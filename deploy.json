@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "name": "ggg-web",
+      "script": "npm",
+      "args": "start",
+      "instances": "1",
+      "instance_var": "INSTANCE_ID",
+      "exec_mode": "cluster",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}

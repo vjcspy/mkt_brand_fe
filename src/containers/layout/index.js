@@ -1,0 +1,34 @@
+import Head from "next/head";
+import { MainContainer } from "../../styles";
+
+export default function Layout({ children, seo }) {
+  return (
+    <MainContainer>
+      <Head>
+        {seo && (
+          <>
+            <title>{seo.metaTitle}</title>
+
+            {seo.metaTitle && <meta property="og:title" content={seo.metaTitle} />}
+            {seo.metaDescription && <meta property="og:description" content={seo.metaDescription} />}
+            {seo.image?.url && <meta property="og:image" content={seo.image.url} />}
+
+            {seo.metaTitle && <meta name="twitter:title" content={seo.metaTitle} />}
+            {seo.metaDescription && <meta name="twitter:description" content={seo.metaDescription} />}
+            {seo.image?.url && <meta name="twitter:image" content={seo.image.url} />}
+
+            <meta name="twitter:card" content="summary_large_image" />
+            {seo.metaDescription && <meta name="description" content={seo.metaDescription} />}
+            {seo.image?.url && <meta name="image" content={seo.image.url} />}
+          </>
+        )}
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <link rel="preload" href="/fonts/SFProDisplay-Semibold.otf" as="font" crossOrigin="" />
+        <link rel="preload" href="/fonts/SFProDisplay-Medium.otf" as="font" crossOrigin="" />
+        <link rel="preload" href="/fonts/SFProDisplay-Regular.otf" as="font" crossOrigin="" />
+        <link ref="preload" href="/css/font.css" as="css" crossOrigin="" />
+      </Head>
+      {children}
+    </MainContainer>
+  );
+}

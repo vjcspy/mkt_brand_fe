@@ -1,0 +1,47 @@
+{
+  "name": "ggg-next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3041",
+    "build": "node deploy.js",
+    "start": "next start -p 3041",
+    "build:dev": "next build",
+    "export:dev": "next export"
+  },
+  "dependencies": {
+    "@fortawesome/free-regular-svg-icons": "^5.15.1",
+    "@react-google-maps/api": "^2.1.0",
+    "axios": "^0.21.0",
+    "byte-size": "^7.0.0",
+    "classnames": "^2.2.6",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "dotenv-flow": "^3.2.0",
+    "express": "^4.17.1",
+    "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "next": "10.0.3",
+    "next-redux-wrapper": "^6.0.2",
+    "react": "17.0.1",
+    "react-color": "^2.19.3",
+    "react-dom": "17.0.1",
+    "react-intl": "^5.10.9",
+    "react-page-scroller": "^2.0.11-beta",
+    "react-range": "^1.8.5",
+    "react-redux": "^7.2.2",
+    "react-styled-frame": "^1.1.0",
+    "redux": "^4.0.5",
+    "redux-saga": "^1.1.3",
+    "sass": "^1.30.0",
+    "shortid-36": "^0.1.2",
+    "styled-components": "^5.2.1",
+    "vhost": "^3.0.2"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/react-fontawesome": "^0.1.14"
+  }
+}
