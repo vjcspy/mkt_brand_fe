@@ -1,14 +1,16 @@
 import { map } from "lodash";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Button from "../../components/button";
-import IconTel from "../../components/icons/iconTel";
 import maps from "../../dummyData/maps";
 import { Container } from "../../styles";
-import { LeftContent, MapAddressWrapper, MapButtons, MapItem, MapItemsWrapper, MapItemTitle, RightContent } from "./styled";
+import { LeftContent, MapAddressWrapper, MapButtons, MapItem, MapItemsWrapper, MapItemTitle, RightContent, HiddenContent } from "./styled";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import IconMap from "../../components/icons/iconMap";
 import MapLayout from "./mapLayout";
 import { useSelector } from "react-redux";
+import IconPhone from "../../components/icons/iconPhone";
+import IconTriangleLineDown from "../../components/icons/iconTriangleLineDown";
+import { FormattedMessage } from "react-intl";
 
 const defaultConfig = {
   name: "Địa chỉ nhà hàng",
@@ -38,6 +40,11 @@ const MapAddress = () => {
   }, []);
 
   useEffect(() => {
+    ref.current?.addEventListener("scroll", onScroll, { passive: true });
+    return () => ref.current?.removeEventListener("scroll", onScroll, { passive: true });
+  }, [onScroll]);
+
+  useEffect(() => {
     onScroll(ref.current);
   }, [size]);
 
@@ -45,7 +52,7 @@ const MapAddress = () => {
     <Container ref={measuredRef} onLoad={() => console.log("onLoad")}>
       <MapAddressWrapper headerHeight={top}>
         <LeftContent className={isEnd ? "end" : ""}>
-          <MapItemsWrapper ref={ref} onScroll={onScroll}>
+          <MapItemsWrapper ref={ref}>
             <ul>
               {map(maps, (item, index) => {
                 return (
@@ -65,11 +72,13 @@ const MapAddress = () => {
                       <div dangerouslySetInnerHTML={{ __html: item.openHour }}></div>
 
                       <MapButtons>
-                        <Button varian="outline-a" href="tel:19006622">
-                          <IconTel />
-                          19006622
+                        <Button varian="outline" href="tel:19006622">
+                          <IconPhone width={200} />
+                          <span>19006622</span>
                         </Button>
-                        <Button>Đặt bàn</Button>
+                        <Button>
+                          <FormattedMessage id="header.reservation" />
+                        </Button>
                       </MapButtons>
                     </MapItem>
                     {index < maps.length - 1 && <hr />}
@@ -78,6 +87,9 @@ const MapAddress = () => {
               })}
             </ul>
           </MapItemsWrapper>
+          <HiddenContent className={`${!isEnd ? "show" : ""}`}>
+            <IconTriangleLineDown />
+          </HiddenContent>
         </LeftContent>
         {size.width > 768 || sItem ? (
           <RightContent headerHeight={headerHeight}>

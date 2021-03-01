@@ -8,7 +8,7 @@ const buttonSize = (size) => {
     small: 44,
     tiny: 36,
   };
-  return s[size] ?? s.medium;
+  return s[size] ?? s.small;
 };
 // const buttonColor = ({ theme, status }) => theme.color.status[status] ?? theme.color.status.primary;
 // const buttonColorHover = (props) => shadeColor(buttonColor(props), 20);
@@ -22,8 +22,8 @@ const BtnStyle = css`
   line-height: 18px;
   display: inline-block;
   text-align: center;
-  padding-left: 36px;
-  padding-right: 36px;
+  padding-left: 50px;
+  padding-right: 50px;
 
   border: 0px none;
   outline: 0 none;
@@ -77,7 +77,7 @@ const OutlineStyle = css`
   ${BtnStyle}
   color: ${({ theme }) => theme.color.status.primary};
   border: 1px solid ${({ theme }) => theme.color.status.primary};
-  background-color: white;
+  background: ${({ theme }) => theme.color.status.bgOutline};
 `;
 
 export const PrimaryButton = styled.button`

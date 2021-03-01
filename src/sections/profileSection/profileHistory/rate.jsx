@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { RateItem, RateWrapper } from "./styled";
+import { FormattedMessage } from "react-intl";
 
 const rates = [
   {
-    label: "Bad",
+    label: "profile.history_bad",
     Icon: (
       <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -14,7 +15,7 @@ const rates = [
     ),
   },
   {
-    label: "Average",
+    label: "profile.history_average",
     Icon: (
       <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -25,7 +26,7 @@ const rates = [
     ),
   },
   {
-    label: "Okey",
+    label: "profile.history_okey",
     Icon: (
       <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -36,7 +37,7 @@ const rates = [
     ),
   },
   {
-    label: "Good",
+    label: "profile.history_good",
     Icon: (
       <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -49,7 +50,7 @@ const rates = [
     ),
   },
   {
-    label: "Awesome",
+    label: "profile.history_awesome",
     Icon: (
       <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -75,7 +76,9 @@ const Rate = ({ rate, selectAble }) => {
       {rates.map(({ label, Icon }, index) => (
         <RateItem key={index} active={index === current} onClick={() => selectAble && setCurrent(index)}>
           {Icon}
-          <p>{label}</p>
+          <p>
+            <FormattedMessage id={label} />
+          </p>
         </RateItem>
       ))}
     </RateWrapper>

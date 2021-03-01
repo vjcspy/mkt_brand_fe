@@ -1,6 +1,6 @@
 import React from "react";
 
-const IconUser = ({ color = "#343738", width = 24, height = 24 }) => {
+const IconUser = ({ color = "currentColor", width = 24, height = 24 }) => {
   return (
     <svg width={width} height={height} viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask id="path-1-outside-1" maskUnits="userSpaceOnUse" x="0.866211" y="0.866211" width="30" height="30" fill="black">

@@ -2,9 +2,17 @@ import ImageText from "./imageText";
 import Footer from "./footer";
 import Header from "./header";
 import OnePageScroller from "./onePageScroller";
+import Booking from "./booking";
 import OurMenuDetail from "./ourMenuDetail";
 import Breadcrumbs from "./breadcrumbs";
 import MenuOnePage from "./menusOnePage";
+import ProfileSection from "./profileSection";
+import MapAddress from "./mapAddress";
+import SectionSignIn from "./signIn";
+import ListBlog from "./listBlog";
+import Article from "./article";
+import PromoSection from "./promoSection";
+import Comment from "./comment";
 
 export const RenderHeader = ({ config }) => {
   const H = Headers[config?.name];
@@ -28,70 +36,106 @@ export const RenderSections = ({ sections }) => {
   );
 };
 
+const pageHome = {
+  title: "Home",
+  titleTranslate: "breadcrumbs.home",
+  path: "/",
+  icon: "home",
+  name: "home",
+  sections: [OnePageScroller.defaultConfig],
+  breadcrumbs: [],
+};
+const pagePromo = {
+  name: "promo",
+  titleTranslate: "breadcrumbs.promo",
+  title: "Promo",
+  path: "/promo",
+  icon: "project-diagram",
+  sections: [Breadcrumbs.defaultConfig, PromoSection.defaultConfig, Comment.defaultConfig],
+  breadcrumbs: [pageHome],
+};
+
+const pageOurMenu = {
+  name: "our-menu",
+  title: "Our Menu",
+  titleTranslate: "breadcrumbs.our_menu",
+  path: "/our-menu",
+  icon: "utensils",
+  sections: [MenuOnePage.defaultConfig],
+  breadcrumbs: [pageHome],
+};
+const pageOurMenuDetail = {
+  name: "our-menu-detail",
+  title: "Our Menu Detail",
+  path: "/our-menu/[menu]",
+  icon: "utensils",
+  sections: [Breadcrumbs.defaultConfig, OurMenuDetail.defaultConfig],
+  breadcrumbs: [pageHome, pageOurMenu],
+};
+const pageMap = {
+  name: "map",
+  title: "Địa chỉ nhà hàng",
+  titleTranslate: "breadcrumbs.address_restaurant",
+  path: "/map",
+  icon: "map",
+  sections: [Breadcrumbs.defaultConfig, MapAddress.defaultConfig],
+  breadcrumbs: [pageHome],
+};
+const pageProfile = {
+  name: "profile",
+  title: "Profile",
+  titleTranslate: "breadcrumbs.info_account",
+  path: "/profile",
+  icon: "user",
+  sections: [Breadcrumbs.defaultConfig, ProfileSection.defaultConfig],
+  breadcrumbs: [pageHome],
+};
+const pageLogin = {
+  name: "login",
+  title: "Login",
+  path: "/login",
+  icon: "user",
+  sections: [SectionSignIn.defaultConfig],
+  breadcrumbs: [],
+};
+const pageBlog = {
+  name: "blog",
+  title: "Blog",
+  titleTranslate: "breadcrumbs.blog",
+  path: "/news",
+  icon: "blog",
+  sections: [Breadcrumbs.defaultConfig, ListBlog.defaultConfig],
+  breadcrumbs: [pageHome],
+};
+const pageBlogDetail = {
+  name: "blog-detail",
+  title: "Blog Detail",
+  titleTranslate: "breadcrumbs.blog",
+  path: "/news/[article]",
+  icon: "blog",
+  sections: [Breadcrumbs.defaultConfig, Article.defaultConfig],
+  breadcrumbs: [pageHome, pageBlog],
+};
+
+const pageBooking = {
+  name: "booking",
+  title: "Booking",
+  path: "/booking",
+  icon: "blog",
+  sections: [Booking.defaultConfig],
+};
+
 export const Pages = {
-  home: {
-    title: "Home",
-    path: "/",
-    icon: "home",
-    name: "home",
-    sections: [],
-  },
-  promo: {
-    name: "promo",
-    title: "Promo",
-    path: "/promo",
-    icon: "project-diagram",
-    sections: [],
-  },
-  "our-menu": {
-    name: "our-menu",
-    title: "Our Menu",
-    path: "/our-menu",
-    icon: "utensils",
-    sections: [],
-  },
-  "our-menu-detail": {
-    name: "our-menu-detail",
-    title: "Our Menu Detail",
-    path: "/our-menu/[menu]",
-    icon: "utensils",
-    sections: [],
-  },
-  map: {
-    name: "map",
-    title: "Địa chỉ nhà hàng",
-    path: "/map",
-    icon: "map",
-    sections: [],
-  },
-  profile: {
-    name: "profile",
-    title: "Profile",
-    path: "/profile",
-    icon: "user",
-    sections: [],
-  },
-  login: {
-    name: "login",
-    title: "Login",
-    path: "/login",
-    icon: "user",
-    sections: [],
-  },
-  blog: {
-    name: "blog",
-    title: "Blog",
-    path: "/blog",
-    icon: "blog",
-    section: "",
-  },
-  "blog-detail": {
-    name: "blog-detail",
-    title: "Blog Detail",
-    path: "/blog/[article]",
-    icon: "User",
-    section: [],
-  },
+  home: pageHome,
+  promo: pagePromo,
+  "our-menu": pageOurMenu,
+  "our-menu-detail": pageOurMenuDetail,
+  map: pageMap,
+  profile: pageProfile,
+  login: pageLogin,
+  blog: pageBlog,
+  "blog-detail": pageBlogDetail,
+  booking: pageBooking,
 };
 
 export const Headers = { [Header.defaultConfig.name]: Header };
@@ -103,4 +147,11 @@ export const Sections = {
   [OnePageScroller.defaultConfig.name]: OnePageScroller,
   [OurMenuDetail.defaultConfig.name]: OurMenuDetail,
   [MenuOnePage.defaultConfig.name]: MenuOnePage,
+  [PromoSection.defaultConfig.name]: PromoSection,
+  [ProfileSection.defaultConfig.name]: ProfileSection,
+  [MapAddress.defaultConfig.name]: MapAddress,
+  [SectionSignIn.defaultConfig.name]: SectionSignIn,
+  [ListBlog.defaultConfig.name]: ListBlog,
+  [Article.defaultConfig.name]: Article,
+  [Booking.defaultConfig.name]: Booking,
 };

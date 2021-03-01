@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { BtnBack, MediaCard, MediaCardWrapper, MediaContent, MediaBodyWrapper } from "./styled";
 import { formatBytes } from "./ultils";
 import IconTrash from "../../components/icons/icTrash";

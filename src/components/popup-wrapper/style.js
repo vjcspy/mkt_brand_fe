@@ -57,6 +57,8 @@ export const PopupContent = styled.div`
   width: fit-content;
   max-width: 60%;
   padding: 40px;
+  max-height: 80%;
+  max-width: 634px;
 
   border-radius: 10px;
   background: #ffffff;
@@ -70,6 +72,7 @@ export const PopupContent = styled.div`
     right: 40px;
     top: 40px;
     cursor: pointer;
+    z-index: 10;
   }
 
   @media (max-width: 768px) {

@@ -1,9 +1,10 @@
 import React, { Fragment } from "react";
 import { TitleLinkPagination, WrapperBreadcrumbs } from "./style";
 import { Container } from "../../styles";
-import { useSelector } from "react-redux";
 import { map } from "lodash";
 import LinkRouter from "../../components/link-router";
+import { FormattedMessage } from "react-intl";
+import useFromJS from "../../hooks/useFromJS";
 
 const defaultConfig = {
   type: "section",
@@ -13,7 +14,7 @@ const defaultConfig = {
   components: {},
 };
 const Breadcrumbs = () => {
-  const breadcrumbs = useSelector((s) => s.get("breadcrumbs"))?.toJS() ?? [];
+  const breadcrumbs = useFromJS(["breadcrumbs"]);
   return (
     <WrapperBreadcrumbs>
       <Container>
@@ -23,7 +24,7 @@ const Breadcrumbs = () => {
               {index != 0 && <span>&nbsp;{">"}&nbsp;</span>}
               <LinkRouter href={item.path ?? "/"}>
                 <a>
-                  <h5>{item.title}</h5>
+                  <h5>{item.titleTranslate ? <FormattedMessage id={item.titleTranslate} /> : <span>{item.title}</span>}</h5>
                 </a>
               </LinkRouter>
             </Fragment>

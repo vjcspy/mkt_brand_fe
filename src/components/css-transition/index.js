@@ -4,29 +4,36 @@ export default function CSSTransition({ show, classTransition, timing = 300, chi
   const [isEnabled, setEnabled] = useState();
 
   useEffect(() => {
+    let timer;
     if (show) {
       setEnabled(true);
       setClassName(classTransition + "-start");
-      setTimeout(() => {
+      timer = setTimeout(() => {
         setClassName(classTransition + "-started");
       }, timing);
     } else {
       setClassName(classTransition + "-end");
-      setTimeout(() => {
+      timer = setTimeout(() => {
         setEnabled(false);
         setClassName(classTransition + "-ended");
       }, timing);
     }
+    return () => {
+      clearTimeout(timer);
+    };
   }, [show, timing, classTransition]);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (className === classTransition + "-start") {
         setClassName(classTransition + "-starting");
       } else if (className === classTransition + "-end") {
         setClassName(classTransition + "-ending");
       }
     });
+    return () => {
+      clearTimeout(timer);
+    };
   }, [className, classTransition]);
 
   return isEnabled ? React.cloneElement(children, { className: className }) : null;

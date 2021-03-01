@@ -1,24 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import Button from "../../components/button";
 import { Checkbox } from "../../components/checkbox";
-import { Input } from "../../components/input-style";
 import PinInput from "../../components/pin-input";
 import InputComponent from "../../components/input";
 import DropDown from "../../components/input/drop-down";
 import InputPhone from "../../components/input/input-phone";
-import {
-  WrapperSignIn,
-  Content,
-  WrapperScroll,
-  Item,
-  WrapperContentScroll,
-  Info,
-  GroupInput,
-  ContentSignIn,
-  WrapperItemSignIn,
-  ListItemScroll,
-  ContentSingUp,
-} from "./style";
+import { FormattedMessage } from "react-intl";
+
+import { WrapperSignIn, Item, Info, GroupInput, ContentSignIn, WrapperItemSignIn, ListItemScroll, ContentSingUp } from "./style";
 import useSiteRouter from "../../hooks/useSiteRouter";
 const defaultConfig = {
   type: "section",
@@ -79,27 +68,37 @@ const SectionSignIn = () => {
     <WrapperSignIn>
       {showLogin ? (
         <ContentSignIn className="content">
-          <h2>Sign in</h2>
+          <h2>
+            <FormattedMessage id="login.sign_in" />
+          </h2>
           <WrapperItemSignIn>
             <ListItemScroll style={{ transform: `translateX(${-stepOTP * 50}%)` }}>
               {showGetOTP ? (
                 <Item>
-                  <Info>Enter your phone number and we'll send you OTP</Info>
+                  <Info>
+                    <FormattedMessage id="login.note_phone_number" />
+                  </Info>
                   <InputPhone
                     className="input-phone"
                     ref={refPhone}
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target?.value)}
                   />
-                  <Button onClick={onGetOTP}>Receive OTP</Button>
+                  <Button onClick={onGetOTP}>
+                    <FormattedMessage id="login.get_opt" />
+                  </Button>
                 </Item>
               ) : (
                 <Item>
-                  <Info>We sent OTP to your phone number 0944 xxx xxx</Info>
+                  <Info>
+                    <FormattedMessage id="login.nofity_get_otp" /> 0944 xxx xxx
+                  </Info>
                   <PinInput ref={refOTP} value={otp} onChange={onSetOTP} />
-                  <Button onClick={onSubmitOTP}>Sign in</Button>
+                  <Button onClick={onSubmitOTP}>
+                    <FormattedMessage id="login.sign_in" />
+                  </Button>
                   <h5>
-                    Did not receive the OTP? <span className="underline">Resend</span>
+                    <FormattedMessage id="login.fail_otp" /> <span className="underline">Resend</span>
                   </h5>
                 </Item>
               )}
@@ -108,15 +107,19 @@ const SectionSignIn = () => {
         </ContentSignIn>
       ) : (
         <ContentSingUp>
-          <h2 style={{ marginLeft: 0 }}>Sign up</h2>
-          <Info>Please fill in the form below to create new account</Info>
+          <h2 style={{ marginLeft: 0 }}>
+            <FormattedMessage id="login.sign_up" />
+          </h2>
+          <Info>
+            <FormattedMessage id="login.note_create_account" />
+          </Info>
           <GroupInput>
-            <InputComponent className="input" title="First name" placeHolder="Text" />
-            <InputComponent className="input" title="Last name" placeHolder="Text" />
+            <InputComponent className="input" title="login.first_name" placeHolder="Text" />
+            <InputComponent className="input" title="login.last_name" placeHolder="Text" />
           </GroupInput>
           <GroupInput>
-            <InputComponent className="input" title="Email address" placeHolder="Text" />
-            <DropDown listData={genders} className="input dropdown" title="Gender" />
+            <InputComponent className="input" title="login.email_address" placeHolder="Text" />
+            <DropDown className="input" listData={genders} title="login.gender" />
           </GroupInput>
           <Info>
             <Checkbox checked={checkPolicy} onClick={() => setCheckPolicy(!checkPolicy)} />

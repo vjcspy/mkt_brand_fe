@@ -2,6 +2,7 @@ import { map } from "lodash";
 import React from "react";
 import Icon from "../icons";
 import { TabItem, TabsContent, TabsWrapper } from "./styled";
+import { FormattedMessage } from "react-intl";
 
 const Tabs = ({ current, items, onChange }) => {
   return (
@@ -16,7 +17,9 @@ const Tabs = ({ current, items, onChange }) => {
             }}
           >
             <Icon icon={item.icon} />
-            <h4>{item.label}</h4>
+            <h4>
+              <FormattedMessage id={item?.label} />
+            </h4>
           </TabItem>
         ))}
       </TabsContent>

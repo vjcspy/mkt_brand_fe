@@ -1,9 +1,9 @@
 import React from "react";
 
-const IconTriangleDown = ({ width = 9, height = 17, color = "currentColor" }) => {
+const IconTriangleDown = ({ width = 24, height = 24, color = "currentColor", ...rest }) => {
   return (
-    <svg width={width} height={height} viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M-2.18557e-07 4.76837e-07L4.5 5L9 8.34346e-08" fill={color} />
+    <svg {...rest} width={width} height={height} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 9L12 17L19 9" fill={color} />
     </svg>
   );
 };

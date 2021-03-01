@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const TitleLinkPagination = styled.div`
   display: flex;
   align-items: center;
-  margin: 40px 0;
+  margin: 40px 0 24px;
+
   h5 {
     cursor: pointer;
     &:not(:first-child) {

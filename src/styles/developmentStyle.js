@@ -113,6 +113,7 @@ export const DevInput = styled.input`
   font-weight: normal;
   font-style: normal;
   outline: 0 none;
+  padding: 5px;
   
   &:focus {
     box-shadow: 0px 0px 4px 2px #9393cc;

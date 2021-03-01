@@ -1,14 +1,23 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const WrapperListRestaurant = styled.div`
   height: 100%;
+  position: relative;
 `;
 
-export const Title = styled.h3``;
+export const Title = styled.h3`
+  width: calc(100% - 40px);
+`;
 
 export const List = styled.div`
-  height: 100%;
-  overflow: auto;
+  // height: 100%;
+  // overflow: auto;
+  margin-top: 20px;
+  & > div:not(:first-child) {
+    margin-top: 20px;
+    border-top: 1px solid #e9e9e9;
+    padding-top: 20px;
+  }
 `;
 
 export const ItemRestaurant = styled.div`
@@ -16,6 +25,7 @@ export const ItemRestaurant = styled.div`
   h5 {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 8px;
 
     align-items: center;
     svg {
@@ -24,6 +34,14 @@ export const ItemRestaurant = styled.div`
     span {
       display: flex;
       align-items: center;
+    }
+    .view-map {
+      font-style: normal;
+      font-weight: normal;
+      line-height: 24px;
+      text-align: right;
+      letter-spacing: 0.03em;
+      color: #231f20;
     }
   }
 

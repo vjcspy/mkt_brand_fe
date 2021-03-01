@@ -27,28 +27,30 @@ async function handler(req, res) {
   // Run the middleware
   await runMiddleware(req, res, cors);
   console.log("deploying ");
-  await exportSite.exportSite(req.query.site_code);
-  res.json({ message: "success" });
+  // await exportSite.exportSite(req.query.site_code);
   // res.json({ success: "build error " });
-  // const sp = spawn(`sh`, ["deploy.sh"], { cwd: process.cwd() });
-  // sp.stdout.on("data", (data) => {
-  //   console.log(`stdout: ${data}`);
-  //   // Rest of the API logic
-  // });
+  const sp = spawn(`sh`, ["deploy.sh"], { env: { ...process.env, SITE_CODE: req.query.site_code }, cwd: process.cwd() });
+  sp.stdout.on("data", (data) => {
+    console.log(`stdout: ${data}`);
+    // Rest of the API logic
+  });
 
-  // sp.stderr.on("data", (data) => {
-  //   console.log(`stderr: ${data}`);
-  // });
+  sp.stderr.on("data", (data) => {
+    console.log(`stderr: ${data}`);
+  });
 
-  // sp.on("error", (e) => {
-  //   console.log(`error: ${e.message}`);
-  //   res.json({ message: "build error" });
-  // });
+  sp.on("error", (e) => {
+    console.log(`error: ${e.message}`);
+  });
 
-  // sp.on("close", (e) => {
-  //   res.json({
-  //     message: "build succeed",
-  //   });
-  // });
+  sp.on("close", (e) => {
+    if (e) {
+      res.json({ message: "build error", error_code: e });
+    } else {
+      res.json({
+        message: "build succeed",
+      });
+    }
+  });
 }
 export default handler;

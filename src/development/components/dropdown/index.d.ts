@@ -9,6 +9,8 @@ export type Item = {
 
 export type DropdownProps = {
   items: [Item];
+  icon: Boolean;
+  current: String;
 };
 
-export default function Dropdown(props: DropdownProps): JSX.Element
+export default function Dropdown(props: DropdownProps): JSX.Element;

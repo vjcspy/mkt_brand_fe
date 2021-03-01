@@ -23,15 +23,18 @@ export const WrapperPopupMobile = styled.div`
   background: #ffffff;
   bottom: 0;
   transition: 0.3s;
-  z-index: 10;
+  z-index: 1000;
   &.bottom-top-started {
     height: calc(100% - 69px);
   }
+
   // animation: ${showPopup} 0.3s forwards;
   // &.close {
   //   animation: ${closePopup} 0.3s forwards;
   // }
 `;
+
+export const WrapperContentPopup = styled.div``;
 
 export const ContentPopup = styled.div`
   width: 100%;

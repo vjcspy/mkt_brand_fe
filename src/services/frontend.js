@@ -1,7 +1,7 @@
-import { defaultsDeep, filter, first, get, isEmpty, map, reduce, cloneDeep } from "lodash";
+import { defaultsDeep, filter, first, get, isEmpty, map, reduce, cloneDeep, find, isObject } from "lodash";
 import { Footers, Headers, Sections, Pages } from "../sections";
 import { DefaultTheme } from "../styles/theme";
-
+import defaultTranslation from "../translations";
 /// Frontend
 
 /**
@@ -51,7 +51,10 @@ export const mergeConfig = (defaultConfig, config) => {
   let { components: cComponent, ...cRest } = config;
   let components = {};
   Object.keys(dComponent).map((key) => {
-    components[key] = { ...dComponent[key], value: defaultsDeep(cComponent[key].value, dComponent[key]?.value) };
+    components[key] = {
+      ...dComponent[key],
+      value: isObject(dComponent[key]?.value) ? defaultsDeep(cComponent[key]?.value, dComponent[key]?.value) : cComponent[key]?.value,
+    };
   });
   return {
     ...dRest,
@@ -64,7 +67,8 @@ export const formatConfig = (config) => {
   const header = config?.header;
   const footer = config?.footer;
   const theme = config?.theme;
-
+  const menus = config?.menus ?? [];
+  const translation = config?.translation;
   let headerConfig = (Headers[header?.name] ?? first(map(Headers))).defaultConfig;
   let footerConfig = (Footers[footer?.name] ?? first(map(Footers))).defaultConfig;
   const modifiedConfig = {
@@ -76,16 +80,19 @@ export const formatConfig = (config) => {
         ...pages,
         [pageName]: {
           ...page,
-          sections: map(
-            filter(get(config, ["pages", pageName, "sections"]), (s) => Sections[s.name]),
-            (section) => mergeConfig(Sections[section.name].defaultConfig, section)
+          sections: map(page.sections, (section) =>
+            mergeConfig(
+              section,
+              find(get(config, ["pages", pageName, "sections"]), (s) => s.name == section.name)
+            )
           ),
         },
       }),
       {}
     ),
     theme: defaultsDeep(theme, DefaultTheme),
-    menus: config?.menus ?? [],
+    menus: menus,
+    translation: defaultsDeep(translation, defaultTranslation),
   };
 
   return modifiedConfig;

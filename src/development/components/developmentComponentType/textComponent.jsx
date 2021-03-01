@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { UPDATE_CONFIG } from "../../../constants";
 import { themeColor } from "../../../services/frontend";
@@ -14,18 +14,27 @@ const TextArea = styled.textarea`
   border-radius: 4px;
 `;
 
-const TextComponent = ({ config, path }) => {
+const TextComponent = ({ config, path, ignoreLocale }) => {
+  const locale = useSelector((s) => s.get("locale"));
   const dispatch = useDispatch();
   const onChange = useCallback(
     (e) => {
-      dispatch({ type: UPDATE_CONFIG, path, value: e.target.value });
+      const p = ignoreLocale ? path : [...path, locale];
+      dispatch({ type: UPDATE_CONFIG, path: p, value: e.target.value });
     },
-    [dispatch, path]
+    [dispatch, path, locale, ignoreLocale]
   );
   return (
     <ComponentWrapper>
       <label>{config.title}</label>
-      <TextArea type="text" value={config.value} style={{ height: 75 }} onChange={onChange} />
+      <TextArea
+        type="text"
+        value={ignoreLocale ? config.value : config.value?.[locale]}
+        style={{
+          height: 75,
+        }}
+        onChange={onChange}
+      />
     </ComponentWrapper>
   );
 };

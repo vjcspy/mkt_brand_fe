@@ -6,11 +6,11 @@ import { MenuChildImageWrapper, MenuChildItem, MenuChildItemWraper, MenuChildWra
 const MenuChildComponent = ({ config }) => {
   return (
     <MenuChildWraper>
-      {config.products?.map((product) => (
+      {config.products?.items?.map((product) => (
         <MenuChildItemWraper key={product.id}>
           <MenuChildItem isFirst>
             <MenuChildImageWrapper>
-              <Image src={product.image.url} alt="product" title="product" width="500" height="500" />
+              <Image width={283} height={273} src={product.image.url} alt="product" title="product" width="500" height="500" />
             </MenuChildImageWrapper>
           </MenuChildItem>
           <MenuChildItem>

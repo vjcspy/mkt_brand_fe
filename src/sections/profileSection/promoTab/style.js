@@ -16,14 +16,26 @@ export const MarkerList = styled.div`
   position: relative;
 `;
 
+export const WrapperSlideList = styled.div`
+  width: calc(100% - 140px);
+  overflow: hidden;
+`;
+
 export const List = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: calc(100% - 140px);
+  justify-content: ${({ numItem }) => (numItem <= 2 ? "center" : "space-between")};
+  transition: 0.3s;
+
+  & > div {
+    width: ${({ numItem }) => (numItem <= 2 ? "50%" : "calc(100% / " + numItem + " )")};
+  }
 `;
 
 export const PromoProfile = styled.div`
-  width: calc(50% - 20px);
+  min-width: 364px;
+  &:not(:last-child) {
+    margin-right: 40px;
+  }
 `;
 
 export const ImageWrapper = styled.div`
@@ -55,6 +67,7 @@ export const GroupButton = styled.div`
   margin-top: 20px;
   button {
     width: calc(50% - 10px);
+    padding: 0 10px;
   }
 `;
 export const WrapperIcon = styled.div`
@@ -108,6 +121,6 @@ export const ContentMobile = styled.div`
   left: 0;
   width: 100%;
   border-radius: 12px 12px 0 0;
-  padding: 10px;
+  padding: 20px;
   background: #ffffff;
 `;

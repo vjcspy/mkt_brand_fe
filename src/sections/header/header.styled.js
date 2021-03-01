@@ -20,10 +20,9 @@ export const HeaderContent = styled.div`
 
 export const LogoWrapper = styled.a`
   img {
-    max-width: 100px;
-    max-height: 60px;
+    height: 100%;
+    max-height: 68px;
     width: auto;
-    height: auto;
   }
 `;
 
@@ -36,6 +35,15 @@ export const HeaderLinks = styled.div`
     margin: 0 30px;
     position: relative;
     transition: 0.3s color ease-in-out;
+
+    &.active {
+      color: ${({ theme }) => theme.color.status.primary};
+      &: after {
+        content: "";
+        background: ${({ theme }) => theme.color.status.primary};
+        width: 100%;
+      }
+    }
 
     &:first-child {
       margin-left: 0;
@@ -80,12 +88,11 @@ export const HeaderLinks = styled.div`
     width: 100%;
     padding: 18px 20px;
     background: #242424cc;
-
-    h4 {
+    a {
       color: #ffffff;
     }
-
     a:hover {
+      color: ${({ theme }) => theme.color.status.primary};
       text-decoration: underline;
     }
   }
@@ -149,6 +156,7 @@ export const HeaderTopWrapper = styled.div`
 
 export const ItemTopMenuRight = styled.div`
   height: 100%;
+  cursor: pointer;
   display: flex;
   align-items: center;
   position: relative;
@@ -241,10 +249,11 @@ export const WrapperMenuRight = styled.div`
   flex: 1 0 0;
   display: flex;
   justify-content: flex-end;
+  min-width: 335px;
 
-  @media (max-width: 1068px) {
-    min-width: 310px;
-  }
+  // @media (max-width: 1068px) {
+  //   min-width: 335px;
+  // }
 `;
 
 export const GroupFlexBox = styled.div`

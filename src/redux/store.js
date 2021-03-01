@@ -10,8 +10,9 @@ const loadState = () => {
   try {
     const serializedState = JSON.parse(localStorage.getItem("state") ?? "{}");
     const jwtToken = JWT_TOKEN;
+    const firstLoad = JSON.parse(sessionStorage.getItem("firstLoad")) ?? true;
     serializedState.token = getStorage(jwtToken);
-    return fromJS({ ...initialState.toJS(), ...serializedState });
+    return fromJS({ ...initialState.toJS(), ...serializedState, firstLoad });
   } catch (err) {
     return undefined;
   }
@@ -34,6 +35,8 @@ sagaMiddleware.run(saga);
 
 store.subscribe(() => {
   let state = store.getState();
+  const firstLoad = state.get("firstLoad");
+  sessionStorage.setItem("firstLoad", firstLoad);
   saveState({
     // mode: state.get("mode"),
   });

@@ -57,9 +57,9 @@ const MenuGrandChildComponent = ({
         </MenuGrandChildMobileInfoWrapper>
       )}
       <MenuGrandChildWraper>
-        {config?.products?.map((product) => (
+        {config?.products?.items?.map((product) => (
           <MenuGrandChildItem key={product.id}>
-            <Image src={product.image.url} alt="product" title="product" width="283" height="237" />
+            <Image width={283} height={273} src={product.image.url} alt="product" title="product" width="283" height="237" />
             <h4>{product.name}</h4>
           </MenuGrandChildItem>
         ))}

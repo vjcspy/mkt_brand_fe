@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const MapAddressWrapper = styled.div`
   display: flex;
@@ -57,6 +57,8 @@ export const LeftContent = styled.div`
 export const MapItemsWrapper = styled.div`
   height: 100%;
   overflow: auto;
+  padding-right: 15px;
+  margin-right: -15px;
 `;
 
 export const RightContent = styled.div`
@@ -127,17 +129,71 @@ export const MapItemTitle = styled.div`
 
 export const MapButtons = styled.div`
   display: flex;
+  justify-content: space-between;
   margin-top: 20px;
 
-  button,
-  a {
-    flex: 1 0 0;
-    &:first-child {
-      margin-right: 24px;
-    }
-
+  button {
+    width: calc(50% - 12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
     svg {
       margin-right: 12px;
     }
+  }
+`;
+const animation = keyframes`
+  0%{
+    transform: translateY(-25%);
+  }
+  25%{
+    transform: translateY(0);
+  }
+  50%{
+    transform: translateY(25%);
+
+  }
+  75%{
+    transform: translateY(0);
+
+  }
+  100%{
+    transform: translateY(-25%);
+
+  }
+`;
+
+export const HiddenContent = styled.div`
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+
+  background: rgb(255, 255, 255);
+  background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5172443977591037) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: 0.3s;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 100;
+
+  & svg {
+    transform: rotate(90deg);
+    cursor: pointer;
+    animation: ${animation} 1s infinite;
+    cursor: pointer;
+  }
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 768px) {
+    bottom: -20px;
   }
 `;

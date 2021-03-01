@@ -12,9 +12,7 @@ const SectionThumbnail = ({ components }) => {
       if (isArray(image.value)) {
         return (
           <SectionThumbnailWrapper isGrid={true}>
-            {image.value.slice(0, 4).map((media) => (
-              <ImageMedia key={media.hash} media={media} formats="thumbnail" />
-            ))}
+            {image.value.slice(0, 4).map((media) => (media ? <ImageMedia key={media.hash} media={media} formats="thumbnail" /> : null))}
           </SectionThumbnailWrapper>
         );
       }

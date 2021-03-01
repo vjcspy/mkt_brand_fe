@@ -1,14 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { WrapperRatio, Content } from "./style";
+
 const RatioImage = ({ children, ratio }) => {
-  const paddingTop = () => {
-    switch (ratio) {
-      case "16:9":
-        return 56.25;
-      default:
-        return 100;
-    }
-  };
+  const paddingTop = useMemo(() => {
+    return ratio === "16:9" ? 56.25 : 100;
+  }, [ratio]);
 
   return (
     <WrapperRatio>

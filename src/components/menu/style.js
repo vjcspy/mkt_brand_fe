@@ -34,6 +34,7 @@ export const MarkerLayout = styled.div`
 `;
 
 export const WrapperContentMenu = styled.div`
+  width: 40%;
   height: 100%;
   min-width: 358px;
   display: flex;
@@ -64,14 +65,22 @@ export const WrapperContentMenu = styled.div`
 
   @media (max-width: 768px) {
     width: 100%;
-    padding: 20px;
-    padding-bottom: 0;
+  }
+`;
+
+export const ContentRelative = styled.div`
+  position: relative;
+  height: 100%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 26px 20px 0;
   }
 `;
 
 export const HeaderMenu = styled.div`
   background: #ffffff;
-  padding: 60px 40px 23px 0;
+  padding: 60px 96px 23px 0;
   text-align: right;
 
   svg {
@@ -81,12 +90,18 @@ export const HeaderMenu = styled.div`
   @media (max-width: 768px) {
     padding: 0;
     padding-bottom: 15px;
+    svg {
+      margin-right: 6px;
+    }
   }
 `;
 export const ContentMenu = styled.div`
-  flex: 1;
   position: relative;
   overflow: hidden;
+  height: calc(100% - 110px);
+  @media (max-width: 768px) {
+    height: calc(100% - 85px);
+  }
 `;
 
 export const MainMenu = styled.div`
@@ -96,23 +111,15 @@ export const MainMenu = styled.div`
   overflow-y: scroll;
   max-height: 100%;
 
-  & > div:not(:last-child) {
-    margin-bottom: 32px;
-  }
   &.hide {
     transform: translateX(-100%);
   }
 
   @media (max-width: 768px) {
-    padding: 15px 0;
-    border-bottom: 1px solid #e2e2e2;
+    padding: 12px 0 0;
     max-height: 100%;
+    height: 100%;
     overflow: auto;
-    padding-bottom: 80px;
-
-    & > div:not(:last-child) {
-      margin-bottom: 20px;
-    }
   }
 `;
 
@@ -120,13 +127,15 @@ export const ItemMenu = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  &:not(:last-child) {
+    margin-bottom: 24px;
+  }
   cursor: pointer;
   padding: 0 40px;
+  padding-right: 96px;
 
-  h3 {
+  h4 {
     margin: 0;
-    line-height: 32px;
     position: relative;
 
     span {
@@ -150,9 +159,11 @@ export const ItemMenu = styled.div`
 
   @media (max-width: 768px) {
     padding: 0;
-    h3 {
-      font-size: 18px;
-      line-height: 24px;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+    svg {
+      margin-right: 6px;
     }
   }
 `;
@@ -160,7 +171,7 @@ export const ItemMenu = styled.div`
 export const SubMenu = styled.div`
   width: 100%;
   height: 100%;
-  padding: 0 40px;
+  padding: 0 49px;
   padding-top: 35px;
 
   position: absolute;
@@ -190,7 +201,7 @@ export const HeaderSubMenu = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 
   div {
     cursor: pointer;
@@ -201,13 +212,13 @@ export const HeaderSubMenu = styled.div`
   }
 
   @media (max-width: 768px) {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
   }
 `;
 
 export const MainSubMenu = styled.div`
   & > div:not(:last-child) {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 `;
 
@@ -218,6 +229,7 @@ export const ItemSubMenu = styled.div`
 
   cursor: pointer;
   padding: 0 22px;
+  padding-left: 35px;
 
   @media (max-width: 768px) {
     padding: 0 30px;
@@ -227,8 +239,14 @@ export const ItemSubMenu = styled.div`
 export const FeatureMobile = styled.div`
   display: none;
   flex: 1 0 0;
+
   @media (max-width: 768px) {
     display: block;
+    margin-top: -4px;
+    display: block;
+    margin-top: -4px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e2e2;
   }
 `;
 
@@ -239,6 +257,14 @@ export const ListFeature = styled.div`
     font-weight: normal;
     margin-top: 12px;
   }
+  @media (max-width: 768px) {
+    h5 {
+      margin-top: 0;
+    }
+    h5:not(:last-child) {
+      margin-bottom: 12px;
+    }
+  }
 `;
 
 export const LanguageLocation = styled.div`
@@ -247,36 +273,45 @@ export const LanguageLocation = styled.div`
   justify-content: space-between;
   margin-top: 30px;
 
-  div {
-    display: flex;
-    cursor: pointer;
-    align-items: center;
+  // div {
+  //   display: flex;
+  //   cursor: pointer;
+  //   align-items: center;
 
-    h5 {
-      font-style: normal;
-      font-weight: normal;
-    }
+  //   h5 {
+  //     font-style: normal;
+  //     font-weight: normal;
+  //   }
 
-    svg,
-    img {
-      margin: 0 5px;
-    }
+  //   p {
+  //     margin: 0;
+  //   }
+  // }
+  @media (max-width: 768px) {
+    margin-top: 50px;
   }
 `;
 
 export const FooterMenu = styled.div`
   z-index: 1005;
+  width: 100%;
   position: absolute;
   bottom: 0;
   left: 0;
+
   button,
   a {
     border-radius: 0px !important;
+    width: 50%;
+    padding: 0;
   }
 
   button,
   a:not(last-child) {
     border-right: 1px solid rgba(255, 255, 255, 0.6);
+    &:not(:last-child) {
+      border-right: 1px solid rgba(255, 255, 255, 0.6);
+    }
   }
 
   @media (max-width: 768px) {

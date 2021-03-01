@@ -57,7 +57,7 @@ export const StoresWrapper = styled.div`
   margin-top: 24px;
   a {
     display: block;
-
+    cursor: pointer;
     &:first-child {
       margin-right: 36px;
     }

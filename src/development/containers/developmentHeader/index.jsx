@@ -15,15 +15,6 @@ const DevelopmentHeader = () => {
   const putConfig = useCallback((config) => dispatch({ type: PUT_CONFIG, value: config }), []);
   const putPublicConfig = useCallback(() => dispatch({ type: PUT_PUBLIC_CONFIG }), []);
 
-  const link = (() => {
-    let link = "/preview";
-    if (process.browser) {
-      let regex = new RegExp(`^/${site?.site_code}`);
-      return regex.test(location.pathname) ? `/${site?.site_code}/preview` : "/preview";
-    }
-    return link;
-  })();
-
   return (
     <HeaderWrapper>
       <LeftWrapper>
@@ -36,7 +27,7 @@ const DevelopmentHeader = () => {
         <DevPrimaryButton onClick={putPublicConfig} style={{ background: "#27d427" }}>
           Public
         </DevPrimaryButton>
-        <DevSecondaryA href={link} target="_blank" rel="noopener noreferrer">
+        <DevSecondaryA href={"/preview"} target="_blank" rel="noopener noreferrer">
           Preview
         </DevSecondaryA>
         <DevPrimaryButton
@@ -52,12 +43,4 @@ const DevelopmentHeader = () => {
   );
 };
 
-// const mapStateToProps = (s) => ({ site: s.get("site")?.toJS(), modifiedConfig: s.get("modifiedConfig")?.toJS() });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   putConfig: (config) => dispatch({ type: PUT_CONFIG, value: config }),
-//   putPublicConfig: () => dispatch({ type: PUT_PUBLIC_CONFIG }),
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(DevelopmentHeader);
 export default DevelopmentHeader;

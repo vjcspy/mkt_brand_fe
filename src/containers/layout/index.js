@@ -23,9 +23,7 @@ export default function Layout({ children, seo }) {
           </>
         )}
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <link rel="preload" href="/fonts/SFProDisplay-Semibold.otf" as="font" crossOrigin="" />
-        <link rel="preload" href="/fonts/SFProDisplay-Medium.otf" as="font" crossOrigin="" />
-        <link rel="preload" href="/fonts/SFProDisplay-Regular.otf" as="font" crossOrigin="" />
+        <link rel="preload" href="/fonts/subset-SFProDisplay-Medium.ttf" as="font" crossOrigin="" />
         <link ref="preload" href="/css/font.css" as="css" crossOrigin="" />
       </Head>
       {children}

@@ -59,7 +59,7 @@ export const InputTag = styled.input`
   align-items: center;
   letter-spacing: 0.03em;
   color: #231f20;
-
+  text-align: center;
   &:active,
   &:focus,
   &:valid {
@@ -68,7 +68,10 @@ export const InputTag = styled.input`
       font-size: 14px;
     }
   }
-
+  &::-webkit-input-placeholder {
+    color: #7b7979;
+    opacity: 0.6;
+  }
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;

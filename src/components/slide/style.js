@@ -37,6 +37,7 @@ export const ItemSlide = styled.div`
     font-weight: 500;
     cursor: pointer;
     text-decoration: underline !important;
+    color: ${({ theme }) => theme.color.text.heading};
   }
 `;
 

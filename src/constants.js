@@ -10,7 +10,7 @@ export const SELECTED_SECTION = "SELECTED_SECTION";
 export const SELECTED_COMPONENT = "SELECTED_COMPONENT";
 export const CONFIG = "CONFIG";
 export const SHOW_LANGUAGE_LOCATION = "SHOW_LANGUAGE_LOCATION";
-
+export const SET_FIRST_LOAD = "SET_FIRST_LOAD";
 /**
  * UPDATE REDUCER
  */
@@ -33,14 +33,20 @@ export const ADD_FILES_UPLOAD = "ADD_FILES_UPLOAD";
 export const REMOVE_FILES_UPLOAD = "REMOVE_FILES_UPLOAD";
 export const SET_MEDIA_DIALOG = "SET_MEDIA_DIALOG";
 export const SET_SHOW_MENU_HEADER = "SET_SHOW_MENU_HEADER";
+export const SET_HEIGHT_POPUP = "SET_HEIGHT_POPUP";
 
 export const UPDATE_API_STATUS = "UPDATE_API_STATUS";
-export const SET_LOCATE = "SET_LOCATE";
+export const SET_LOCALE = "SET_LOCALE";
+export const SET_LOCATION = "SET_LOCATION";
 export const SET_PAGE_NAME = "SET_PAGE_NAME";
 export const SET_OUR_MENUS = "SET_OUR_MENUS";
 export const SET_HEADER_HEIGHT = "SET_HEADER_HEIGHT";
+export const SET_HOST = "SET_HOST";
+export const SET_ID_BLOG = "SET_ID_BLOG";
+export const ACCEPT_COOKIE = "ACCEPT_COOKIE";
 
-export const UPDATE_PHONE_OTP = "UPDATE_PHONE_OTP";
+export const UPDATE_phoneOTP = "UPDATE_phoneOTP";
+export const UPDATE_VALUE_TRANSITION = "UPDATE_VALUE_TRANSITION";
 
 /**
  * SAGA
@@ -55,6 +61,7 @@ export const UPLOAD_FILES = "UPLOAD_FILES";
 export const DOWNLOAD_FILE = "DOWNLOAD_FILE";
 export const LOGIN = "LOGIN";
 export const GET_SITE = "GET_SITE";
+export const FETCH_MENU = "FETCH_MENU";
 
 export const SUBMIT_OPT = "SUBMIT_OTP";
 export const SUBMIT_PHONE = "SUBMIT_PHONE";

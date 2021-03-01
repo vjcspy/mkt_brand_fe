@@ -3,8 +3,9 @@ import useDebounce from "../../hooks/useDebounce";
 import { ItemSubMenu, SubMenu, HeaderSubMenu, MainSubMenu } from "./style";
 import IconTriangleLineLeft from "../icons/iconTriangleLineLeft";
 import IconTriangleRight from "../icons/iconTriangleLineRight";
+import LinkRouter from "../link-router";
 
-function ChildMenu({ parent, setItemSubMenu }) {
+function ChildMenu({ parent, setItemSubMenu, onCloseMenu, locale }) {
   const [itemChildMenu, setItemChildMenu] = useState();
   const [className, setClassName] = useState();
   const show = useDebounce("show", 500);
@@ -26,29 +27,31 @@ function ChildMenu({ parent, setItemSubMenu }) {
         {parent && (
           <HeaderSubMenu onClick={onCLoseSubMenu}>
             <IconTriangleLineLeft width={15} height={15} />
-            <h3>{parent.label}</h3>
+            <h4>{parent.label?.[locale]}</h4>
           </HeaderSubMenu>
         )}
         <MainSubMenu>
-          {parent?.subMenu?.map((item, index) => (
-            <>
-              {item.subMenu?.length > 0 ? (
-                <ItemSubMenu key={index} onClick={() => setItemChildMenu(item)}>
-                  <h4>{item.label}</h4>
-                  <div>
-                    <IconTriangleRight width={12} height={12} />
-                  </div>
-                </ItemSubMenu>
-              ) : (
-                <ItemSubMenu>
-                  <h4> {item.label}</h4>
-                </ItemSubMenu>
-              )}
-            </>
-          ))}
+          {parent?.children?.map((item, index) =>
+            item.children?.length > 0 ? (
+              <ItemSubMenu key={index} onClick={() => setItemChildMenu(item)}>
+                <h5>{item.label?.[locale]}</h5>
+                <div>
+                  <IconTriangleRight width={12} height={12} />
+                </div>
+              </ItemSubMenu>
+            ) : (
+              <ItemSubMenu key={index}>
+                <h5 onClick={onCloseMenu}>
+                  <LinkRouter href={item.url} passHref>
+                    <a>{item.label?.[locale]}</a>
+                  </LinkRouter>
+                </h5>
+              </ItemSubMenu>
+            )
+          )}
         </MainSubMenu>
       </SubMenu>
-      {itemChildMenu && <ChildMenu parent={itemChildMenu} setItemSubMenu={setItemChildMenu} />}
+      {itemChildMenu && <ChildMenu locale={locale} parent={itemChildMenu} setItemSubMenu={setItemChildMenu} onCloseMenu={onCloseMenu} />}
     </>
   );
 }

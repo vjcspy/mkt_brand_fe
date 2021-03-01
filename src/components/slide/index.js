@@ -50,7 +50,7 @@ const Slide = ({ slides, current = 0 }) => {
             {slides?.map((item, index) => (
               <ItemSlide key={index}>
                 {item.text.value}&nbsp;
-                <Button varian="link" href={item.link.value?.url}>
+                <Button className="get-code" varian="link" href={item.link.value?.url}>
                   {item.link.value?.label}
                 </Button>
               </ItemSlide>

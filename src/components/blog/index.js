@@ -11,7 +11,7 @@ const Blog = ({ blog }) => {
     <WrapperBlog>
       <WrapperImage>
         <RatioImage>
-          <img src={blog.image} />
+          <img src={blog.image} width={500} height={500} alt="" />
         </RatioImage>
       </WrapperImage>
       <Title>{blog.title}</Title>

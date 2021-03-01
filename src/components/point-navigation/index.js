@@ -7,6 +7,7 @@ const PointNavigation = ({
   borderColor = "#ffffff",
   backgroundActive = "#ffffff",
   display = "inline-block",
+  sizeAfter = 14,
   ...rest
 }) => {
   const dots = useMemo(() => {
@@ -16,7 +17,14 @@ const PointNavigation = ({
   return (
     <WrapperListPoint {...rest} maxWidth={20 * size}>
       {dots.map((i) => (
-        <Item key={i} active={i === currentIndex} background={backgroundActive} borderColor={borderColor} display={display} />
+        <Item
+          sizeAfter={sizeAfter}
+          key={i}
+          active={i === currentIndex}
+          background={backgroundActive}
+          borderColor={borderColor}
+          display={display}
+        />
       ))}
     </WrapperListPoint>
   );

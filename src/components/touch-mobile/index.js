@@ -1,16 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 import IconRectangle from "../icons/iconRectangle";
 import IconClose from "../icons/iconsClose";
 import { WrapperDrag, ContentDrag, IconDrag, IconCloseDrag, Content } from "./style";
-const DragMobile = ({ children }) => {
+const DragMobile = ({ isShowDefault, children }) => {
   const refDrag = useRef();
   const [statusTop, setStatusTop] = useState(false);
   const [height, setHeight] = useState(300);
 
-  const onTouchStart = () => {
-    console.log("on touch start");
-  };
+  const onTouchStart = () => {};
   const onTouchMove = (e) => {
     setHeight(window.innerHeight - e.touches[0].clientY);
   };
@@ -25,6 +23,13 @@ const DragMobile = ({ children }) => {
     setStatusTop(true);
     setHeight("calc(100% - 114px)");
   };
+
+  // mac dinh se show neu click xem uu dai o home page
+  useEffect(() => {
+    if (isShowDefault) {
+      onOpen();
+    }
+  }, [isShowDefault]);
   return (
     <WrapperDrag style={{ height: height }}>
       <ContentDrag ref={refDrag}>

@@ -17,6 +17,7 @@ import Button from "../../../components/button";
 import InputComponent from "../../../components/input";
 import DropDown from "../../../components/input/drop-down";
 import useIframeResize from "../../../hooks/useWindowResize/useIframeResize";
+import { FormattedMessage } from "react-intl";
 
 const genders = ["Woman", "Man", "Other"];
 
@@ -30,7 +31,7 @@ const ProfileTab = ({}) => {
           <ProfileTabGrid>
             <AvatarWrapper>
               {has(profile, ["avatar", "url"]) ? (
-                <Image src={get(profile, ["avatar", "url"])} />
+                <Image width={130} height={130} src={get(profile, ["avatar", "url"])} />
               ) : (
                 <AvatarButton>
                   <Icon icon="camera" />
@@ -39,54 +40,68 @@ const ProfileTab = ({}) => {
             </AvatarWrapper>
             <ProfileInfoWrapper>
               <ProfileInfoItem>
-                <p>ID:</p>
+                <p>
+                  <FormattedMessage id="profile.info_code" />:
+                </p>
                 <p>123568</p>
               </ProfileInfoItem>
               <ProfileInfoItem>
-                <p>Coin:</p>
+                <p>
+                  <FormattedMessage id="profile.info_coin" />:
+                </p>
                 <p>
                   100.660 <Icon icon="coin" />
                 </p>
               </ProfileInfoItem>
               <ProfileInfoItem>
-                <p>Level:</p>
+                <p>
+                  <FormattedMessage id="profile.info_level" />:
+                </p>
                 <p>Sliver</p>
               </ProfileInfoItem>
               <ProfileInfoItem>
-                <p>Phone number:</p>
+                <p>
+                  <FormattedMessage id="profile.info_phone_number" />:
+                </p>
                 <p>0946 xxx xxx</p>
               </ProfileInfoItem>
               <ProfileButtons>
-                <Button varian="outline">Cancel</Button>
-                <Button varian="primary">Save</Button>
+                <Button varian="outline">
+                  <FormattedMessage id="profile.info_cancel" />
+                </Button>
+                <Button varian="primary">
+                  <FormattedMessage id="profile.info_save" />
+                </Button>
               </ProfileButtons>
             </ProfileInfoWrapper>
           </ProfileTabGrid>
           <ProfileTabGrid>
             <ProfileInputWrapper>
-              <InputComponent title="First name" />
-              <InputComponent title="Email" />
-              <DropDown title="Gender" listData={genders} />
-              <InputComponent title="City" />
+              <InputComponent title="profile.info_first_name" />
+              <InputComponent title="profile.info_email" />
+              <DropDown title="profile.info_gender" listData={genders} />
+              <InputComponent title="profile.info_city" />
             </ProfileInputWrapper>
           </ProfileTabGrid>
           <ProfileTabGrid>
             <ProfileInputWrapper>
-              <InputComponent title="Last name" />
-              <DropDown title="Birthday" listData={["20/2/1960"]} />
-              <InputComponent title="Address (Street/Ward)" />
-              <DropDown title="Country" listData={["VietNam"]} />
+              <InputComponent title="profile.info_last_name" />
+              <DropDown title="profile.info_birth_day" listData={["20/2/1960"]} />
+              <InputComponent title="profile.info_address" />
+              <DropDown title="profile.info_country" listData={["VietNam"]} />
             </ProfileInputWrapper>
           </ProfileTabGrid>
         </>
       ) : (
         <>
           <ProfileTabGrid>
-            <h3>Thông tin cá nhân</h3>
+            <h3>
+              <FormattedMessage id="profile.title_info_account" />
+            </h3>
             <ProfileInfoWrapper>
               <AvatarWrapper>
                 {has(profile, ["avatar", "url"]) ? (
-                  <Image src={get(profile, ["avatar", "url"])} />
+                  <Image width={130} height={130} src={get(profile, ["avatar", "url"])} />
                 ) : (
                   <AvatarButton>
                     <Icon icon="camera" />
@@ -94,37 +109,49 @@ const ProfileTab = ({}) => {
                 )}
               </AvatarWrapper>
               <ProfileInfoItem>
-                <p>ID:</p>
+                <p>
+                  <FormattedMessage id="profile.info_code" />:
+                </p>
                 <p>123568</p>
               </ProfileInfoItem>
               <ProfileInfoItem>
-                <p>Coin:</p>
+                <p>
+                  <FormattedMessage id="profile.info_coin" />:
+                </p>
                 <p>
                   100.660 <Icon icon="coin" />
                 </p>
               </ProfileInfoItem>
               <ProfileInfoItem>
-                <p>Level:</p>
+                <p>
+                  <FormattedMessage id="profile.info_level" />:
+                </p>
                 <p>Sliver</p>
               </ProfileInfoItem>
               <ProfileInfoItem>
-                <p>Phone number:</p>
+                <p>
+                  <FormattedMessage id="profile.info_phone_number" />:
+                </p>
                 <p>0946 xxx xxx</p>
               </ProfileInfoItem>
             </ProfileInfoWrapper>
             <ProfileInputWrapper>
-              <InputComponent title="First name" />
-              <InputComponent title="Email" />
-              <DropDown title="Gender" listData={genders} />
-              <InputComponent title="City" />
-              <InputComponent title="Last name" />
-              <DropDown title="Birthday" listData={["20/2/1960"]} />
-              <InputComponent title="Address (Street/Ward)" />
-              <DropDown title="Country" listData={["VietNam"]} />
+              <InputComponent title="profile.info_first_name" />
+              <InputComponent title="profile.info_email" />
+              <DropDown title="profile.info_gender" listData={genders} />
+              <InputComponent title="profile.info_city" />
+              <InputComponent title="profile.info_last_name" />
+              <DropDown title="profile.info_birth_day" listData={["20/2/1960"]} />
+              <InputComponent title="profile.info_address" />
+              <DropDown title="profile.info_country" listData={["VietNam"]} />
             </ProfileInputWrapper>
             <ProfileButtons>
-              <Button varian="outline">Cancel</Button>
-              <Button varian="primary">Save</Button>
+              <Button varian="outline">
+                <FormattedMessage id="profile.info_cancel" />
+              </Button>
+              <Button varian="primary">
+                <FormattedMessage id="profile.info_save" />
+              </Button>
             </ProfileButtons>
           </ProfileTabGrid>
         </>

@@ -11,48 +11,63 @@ import {
   PopupContent,
 } from "./style";
 import IconClose from "../../../components/icons/iconsClose";
-import IconTriangleDown from "../../../components/icons/iconTriangleDown";
-import IconMapMarker from "../../../components/icons/iconMapMarker";
 import Button from "../../../components/button";
 import { useSelector, useDispatch } from "react-redux";
-import useFromJS from "../../../hooks/useFromJS";
 import { RadioButton } from "../../../styles";
-
+import { FormattedMessage } from "react-intl";
+import { SET_LOCALE, SHOW_LANGUAGE_LOCATION } from "../../../constants";
+import SelectLocation from "../../../components/drop-down/SelectLocation";
 const PopupLanguageLocation = () => {
-  const [check, setCheck] = useState("en");
-  // const profile = useFromJS(["profile"]);
+  const locale = useSelector((state) => state.getIn(["locale"]));
+  const [language, setCheck] = useState(locale);
+
   const showLanguageLocation = useSelector((state) => state.getIn(["showLanguageLocation"]));
   const dispatch = useDispatch();
-  const setPopupLanguageLocation = useCallback((value) => dispatch({ type: "SHOW_LANGUAGE_LOCATION", value }), []);
+  const setPopupLanguageLocation = useCallback((value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }), []);
+  const updateLanguage = useCallback((value) => dispatch({ type: SET_LOCALE, value }), []);
+
+  const onDone = () => {
+    setPopupLanguageLocation(false);
+    updateLanguage(language);
+  };
+
+  const onClosePopup = () => {
+    setPopupLanguageLocation(false);
+  };
+
   return showLanguageLocation ? (
     <Background>
-      <MarkerWrapper className="showMarker" onClick={() => setPopupLanguageLocation(false)} />
+      <MarkerWrapper className="showMarker" onClick={onClosePopup} />
       <PopupContent className="showContent">
         <HeaderPopup>
-          <h3>Location & Language</h3>
-          <IconClose onClick={() => setPopupLanguageLocation(false)} />
+          <h3>
+            <FormattedMessage id="header.location_and_language" />
+          </h3>
+          <IconClose onClick={onClosePopup} />
         </HeaderPopup>
         <ContentPopup>
-          <TitleGroup>Choose your location:</TitleGroup>
+          <TitleGroup>
+            <FormattedMessage id="header.select_location" />:
+          </TitleGroup>
           <GroupLocation>
-            <div>
-              <IconMapMarker width={16} height={16} />
-              <h5>Ha Noi</h5>
-              <IconTriangleDown />
-            </div>
+            <SelectLocation className="popup-language-location-in-home" />
           </GroupLocation>
-          <TitleGroup>Choose your language:</TitleGroup>
+          <TitleGroup>
+            <FormattedMessage id="header.select_language" />:
+          </TitleGroup>
           <GroupLanguage>
-            <RadioButton checked={check === "en"} onClick={() => setCheck("en")}>
-              English
+            <RadioButton checked={language === "en"} onClick={() => setCheck("en")}>
+              <FormattedMessage id="header.english" />
             </RadioButton>
-            <RadioButton checked={check === "vn"} onClick={() => setCheck("vn")}>
-              Vietnamese
+            <RadioButton checked={language === "vi"} onClick={() => setCheck("vi")}>
+              <FormattedMessage id="header.vietnamese" />
             </RadioButton>
           </GroupLanguage>
         </ContentPopup>
         <GroupButton>
-          <Button status="primary">Done</Button>
+          <Button onClick={onDone} status="primary">
+            <FormattedMessage id="header.done" />
+          </Button>
         </GroupButton>
       </PopupContent>
     </Background>

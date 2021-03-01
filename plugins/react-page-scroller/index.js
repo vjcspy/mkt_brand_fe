@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 import * as Events from "./Events";
@@ -114,11 +114,17 @@ const ReactPageScroller = ({
     }
   }, []);
 
-  const setRenderComponents = useCallback(() => {
+  useEffect(() => {
+    if (componentIndex === componentsToRenderLength - 1) {
+      enableDocumentScroll();
+    } else {
+      disableScroll();
+    }
+  }, [componentIndex, componentsToRenderLength]);
+
+  const RenderComponents = useMemo(() => {
     const newComponentsToRender = [];
-
     let i = 0;
-
     while (i < componentsToRenderLength && !isNil(children[i])) {
       containers[i] = true;
       newComponentsToRender.push(
@@ -222,6 +228,11 @@ const ReactPageScroller = ({
     [scrollWindowDown, scrollWindowUp]
   );
 
+  useEffect(() => {
+    pageContainer.current?.addEventListener("wheel", wheelScroll, { passive: true });
+    return () => pageContainer.current?.removeEventListener("wheel", wheelScroll, { passive: true });
+  }, [wheelScroll]);
+
   const keyPress = useCallback(
     (event) => {
       if (event.keyCode === KEY_UP) {
@@ -235,11 +246,11 @@ const ReactPageScroller = ({
   );
 
   useEffect(() => {
-    scrollContainer.current?.addEventListener(Events.TOUCHMOVE, touchMove);
-    scrollContainer.current?.addEventListener(Events.KEYDOWN, keyPress);
+    scrollContainer.current?.addEventListener(Events.TOUCHMOVE, touchMove, { passive: true });
+    scrollContainer.current?.addEventListener(Events.KEYDOWN, keyPress, { passive: true });
     return () => {
-      scrollContainer.current?.removeEventListener(Events.TOUCHMOVE, touchMove);
-      scrollContainer.current?.removeEventListener(Events.KEYDOWN, keyPress);
+      scrollContainer.current?.removeEventListener(Events.TOUCHMOVE, touchMove, { passive: true });
+      scrollContainer.current?.removeEventListener(Events.KEYDOWN, keyPress, { passive: true });
     };
   }, [touchMove, keyPress]);
 
@@ -333,7 +344,6 @@ const ReactPageScroller = ({
     >
       <div
         ref={pageContainer}
-        onWheel={wheelScroll}
         style={{
           height: "100%",
           width: "100%",
@@ -342,7 +352,7 @@ const ReactPageScroller = ({
         }}
         tabIndex={0}
       >
-        {setRenderComponents()}
+        {RenderComponents}
       </div>
     </div>
   );

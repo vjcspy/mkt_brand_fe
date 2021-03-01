@@ -110,13 +110,13 @@ class GlobalPagination extends React.Component {
       <Wrapper>
         <div>
           <a href="" className="paginationNavigator" onClick={this.handlePreviousPageClick} disabled={this.isFirstPage()}>
-            <FontAwesomeIcon icon="chevron-left" size="10px" />
+            <FontAwesomeIcon icon="chevron-left" />
           </a>
           <nav className="navWrapper">
             <ul className="navUl">{this.renderLinks()}</ul>
           </nav>
           <a href="" className="paginationNavigator" onClick={this.handleNextPageClick} disabled={this.isLastPage()}>
-            <FontAwesomeIcon icon="chevron-right" size="sm" />
+            <FontAwesomeIcon icon="chevron-right" />
           </a>
         </div>
       </Wrapper>

@@ -33,7 +33,11 @@ export const MenusRightContent = styled.div`
 `;
 
 export const MenusComponentWrapper = styled.div`
+  position: sticky;
+  left: 0;
+  top: 130px;
   @media (max-width: 768px) {
+    position: relative;
     display: flex;
     justify-content: space-between;
   }
@@ -67,6 +71,7 @@ export const MenuItemButton = styled.button`
   h4,
   h5 {
     position: relative;
+    color: ${({ isOpen, theme }) => (isOpen ? theme.color.status.primary : "")};
     &:after {
       position: absolute;
       top: 100%;
@@ -75,7 +80,7 @@ export const MenuItemButton = styled.button`
       content: "";
       width: 0px;
       height: 2px;
-      background: currentColor;
+      background: ${({ theme }) => theme.color.status.primary};
       transition: 0.3s width ease-in-out;
     }
 
@@ -88,21 +93,20 @@ export const MenuItemButton = styled.button`
     h3,
     h4,
     h5 {
-      &:after {
-        width: 100%;
-        right: auto;
-        left: 0px;
-      }
+      color: ${({ theme }) => theme.color.status.primary};
+      // &:after {
+      //   width: 100%;
+      //   right: auto;
+      //   left: 0px;
+      // }
     }
   }
 
   ${({ isOpen }) =>
     isOpen
       ? `
-  
-  h3,
-  h4,
   h5 {
+    color: ${({ theme }) => theme.color.status.primary};
     &:after {
       width: 100%;
       right: auto;
@@ -113,6 +117,10 @@ export const MenuItemButton = styled.button`
       : ""}
 `;
 
+export const NameParentMenu = styled.h4`
+  color: ${({ isOpen, theme }) => (isOpen ? theme.color.status.primary : "")};
+`;
+
 export const CaretDownIcon = styled.div`
   svg {
     transition: 0.3s transform ease-in-out;
@@ -121,14 +129,32 @@ export const CaretDownIcon = styled.div`
 `;
 
 export const MenuSubItemWrapper = styled.div`
-  border-top: 1px solid ${({ theme }) => theme.color.page.border};
+  border-top: 1px solid ${({ isOpen, theme }) => (isOpen ? theme.color.status.primary : theme.color.page.border)};
+  border-top: ${({ isOpen, theme }) => (isOpen ? "4px solid" + theme.color.status.primary : "1px solid" + theme.color.page.border)};
   padding-left: 18px;
-  margin-top: 20px;
+  margin-top: 9px;
 `;
 
 export const MenuSubItemButton = styled(MenuItemButton)`
   height: 24px;
   margin-top: 20px;
+
+  ${({ isOpen }) =>
+    isOpen
+      ? `
+  .have-sup-menu {
+    color: ${({ theme }) => theme.color.status.primary};
+    &:after{
+      width:0;
+    }
+    }
+  }
+  `
+      : ""}
+`;
+
+export const NameSubItemMenu = styled.h5`
+  // color: red;
 `;
 
 export const MenuSubItemIcon = styled.div`
@@ -163,6 +189,10 @@ export const MenuSubItemIcon = styled.div`
       ? `
   &:before {
     opacity: 0;
+  }
+  &:after {
+    background: #F89520;
+
   }
   `
       : ""}

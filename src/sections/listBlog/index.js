@@ -8,7 +8,8 @@ const defaultConfig = {
   type: "section",
   code: "code-dawdaw",
   name: "blogs",
-  title: "List Blog",
+  title: "Blog",
+  titleTranslate: "breadcrumbs.blog",
   components: {},
 };
 
@@ -19,8 +20,8 @@ const ListBlog = ({ limited = 4 }) => {
         {blogs
           ?.filter((_e, i) => i < limited)
           .map((item, index) => (
-            <a href={`blog/${item.id}`}>
-              <Blog key={index} blog={item} />
+            <a key={index} href={`news/${item.id}`}>
+              <Blog blog={item} />
             </a>
           ))}
       </RenderListFlex>

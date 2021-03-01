@@ -13,6 +13,7 @@ export const WrapperFlex = styled.div`
   @media (max-width: 768px) {
     & > * {
       width: ${({ widthItemMobile }) => "calc(" + widthItemMobile + "% - 10px)"};
+      margin-bottom: 24px;
     }
   }
 `;

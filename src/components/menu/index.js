@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
   FooterMenu,
   HeaderMenu,
@@ -12,44 +12,30 @@ import {
   FeatureMobile,
   ListFeature,
   LanguageLocation,
+  ContentRelative,
 } from "./style";
 import IconClose from "../icons/iconsClose";
 import IconTriangleRight from "../icons/iconTriangleLineRight";
 import ChildMenu from "./childMenu";
 import Button from "../button";
-import useDebounce from "../../hooks/useDebounce";
 import IconTriangleDown from "../icons/iconTriangleDown";
-import IconMapMarker from "../icons/iconMapMarker";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { SHOW_LANGUAGE_LOCATION } from "../../constants";
+import { FormattedMessage } from "react-intl";
+import LinkRouter from "../link-router";
+import SelectLocation from "../drop-down/SelectLocation";
+import SelectLanguage from "../drop-down/SelectLanguage";
+import useGraphql from "../../hooks/useApi/useGraphql";
 
 const mapDispatchToProp = (dispatch) => ({
   setShowLanguageLocation: (value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }),
 });
 
-const featureMobile = [
-  { title: "Help Center", url: "" },
-  { title: "Log in", url: "" },
-  { title: "Facebook", url: "" },
-  { title: "Instagram", url: "" },
-  { title: "Youtube", url: "" },
-];
-
-const Menu = ({ show, listMenu, setShowMenu, socialFeature, setShowLanguageLocation }) => {
+const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
   const [itemSubMenu, setItemSubMenu] = useState();
-  const [classNameMenu, setClassNameMenu] = useState();
-  const [classNameMarker, setClassNameMarker] = useState();
-
-  const classMarker = useDebounce("show", 300);
-  const classMenu = useDebounce("show", 200);
-
-  useEffect(() => {
-    setClassNameMarker(classMarker);
-  }, [classMarker]);
-
-  useEffect(() => {
-    setClassNameMenu(classMenu);
-  }, [classMenu]);
+  const locale = useSelector((state) => state.getIn(["locale"]));
+  const menu = useGraphql("menu");
+  const menus = useMemo(() => listMenu?.map((m) => (m.apiKey === "menu" ? { ...m, children: menu } : m)), [listMenu, menu]);
 
   const onCloseMenu = () => {
     // setClassNameMenu(null);
@@ -64,66 +50,71 @@ const Menu = ({ show, listMenu, setShowMenu, socialFeature, setShowLanguageLocat
       <ContentPosition>
         <MarkerLayout className={`${show ? "show" : ""}`} onClick={onCloseMenu} />
         <WrapperContentMenu className={`${show ? "show" : ""}`}>
-          <HeaderMenu>
-            <div>
-              <IconClose onClick={onCloseMenu} width={15} height={15} />
-            </div>
-          </HeaderMenu>
-          <hr />
-          <ContentMenu>
-            <MainMenu className={`${itemSubMenu ? "hide" : ""}`}>
-              {listMenu?.map((item, index) => (
-                <>
-                  {item.subMenu?.length > 0 ? (
-                    <>
-                      <ItemMenu key={index} onClick={() => setItemSubMenu(item)}>
-                        <h3>
-                          {item.label}
-                          {item.notifi && <span>{item.notifi.label}</span>}
-                        </h3>
+          <ContentRelative>
+            <HeaderMenu>
+              <div>
+                <IconClose onClick={onCloseMenu} width={20} height={20} />
+              </div>
+            </HeaderMenu>
+            <hr />
+            <ContentMenu>
+              <MainMenu className={`${itemSubMenu ? "hide" : ""}`}>
+                {menus?.map((item, index) => (
+                  <React.Fragment key={index}>
+                    {item.children?.length > 0 ? (
+                      <ItemMenu onClick={() => setItemSubMenu(item)}>
+                        <h4>
+                          {item.label?.[locale]}
+                          {item.apiKey == "promo" && <span>{2}</span>}
+                        </h4>
                         <IconTriangleRight width={15} height={15} />
                       </ItemMenu>
-                    </>
-                  ) : (
-                    <ItemMenu>
-                      <h3>
-                        <a href={item.url}>{item.label}</a>
-                        {item.notifi && <span>{item.notifi.label}</span>}
-                      </h3>
-                    </ItemMenu>
-                  )}
-                </>
-              ))}
+                    ) : (
+                      <ItemMenu>
+                        <h4 onClick={onCloseMenu}>
+                          <LinkRouter href={item.url} passHref>
+                            <a>{item.label?.[locale]}</a>
+                          </LinkRouter>
+                          {item.apiKey == "promo" && <span>{2}</span>}
+                        </h4>
+                      </ItemMenu>
+                    )}
+                  </React.Fragment>
+                ))}
 
-              <FeatureMobile>
-                <ListFeature>
-                  {featureMobile?.map((item, index) => (
+                <FeatureMobile>
+                  <ListFeature>
                     <h5>
-                      <a href={item.url}>{item.title}</a>
+                      <a href="">
+                        <FormattedMessage id="menu.helper" />
+                      </a>
                     </h5>
-                  ))}
-                </ListFeature>
-                <LanguageLocation>
-                  <div onClick={() => setShowLanguageLocation(true)}>
-                    <img src="/images/ic/ic_usa_flag.svg" />
-                    <h5>English</h5>
-                    <IconTriangleDown />
-                  </div>
-                  <div onClick={() => setShowLanguageLocation(true)}>
-                    <IconMapMarker />
-                    <h5>Ha Noi</h5>
-                    <IconTriangleDown />
-                  </div>
-                </LanguageLocation>
-              </FeatureMobile>
-            </MainMenu>
-            {itemSubMenu && itemSubMenu.subMenu?.length > 0 && <ChildMenu parent={itemSubMenu} setItemSubMenu={setItemSubMenu} />}
-          </ContentMenu>
+                    <h5>
+                      <a href="">
+                        <FormattedMessage id="menu.login" />
+                      </a>
+                    </h5>
+                  </ListFeature>
+                  <LanguageLocation>
+                    <SelectLanguage />
+                    <SelectLocation />
+                  </LanguageLocation>
+                </FeatureMobile>
+              </MainMenu>
+              {itemSubMenu?.children?.length > 0 && (
+                <ChildMenu onCloseMenu={onCloseMenu} locale={locale} parent={itemSubMenu} setItemSubMenu={setItemSubMenu} />
+              )}
+            </ContentMenu>
 
-          <FooterMenu>
-            <Button status="primary">Download App</Button>
-            <Button status="primary">Reservations</Button>
-          </FooterMenu>
+            <FooterMenu>
+              <Button status="primary">
+                <FormattedMessage id="menu.download_app" />
+              </Button>
+              <Button status="primary">
+                <FormattedMessage id="menu.reservation" />
+              </Button>
+            </FooterMenu>
+          </ContentRelative>
         </WrapperContentMenu>
       </ContentPosition>
     </WrapperMenu>

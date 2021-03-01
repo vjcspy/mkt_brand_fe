@@ -17,7 +17,7 @@ import {
   SET_TOKEN,
   UPDATE_API_STATUS,
   UPDATE_CONFIG,
-  SET_LOCATE,
+  SET_LOCALE,
   SET_SELECTED_COMPONENT,
   JWT_TOKEN,
   REMOVE_CONFIG,
@@ -26,6 +26,13 @@ import {
   SET_OUR_MENUS,
   SET_HEADER_HEIGHT,
   SET_SHOW_MENU_HEADER,
+  UPDATE_VALUE_TRANSITION,
+  SET_LOCATION,
+  SET_HOST,
+  SET_ID_BLOG,
+  SET_HEIGHT_POPUP,
+  ACCEPT_COOKIE,
+  SET_FIRST_LOAD,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -33,6 +40,9 @@ import { formatConfig, setStorage } from "../services/frontend";
 export const initialState = fromJS({
   mode: PRODUCTION_MODE,
   selectedSection: null,
+  locale: "vi",
+  location: "hn",
+  acceptCookie: false,
 });
 
 export default function rootReducer(state = initialState, action) {
@@ -96,8 +106,10 @@ export default function rootReducer(state = initialState, action) {
       return state.updateIn(["apiStatus", ...action.path], () => fromJS(action.value));
     case SET_MEDIA_DIALOG:
       return state.set("mediaDialog", fromJS(action.value));
-    case SET_LOCATE:
-      return state.set("locate", action.value);
+    case SET_LOCALE:
+      return state.set("locale", action.value);
+    case SET_LOCATION:
+      return state.set("location", action.value);
     case SHOW_LANGUAGE_LOCATION:
       return state.set("showLanguageLocation", action.value);
     case SET_PAGE_NAME:
@@ -108,6 +120,18 @@ export default function rootReducer(state = initialState, action) {
       return state.set("headerHeight", action.value);
     case SET_SHOW_MENU_HEADER:
       return state.set("showMenuHeader", action.value);
+    case UPDATE_VALUE_TRANSITION:
+      return state.updateIn(["modifiedConfig", "translation", ...action.path], () => action.value);
+    case SET_HOST:
+      return state.set("host", action.host).set("graphqlHost", action.graphqlHost);
+    case SET_ID_BLOG:
+      return state.set("idBlog", action.value);
+    case SET_HEIGHT_POPUP:
+      return state.set("heightPopup", action.value);
+    case ACCEPT_COOKIE:
+      return state.update("acceptCookie", () => action.value);
+    case SET_FIRST_LOAD:
+      return state.update("firstLoad", () => action.value);
     default:
       return state;
   }

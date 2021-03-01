@@ -3,7 +3,7 @@ import { DevSecondaryButton } from "../../../styles/developmentStyle";
 
 export const DropDownWrapper = styled.div`
   position: relative;
-  margin-left: 20px;
+  // margin-left: 20px;
 `;
 
 export const DropDownButton = styled(DevSecondaryButton)`
@@ -11,11 +11,19 @@ export const DropDownButton = styled(DevSecondaryButton)`
   z-index: 1;
   display: flex;
   align-items: center;
+  padding: 0px 10px;
+
+  ${({ icon }) => !icon && "width: 100%;"}
 
   svg {
     width: 18px;
     height: 18px;
   }
+`;
+
+export const DropDownButtonLabel = styled.span`
+  flex: 1;
+  text-align: left;
 `;
 
 export const DropDownContent = styled.div`
@@ -26,6 +34,7 @@ export const DropDownContent = styled.div`
   overflow: hidden;
   z-index: 2;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 2px, rgba(0, 0, 0, 0.3) 0px 4px 8px;
+  ${({ icon }) => !icon && "left: 0px;"}
 `;
 
 export const DropDownItem = styled(DevSecondaryButton)`

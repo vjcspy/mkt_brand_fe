@@ -5,7 +5,6 @@ export const Footer = styled.footer``;
 export const FooterWrapper = styled.div`
   margin-top: 140px;
   @media (max-width: 767px) {
-    display: none;
   }
 `;
 
@@ -18,6 +17,13 @@ export const Content = styled.div`
   width: 100%;
   justify-content: space-between;
   padding: 30px 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    & > div {
+      width: 100%;
+    }
+  }
 `;
 
 export const LeftContent = styled.div`
@@ -34,6 +40,14 @@ export const RightContent = styled.div`
   justify-content: space-around;
   img {
   }
+  h6 {
+    color: ${({ theme }) => theme.color.text.description};
+  }
+
+  @media (max-width: 768px) {
+    align-items: flex-start;
+    margin-top: 12px;
+  }
 `;
 
 export const WrapperFeature = styled.div`
@@ -43,12 +57,12 @@ export const WrapperFeature = styled.div`
   max-width: 500px;
   margin: 0 auto;
 
-  h5 {
+  h3 {
     margin-bottom: 30px;
   }
-  p {
+  h6 {
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
     color: ${({ theme }) => theme.color.text.description};
   }
 `;
@@ -61,6 +75,9 @@ export const GroupDownload = styled.div`
   a {
     margin: 0 18px;
     cursor: pointer;
+    img {
+      width: 190px;
+    }
   }
 
   a:first-child {
@@ -74,10 +91,14 @@ export const GroupDownload = styled.div`
 export const SocialNetwork = styled.div`
   margin: 80px 0 45px;
   display: flex;
-  justify-content: space-around;
+
   a {
+    display: block;
     cursor: pointer;
-    margin: 20px;
+    margin: 0 20px;
+    svg {
+      display: block;
+    }
   }
   a:first-child {
     margin-left: 0;

@@ -27,6 +27,7 @@ const Site = ({ config, site_code }) => {
     dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });
     dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
     dispatch({ type: SET_SHOW_MENU_HEADER, value: true });
+    return () => dispatch({ type: SET_SHOW_MENU_HEADER, value: false });
   }, [config]);
 
   return (

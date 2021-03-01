@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { useTheme } from "styled-components";
 import cn from "classnames";
 import IconChevronLeft from "../../components/icons/icChevronLeft";

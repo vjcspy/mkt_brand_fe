@@ -2,34 +2,57 @@
 import { GlobalStyle } from "../src/styles/globals";
 import { ThemeProvider } from "styled-components";
 import { DefaultTheme } from "../src/styles/theme";
-import { Provider, useSelector } from "react-redux";
 import store from "../src/redux/store";
+import LanguageProvider from "../src/components/language-provider";
+import { Provider, useDispatch } from "react-redux";
+import useFromJS from "../src/hooks/useFromJS";
+import defaultTranslation from "../src/translations";
+import { useEffect } from "react";
+import { SET_HOST } from "../src/constants";
 
 const ThemeWrapper = ({ children }) => {
-  const theme = useSelector((s) => s.getIn(["modifiedConfig", "theme"]));
-  return <ThemeProvider theme={theme?.toJS() ?? DefaultTheme}>{children}</ThemeProvider>;
+  const theme = useFromJS(["modifiedConfig", "theme"]);
+  return <ThemeProvider theme={theme ?? DefaultTheme}>{children}</ThemeProvider>;
+};
+const LanguageWrapper = ({ children }) => {
+  const translation = useFromJS(["modifiedConfig", "translation"]);
+  return <LanguageProvider messages={translation ?? defaultTranslation}>{children}</LanguageProvider>;
 };
 
-function App({ Component, pageProps }) {
-  if (process.browser) {
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  }
+const HostWrapper = ({ children, host, graphqlHost }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: SET_HOST, host, graphqlHost });
+  }, [host, graphqlHost]);
+  return children;
+};
+
+function App({ Component, pageProps, host, graphqlHost }) {
+  useEffect(() => {
+    if (process.browser) {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    }
+  }, []);
 
   return (
     <Provider store={store}>
-      <ThemeWrapper>
-        <GlobalStyle />
-        <Component {...pageProps} />
-      </ThemeWrapper>
+      <HostWrapper host={host} graphqlHost={graphqlHost}>
+        <LanguageWrapper>
+          <ThemeWrapper>
+            <GlobalStyle />
+            <Component {...pageProps} />
+          </ThemeWrapper>
+        </LanguageWrapper>
+      </HostWrapper>
     </Provider>
   );
 }
 
-// App.getInitialProps = async ({ Component, ctx }) => {
-//   const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-//   console.log("getInitialProps App");
-//   return { pageProps };
-// };
+App.getInitialProps = async ({ Component, ctx }) => {
+  // const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
+  // console.log("getInitialProps App");
+  return { host: process.env.API_HOST, graphqlHost: process.env.GRAPHQL_HOST };
+};
 
 export default App;

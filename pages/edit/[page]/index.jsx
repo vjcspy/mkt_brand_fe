@@ -1,18 +1,17 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DEVELOPMENT_MODE, GET_SITE, SET_MODE, SET_OUR_MENUS } from "../../src/constants";
-import PageContainer from "../../src/containers/pageContainer";
-import DevelopmentLayout from "../../src/development/containers/developmentLayout";
-import { Pages } from "../../src/sections";
-import { map } from "lodash";
-import { menus } from "../../src/dummyData/menus";
-import useSiteRouter from "../../src/hooks/useSiteRouter";
+import { DEVELOPMENT_MODE, GET_SITE, SET_MODE, SET_OUR_MENUS, SET_PAGE_NAME } from "../../../src/constants";
+import PageContainer from "../../../src/containers/pageContainer";
+import DevelopmentLayout from "../../../src/development/containers/developmentLayout";
+import { Pages } from "../../../src/sections";
+import { get, map } from "lodash";
+import useSiteRouter from "../../../src/hooks/useSiteRouter";
+import { getSite } from "../../../src/services/backend";
 
 export async function getStaticPaths() {
   const pagePaths = map(Pages, (page) => ({
     params: { page: page.name },
   }));
-  console.log("pagePaths", pagePaths);
   return {
     paths: pagePaths,
     fallback: false,
@@ -20,20 +19,25 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
+  const site = await getSite(process.env.SITE_CODE);
+  const menus = get(site, ["menu", "children"], []);
   const { page } = params;
   const site_code = process.env.SITE_CODE;
   return {
     props: {
       site_code: site_code ?? null,
       page: page ?? null,
+      menus: menus ?? null,
     },
   };
 }
 
-const PageEdit = ({ site_code }) => {
+const PageEdit = ({ site_code, menus }) => {
   /// Selector
   const token = useSelector((s) => s.get("token"));
+  const site = useSelector((s) => s.get("site"));
   const router = useSiteRouter();
+  const { page } = router.query;
 
   const dispatch = useDispatch();
 
@@ -44,12 +48,19 @@ const PageEdit = ({ site_code }) => {
   useEffect(() => {
     if (!token) {
       router.push("/edit/signin");
-    } else {
-      const { page: pageName } = router.query;
-      dispatch({ type: SET_OUR_MENUS, value: menus });
-      dispatch({ type: GET_SITE, site_code, pageName });
     }
-  }, [token, site_code]);
+  }, [token]);
+
+  useEffect(() => {
+    if (!site) {
+      dispatch({ type: GET_SITE, site_code, pageName: page });
+      dispatch({ type: SET_OUR_MENUS, value: menus });
+    }
+  }, [site, site_code, page]);
+
+  useEffect(() => {
+    dispatch({ type: SET_PAGE_NAME, value: page });
+  }, [page]);
 
   return (
     <DevelopmentLayout>
@@ -57,11 +68,5 @@ const PageEdit = ({ site_code }) => {
     </DevelopmentLayout>
   );
 };
-
-// Home.getInitialProps = async (ctx) => {
-//   return {
-//     site_code: ctx.query.site,
-//   };
-// };
 
 export default PageEdit;

@@ -64,7 +64,13 @@ const Profile = ({ site }) => {
   const logout = useCallback(() => dispatch({ type: SET_TOKEN, remember: true }), [dispatch]);
 
   return (
-    <ProfileWrapper onBlur={() => setShow()}>
+    <ProfileWrapper
+      onBlur={() =>
+        setTimeout(() => {
+          setShow();
+        }, 100)
+      }
+    >
       <ImageMedia media={site?.logo} formats="thumbnail" onClick={() => setShow(true)} />
       {show && (
         <Dropdown>

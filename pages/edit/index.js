@@ -28,7 +28,7 @@ const Home = ({ site_code }) => {
 
   useEffect(() => {
     if (!token) {
-      router.push("/edit/signin");
+      router.push("/signin");
     } else {
       dispatch({ type: SET_OUR_MENUS, value: menus });
       dispatch({ type: GET_SITE, site_code });

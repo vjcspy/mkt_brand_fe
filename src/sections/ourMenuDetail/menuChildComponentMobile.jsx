@@ -1,4 +1,4 @@
-import { get, has } from "lodash";
+import { get } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Button from "../../components/button";
@@ -8,13 +8,7 @@ import ReactPageScroller from "../../../plugins/react-page-scroller";
 import { toMoney } from "../../services/frontend";
 import { MenuChildItemMobile, MenuChildMobileScroller, MenuChildMobileWrapper, DotsWrapper, MenuChildMobileInfo } from "./styled";
 
-const MenuChildComponentMobile = ({
-  config,
-  setPath,
-  indexParent,
-  setIndexChild,
-  setIndexGrandChild,
-}) => {
+const MenuChildComponentMobile = ({ config, setPath, indexParent, setIndexChild, setIndexGrandChild }) => {
   const [current, setCurrent] = useState(0);
   const [product, setProduct] = useState();
   const headerHeight = useSelector((s) => s.get("headerHeight") ?? 0);
@@ -33,9 +27,9 @@ const MenuChildComponentMobile = ({
     <MenuChildMobileWrapper style={{ height: `calc(100vh - ${headerHeight}px)` }}>
       <MenuChildMobileScroller style={{ height: height }}>
         <ReactPageScroller containerHeight={height} pageOnChange={setCurrent}>
-          {config.products?.map((product, index) => (
+          {config.products?.items?.map((product, index) => (
             <MenuChildItemMobile key={index}>
-              <Image src={product.image.url} />
+              <Image width={283} height={273} src={product.image.url} />
             </MenuChildItemMobile>
           ))}
         </ReactPageScroller>
@@ -51,12 +45,12 @@ const MenuChildComponentMobile = ({
           style={{ display: "block", width: "100%" }}
           onClick={() => {
             setIndexChild(current);
-            if (has(config, ["items", current, "products"])) {
+            if (get(config, ["children", current, "products", "items", "length"]) > 0) {
               setIndexGrandChild(undefined);
-              setPath([indexParent, "items", current]);
+              setPath([indexParent, "children", current]);
             } else {
               setIndexGrandChild(0);
-              setPath([indexParent, "items", current, "items", 0]);
+              setPath([indexParent, "children", current, "children", 0]);
             }
           }}
         >

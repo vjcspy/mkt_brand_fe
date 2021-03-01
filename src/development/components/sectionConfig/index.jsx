@@ -48,6 +48,7 @@ const SectionConfig = ({ path, putStage, popStage }) => {
         </DevSecondaryButton>
         <h4>{config?.title}</h4>
         <Dropdown
+          icon
           items={[
             {
               label: "Hide Section",

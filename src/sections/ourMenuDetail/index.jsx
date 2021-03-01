@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
 import useFromJS from "../../hooks/useFromJS";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import { Container } from "../../styles";

@@ -1,16 +1,13 @@
-import { useRouter } from "next/dist/client/router";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import loadable from "@loadable/component";
 import Tabs from "../../components/tabs";
-import useHistory from "../../hooks/useHistory";
 import useSiteRouter from "../../hooks/useSiteRouter";
-import { getBrowserLink } from "../../services/frontend";
-import { Container } from "../../styles";
-import ProfileGift from "./profileGift";
-import ProfileHistory from "./profileHistory";
-import ProfileTab from "./profileTab";
-import PromoTab from "./promoTab";
 import { ProfileSectionWrapper } from "./styled";
+import { Container } from "../../styles";
+const ProfileGift = loadable(() => import("./profileGift"));
+const ProfileHistory = loadable(() => import("./profileHistory"));
+const ProfileTab = loadable(() => import("./profileTab"));
+const PromoTab = loadable(() => import("./promoTab"));
 
 const defaultConfig = {
   name: "profileSection",
@@ -21,27 +18,26 @@ const defaultConfig = {
 };
 
 const items = [
-  { icon: "tab-profile", code: "my-profile", label: "Thông tin tài khoản", Component: ProfileTab },
-  { icon: "tab-promo", code: "my-promo", label: "Ưu đãi của tôi", Component: PromoTab },
-  { icon: "tab-history", code: "my-history", label: "Lịch sử giao dịch", Component: ProfileHistory },
-  { icon: "tab-gift", code: "register-promo", label: "Đăng ký nhận tin ưu đãi", Component: ProfileGift },
+  { icon: "tab-profile", code: "my-profile", label: "profile.title_info_account", Component: ProfileTab },
+  { icon: "tab-promo", code: "my-promo", label: "profile.title_my_promo", Component: PromoTab },
+  { icon: "tab-history", code: "my-history", label: "profile.title_history_deal", Component: ProfileHistory },
+  { icon: "tab-gift", code: "register-promo", label: "profile.title_register_to_get_promo", Component: ProfileGift },
 ];
 
 const ProfileSection = ({}) => {
   const router = useSiteRouter();
   const {
-    query: { tab },
+    query: { tab, subPage },
   } = router;
-  const [state, history] = useHistory();
   const [current, setCurrent] = useState(0);
   const Component = items[current]?.Component;
 
   useEffect(() => {
-    let index = items.findIndex((i) => i.code == tab);
+    let index = items.findIndex((i) => i.code == (tab || subPage));
     if (index > -1) {
       setCurrent(index);
     }
-  }, [tab]);
+  }, [tab, subPage]);
 
   return (
     <ProfileSectionWrapper>

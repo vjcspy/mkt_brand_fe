@@ -1,35 +1,55 @@
 import React from "react";
-import { WrapperFlex, NamePromo, Feature, Description } from "./style";
+import { WrapperFlex, NamePromo, Feature, Description, WrapperButton, ContentField } from "./style";
 import Button from "../../../components/button";
 import IconTriangleDown from "../../../components/icons/iconTriangleDown";
+import { FormattedMessage } from "react-intl";
+
 const PromoInfo = ({ promo, onGetCode, getRestaurant, getCondition }) => {
   return (
     <>
       <NamePromo>{promo.title}</NamePromo>
       <WrapperFlex>
-        <h5>Khu vực</h5>
-        <span>{promo.location}</span>
+        <h5>
+          <FormattedMessage id="promo.location" />
+        </h5>
+        <ContentField>{promo.location}</ContentField>
       </WrapperFlex>
       <WrapperFlex>
-        <h5>Thời gian áp dụng</h5>
-        <span>{promo.timeAvailable}</span>
+        <h5>
+          <FormattedMessage id="promo.date_apply" />
+        </h5>
+        <ContentField>{promo.timeAvailable}</ContentField>
       </WrapperFlex>
       <WrapperFlex>
-        <h5>Số Voucher còn lại</h5>
-        <span>{promo.voucher}</span>
+        <h5>
+          <FormattedMessage id="promo.vouchers" />
+        </h5>
+        <ContentField>{promo.voucher}</ContentField>
       </WrapperFlex>
       <WrapperFlex>
-        <h5>Hết hạn sau</h5>
-        <span>{promo.dateExpend} ngày</span>
+        <h5>
+          <FormattedMessage id="promo.expired" />
+        </h5>
+        <ContentField>
+          {promo.dateExpend} <FormattedMessage id="promo.date" />
+        </ContentField>
       </WrapperFlex>
-      <Button onClick={onGetCode}>Nhận mã</Button>
-      <h5>Nội dung chương trình</h5>
-      <Description>{promo.description}</Description>
+      <WrapperButton>
+        <Button onClick={onGetCode}>
+          <FormattedMessage id="promo.get_otp" />
+        </Button>
+      </WrapperButton>
+      <h5>
+        <FormattedMessage id="promo.content_event" />
+      </h5>
+      <ContentField>{promo.description}</ContentField>
       <Feature onClick={getRestaurant}>
-        Nhà hàng áp dụng <IconTriangleDown />
+        <FormattedMessage id="promo.restaurant_apply" />
+        <IconTriangleDown width={16} height={16} />
       </Feature>
       <Feature style={{ marginBottom: 0 }} onClick={getCondition}>
-        Điều kiện áp dụng <IconTriangleDown />
+        <FormattedMessage id="promo.condition_apply" />
+        <IconTriangleDown width={16} height={16} />
       </Feature>
     </>
   );

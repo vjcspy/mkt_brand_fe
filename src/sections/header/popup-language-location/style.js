@@ -64,7 +64,7 @@ export const PopupContent = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 20px;
+    padding: 24px;
     width: calc(100% - 40px);
   }
 `;
@@ -93,18 +93,9 @@ export const GroupLocation = styled.div`
   padding-bottom: 20px;
   border-bottom: 1px solid #7171713d;
   margin-bottom: 20px;
-
-  div {
-    display: flex;
-    align-items: center;
-    svg {
-      margin: 0 13px;
-    }
-
-    svg:first-child {
-      margin-left: 0;
-      margin-right: 13px;
-    }
+  position: relative;
+  .popup-language-location-in-home {
+    position: unset;
   }
 `;
 
@@ -118,4 +109,58 @@ export const GroupButton = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 40px;
+`;
+
+export const WrapperSelectLocation = styled.div``;
+
+export const TitleLocation = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  p {
+    margin: 0 63px 0 17px;
+  }
+  .icon-down {
+    position: absolute;
+    left: 160px;
+  }
+`;
+
+export const ListLocation = styled.div`
+  position: absolute;
+  background: #ffffff;
+  width: 160px;
+  height: 100px;
+  overflow: auto;
+  z-index: 10;
+  border: 1px solid #231f20;
+  box-sizing: border-box;
+  border-radius: 4px;
+  top: 100%;
+  padding-top: 2px;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 24px;
+    cursor: pointer;
+    p {
+      margin: 0;
+    }
+
+    svg {
+      color: ${({ theme }) => theme.color.status.primary};
+    }
+  }
+`;
+
+export const Marker = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 1;
 `;

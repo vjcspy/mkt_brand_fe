@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useRef, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { SET_HEIGHT_POPUP } from "../../constants";
 import IconClose from "../icons/iconsClose";
 import { Background, MarkerWrapper, PopupContent } from "./style";
-import Portal from "../../development/containers/developmentDialog/portal";
 const Popup = ({ show, onClose, children }) => {
+  const refPopup = useRef();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (refPopup.current) {
+      const height = refPopup.current.clientHeight;
+      dispatch({ type: SET_HEIGHT_POPUP, name: "popupWrapper", value: height - 80 });
+    }
+  });
+
   return show ? (
     <Background>
       <div>
         <MarkerWrapper className="showMarker" onClick={onClose} />
-        <PopupContent className="showContent">
+        <PopupContent ref={refPopup} className="showContent">
           <IconClose className="icon-close" onClick={onClose} />
           {children}
         </PopupContent>

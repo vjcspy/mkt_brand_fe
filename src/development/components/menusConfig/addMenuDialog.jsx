@@ -5,7 +5,7 @@ import { DevInput, DevSecondaryButton } from "../../../styles/developmentStyle";
 import Portal from "../../containers/developmentDialog/portal";
 import { DialogBackground, DialogBody, DialogFooter, DialogHeader, DialogWrapper } from "../../containers/developmentDialog/styled";
 import { ComponentWrapper } from "../developmentComponentType/styled";
-
+ 
 const AddMenuDialog = ({ dialog, onClose, onAddMenu }) => {
   const [title, setTitle] = useState("");
   const size = useWindowResize();

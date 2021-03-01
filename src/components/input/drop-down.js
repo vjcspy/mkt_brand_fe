@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { DropdownWrapper, TitleDopDown, ContentDropDown, ListData, ItemSelect, MarkerDropdown } from "./style";
 import IconTriangleDown from "../icons/iconTriangleDown";
 import IconTick from "../icons/iconTick";
+import { FormattedMessage } from "react-intl";
+
 const DropDown = ({ title, listData, ...rest }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [itemSelected, setItemSelected] = useState(listData[0]);
@@ -12,7 +14,9 @@ const DropDown = ({ title, listData, ...rest }) => {
   return (
     <DropdownWrapper {...rest}>
       {openDropdown && <MarkerDropdown onClick={() => setOpenDropdown(false)} />}
-      <TitleDopDown>{title}</TitleDopDown>
+      <TitleDopDown>
+        <FormattedMessage id={title} />
+      </TitleDopDown>
       <ContentDropDown onClick={() => setOpenDropdown(true)}>
         <p>{itemSelected}</p>
         <IconTriangleDown />

@@ -17,25 +17,28 @@ const Footer = ({ config }) => {
     <FooterWrapper>
       <Container>
         <WrapperFeature>
-          <h5>Tải App The Golden Spoon</h5>
+          <h3>Tải App The Golden Spoon</h3>
           <GroupDownload>
             <a>
-              <img src="/images/app_store.png" />
+              <img width={190} height={60} src="/images/googleplay.jpg" />
             </a>
             <a>
-              <img src="/images/google_play.png" />
+              <img width={190} height={60} src="/images/appstore.jpg" />
             </a>
           </GroupDownload>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <h6>
+            The Golden Spoon – Siêu ứng dụng cho tín đồ ẩm thực.
+            <br /> Tải App Hôm Nay Chạm Ngay Ưu Đãi.
+          </h6>
           <SocialNetwork>
             <a>
-              <IconFacebookCircle />
+              <IconFacebookCircle width={36} height={36} />
             </a>
             <a>
-              <IconInstagramCircle />
+              <IconInstagramCircle width={36} height={36} />
             </a>
             <a>
-              <IconYoutubeCircle />
+              <IconYoutubeCircle width={36} height={36} />
             </a>
           </SocialNetwork>
         </WrapperFeature>
@@ -50,11 +53,11 @@ const Footer = ({ config }) => {
                 Trụ sở chính: Số 60 Phố Giang Văn Minh, Phường Đội Cấn,
                 <br /> Quận Ba Đình, Thành phố Hà Nội, Việt Nam
                 <br /> GPĐK: 0102721191 cấp ngày 09/04/2008
-                <br /> ĐT: 043 222 3000 Email: support.hn@ggg.com.vn
+                <br /> ĐT: 043 222 3000 Email: support.hn@ggg.com.vi
               </h6>
             </LeftContent>
             <RightContent>
-              <img src="/images/icon_bct.png" />
+              <img width={126} height={48} src="/images/icon_bct.png" />
               <h6> © 2011 Golden Gate ., JSC. All rights reserved</h6>
             </RightContent>
           </Content>

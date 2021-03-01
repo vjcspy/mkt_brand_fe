@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { all, call, put, select, takeEvery } from "redux-saga/effects";
+import { all, put, select, takeEvery } from "redux-saga/effects";
 import {
   ADD_FILES_UPLOAD,
   DOWNLOAD_FILE,
@@ -18,8 +18,9 @@ import {
   LOGIN,
   SET_TOKEN,
   GET_SITE,
+  FETCH_MENU,
 } from "../constants";
-import _, { get } from "lodash";
+import { chain, get } from "lodash";
 
 function* fetchConfig({ value }) {
   try {
@@ -50,7 +51,7 @@ function* putPublicConfig() {
   try {
     const host = process.env.NEXT_PUBLIC_API_HOST;
     const [site] = yield select((s) => [s.get("site").toJS()]);
-    const { data } = yield Axios.put(`${host}/sites/${site.id}`, {
+    yield Axios.put(`${host}/sites/${site.id}`, {
       config: site.raw_config,
     });
     const response = yield Axios.post("/api/deploy", {}, { params: { site_code: site.site_code } });
@@ -125,7 +126,7 @@ function* uploadFiles() {
   try {
     yield put({ type: UPDATE_API_STATUS, path: ["filesUpload"], value: { loading: true } });
     const filesUpload = yield select((s) => s.get("filesUpload")?.toJS() ?? []);
-    const requests = yield all(filesUpload.map((fileData) => uploadFile(fileData)));
+    yield all(filesUpload.map((fileData) => uploadFile(fileData)));
     yield put({ type: UPDATE_API_STATUS, path: ["filesUpload"], value: { success: true } });
   } catch (e) {
     console.error(e);
@@ -206,6 +207,54 @@ function* getSite({ site_code, pageName }) {
   }
 }
 
+function* fetchMenu({ urlKey = "gogi" } = {}) {
+  try {
+    yield put({ type: UPDATE_API_STATUS, value: { loading: true }, path: ["menu"] });
+    const { data } = yield Axios.post("/api/graphql", {
+      query: `
+      query {
+        categories(filters: { url_key: { eq: "${urlKey}" } }, pageSize: 1, currentPage: 1) {
+          items { 
+            id
+            name
+            position
+            url_key
+            children {
+              id
+              name
+              position
+              url_key
+            }
+          }
+          page_info {
+            total_pages
+            page_size
+          }
+          total_count
+        }
+      }
+      `,
+    });
+
+    const menus = chain(data)
+      .get(["data", "categories", "items", 0, "children"])
+      .sortBy("position")
+      .map((menu) => ({
+        url: "/our-menu/" + menu.url_key,
+        label: {
+          en: menu.name,
+          vi: menu.name,
+        },
+      }))
+      .value();
+
+    yield put({ type: UPDATE_API_STATUS, value: { data: menus, success: true }, path: ["menu"] });
+  } catch (e) {
+    yield put({ type: UPDATE_API_STATUS, value: { loading: false }, path: ["menu"] });
+    console.error(e);
+  }
+}
+
 function* saga() {
   yield takeEvery(FETCH_CONFIG, fetchConfig);
   yield takeEvery(PUT_CONFIG, putConfig);
@@ -216,6 +265,7 @@ function* saga() {
   yield takeEvery(DOWNLOAD_FILE, downloadFile);
   yield takeEvery(LOGIN, login);
   yield takeEvery(GET_SITE, getSite);
+  yield takeEvery(FETCH_MENU, fetchMenu);
 }
 
 export default saga;

@@ -29,6 +29,7 @@ export const DefaultTheme = {
       warning: "#EBB700",
       danger: "#E10007",
       disabled: "#E9E9E9",
+      bgOutline: "#f895201a",
     },
   },
 };

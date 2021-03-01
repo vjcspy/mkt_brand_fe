@@ -3,67 +3,48 @@ import Button from "../button";
 import IconPoint from "../icons/IconPoint";
 import IConPhone from "../icons/iconPhone";
 import IConViewMap from "../icons/iconViewMap";
-
+import { FormattedMessage } from "react-intl";
 import { WrapperListRestaurant, ItemRestaurant, Title, List, GroupButton } from "./style";
-export const ListRestaurant = ({ listRestaurant, onCallPhone, onViewMap }) => {
+import ScrollShowContent from "../scroll-show-content";
+import ItemRestaurantViewMap from "../item-restaurant/item-restaurant-view-map";
+
+const ListRestaurant = ({ listRestaurant, onCallPhone, onViewMap }) => {
   return (
     <WrapperListRestaurant>
-      <Title>Danh sách các nhà hàng áp dụng mã ưu đãi</Title>
-      <List>
-        {listRestaurant?.map((item, index) => (
-          <ItemRestaurant key={index}>
-            <h5>
-              <span>
-                <IconPoint /> {item.name}
-              </span>
-            </h5>
-            <p>{item.address}</p>
-            <GroupButton>
-              <Button size="tiny" varian="outline">
-                <IConPhone />
-                {item.phone}
-              </Button>
-              <Button size="tiny" varian="outline" onClick={() => onViewMap(true)}>
-                <IConViewMap />
-                View map
-              </Button>
-            </GroupButton>
-          </ItemRestaurant>
-        ))}
-      </List>
+      <Title>
+        <FormattedMessage id="promo.list_restaurant_have_promo" />
+      </Title>
+      <ScrollShowContent>
+        <List>
+          {listRestaurant?.map((item, index) => (
+            <ItemRestaurantViewMap restaurant={item} key={index} />
+            // <ItemRestaurant key={index}>
+            //   <h5>
+            //     <span>
+            //       <IconPoint /> {item.name}
+            //     </span>
+            //   </h5>
+            //   <p>
+            //     {item.address}
+            //     <br />
+            //     {item.openClose}
+            //   </p>
+            //   <GroupButton>
+            //     <Button size="tiny" varian="outline">
+            //       <IConPhone />
+            //       {item.phone}
+            //     </Button>
+            //     <Button size="tiny" varian="outline" onClick={() => onViewMap(true)}>
+            //       <IConViewMap />
+            //       <FormattedMessage id="promo.view_map" />
+            //     </Button>
+            //   </GroupButton>
+            // </ItemRestaurant>
+          ))}
+        </List>
+      </ScrollShowContent>
     </WrapperListRestaurant>
   );
 };
 
-export const ListRestaurantBooking = ({ listRestaurant, onBook, onViewMap }) => {
-  return (
-    <WrapperListRestaurant>
-      <Title>Danh sách các nhà hàng áp dụng mã ưu đãi</Title>
-      <List>
-        {listRestaurant?.map((item, index) => (
-          <ItemRestaurant key={index}>
-            <h5>
-              <span>
-                <IconPoint /> {item.name}
-              </span>
-              <span onClick={() => onViewMap()}>
-                0.7km
-                <IConViewMap color="#7B7979" />
-              </span>
-            </h5>
-            <p>{item.address}</p>
-            <GroupButton>
-              <Button size="tiny" varian="outline">
-                <IConPhone />
-                {item.phone}
-              </Button>
-              <Button size="tiny" onClick={() => onBook()}>
-                Đặt bàn
-              </Button>
-            </GroupButton>
-          </ItemRestaurant>
-        ))}
-      </List>
-    </WrapperListRestaurant>
-  );
-};
+export default ListRestaurant;

@@ -21,13 +21,25 @@ export const WrapperFlex = styled.div`
   }
 `;
 
+export const ContentField = styled.span`
+  font-size: 16px;
+  color: ${({ theme }) => theme.color.text.description};
+`;
+
+export const WrapperButton = styled.div`
+  & span {
+    color: #ffffff;
+  }
+`;
+
 export const Feature = styled.h5`
   display: flex;
   align-items: center;
   cursor: pointer;
-  margin: 24px 0;
+  margin: 20px 0;
   svg {
     margin-left: 5px;
+    margin-top: 3px;
     transform: rotate(-90deg);
   }
 `;

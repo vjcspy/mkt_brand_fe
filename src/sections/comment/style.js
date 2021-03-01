@@ -5,25 +5,38 @@ export const WrapperComment = styled.div`
   margin: 0 auto;
   max-width: 1024px;
   margin-top: 100px;
-  @media (max-width: 768px) {
-    display: none;
-  }
 `;
 
 export const WrapperListComment = styled.div`
+  max-width: 100%;
+  overflow: hidden;
+`;
+
+export const ListComment = styled.div`
   display: flex;
-  justify-content: space-around;
+
+  & > div:first-child {
+    margin-left: 0;
+  }
+  & > div:last-child {
+    margin-right: 0;
+  }
+  transition: 0.3s;
 `;
 export const CommentWrapper = styled.div`
-  width: calc(50% - 20px);
   border: 1px solid ${({ theme }) => theme.color.page.border};
   border-radius: 20px;
   padding: 24px 20px;
-
+  margin: 0 20px;
+  min-width: calc(50% - 20px);
+  user-select: none;
   p {
     color: ${({ theme }) => theme.color.text.description};
     font-size: 14px;
     margin: 0;
+  }
+  @media (max-width: 768px) {
+    margin: 0 1px;
   }
 `;
 export const GroupActor = styled.div`
@@ -42,5 +55,19 @@ export const Actor = styled.div``;
 export const WrapperEndpointComment = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 33px;
+  align-items: center;
+  margin-top: 97px;
+
+  .point-pagination-promo {
+  }
+  .left {
+    margin-right: 14px;
+  }
+  .right {
+    margin-left: 14px;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 20px;
+  }
 `;

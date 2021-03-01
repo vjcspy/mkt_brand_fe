@@ -12,6 +12,7 @@ import SectionConfig from "../sectionConfig";
 import ThemesConfig from "../themesConfig";
 import MenusConfig from "../menusConfig";
 import useFromJS from "../../../hooks/useFromJS";
+import LanguageConfig from "../languageConfig";
 
 const SectionsConfig = ({ putStage }) => {
   /// selector
@@ -39,6 +40,7 @@ const SectionsConfig = ({ putStage }) => {
           {header?.title}
         </SectionItem>
       </SectionsBlock>
+
       <SectionsBlock>
         {map(sections, (section, index) => (
           <SectionItem
@@ -61,6 +63,7 @@ const SectionsConfig = ({ putStage }) => {
           Add Section
         </SectionItem>
       </SectionsBlock>
+
       <SettingItemWrapper>
         <SettingItem
           onClick={() => {
@@ -75,6 +78,7 @@ const SectionsConfig = ({ putStage }) => {
           <FontAwesomeIcon icon="chevron-right" />
         </SettingItem>
       </SettingItemWrapper>
+
       <SettingItemWrapper>
         <SettingItem
           onClick={() => {
@@ -89,6 +93,22 @@ const SectionsConfig = ({ putStage }) => {
           <FontAwesomeIcon icon="chevron-right" />
         </SettingItem>
       </SettingItemWrapper>
+
+      <SettingItemWrapper>
+        <SettingItem
+          onClick={() => {
+            putStage({
+              props: { path: ["modifiedConfig", "translation"] },
+              Component: LanguageConfig,
+            });
+          }}
+        >
+          <FontAwesomeIcon icon="project-diagram" />
+          <ThemeItemTitle>Language Settings</ThemeItemTitle>
+          <FontAwesomeIcon icon="chevron-right" />
+        </SettingItem>
+      </SettingItemWrapper>
+
       <AddSectionDialog
         dialog={addSectionDialog}
         onClose={() => setAddSection({})}

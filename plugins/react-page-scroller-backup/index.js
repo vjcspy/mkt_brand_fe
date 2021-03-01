@@ -160,6 +160,9 @@ var ReactPageScroller = function ReactPageScroller(_ref) {
   );
   var scrollWindowDown = useCallback(
     function () {
+      if (componentIndex === 2) {
+        enableDocumentScroll();
+      }
       if (!isScrolling && !blockScrollDown) {
         if (!isNil(containers[componentIndex + 1])) {
           disableScroll();

@@ -78,18 +78,3 @@ export const SectionThumbnailWrapper = styled.div`
 export const SectionTitleWrapper = styled.div`
   flex: 1 0 0;
 `;
-
-export const DeleteSection = styled.button`
-  border: 0 none;
-  background-image: url("/images/ic/ic_trash.svg");
-  background-size: 16px 16px;
-  background-repeat: no-repeat;
-  background-position: center;
-  border-radius: 4px;
-  width: 24px;
-  height: 24px;
-  position: absolute;
-  top: calc(50% - 12px);
-  right: 5px;
-  cursor: pointer;
-`;

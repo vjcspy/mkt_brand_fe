@@ -49,6 +49,7 @@ export const DetailInfo = styled.div`
 export const LeftInfo = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 10px;
 `;
 
 export const DatePost = styled.span`
@@ -66,3 +67,9 @@ export const Rating = styled.div``;
 export const RelativeBlog = styled.div`
   margin-top: 80px;
 `;
+
+export const Banner = styled.div`
+  margin: 40px 0;
+`;
+
+export const Title = styled.h3``;

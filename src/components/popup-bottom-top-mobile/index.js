@@ -1,8 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { SET_HEIGHT_POPUP } from "../../constants";
 import IconClose from "../icons/iconsClose";
 import { WrapperPopup, ContentPopup } from "./style";
+import { useDispatch } from "react-redux";
 const PopupBottomToMobile = ({ show, onClose, children, ...rest }) => {
   const [showPopup, setShow] = useState();
+  const refPopup = useRef();
+  const dispatch = useDispatch();
+
+  const setHeightPopup = () => dispatch({ type: SET_HEIGHT_POPUP, value: refPopup.current.clientHeight - 40 });
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (refPopup.current && show) {
+        setHeightPopup();
+      }
+    }, 300);
+  }, [show]);
 
   const onClosePopup = () => {
     setShow(false);
@@ -10,14 +24,16 @@ const PopupBottomToMobile = ({ show, onClose, children, ...rest }) => {
       onClose();
     }, 300);
   };
+
   useEffect(() => {
     setTimeout(() => {
       setShow(show);
     });
   }, []);
+
   return (
     <WrapperPopup className={`${showPopup ? "show" : ""}`} {...rest}>
-      <ContentPopup>
+      <ContentPopup ref={refPopup}>
         <IconClose onClick={onClosePopup} />
         {children}
       </ContentPopup>

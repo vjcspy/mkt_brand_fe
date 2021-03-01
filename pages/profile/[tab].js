@@ -4,13 +4,10 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/constants";
 import Layout from "../../src/containers/layout";
-import { Pages, RenderFooter, RenderHeader } from "../../src/sections";
+import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
 import { getSite } from "../../src/services/backend";
-import { MainContainer, MainWrapper } from "../../src/styles";
-import Breadcrumbs from "../../src/sections/breadcrumbs";
-import ProfileSection from "../../src/sections/profileSection";
-import useFromJS from "../../src/hooks/useFromJS";
+import PageContainer from "../../src/containers/pageContainer";
 
 export async function getStaticPaths() {
   const tabs = ["my-profile", "my-promo", "my-history", "register-promo"];
@@ -24,7 +21,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const { site_code, tab } = params;
+  const { tab } = params;
   const site = await getSite(process.env.SITE_CODE);
   return {
     props: {
@@ -37,8 +34,6 @@ export async function getStaticProps({ params }) {
 
 const Profile = ({ config, site_code, tab }) => {
   const dispatch = useDispatch();
-  const header = useFromJS(["modifiedConfig", "header"]);
-  const footer = useFromJS(["modifiedConfig", "footer"]);
 
   useEffect(() => {
     const modifiedConfig = formatConfig(config);
@@ -55,14 +50,7 @@ const Profile = ({ config, site_code, tab }) => {
 
   return (
     <Layout>
-      <MainContainer>
-        <RenderHeader config={header} />
-        <MainWrapper className="main-content">
-          <Breadcrumbs />
-          <ProfileSection />
-        </MainWrapper>
-        <RenderFooter config={footer} />
-      </MainContainer>
+      <PageContainer />
     </Layout>
   );
 };

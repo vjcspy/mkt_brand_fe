@@ -1,19 +1,21 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import loadable from "@loadable/component";
 import { HeaderContent, HeaderLinks, HeaderWrapper, FlexGrow, GroupFlexBox, LogoWrapper, MenuIconButton } from "./header.styled";
 import { SET_HEADER_HEIGHT, SHOW_LANGUAGE_LOCATION } from "../../constants";
 import { Container } from "../../styles";
-import Image from "../../components/image";
 import IconMenu from "../../components/icons/iconMenu";
-import Button from "../../components/button";
-import MenuRight from "../../components/menu";
-import PopupLanguageLocation from "./popup-language-location";
 import IconUserNoBorder from "../../components/icons/iconUserNoBorder";
 import useWindowResize from "../../hooks/useWindowResize";
 import HeaderTop from "./headerTop";
-import Link from "next/link";
-import useFromJS from "../../hooks/useFromJS";
 import LinkRouter from "../../components/link-router";
+import useSiteRouter from "../../hooks/useSiteRouter";
+import useMenu from "../../hooks/useMenu";
+import { Marker } from "./profileDropdown/styled";
+import ProfileDropdown from "./profileDropdown";
+import ImageMedia from "../../development/components/imageMedia";
+const MenuRight = loadable(() => import("../../components/menu"));
+const PopupLanguageLocation = loadable(() => import("./popup-language-location"));
 
 const defaultConfig = {
   id: "header",
@@ -27,43 +29,17 @@ const defaultConfig = {
       title: "Header Logo",
       value: null,
     },
-    // topColor: {
-    //   type: "color",
-    //   name: "topColor",
-    //   title: "Top color",
-    //   value: "white",
-    // },
-    // topBackground: {
-    //   type: "color",
-    //   name: "topBackground",
-    //   title: "Top background",
-    //   value: "#8A2629",
-    // },
-    // topTitle: {
-    //   type: "text",
-    //   name: "topTitle",
-    //   title: "Top title",
-    //   value: "Ăn GoGi trúng 1 tỷ. Nhận mã ngay",
-    // },
-    headerLink: {
-      type: "link",
-      name: "headerLink",
-      title: "Header Link",
-      multiple: true,
-      value: [
-        {
-          label: "Restaurants",
-          url: "/",
-        },
-        {
-          label: "Our Menu",
-          url: "/",
-        },
-        {
-          label: "Reservations",
-          url: "/",
-        },
-      ],
+    navMenu: {
+      type: "menu",
+      name: "navMenu",
+      title: "Nav Menu",
+      value: "navMenu",
+    },
+    hambergerMenu: {
+      type: "menu",
+      name: "hambergerMenu",
+      title: "Hamberger Menu",
+      value: "hambergerMenu",
     },
     slides: {
       type: "group",
@@ -109,55 +85,39 @@ const defaultConfig = {
       ],
     },
 
-    menu: {
-      title: "menu",
-      name: "menu",
-      type: "menu",
-      multiple: true,
-      value: [
-        {
-          label: "Menu",
-          url: "/",
-          subMenu: [
-            { label: "Buffet Premium", url: "/" },
-            { label: "Bibimbap", url: "/" },
-            { label: "Combo", key: "3", parentKey: "1", url: "/" },
-            {
-              label: "Special",
-              key: "4",
-              parentKey: "1",
-              url: "/",
-              subMenu: [
-                { label: "Combo", url: "/" },
-                { label: "Special", url: "/" },
-              ],
-            },
-          ],
-        },
-        { label: "Reservations", url: "/" },
-        { label: "Restaurants", url: "/" },
-        {
-          label: "Promo",
-          url: "/",
-          notifi: {
-            label: "2",
-          },
-          subMenu: [
-            { label: "Combo", url: "/" },
-            { label: "Special", url: "/" },
-          ],
-        },
-        { label: "Delivery", url: "/" },
-        { label: "About Us", url: "/" },
-        { label: "New", url: "/" },
-        { label: "Contact", url: "/" },
-      ],
-    },
+    // menu: {
+    //   title: "menu",
+    //   name: "menu",
+    //   type: "menu",
+    //   multiple: true,
+    //   value: [
+    //     {
+    //       label: "Thực đơn",
+    //       subMenu: [
+    //         { label: "Buffet", url: "/our-menu/buffet" },
+    //         { label: "Combo", url: "/our-menu/combo" },
+    //         { label: "Món lẻ", url: "/our-menu/mon-le" },
+    //       ],
+    //     },
+    //     { label: "Đặt bàn", url: "/" },
+    //     {
+    //       label: "Ưu đãi",
+    //       url: "/promo",
+    //       notifi: {
+    //         label: "2",
+    //       },
+    //     },
+    //     { label: "Giao hàng", url: "/" },
+    //     { label: "Về chúng tôi", url: "/" },
+    //     { label: "Tin tức", url: "/" },
+    //     { label: "Liên lạc", url: "/" },
+    //   ],
+    // },
   },
 };
 
 // const mapStateToProps = (state) => ({
-//   locate: state.get("locate") ?? "en",
+//   locale: state.get("locale") ?? "en",
 //   languages: ["en", "vi"],
 //   showLanguageLocation: state.get("showLanguageLocation") ?? false,
 //   showMenuHeader: state.get("showMenuHeader"),
@@ -176,18 +136,12 @@ function requestLocation() {
       alert(`latitude: ${position.coords.latitude}\nlongitude: ${position.coords.longitude}`);
     },
     (error) => {
-      let title = "Đã có lỗi xảy ra";
-      let body = "Vui lòng thử lại";
-
       switch (error.code) {
         case error.PERMISSION_DENIED:
-          title = "Dịch vụ định vị bị tắt";
           break;
         case error.POSITION_UNAVAILABLE:
-          title = "Vị trí không khả dụng";
           break;
         case error.TIMEOUT:
-          title = "Đã hết thời gian yêu cầu dịch vụ định vị.";
           break;
         default:
           break;
@@ -202,52 +156,96 @@ function requestLocation() {
 }
 
 const Header = ({ config = defaultConfig }) => {
-  const locate = useFromJS(["locate"]) ?? "en";
-  const showLanguageLocation = useSelector((state) => state.getIn(["showLanguageLocation"]));
+  // const locale = useFromJS(["locale"]) ?? "en";
   const showMenuHeader = useSelector((state) => state.getIn(["showMenuHeader"]));
-
+  const pageName = useSelector((state) => state.getIn(["pageName"]));
+  const router = useSiteRouter();
   const dispatch = useDispatch();
   const setPopupLanguageLocation = useCallback((value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }), []);
   const components = config.components;
   const [isShowMenu, setShowMenu] = useState(false);
   const ref = useRef();
   const size = useWindowResize();
+  const [isEqualPageName, setIsEqualPageName] = useState(pageName);
+  const locale = useSelector((s) => s.get("locale"));
+  const navMenu = useMenu(components.navMenu?.value);
+  const hambergerMenu = useMenu(components.hambergerMenu?.value);
+  const [showProfileDropdownMobile, setShowProfileDropdownMobile] = useState(false);
 
   useEffect(() => {
     requestLocation();
   }, []);
 
   useEffect(() => {
+    if (pageName === "our-menu-detail") {
+      setIsEqualPageName("our-menu");
+    } else {
+      setIsEqualPageName(pageName);
+    }
+  }, [pageName]);
+
+  useEffect(() => {
     dispatch({ type: SET_HEADER_HEIGHT, value: ref.current.offsetHeight });
   }, [dispatch, size]);
 
+  useEffect(() => {
+    if (!process.browser) {
+      return;
+    }
+    if (sessionStorage.getItem("redirect") != "true" && size <= 768) {
+      router.push("/our-menu");
+    }
+    sessionStorage.setItem("redirect", "true");
+  }, []);
+
   return (
     <>
-      <MenuRight show={isShowMenu} listMenu={defaultConfig.components.menu.value} setShowMenu={setShowMenu} />
-      <PopupLanguageLocation show={showLanguageLocation} onClosePopup={() => setPopupLanguageLocation(false)} />
+      <MenuRight show={isShowMenu} listMenu={hambergerMenu?.children} setShowMenu={setShowMenu} />
+      <PopupLanguageLocation />
 
       <HeaderWrapper ref={ref}>
         <HeaderTop setPopupLanguageLocation={setPopupLanguageLocation} slides={components.slides} />
         <Container>
           <HeaderContent>
             <FlexGrow>
-              <LogoWrapper href="/">
-                <Image src={components.logo.value?.url ?? "/images/default-image.svg"} alt="Logo" title="Logo" />
-              </LogoWrapper>
+              <LinkRouter href="/" passHref>
+                <LogoWrapper>
+                  <ImageMedia
+                    width={129}
+                    className="logo"
+                    alt="Logo"
+                    title="Logo"
+                    height={73}
+                    media={components.logo.value}
+                    formats="thumbnail"
+                  />
+                </LogoWrapper>
+              </LinkRouter>
             </FlexGrow>
             <HeaderLinks showMobile={showMenuHeader}>
-              {components.headerLink?.value?.map((e, index) => (
-                <LinkRouter key={index} href={e.url}>
-                  <a>
-                    <h4>{e.label}</h4>
+              {navMenu?.children.map((e, index) => (
+                <LinkRouter key={index} href={e.url} passHref={true}>
+                  <a className={`${"/" + isEqualPageName === e.url ? "active" : ""}`}>
+                    <h4>{e.label?.[locale]}</h4>
                   </a>
                 </LinkRouter>
               ))}
             </HeaderLinks>
             <FlexGrow style={{ textAlign: "right" }}>
               <GroupFlexBox>
-                <MenuIconButton hideDesktop={true}>
+                <MenuIconButton hideDesktop={true} onClick={() => setShowProfileDropdownMobile(true)}>
                   <IconUserNoBorder />
+                  {showProfileDropdownMobile && (
+                    <>
+                      <Marker
+                        onClick={(e) => {
+                          setShowProfileDropdownMobile(false);
+                          e.stopPropagation();
+                        }}
+                      />
+                      <ProfileDropdown />
+                    </>
+                  )}
                 </MenuIconButton>
                 <MenuIconButton onClick={() => setShowMenu(true)}>
                   <IconMenu />

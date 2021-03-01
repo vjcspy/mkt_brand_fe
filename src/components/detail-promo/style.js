@@ -26,7 +26,14 @@ export const HeaderMobile = styled.div`
   }
   p {
     margin: 0;
+    margin-bottom: 10px;
     text-align: center;
+  }
+  .notify {
+    margin: 8px 0;
+  }
+  button {
+    margin-top: 12px;
   }
   @media (max-width: 768px) {
     display: flex;
@@ -70,74 +77,17 @@ export const ContentHeader = styled.div`
   }
 `;
 
-export const WrapperScroll = styled.div`
-  max-height: 410px;
-  overflow-y: auto;
-
-  & > div:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-
-  h5 {
-    margin-bottom: 8px;
-  }
-  h6 {
-    margin-bottom: 20px;
-    color: 1px solid ${({ theme }) => theme.color.text.subColor};
-  }
-  @media (max-width: 768px) {
-    max-height: fit-content;
-  }
-`;
-
-const animation = keyframes`
-  0%{
-    transform: translateY(-25%);
-  }
-  25%{
-    transform: translateY(0);
-  }
-  50%{
-    transform: translateY(25%);
-
-  }
-  75%{
-    transform: translateY(0);
-
-  }
-  100%{
-    transform: translateY(-25%);
-
-  }
-`;
-
-export const HiddenContent = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  background: rgb(255, 255, 255);
-  background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5172443977591037) 100%);
+export const Restaurant = styled.div``;
+export const NameRestaurant = styled.div`
+  margin-bottom: 8px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.3s;
-  opacity: 0;
-  visibility: hidden;
-  border-radius: 12px;
-  svg {
-    transform: rotate(90deg);
-    cursor: pointer;
-    animation: ${animation} 1s infinite;
-    cursor: pointer;
-  }
-  &.show {
-    opacity: 1;
-    visibility: visible;
-  }
-  @media (max-width: 768px) {
-    display: none;
+  justify-content: space-between;
+  p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    svg {
+      margin-left: 5px;
+    }
   }
 `;

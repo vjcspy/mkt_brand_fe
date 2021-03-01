@@ -1,0 +1,42 @@
+import React from "react";
+import Button from "../button";
+import IconClose from "../icons/iconsClose";
+import { CookieWrapper, Title, Content } from "./style";
+import { useDispatch, useSelector } from "react-redux";
+import { ACCEPT_COOKIE } from "../../constants";
+import { FormattedMessage } from "react-intl";
+
+const AcceptCookie = () => {
+  const dispatch = useDispatch();
+  const acceptCookie = useSelector((state) => state.get("acceptCookie"));
+  const onAcceptCookie = () => dispatch({ type: ACCEPT_COOKIE, value: true });
+  return (
+    !acceptCookie && (
+      <CookieWrapper>
+        <Title>
+          <h3>
+            <FormattedMessage id="cookie.title" />
+          </h3>
+          <IconClose onClick={onAcceptCookie} />
+        </Title>
+        <Content>
+          <p>
+            {/* <FormattedMessage id="cookie.content" />
+             */}
+            Bằng việc tiếp tục sử dụng website, bạn đồng ý với các điều khoản Chính sách Về Cookie của chúng tôi.Bằng việc tiếp tục sử dụng
+            website, bạn đồng ý với các điều khoản{" "}
+            <a className="link" href="">
+              Chính sách Về Cookie
+            </a>{" "}
+            của chúng tôi.
+          </p>
+          {/* <Button onClick={onAcceptCookie}>
+            <FormattedMessage id="cookie.confirm" />
+          </Button> */}
+        </Content>
+      </CookieWrapper>
+    )
+  );
+};
+
+export default AcceptCookie;

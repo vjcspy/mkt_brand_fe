@@ -7,7 +7,7 @@ import { DevPrimaryButton } from "../../src/styles/developmentStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { LOGIN } from "../../src/constants";
 import { getSite } from "../../src/services/backend";
-import useSiteRouter from "../../src/hooks/useSiteRouter";
+import { useRouter } from "next/dist/client/router";
 
 const SigninWrapper = styled.div`
   width: 100%;
@@ -129,7 +129,7 @@ const Signin = ({ site_code, logo }) => {
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState();
   const [remember, setRemember] = useState(true);
-  const router = useSiteRouter();
+  const router = useRouter();
 
   const dispatch = useDispatch();
   const login = useCallback(({ email, password, remember }) => dispatch({ type: LOGIN, email, password, remember }), [dispatch]);
@@ -154,7 +154,14 @@ const Signin = ({ site_code, logo }) => {
 
   return (
     <SigninWrapper>
-      <Image src={logo?.url} alt="logo" title="logo" style={{ maxWidth: 100, maxHeight: 100, width: "auto", height: "auto" }} />
+      <Image
+        width={129}
+        height={73}
+        src={logo?.url}
+        alt="logo"
+        title="logo"
+        style={{ maxWidth: 100, maxHeight: 100, width: "auto", height: "auto" }}
+      />
       <SigninBody>
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <form onSubmit={submit}>

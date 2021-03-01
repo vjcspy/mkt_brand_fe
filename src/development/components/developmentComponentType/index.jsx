@@ -3,6 +3,7 @@ import ColorComponent from "./colorComponent";
 import GroupComponent from "./groupComponent";
 import ImageComponent from "./imageComponent";
 import LinkComponent from "./linkComponent";
+import MenuComponent from "./menu";
 import RangeComponent from "./rangeComponent";
 import TextComponent from "./textComponent";
 
@@ -13,6 +14,7 @@ const ComponentType = {
   range: RangeComponent,
   link: LinkComponent,
   group: GroupComponent,
+  menu: MenuComponent,
 };
 
 const DevelopmentComponentType = ({ config, ...rest }) => {

@@ -62,16 +62,17 @@ const MenusConfig = ({ path, popStage, putStage }) => {
         dialog={dialog}
         onClose={() => setDialog({})}
         onAddMenu={(title) => {
+          const code = generate();
           addMenu(
             {
               title: title,
-              name: `menu-${count + 1}`,
-              code: generate(),
-              items: [],
+              name: `menu-${code}`,
+              code: code,
+              children: [],
             },
             [...path, count]
           );
-          setDialog({})
+          setDialog({});
         }}
       />
     </SectionWrapper>

@@ -27,7 +27,7 @@ export const Checkbox = styled.button`
     display: block;
     width: 18px;
     height: 18px;
-    border: ${({ checked, theme }) => (checked ? "none" : "1px solid #7B7979;")};
+    border: ${({ checked, theme }) => (checked ? "none" : `1px solid #7B7979;`)};
     border-radius: 4px;
     position: absolute;
     top: -12px;

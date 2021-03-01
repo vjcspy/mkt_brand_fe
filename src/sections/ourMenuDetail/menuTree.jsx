@@ -1,4 +1,4 @@
-import { get, has, isArray, map } from "lodash";
+import { get, map } from "lodash";
 import React, { Fragment, useEffect } from "react";
 import { useSelector } from "react-redux";
 import IconTriangleDown from "../../components/icons/iconTriangleDown";
@@ -13,34 +13,37 @@ import {
   MenuSubItemButton,
   MenuSubItemIcon,
   MenuSubItemWrapper,
+  NameParentMenu,
 } from "./styled";
 
 const MenuTree = ({ indexParent, setIndexParent, indexChild, setIndexChild, indexGrandChild, setIndexGrandChild, menus, setPath }) => {
   const mode = useSelector((s) => s.get("mode"));
-  const menu = useSelector((s) => s.get("menu-slug"));
   const router = useSiteRouter();
+  const {
+    query: { menu },
+  } = router;
 
   useEffect(() => {
     if (menu && menus) {
-      let index = menus.findIndex((m) => m.slug === menu);
+      let index = menus.findIndex((m) => m.url_key === menu);
       if (index != -1) {
         setIndexParent(index);
         let item = menus[index];
-        if (has(item, ["products"])) {
+        if (get(item, ["products", "items", "length"]) > 0) {
           setIndexGrandChild(undefined);
           setIndexChild(undefined);
           setPath([index]);
         } else {
           setIndexGrandChild(undefined);
           setIndexChild(0);
-          setPath([index, "items", 0]);
+          setPath([index, "children", 0]);
         }
       }
     }
   }, [menu, menus]);
 
   return (
-    <MenusComponentWrapper>
+    <MenusComponentWrapper className="sticky">
       {map(menus, (item, index) => (
         <MenuItemWrapper key={index}>
           <MenuItemButton
@@ -51,33 +54,33 @@ const MenuTree = ({ indexParent, setIndexParent, indexChild, setIndexChild, inde
               } else {
                 setIndexParent(index);
                 if (mode != DEVELOPMENT_MODE) {
-                  router.push(`/our-menu/${item.slug}`, undefined, { shallow: true });
+                  router.push(`/our-menu/${item.url_key}`, undefined, { shallow: true });
                 }
               }
-              if (has(item, ["products"])) {
+              if (get(item, ["products", "items", "length"]) > 0) {
                 setIndexGrandChild(undefined);
                 setIndexChild(undefined);
                 setPath([index]);
               } else {
                 setIndexGrandChild(undefined);
                 setIndexChild(0);
-                setPath([index, "items", 0]);
+                setPath([index, "children", 0]);
               }
             }}
           >
-            <h3>{item.name}</h3>
-            {get(item, ["items", "length"]) > 0 && (
+            <NameParentMenu isOpen={indexParent == index}>{item.name}</NameParentMenu>
+            {get(item, ["children", "length"]) > 0 && (
               <CaretDownIcon isOpen={indexParent == index}>
-                <IconTriangleDown width={13} height={7} />
+                <IconTriangleDown color={`${indexParent == index ? "#F89520" : "currentColor"}`} width={13} height={7} />
               </CaretDownIcon>
             )}
           </MenuItemButton>
-          {indexParent == index && isArray(item.items) && (
-            <MenuSubItemWrapper>
-              {item.items.map((subItem, subIndex) => (
+          {indexParent == index && get(item, ["children", "length"]) > 0 && (
+            <MenuSubItemWrapper isOpen={true}>
+              {map(item.children, (subItem, subIndex) => (
                 <Fragment key={subIndex}>
                   <MenuSubItemButton
-                    isOpen={indexChild === subIndex && !has(subItem, ["items"])}
+                    isOpen={indexChild === subIndex}
                     onClick={() => {
                       if (subIndex == indexChild) {
                         setIndexGrandChild(undefined);
@@ -86,27 +89,29 @@ const MenuTree = ({ indexParent, setIndexParent, indexChild, setIndexChild, inde
                         return;
                       }
                       setIndexChild(subIndex);
-                      if (has(subItem, ["products"])) {
+                      if (get(subItem, ["products", "items", "length"]) > 0) {
                         setIndexGrandChild(undefined);
-                        setPath([indexParent, "items", subIndex]);
+                        setPath([indexParent, "children", subIndex]);
                       } else {
                         setIndexGrandChild(0);
-                        setPath([indexParent, "items", subIndex, "items", 0]);
+                        setPath([indexParent, "children", subIndex, "children", 0]);
                       }
                     }}
                   >
-                    <h4>{subItem.name}</h4>
-                    {get(subItem, ["items", "length"]) > 0 && <MenuSubItemIcon isOpen={indexChild == subIndex} />}
+                    <h5 className={`${get(subItem, ["children", "length"]) > 0 ? "sup-item-1 have-sup-menu " : " sup-item-1"}`}>
+                      {subItem.name}
+                    </h5>
+                    {get(subItem, ["children", "length"]) > 0 && <MenuSubItemIcon isOpen={indexChild == subIndex} />}
                   </MenuSubItemButton>
-                  {indexChild == subIndex && isArray(subItem.items) && (
+                  {indexChild == subIndex && get(subItem, ["children", "length"]) > 0 && (
                     <MenuSub2ItemWrapper>
-                      {subItem.items.map((sub2Item, sub2Index) => (
+                      {subItem.children.map((sub2Item, sub2Index) => (
                         <MenuSubItemButton
                           key={sub2Index}
                           isOpen={indexGrandChild === sub2Index}
                           onClick={() => {
                             setIndexGrandChild(sub2Index);
-                            setPath([index, "items", subIndex, "items", sub2Index]);
+                            setPath([index, "children", subIndex, "children", sub2Index]);
                           }}
                         >
                           <h5>{sub2Item.name}</h5>

@@ -1,4 +1,4 @@
-import { get, has, map } from "lodash";
+import { get, map } from "lodash";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DEVELOPMENT_MODE } from "../../constants";
@@ -23,9 +23,9 @@ const MenuTreeMobile = ({
   const currentMenus = (() => {
     switch (path.length) {
       case 5:
-        return get(menus, [indexParent, "items", indexChild, "items"]);
+        return get(menus, [indexParent, "children", indexChild, "children"]);
       case 3:
-        return get(menus, [indexParent, "items"]);
+        return get(menus, [indexParent, "children"]);
       default:
         return menus;
     }
@@ -44,18 +44,18 @@ const MenuTreeMobile = ({
 
   useEffect(() => {
     if (menu && menus) {
-      let index = menus.findIndex((m) => m.slug === menu);
+      let index = menus.findIndex((m) => m.url_key === menu);
       if (index != -1) {
         setIndexParent(index);
         let item = menus[index];
-        if (has(item, ["products"])) {
+        if (get(item, ["products", "items", "length"]) > 0) {
           setIndexGrandChild(undefined);
           setIndexChild(undefined);
           setPath([index]);
         } else {
           setIndexGrandChild(undefined);
           setIndexChild(0);
-          setPath([index, "items", 0]);
+          setPath([index, "children", 0]);
         }
       }
     }
@@ -67,33 +67,32 @@ const MenuTreeMobile = ({
     } else {
       setIndexParent(index);
       if (mode != DEVELOPMENT_MODE) {
-        router.push(`/our-menu/${item.slug}`, undefined, { shallow: true });
+        router.push(`/our-menu/${item.url_key}`, undefined, { shallow: true });
       }
     }
-    if (has(item, ["products"])) {
+    if (get(item, ["products", "items", "length"]) > 0) {
       setIndexGrandChild(undefined);
       setIndexChild(undefined);
       setPath([index]);
     } else {
       setIndexGrandChild(undefined);
       setIndexChild(0);
-      setPath([index, "items", 0]);
+      setPath([index, "children", 0]);
     }
   };
 
   const onClickChild = (item, index) => {
-    debugger;
     if (index == indexChild) {
       return;
     }
     setIndexChild(index);
     setIndexGrandChild(undefined);
-    setPath([indexParent, "items", index]);
+    setPath([indexParent, "children", index]);
   };
 
   const onClickGrandChild = (item, index) => {
     setIndexGrandChild(index);
-    setPath([indexParent, "items", indexChild, "items", index]);
+    setPath([indexParent, "children", indexChild, "children", index]);
   };
 
   return (

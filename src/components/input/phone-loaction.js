@@ -19,8 +19,10 @@ const PhoneLocation = ({}) => {
       </LocationSelected>
       {show && (
         <ListLocation>
-          {dataPhoneLocation.map((item) => (
-            <p onClick={() => onSelectItem(item)}>{item}</p>
+          {dataPhoneLocation.map((item, index) => (
+            <p key={index} onClick={() => onSelectItem(item)}>
+              {item}
+            </p>
           ))}
         </ListLocation>
       )}

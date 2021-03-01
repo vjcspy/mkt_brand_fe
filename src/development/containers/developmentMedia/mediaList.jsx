@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "styled-components";
 import IconSearch from "../../components/icons/icSearch";
 import { ADD_FILES_UPLOAD, FETCH_MEDIAS, FETCH_MEDIA_COUNT } from "../../../constants";
@@ -14,27 +14,27 @@ import LimitSelection from "../../components/limitSelection";
 import GlobalPagination from "../../components/GlobalPagination";
 import useFromJS from "../../../hooks/useFromJS";
 
-// const mapStateToProps = (state) => ({
-//   medias: state.get("medias")?.toJS() ?? [],
-//   mediaCount: state.get("mediaCount") ?? 0,
-//   apiStatus: state.getIn(["apiStatus", "medias"])?.toJS() ?? {},
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   fetchMedias: (_limit, _start, _q) => dispatch({ type: FETCH_MEDIAS, _limit, _start, _q }),
-//   fetchMediaCount: () => dispatch({ type: FETCH_MEDIA_COUNT }),
-//   addFilesUpload: (files) => dispatch({ type: ADD_FILES_UPLOAD, value: files }),
-// });
-
 const MediaList = ({ handleFinish, handleClose, handleAdd }) => {
   const medias = useFromJS(["medias"]) ?? [];
-  const mediaCount = useFromJS(["mediaCount"]) ?? 0;
+  const mediaCount = useSelector((s) => s.get("mediaCount")) ?? 0;
   const { success, loading } = useFromJS(["apiStatus", "medias"]) ?? {};
 
   const dispatch = useDispatch();
-  const fetchMedias = useCallback((_limit, _start, _q) => dispatch({ type: FETCH_MEDIAS, _limit, _start, _q }), []);
-  const fetchMediaCount = useCallback(() => dispatch({ type: FETCH_MEDIA_COUNT }), []);
-  const addFilesUpload = useCallback((files) => dispatch({ type: ADD_FILES_UPLOAD, value: files }), []);
+  const fetchMedias = useCallback(
+    (_limit, _start, _q) => {
+      dispatch({ type: FETCH_MEDIAS, _limit, _start, _q });
+    },
+    [dispatch]
+  );
+  const fetchMediaCount = useCallback(() => {
+    dispatch({ type: FETCH_MEDIA_COUNT });
+  }, [dispatch]);
+  const addFilesUpload = useCallback(
+    (files) => {
+      dispatch({ type: ADD_FILES_UPLOAD, value: files });
+    },
+    [dispatch]
+  );
 
   const theme = useTheme();
   const [selected, setSelected] = useState();
@@ -119,5 +119,4 @@ const MediaList = ({ handleFinish, handleClose, handleAdd }) => {
   );
 };
 
-// export default connect(mapStateToProps, mapDispatchToProps)(MediaList);
 export default MediaList;

@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fromJS } from "immutable";
 import { last, map } from "lodash";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { REMOVE_CONFIG, UPDATE_CONFIG } from "../../../constants";
+import { FETCH_MENU, REMOVE_CONFIG, UPDATE_CONFIG } from "../../../constants";
 import { DevSecondaryButton } from "../../../styles/developmentStyle";
 import { ComponentWrapper, MultipleWrapper } from "../developmentComponentType/styled";
 import TextComponent from "../developmentComponentType/textComponent";
@@ -11,47 +11,75 @@ import DropDown from "../dropdown";
 import { SectionHeader, SectionWrapper } from "../sectionConfig/styled";
 import { SectionThumbnailWrapper } from "../sectionsConfig/styled";
 import { MenuItem, MenuItemLabel, MenuItemWrapper, SubMenuItemWrapper } from "./styled";
-import AddMenuItemDialog from "./addMenuItemDialog";
+import MenuDialog from "./menuDialog";
 import generate from "shortid-36";
+import useFromJS from "../../../hooks/useFromJS";
 
-const RenderMenuItem = ({ item, index, path, deleteMenu, setDialog }) => {
+const RenderMenuItem = ({ item, index, path, deleteMenu, setDialog, locale, showApi }) => {
+  const shouldShowAdd = item.apiKey !== "menu";
   return (
     <MenuItemWrapper>
       <MenuItem>
-        <MenuItemLabel>{item.label}</MenuItemLabel>
+        <MenuItemLabel>{item.label?.[locale]}</MenuItemLabel>
         <DevSecondaryButton
           icon
           onClick={(e) => {
             e.stopPropagation();
-            deleteMenu(index, [...path, "items"]);
+            setDialog({
+              show: true,
+              path: path,
+              index: index,
+              value: item,
+              showApi: showApi,
+            });
+          }}
+        >
+          <FontAwesomeIcon icon="pencil-alt" />
+        </DevSecondaryButton>
+        <DevSecondaryButton
+          icon
+          onClick={(e) => {
+            e.stopPropagation();
+            deleteMenu(index, [...path, "children"]);
           }}
         >
           <FontAwesomeIcon icon="trash-alt" />
         </DevSecondaryButton>
       </MenuItem>
-      <SubMenuItemWrapper>
-        {map(item.items, (subItem, subIndex) => (
-          <RenderMenuItem item={subItem} index={subIndex} path={[...path, "items", index]} deleteMenu={deleteMenu} setDialog={setDialog} />
-        ))}
-        <MenuItem
-          add
-          onClick={() => {
-            setDialog({ show: true, path: [...path, "items", index], count: item.items.length });
-          }}
-        >
-          <SectionThumbnailWrapper>
-            <FontAwesomeIcon icon={["far", "plus-square"]} />
-          </SectionThumbnailWrapper>
-          Add sub menu item
-        </MenuItem>
-      </SubMenuItemWrapper>
+      {shouldShowAdd && (
+        <SubMenuItemWrapper>
+          {map(item.children, (subItem, subIndex) => (
+            <RenderMenuItem
+              key={subIndex}
+              item={subItem}
+              index={subIndex}
+              path={[...path, "children", index]}
+              deleteMenu={deleteMenu}
+              setDialog={setDialog}
+              locale={locale}
+            />
+          ))}
+          <MenuItem
+            add
+            onClick={() => {
+              setDialog({ show: true, path: [...path, "children", index], index: item.children.length });
+            }}
+          >
+            <SectionThumbnailWrapper>
+              <FontAwesomeIcon icon={["far", "plus-square"]} />
+            </SectionThumbnailWrapper>
+            Add sub menu item
+          </MenuItem>
+        </SubMenuItemWrapper>
+      )}
     </MenuItemWrapper>
   );
 };
 
 const MenuConfig = ({ path, popStage }) => {
-  const config = useSelector((s) => s.getIn(path))?.toJS();
-  const count = config?.items.length ?? 0;
+  const locale = useSelector((s) => s.get("locale"));
+  const config = useFromJS(path);
+  const count = config?.children?.length ?? 0;
   const dispatch = useDispatch();
   const addMenuItem = (value, path) => dispatch({ type: UPDATE_CONFIG, value: fromJS(value), path });
   const deleteMenu = (index, path) => dispatch({ type: REMOVE_CONFIG, value: index, path });
@@ -66,6 +94,7 @@ const MenuConfig = ({ path, popStage }) => {
         </DevSecondaryButton>
         <h4>{config?.title}</h4>
         <DropDown
+          icon={true}
           items={[
             {
               icon: "trash-alt",
@@ -80,19 +109,36 @@ const MenuConfig = ({ path, popStage }) => {
           ]}
         />
       </SectionHeader>
-      <TextComponent config={{ title: "Menu title", value: config?.title }} path={[...path, "title"]} />
+
+      <TextComponent
+        config={{
+          title: "Menu title",
+          value: config?.title,
+        }}
+        ignoreLocale
+        path={[...path, "title"]}
+      />
 
       <ComponentWrapper>
         <label>Items</label>
         <MultipleWrapper>
-          {map(config?.items, (item, index) => (
-            <RenderMenuItem key={index} item={item} index={index} path={path} deleteMenu={deleteMenu} setDialog={setDialog} />
+          {map(config?.children, (item, index) => (
+            <RenderMenuItem
+              key={index}
+              item={item}
+              index={index}
+              path={path}
+              deleteMenu={deleteMenu}
+              setDialog={setDialog}
+              locale={locale}
+              showApi={true}
+            />
           ))}
           <MenuItemWrapper>
             <MenuItem
               add
               onClick={() => {
-                setDialog({ show: true, path, count });
+                setDialog({ show: true, path, index: count, showApi: true });
               }}
             >
               <SectionThumbnailWrapper>
@@ -103,11 +149,18 @@ const MenuConfig = ({ path, popStage }) => {
           </MenuItemWrapper>
         </MultipleWrapper>
       </ComponentWrapper>
-      <AddMenuItemDialog
+      <MenuDialog
         dialog={dialog}
         onClose={() => setDialog({})}
-        onAddMenuItem={(item, path, count) => {
-          addMenuItem({ ...item, code: generate(), items: [] }, [...path, "items", count]);
+        onAddMenuItem={(item, path, index) => {
+          addMenuItem(
+            {
+              ...item,
+              children: item.children ?? [],
+              code: item.code ?? generate(),
+            },
+            [...path, "children", index]
+          );
         }}
       />
     </SectionWrapper>

@@ -1,93 +1,115 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import Button from "../button";
-import IconTriangleLineDown from "../icons/iconTriangleLineDown";
-import { HeaderDesktop, HeaderMobile, WrapperQcCode, ContentHeader, WrapperScroll, HiddenContent } from "./style";
-const SuccessRegister = () => {
-  const [isShow, setShow] = useState(false);
-  const refScroll = useRef();
+import { HeaderDesktop, HeaderMobile, WrapperQcCode, ContentHeader, WrapperInfo } from "./style";
+import { FormattedMessage } from "react-intl";
+import { ContentInfo, GroupButton, HeaderItemRestaurant, ItemRestaurant, ListRestaurant, TitleInfo } from "../popup-promo/style";
+import IconMap from "../icons/iconMap";
+import IconPhone from "../icons/iconPhone";
+import ScrollShowContent from "../scroll-show-content";
+import ItemRestaurantBooking from "../item-restaurant/item-restaurant-booking";
 
-  const onCheckHeight = () => {
-    const scrollHeight = refScroll.current?.scrollHeight;
-    const scroolTop = refScroll.current?.scrollTop;
-    const clientHeight = refScroll.current?.clientHeight;
-    if (scroolTop === scrollHeight - clientHeight) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-  const onScrollContent = () => {
-    setShow(onCheckHeight());
-  };
-
-  useEffect(() => {
-    window.onresize = () => {
-      setShow(onCheckHeight());
-    };
-  }, []);
-
-  const onMoveBottom = () => {
-    refScroll.current.scrollTo({
-      top: 1000,
-      left: 100,
-      behavior: "smooth",
-    });
-  };
-
+const SuccessRegister = ({ listRestaurant }) => {
   return (
     <>
       <HeaderDesktop>
         <WrapperQcCode>
-          <img src="/images/demo_qc.png" />
+          <img width={82} height={82} src="/images/demo_qc.png" />
+          <h6 className="promo-code">
+            <FormattedMessage id="successRegister.promo_code" />
+          </h6>
+          <h6 className="code">CQR42000V</h6>
         </WrapperQcCode>
         <ContentHeader>
-          <h3>Chúc mừng đăng ký thành công!</h3>
-          <p>Mã voucher đã được gửi về Email và ví voucher của bạn.</p>
-          <Button varian="outline">Xem ưu đãi của tôi</Button>
-          <Button>Đặt bàn ngay</Button>
+          <h3>
+            <FormattedMessage id="successRegister.congratulation" />
+          </h3>
+          <p>
+            <FormattedMessage id="successRegister.send_voucher_email" />
+          </p>
+          <Button className="view-my-promo" varian="outline">
+            <FormattedMessage id="successRegister.view_my_promo" />
+          </Button>
+          <Button>
+            <FormattedMessage id="successRegister.reservation_now" />
+          </Button>
         </ContentHeader>
       </HeaderDesktop>
 
       <HeaderMobile>
-        <h3>
-          Chúc mừng đăng ký <br />
-          thành công!
-        </h3>
+        <FormattedMessage
+          id="successRegister.congratulation_mobile"
+          values={{
+            br: <br />,
+          }}
+        />
         <WrapperQcCode>
-          <img src="/images/demo_qc.png" />
+          <img width={82} height={82} src="/images/demo_qc.png" />
         </WrapperQcCode>
-        <p>Mã ưu đãi</p>
+        <p>
+          <FormattedMessage id="successRegister.promo_code" />
+        </p>
         <h4>CQR42000V</h4>
-        <p>Mã voucher đã được gửi về Email và ví voucher của bạn.</p>
-        <Button>Đặt bàn ngay</Button>
-        <Button varian="outline">Xem ưu đãi của tôi</Button>
+        <p>
+          <FormattedMessage id="successRegister.send_voucher_email" />
+        </p>
+        <Button>
+          <FormattedMessage id="successRegister.reservation_now" />
+        </Button>
+        <Button varian="outline">
+          <FormattedMessage id="successRegister.view_my_promo" />
+        </Button>
       </HeaderMobile>
-
-      <WrapperScroll ref={refScroll} onScroll={onScrollContent}>
-        <h5>Nội dung chương trình</h5>
-        <h6>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit ipsum dolor sit amet, consectetur adipiscing elit dolor sit amet,
-          consectetur adipiscing elit ipsum dolor sit amet.
-        </h6>
-        <h5>Khu vực</h5>
-        <h6>Hà Nội</h6>
-        <h5>Thời gian áp dụng</h5>
-        <h6>01/12/2020 - 31/12/2020</h6>
-        <h5>Nhà hàng áp dụng</h5>
-        <ul>
-          <li>
-            <h6>• Gogi House Trần Phú</h6>
-            <p>
-              Khu nhà ở liền kề 3C-10, 11, 24, 25. Đường Nguyễn Văn Lộc, khu đô thị Mỗ Lao, phường Mộ Lao, quận Hà Đông, Hà Nội -
-              02473008011
-            </p>
-          </li>
-        </ul>
-
-        <HiddenContent className={`${isShow ? "show" : ""}`}>
-          <IconTriangleLineDown onClick={onMoveBottom} />
-        </HiddenContent>
-      </WrapperScroll>
+      <ScrollShowContent>
+        <WrapperInfo>
+          <TitleInfo>
+            <FormattedMessage id="successRegister.content_event" />
+          </TitleInfo>
+          <ContentInfo>
+            Hỡi các thực thần tứ phương, cùng lên đường thẳng tiến GoGi để có 100% CƠ HỘI nhận hàng ngàn quà tặng cùng giải thưởng tiền mặt
+            trao tay tổng trị giá 1 TỶ ĐỒNG
+          </ContentInfo>
+          <TitleInfo>
+            <FormattedMessage id="successRegister.location" />
+          </TitleInfo>
+          <ContentInfo>Hà Nội</ContentInfo>
+          <TitleInfo>
+            <FormattedMessage id="successRegister.date_apply" />
+          </TitleInfo>
+          <ContentInfo>01/12/2020 - 31/12/2020</ContentInfo>
+          <TitleInfo>
+            <FormattedMessage id="successRegister.restaurant_apply" />
+          </TitleInfo>
+          <ListRestaurant>
+            {listRestaurant?.map((item, index) => (
+              <li key={index}>
+                {/* <ItemRestaurant>
+                  <HeaderItemRestaurant>
+                    <p>• {item.name}</p>
+                    <p className="view-map">
+                      0.7km
+                      <IconMap color="#7B7979" />
+                    </p>
+                  </HeaderItemRestaurant>
+                  <h6>
+                    {item.address}
+                    <br />
+                    {item.openClose}
+                  </h6>
+                  <GroupButton>
+                    <Button size="tiny" varian="outline">
+                      <IconPhone /> {item.phone}
+                    </Button>
+                    <Button size="tiny">
+                      <FormattedMessage id="successRegister.reservation" />
+                    </Button>
+                  </GroupButton>
+                </ItemRestaurant> */}
+                <ItemRestaurantBooking restaurant={item} />
+              </li>
+            ))}
+          </ListRestaurant>
+        </WrapperInfo>
+      </ScrollShowContent>
     </>
   );
 };

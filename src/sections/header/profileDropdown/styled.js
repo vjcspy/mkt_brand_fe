@@ -1,5 +1,14 @@
 import styled from "styled-components";
 
+export const Marker = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99;
+  top: 0;
+  left: 0;
+`;
+
 export const DropDownWrapper = styled.div`
   border: 1px solid ${({ theme }) => theme.color.page.border};
   background: white;
@@ -10,6 +19,9 @@ export const DropDownWrapper = styled.div`
   top: calc(100% + 7px);
   right: 0px;
   z-index: 100;
+  @media (max-width: 768px) {
+    top: 100%;
+  }
 `;
 
 export const ProfileWrapper = styled.div`
@@ -47,6 +59,9 @@ export const ProfileNameWrapper = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  button {
+    padding: 0 10px;
   }
 `;
 
