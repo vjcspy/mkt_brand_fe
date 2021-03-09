@@ -6,7 +6,6 @@ export const WrapperSignIn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 700px;
   flex: 1;
   overflow: hidden;
 
@@ -46,7 +45,7 @@ export const Info = styled.p`
   font-weight: normal;
   font-size: 16px;
   line-height: 24px;
-  color: #7b7979;
+  color: ${({ theme }) => theme.color.text.description};
 
   @media (max-width: 769px) {
     display: flex;
@@ -100,6 +99,9 @@ export const ContentSignIn = styled.div`
   max-width: 400px;
   overflow: hidden;
   padding: 10px;
+  h2 {
+    margin-bottom: 10px;
+  }
 `;
 
 export const WrapperItemSignIn = styled.div`

@@ -12,7 +12,7 @@ const ListCondition = ({ listCondition }) => {
       <ListConditionWrapper>
         {listCondition?.map((item, index) => (
           <li key={index}>
-            <h5>{item}</h5>
+            <p>{item}</p>
           </li>
         ))}
       </ListConditionWrapper>

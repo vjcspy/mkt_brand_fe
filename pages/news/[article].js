@@ -9,9 +9,6 @@ import { Pages, RenderFooter, RenderHeader } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
 import { getSite } from "../../src/services/backend";
 import { MainContainer, MainWrapper } from "../../src/styles";
-import useFromJS from "../../src/hooks/useFromJS";
-import Breadcrumbs from "../../src/sections/breadcrumbs";
-import Article from "../../src/sections/article";
 import PageContainer from "../../src/containers/pageContainer";
 
 export async function getStaticPaths() {

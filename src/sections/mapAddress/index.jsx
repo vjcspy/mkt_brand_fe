@@ -49,7 +49,7 @@ const MapAddress = () => {
   }, [size]);
 
   return (
-    <Container ref={measuredRef} onLoad={() => console.log("onLoad")}>
+    <Container ref={measuredRef} onLoad={() => console.log("")}>
       <MapAddressWrapper headerHeight={top}>
         <LeftContent className={isEnd ? "end" : ""}>
           <MapItemsWrapper ref={ref}>

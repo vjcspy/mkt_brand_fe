@@ -46,7 +46,7 @@ export const PhoneInput = styled.input`
     margin: 0;
   }
   &::-webkit-input-placeholder {
-    color: #7b7979;
+    color: ${({ theme }) => theme.color.text.description};
     opacity: 0.6;
   }
 

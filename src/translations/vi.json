@@ -123,6 +123,8 @@
 
   "login.sign_in": "Đăng nhập",
   "login.sign_up": "Đăng kí",
+  "login.send_otp": "Nhập mã OTP",
+  "login.fail_phone_number": "Số điện thoại không hợp lệ",
   "login.note_phone_number": "Nhập số điện thoại của bạn, chúng tối sẽ gửi đến bạn OTP",
   "login.get_opt": "Nhận OTP",
   "login.nofity_get_otp": "Chúng tôi đã gửi OTP đến số điện thoại",

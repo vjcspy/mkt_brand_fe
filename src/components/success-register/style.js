@@ -58,12 +58,12 @@ export const WrapperQcCode = styled.div`
   }
 
   .promo-code {
-    color: #7b7979;
+    color: ${({ theme }) => theme.color.text.description};
     text-align: center;
     line-height: 22px;
   }
   .code {
-    color: #231f20;
+    color: ${({ theme }) => theme.color.text.heading};
     text-align: center;
     line-height: 22px;
   }

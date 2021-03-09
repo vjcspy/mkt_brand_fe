@@ -12,6 +12,25 @@ export const GlobalStyle = createGlobalStyle`
   body{
     height: 100vh;
     height: calc(var(--vh, 1vh) * 100);
+
+    ::-webkit-scrollbar {
+     width: 0px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+    background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
   }
   h1,
   h2,
@@ -174,4 +193,93 @@ export const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.color.text.description};
   }
 
+  .notification{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1500;
+    display: flex;
+    flex-direction: column;
+    max-width: calc(100% - 40px);
+
+    li {
+      max-width: 400px;
+      width: 100%;
+      display: block;
+      background: white;
+      padding: 12px 20px;
+      box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
+      border-radius: 4px;
+      list-style-type: none;
+      position: relative;
+      transition: all 0.15s ease;
+      margin-bottom: 20px;
+    }
+  
+    &-icon {
+      margin-right: 7px;
+    }
+  
+    &-title {
+      font-size: 16px;
+      line-height: 18px;
+      font-weight: 500;
+      font-style: normal;
+      color: $headingColor;
+      max-width:calc(100% - 50px);
+      min-width: 300px;
+      display: flex;
+      align-items: end;
+      margin-right: 20px;
+      h5{
+        color: #ffffff;
+
+      }
+    }
+  
+    &-content {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+      color: $textColorSecond;
+    }
+  
+    &-close {
+      border: none;
+      background: transparent;
+      padding: 0;
+      position: absolute;
+      top: 16px;
+      right: 12px;
+      width: 16px;
+      height: 16px;
+  
+      img {
+        width: 16px;
+        height: 16px;
+        display: block;
+      }
+    }
+  
+    &-enter {
+      opacity: 0.01;
+      top: -60px;
+      &.notification-enter-active {
+        opacity: 1;
+        transition: all 400ms ease-in;
+        top: 0;
+      }
+    }
+  
+    &-exit {
+      // opacity: 1;
+      right: 0px;
+      &.notification-exit-active {
+        // opacity: 0.01;
+        transform: translateX(100%);
+        transition: all 400ms ease-in;
+      }
+    }
+  }
 `;

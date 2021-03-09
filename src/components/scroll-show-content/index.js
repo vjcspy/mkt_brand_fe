@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import useWindowResize from "../../hooks/useWindowResize";
 import IconTriangleLineDown from "../icons/iconTriangleLineDown";
-import { WrapperScroll, HiddenContent, Content } from "./style";
+import { WrapperScroll, HiddenContent, Content, WrapperContent } from "./style";
 import { useSelector } from "react-redux";
 
 const ScrollShowContent = ({ children, ...rest }) => {
@@ -11,11 +11,10 @@ const ScrollShowContent = ({ children, ...rest }) => {
   const size = useWindowResize();
   const heightPopup = useSelector((state) => state.get("heightPopup"));
   const [maxHeight, setMaxHeight] = useState();
-
   const checkIsBottom = useCallback(() => {
-    const scrollHeight = refScroll.current?.scrollHeight;
-    const scroolTop = refScroll.current?.scrollTop;
-    const clientHeight = refScroll.current?.clientHeight;
+    const scrollHeight = parentScroll.current?.scrollHeight;
+    const scroolTop = parentScroll.current?.scrollTop;
+    const clientHeight = parentScroll.current?.clientHeight;
     if (scroolTop + 2 >= scrollHeight - clientHeight) {
       return false;
     } else {
@@ -28,7 +27,7 @@ const ScrollShowContent = ({ children, ...rest }) => {
   }, []);
 
   useEffect(() => {
-    refScroll.current?.addEventListener("scroll", onScroll, { passive: true });
+    parentScroll.current?.addEventListener("scroll", onScroll, { passive: true });
     return () => refScroll.current?.removeEventListener("scroll", onScroll, { passive: true });
   }, [onScroll]);
 
@@ -49,16 +48,15 @@ const ScrollShowContent = ({ children, ...rest }) => {
       behavior: "smooth",
     });
   }, []);
-
   return (
-    <Content ref={parentScroll}>
-      <WrapperScroll maxHeight={Math.abs(maxHeight)} {...rest} ref={refScroll}>
-        {children}
-      </WrapperScroll>
-      <HiddenContent className={`${isBottom ? "show" : ""}`} onClick={onMoveBottom}>
-        <IconTriangleLineDown />
-      </HiddenContent>
-    </Content>
+    <WrapperContent>
+      <Content ref={parentScroll} onScroll={onScroll}>
+        <WrapperScroll>{children}</WrapperScroll>
+        <HiddenContent className={`${isBottom ? "show" : ""}`} onClick={onMoveBottom}>
+          <IconTriangleLineDown />
+        </HiddenContent>
+      </Content>
+    </WrapperContent>
   );
 };
 

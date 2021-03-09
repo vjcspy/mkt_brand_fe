@@ -1,7 +1,5 @@
-import { get, has } from "lodash";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Icon from "../../../components/icons";
-import useFromJS from "../../../hooks/useFromJS";
 import Image from "../../../components/image";
 import {
   AvatarWrapper,
@@ -18,20 +16,85 @@ import InputComponent from "../../../components/input";
 import DropDown from "../../../components/input/drop-down";
 import useIframeResize from "../../../hooks/useWindowResize/useIframeResize";
 import { FormattedMessage } from "react-intl";
-
-const genders = ["Woman", "Man", "Other"];
+import { useSelector, useDispatch } from "react-redux";
+import { genders } from "../../signIn/createInfo";
+import useApi from "../../../hooks/useApi";
+import { GGG_INTERNAL, SET_USER_INFO } from "../../../constants";
+import PulseLoader from "../../../components/loading";
+import { showNotification } from "../../../components/notification";
 
 const ProfileTab = ({}) => {
-  const profile = useFromJS(["profile"]);
+  const dispatch = useDispatch();
+  const {
+    firstName,
+    lastName,
+    email,
+    gender,
+    dob,
+    address,
+    addresses,
+    avatar,
+    coinAmount,
+    cellphone,
+    customerNumber,
+    currentMembershipName,
+    provinceId,
+  } = useSelector((state) => state.get("userInfo"))?.toJS() ?? {};
+  const { token } = useSelector((state) => state.get("tokenUser")).toJS();
+
   const [size, ref] = useIframeResize();
+
+  const [profile, setProfile] = useState({
+    firstName,
+    lastName,
+    email,
+    gender,
+    dob,
+    address,
+    addresses,
+    provinceId,
+  });
+
+  const [{ loading, error, data }, onUpdateUserInfo] = useApi(
+    `${GGG_INTERNAL}/update-profile`,
+    profile,
+    { "tgs-version": "2.6.10", Authorization: `Bearer ${token}` },
+    "POST"
+  );
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setProfile((state) => ({
+      ...state,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    if (data) {
+      const { message, messageCode, result, error } = data;
+      if (messageCode === 1) {
+        showNotification(dispatch, { content: message, status: "success" });
+        dispatch({ type: SET_USER_INFO, value: result });
+      } else {
+        showNotification(dispatch, { content: error.message ?? message, status: "error" });
+      }
+    }
+    if (error) {
+      showNotification(dispatch, { content: "Lỗi mạng", status: "error" });
+    }
+  }, [data, error]);
+
+  const onChangeGender = (value) => {};
+
   return (
     <ProfileTabWrapper ref={ref}>
       {size.width > 768 ? (
         <>
           <ProfileTabGrid>
             <AvatarWrapper>
-              {has(profile, ["avatar", "url"]) ? (
-                <Image width={130} height={130} src={get(profile, ["avatar", "url"])} />
+              {avatar ? (
+                <Image width={130} height={130} src={avatar} />
               ) : (
                 <AvatarButton>
                   <Icon icon="camera" />
@@ -43,52 +106,58 @@ const ProfileTab = ({}) => {
                 <p>
                   <FormattedMessage id="profile.info_code" />:
                 </p>
-                <p>123568</p>
+                <p>{customerNumber}</p>
               </ProfileInfoItem>
               <ProfileInfoItem>
                 <p>
                   <FormattedMessage id="profile.info_coin" />:
                 </p>
                 <p>
-                  100.660 <Icon icon="coin" />
+                  {coinAmount ?? 0} <Icon icon="coin" />
                 </p>
               </ProfileInfoItem>
               <ProfileInfoItem>
                 <p>
                   <FormattedMessage id="profile.info_level" />:
                 </p>
-                <p>Sliver</p>
+                <p>{currentMembershipName}</p>
               </ProfileInfoItem>
               <ProfileInfoItem>
                 <p>
                   <FormattedMessage id="profile.info_phone_number" />:
                 </p>
-                <p>0946 xxx xxx</p>
+                <p>{cellphone}</p>
               </ProfileInfoItem>
               <ProfileButtons>
                 <Button varian="outline">
                   <FormattedMessage id="profile.info_cancel" />
                 </Button>
-                <Button varian="primary">
-                  <FormattedMessage id="profile.info_save" />
+                <Button onClick={onUpdateUserInfo} varian="primary">
+                  {loading ? <PulseLoader loading fill /> : <FormattedMessage id="profile.info_save" />}
                 </Button>
               </ProfileButtons>
             </ProfileInfoWrapper>
           </ProfileTabGrid>
           <ProfileTabGrid>
             <ProfileInputWrapper>
-              <InputComponent title="profile.info_first_name" />
-              <InputComponent title="profile.info_email" />
-              <DropDown title="profile.info_gender" listData={genders} />
-              <InputComponent title="profile.info_city" />
+              <InputComponent onChange={onChange} name="firstName" value={profile.firstName} title="profile.info_first_name" />
+              <InputComponent onChange={onChange} name="email" value={profile.email} title="profile.info_email" />
+              <DropDown
+                onChangeGender={onChangeGender}
+                value={profile.gender}
+                style={{ borderBottom: "1px solid #231F20" }}
+                title="profile.info_gender"
+                listData={genders}
+              />
+              <InputComponent onChange={onChange} value={profile.provinceId} name={"provinceId"} title="profile.info_city" />
             </ProfileInputWrapper>
           </ProfileTabGrid>
           <ProfileTabGrid>
             <ProfileInputWrapper>
-              <InputComponent title="profile.info_last_name" />
-              <DropDown title="profile.info_birth_day" listData={["20/2/1960"]} />
-              <InputComponent title="profile.info_address" />
-              <DropDown title="profile.info_country" listData={["VietNam"]} />
+              <InputComponent onChange={onChange} name="lastName" value={profile.lastName} title="profile.info_last_name" />
+              <InputComponent onChange={onChange} name="dob" title="profile.info_birth_day" value={profile.dob} />
+              <InputComponent onChange={onChange} name="address" value={profile.address} title="profile.info_address" />
+              <InputComponent onChange={onChange} value={profile.addresses} name="addresses" title="profile.info_country" />
             </ProfileInputWrapper>
           </ProfileTabGrid>
         </>
@@ -100,8 +169,8 @@ const ProfileTab = ({}) => {
             </h3>
             <ProfileInfoWrapper>
               <AvatarWrapper>
-                {has(profile, ["avatar", "url"]) ? (
-                  <Image width={130} height={130} src={get(profile, ["avatar", "url"])} />
+                {avatar ? (
+                  <Image width={130} height={130} src={avatar} />
                 ) : (
                   <AvatarButton>
                     <Icon icon="camera" />
@@ -112,45 +181,52 @@ const ProfileTab = ({}) => {
                 <p>
                   <FormattedMessage id="profile.info_code" />:
                 </p>
-                <p>123568</p>
+                <p>{customerNumber}</p>
               </ProfileInfoItem>
               <ProfileInfoItem>
                 <p>
                   <FormattedMessage id="profile.info_coin" />:
                 </p>
                 <p>
-                  100.660 <Icon icon="coin" />
+                  {coinAmount}
+                  <Icon icon="coin" />
                 </p>
               </ProfileInfoItem>
               <ProfileInfoItem>
                 <p>
                   <FormattedMessage id="profile.info_level" />:
                 </p>
-                <p>Sliver</p>
+                <p>{currentMembershipName}</p>
               </ProfileInfoItem>
               <ProfileInfoItem>
                 <p>
                   <FormattedMessage id="profile.info_phone_number" />:
                 </p>
-                <p>0946 xxx xxx</p>
+                <p>{cellphone}</p>
               </ProfileInfoItem>
             </ProfileInfoWrapper>
             <ProfileInputWrapper>
-              <InputComponent title="profile.info_first_name" />
-              <InputComponent title="profile.info_email" />
-              <DropDown title="profile.info_gender" listData={genders} />
-              <InputComponent title="profile.info_city" />
-              <InputComponent title="profile.info_last_name" />
-              <DropDown title="profile.info_birth_day" listData={["20/2/1960"]} />
-              <InputComponent title="profile.info_address" />
-              <DropDown title="profile.info_country" listData={["VietNam"]} />
+              <InputComponent title="profile.info_first_name" name="firstName" value={profile.firstName} onChange={onChange} />
+              <InputComponent title="profile.info_last_name" name="lastName" value={profile.lastName} onChange={onChange} />
+              <InputComponent title="profile.info_birth_day" name="dob" value={profile.dob} onChange={onChange} />
+              <DropDown
+                style={{ borderBottom: "1px solid #231F20" }}
+                title="profile.info_gender"
+                listData={genders}
+                value={profile.gender}
+                onChangeGender={onChangeGender}
+              />
+              <InputComponent title="profile.info_email" name="email" value={profile.email} onChange={onChange} />
+              <InputComponent title="profile.info_address" name="address" value={profile.address} onChange={onChange} />
+              <InputComponent title="profile.info_city" name="provinceId" value={profile.provinceId} onChange={onChange} />
+              <InputComponent title="profile.info_country" name="addresses" value={profile.addresses} onChange={onChange} />
             </ProfileInputWrapper>
             <ProfileButtons>
               <Button varian="outline">
                 <FormattedMessage id="profile.info_cancel" />
               </Button>
-              <Button varian="primary">
-                <FormattedMessage id="profile.info_save" />
+              <Button onClick={onUpdateUserInfo} varian="primary">
+                {loading ? <PulseLoader loading fill /> : <FormattedMessage id="profile.info_save" />}
               </Button>
             </ProfileButtons>
           </ProfileTabGrid>

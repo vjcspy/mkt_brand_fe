@@ -15,7 +15,7 @@ const useSiteRouter = () => {
         return router.push(getBrowserLink(link, url), as, option);
       },
     };
-  }, [router]);
+  }, [router, mode]);
 };
 
 export default useSiteRouter;

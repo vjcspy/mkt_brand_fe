@@ -32,7 +32,7 @@ export const HeaderMobile = styled.div`
   h6 {
     font-weight: 600;
     line-height: 22px;
-    color: #7b7979;
+    color: ${({ theme }) => theme.color.text.description};
     margin-bottom: 2px;
   }
   p {

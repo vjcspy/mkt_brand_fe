@@ -23,6 +23,8 @@ export const LogoWrapper = styled.a`
     height: 100%;
     max-height: 68px;
     width: auto;
+    max-width: 140px;
+    width: 100%;
   }
 `;
 
@@ -187,6 +189,9 @@ export const ItemTopMenuRight = styled.div`
   @media (max-width: 1068px) {
     padding: 0 10px;
   }
+  h6 {
+    color: ${({ theme }) => theme.color.text.description};
+  }
 `;
 
 export const HoverWrapper = styled.button`
@@ -249,7 +254,7 @@ export const WrapperMenuRight = styled.div`
   flex: 1 0 0;
   display: flex;
   justify-content: flex-end;
-  min-width: 335px;
+  min-width: 345px;
 
   // @media (max-width: 1068px) {
   //   min-width: 335px;

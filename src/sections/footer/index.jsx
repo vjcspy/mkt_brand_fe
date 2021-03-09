@@ -1,18 +1,89 @@
 import React from "react";
 import { Container } from "../../styles";
-import { Content, ContentFooter, FooterWrapper, LeftContent, RightContent, WrapperFeature, SocialNetwork, GroupDownload } from "./style";
+import {
+  Content,
+  ContentFooter,
+  FooterWrapper,
+  LeftContent,
+  RightContent,
+  WrapperFeature,
+  SocialNetwork,
+  GroupDownload,
+} from "./style";
 
 import IconFacebookCircle from "../../components/icons/iconFacebookCircle";
 import IconYoutubeCircle from "../../components/icons/iconYoutubeCircle";
 import IconInstagramCircle from "../../components/icons/iconInstagramCircle";
+import ImageMedia from "../../development/components/imageMedia";
 const defaultConfig = {
   type: "footer",
   name: "footer",
   title: "Default Footer",
-  components: {},
+  components: {
+    socialNetwork: {
+      type: "group",
+      title: "Social Network",
+      name: "socialNetwork",
+      defaultConfig: {
+        text: { type: "text", title: "Text", value: { vi: "Instagram", en: "Instagram" }, name: "text" },
+        icon: { type: "image" },
+        link: {
+          type: "link",
+          name: "link",
+          title: "Link",
+          value: {
+            url: "/",
+          },
+        },
+      },
+      value: [
+        {
+          text: { type: "text", title: "Text", value: { vi: "Facebook", en: "Facebook" }, name: "text" },
+          icon: { type: "image", name: "Facebook" },
+          link: {
+            type: "link",
+            name: "link",
+            title: "Link",
+            value: {
+              label: { vi: "Facebook", en: "Facebook" },
+              url: "https://www.facebook.com/GoGiHouse.QuanThitNuongHanQuoc",
+            },
+          },
+        },
+        {
+          text: { type: "text", title: "Text", value: { vi: "Youtube", en: "Youtube" }, name: "text" },
+          icon: { type: "image", name: "Youtube" },
+          link: {
+            type: "link",
+            name: "link",
+            title: "Link",
+            value: {
+              label: { vi: "Youtube", en: "Youtube" },
+              url: "https://www.youtube.com/channel/UCd3-QS4vCFnPvAEEpKwgNIw",
+            },
+          },
+        },
+        {
+          text: { type: "text", title: "Text", value: { vi: "Instagram", en: "Instagram" }, name: "text" },
+          icon: { type: "image", name: "Instagram" },
+          link: {
+            type: "link",
+            name: "link",
+            title: "Link",
+            value: {
+              label: { vi: "Instagram", en: "Instagram" },
+              url: "https://www.instagram.com/gogihouse.official",
+            },
+          },
+        },
+      ],
+    },
+  },
 };
 
-const Footer = ({ config }) => {
+const Footer = ({ config = defaultConfig }) => {
+  const { components } = config;
+  const { socialNetwork } = components;
   return (
     <FooterWrapper>
       <Container>
@@ -20,10 +91,10 @@ const Footer = ({ config }) => {
           <h3>Tải App The Golden Spoon</h3>
           <GroupDownload>
             <a>
-              <img width={190} height={60} src="/images/googleplay.jpg" />
+              <img width={190} height={60} src="/images/appstore.jpg" />
             </a>
             <a>
-              <img width={190} height={60} src="/images/appstore.jpg" />
+              <img width={190} height={60} src="/images/googleplay.jpg" />
             </a>
           </GroupDownload>
           <h6>
@@ -31,15 +102,11 @@ const Footer = ({ config }) => {
             <br /> Tải App Hôm Nay Chạm Ngay Ưu Đãi.
           </h6>
           <SocialNetwork>
-            <a>
-              <IconFacebookCircle width={36} height={36} />
-            </a>
-            <a>
-              <IconInstagramCircle width={36} height={36} />
-            </a>
-            <a>
-              <IconYoutubeCircle width={36} height={36} />
-            </a>
+            {socialNetwork.value.map((item, key) => (
+              <a target="_blank" href={item.link.value.url} key={key}>
+                <img src={item.icon.value.url} />
+              </a>
+            ))}
           </SocialNetwork>
         </WrapperFeature>
       </Container>

@@ -1,5 +1,5 @@
 import Cors from "cors";
-// import { spawn } from "child_process";
+import { spawn } from "child_process";
 import exportSite from "../../exportSite";
 
 // Initializing the cors middleware

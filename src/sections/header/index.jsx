@@ -1,7 +1,15 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import loadable from "@loadable/component";
-import { HeaderContent, HeaderLinks, HeaderWrapper, FlexGrow, GroupFlexBox, LogoWrapper, MenuIconButton } from "./header.styled";
+import {
+  HeaderContent,
+  HeaderLinks,
+  HeaderWrapper,
+  FlexGrow,
+  GroupFlexBox,
+  LogoWrapper,
+  MenuIconButton,
+} from "./header.styled";
 import { SET_HEADER_HEIGHT, SHOW_LANGUAGE_LOCATION } from "../../constants";
 import { Container } from "../../styles";
 import IconMenu from "../../components/icons/iconMenu";
@@ -46,38 +54,53 @@ const defaultConfig = {
       title: "Slides",
       name: "slides",
       defaultConfig: {
-        text: { type: "text", title: "Text", value: "Ăn GoGi trúng 1 tỷ", name: "text" },
+        text: {
+          type: "text",
+          title: "Text",
+          value: { vi: "Ăn GoGi trúng 1 tỷ", en: "Ăn GoGi trúng 1 tỷ" },
+          name: "text",
+        },
         link: {
           type: "link",
           name: "link",
           title: "Link",
           value: {
-            label: "Nhận mã ngay",
+            label: { vi: "Nhận mã ngay", en: "Nhận mã ngay" },
             url: "/",
           },
         },
       },
       value: [
         {
-          text: { type: "text", title: "Text", value: "Ăn GoGi trúng 1 tỷ", name: "text" },
+          text: {
+            type: "text",
+            title: "Text",
+            value: { vi: "Ăn GoGi trúng 1 tỷ", en: "Ăn GoGi trúng 1 tỷ" },
+            name: "text",
+          },
           link: {
             type: "link",
             name: "link",
             title: "Link",
             value: {
-              label: "Nhận mã ngay",
+              label: { vi: "Nhận mã ngay", en: "Nhận mã ngay" },
               url: "/",
             },
           },
         },
         {
-          text: { type: "text", title: "Text", value: "Ăn GoGi trúng 1 tỷ", name: "text" },
+          text: {
+            type: "text",
+            title: "Text",
+            value: { vi: "Ăn GoGi trúng 1 tỷ", en: "Ăn GoGi trúng 1 tỷ" },
+            name: "text",
+          },
           link: {
             type: "link",
             name: "link",
             title: "Link",
             value: {
-              label: "Nhận mã ngay",
+              label: { vi: "Nhận mã ngay", en: "Nhận mã ngay" },
               url: "/",
             },
           },
@@ -171,6 +194,7 @@ const Header = ({ config = defaultConfig }) => {
   const navMenu = useMenu(components.navMenu?.value);
   const hambergerMenu = useMenu(components.hambergerMenu?.value);
   const [showProfileDropdownMobile, setShowProfileDropdownMobile] = useState(false);
+  const { fullName, avatar } = useSelector((state) => state.get("userInfo"))?.toJS() ?? "";
 
   useEffect(() => {
     requestLocation();
@@ -179,6 +203,8 @@ const Header = ({ config = defaultConfig }) => {
   useEffect(() => {
     if (pageName === "our-menu-detail") {
       setIsEqualPageName("our-menu");
+    } else if (pageName === "home") {
+      setIsEqualPageName("");
     } else {
       setIsEqualPageName(pageName);
     }
@@ -243,7 +269,11 @@ const Header = ({ config = defaultConfig }) => {
                           e.stopPropagation();
                         }}
                       />
-                      <ProfileDropdown />
+                      <ProfileDropdown
+                        setShowProfile={setShowProfileDropdownMobile}
+                        avatar={avatar}
+                        userName={fullName}
+                      />
                     </>
                   )}
                 </MenuIconButton>

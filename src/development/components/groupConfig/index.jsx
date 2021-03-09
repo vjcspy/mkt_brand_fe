@@ -21,7 +21,9 @@ const GroupConfig = ({ path, popStage }) => {
         </DevPrimaryButton>
       </SectionHeader>
       {map(components, (config, index) => (
-        <DevelopmentComponentType key={config.name} config={config} path={[...path, index, "value"]} />
+        <React.Fragment key={config.name + index}>
+          <DevelopmentComponentType config={config} path={[...path, index, "value"]} />
+        </React.Fragment>
       ))}
     </SectionWrapper>
   );

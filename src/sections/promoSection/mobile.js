@@ -21,8 +21,9 @@ const ViewMapRestaurant = loadable(() => import("../../components/view-map-resta
 const SuccessRegisterMobile = loadable(() => import("../../components/succes-register-mobile"));
 const ListCondition = loadable(() => import("./Conditions"));
 
-const PromoMobile = ({ listPromo, detailPromo, config, theme }) => {
-  const [currentPage, setCurrentPage] = useState(detailPromo ? detailPromo : 0);
+const PromoMobile = ({ listPromo, onViewMyPromo, onGetCode, viewMapRestaurant, stateAction, setStateAction }) => {
+  const { promoCode, showPopUpSuccess } = stateAction;
+  const [currentPage, setCurrentPage] = useState(promoCode ? promoCode : 0);
   const [listRestaurant, setListRestaurant] = useState();
   const [listCondition, setListCondition] = useState();
   const [mapRestaurant, setMapRestaurant] = useState();
@@ -60,23 +61,14 @@ const PromoMobile = ({ listPromo, detailPromo, config, theme }) => {
 
   const onBook = (value) => {};
 
-  const viewMapRestaurant = (value) => {
-    setMapRestaurant(value);
-  };
-
   const onBackPopup = () => {
     if (stepFlowPopupMobile === 0) {
-      setShowPopupRegisterMobile(false);
+      setStateAction({ ...stateAction, showPopUpSuccess: false });
       setStepFlowPopupMobile(0);
       setShowLogin(false);
     } else {
       setStepFlowPopupMobile(stepFlowPopupMobile - 1);
     }
-  };
-
-  const onGetCode = () => {
-    setShowPopupRegisterMobile(true);
-    setShowLogin(true);
   };
 
   return (
@@ -105,18 +97,20 @@ const PromoMobile = ({ listPromo, detailPromo, config, theme }) => {
           </WrapperEndpoint>
         </WrapperScroller>
 
-        <DragMobile isShowDefault={detailPromo}>
+        <DragMobile>
           <WrapperDragMobile>
             <PromoInfo
               promo={listPromo[currentPage]}
-              onGetCode={onGetCode}
-              getRestaurant={() => setListRestaurant(listPromo[currentPage].listRestaurant)}
-              getCondition={() => setListCondition(listPromo[currentPage].conditions)}
+              hadGetCode={false}
+              onGetCode={() => onGetCode(listPromo[currentPage]?.id)}
+              onViewMyPromo={() => onViewMyPromo(listPromo[currentPage]?.id)}
+              getRestaurant={() => setListRestaurant(listPromo[currentPage]?.listRestaurant)}
+              getCondition={() => setListCondition(listPromo[currentPage]?.conditions)}
             />
           </WrapperDragMobile>
         </DragMobile>
 
-        <CSSTransition show={showPopupRegisterMobile} classTransition="bottom-top">
+        <CSSTransition show={showPopUpSuccess} classTransition="bottom-top">
           <PopupMobile step={stepFlowPopupMobile} onBack={onBackPopup}>
             {showLogin && (
               <WrapperContentPopup>
@@ -131,6 +125,7 @@ const PromoMobile = ({ listPromo, detailPromo, config, theme }) => {
                 onShowCondition={onShowConditionRegister}
               />
             </WrapperContentPopup>
+
             {showConditionOrRestaurant ? (
               <WrapperContentPopup style={{ height: "100%" }}>
                 <ListRestaurantBooking onBook={onBook} listRestaurant={listPromo[2].listRestaurant} onViewMap={viewMapPromo} />

@@ -51,9 +51,12 @@ export const mergeConfig = (defaultConfig, config) => {
   let { components: cComponent, ...cRest } = config;
   let components = {};
   Object.keys(dComponent).map((key) => {
+    let value = cloneDeep(dComponent[key].value);
     components[key] = {
       ...dComponent[key],
-      value: isObject(dComponent[key]?.value) ? defaultsDeep(cComponent[key]?.value, dComponent[key]?.value) : cComponent[key]?.value,
+      value: isObject(dComponent[key]?.value)
+        ? defaultsDeep(cComponent[key]?.value ?? value, value)
+        : cComponent[key]?.value,
     };
   });
   return {

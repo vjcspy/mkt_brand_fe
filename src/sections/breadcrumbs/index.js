@@ -17,7 +17,7 @@ const Breadcrumbs = () => {
   const breadcrumbs = useFromJS(["breadcrumbs"]);
   return (
     <WrapperBreadcrumbs>
-      <Container>
+      {/* <Container>
         <TitleLinkPagination>
           {map(breadcrumbs, (item, index) => (
             <Fragment key={index}>
@@ -30,7 +30,7 @@ const Breadcrumbs = () => {
             </Fragment>
           ))}
         </TitleLinkPagination>
-      </Container>
+      </Container> */}
     </WrapperBreadcrumbs>
   );
 };

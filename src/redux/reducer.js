@@ -33,6 +33,12 @@ import {
   SET_HEIGHT_POPUP,
   ACCEPT_COOKIE,
   SET_FIRST_LOAD,
+  HIDE_NOTIFICATION,
+  SHOW_NOTIFICATION,
+  SET_USER_INFO,
+  SET_TOKEN_USER,
+  SHOW_LIST_BRAND,
+  SET_MY_VOUCHER,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -43,6 +49,9 @@ export const initialState = fromJS({
   locale: "vi",
   location: "hn",
   acceptCookie: false,
+  notifications: List([]),
+  tokenUser: fromJS({}),
+  showListBrand: false,
 });
 
 export default function rootReducer(state = initialState, action) {
@@ -58,6 +67,8 @@ export default function rootReducer(state = initialState, action) {
     case SET_SELECTED_COMPONENT:
       return state.set("selectedComponent", action.value);
     case UPDATE_CONFIG:
+      // debugger;
+      // console.log(action.path, action.value);
       return state.updateIn(action.path, () => action.value);
     case REMOVE_CONFIG:
       if (state.getIn(action.path) instanceof List) {
@@ -101,7 +112,9 @@ export default function rootReducer(state = initialState, action) {
       return state.update("filesUpload", (files = List([])) => files.concat(List(filesUpload)));
     case REMOVE_FILES_UPLOAD:
       URL.revokeObjectURL(action.value.url);
-      return state.update("filesUpload", (files) => files.filter((fileUpload) => fileUpload.get("url") != action.value.url));
+      return state.update("filesUpload", (files) =>
+        files.filter((fileUpload) => fileUpload.get("url") != action.value.url)
+      );
     case UPDATE_API_STATUS:
       return state.updateIn(["apiStatus", ...action.path], () => fromJS(action.value));
     case SET_MEDIA_DIALOG:
@@ -132,6 +145,22 @@ export default function rootReducer(state = initialState, action) {
       return state.update("acceptCookie", () => action.value);
     case SET_FIRST_LOAD:
       return state.update("firstLoad", () => action.value);
+    case HIDE_NOTIFICATION:
+      let index = state.get("notifications").findIndex((n) => n.get("id") === action.id);
+      if (index !== -1) {
+        return state.deleteIn(["notifications", index]);
+      }
+      return state;
+    case SHOW_NOTIFICATION:
+      return state.update("notifications", (ns) => ns.push(fromJS(action.value)));
+    case SET_USER_INFO:
+      return state.set("userInfo", fromJS(action.value));
+    case SET_TOKEN_USER:
+      return state.set("tokenUser", fromJS(action.value));
+    case SHOW_LIST_BRAND:
+      return state.update("showListBrand", () => action.value);
+    case SET_MY_VOUCHER:
+      return state.set("myVoucher", action.value);
     default:
       return state;
   }

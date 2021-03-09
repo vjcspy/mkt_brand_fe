@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const InputWrapper = styled.div`
-  border-bottom: 1px solid #7b7979;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -10,18 +9,32 @@ export const InputWrapper = styled.div`
 `;
 
 export const InputPhoneWrapper = styled.div`
-  border-bottom: 1px solid #7b7979;
   display: flex;
+  flex-direction: column;
 `;
 
 export const DropdownWrapper = styled.div`
   position: relative;
-  border-bottom: 1px solid #7b7979;
   display: flex;
   align-items: flex-end;
   height: 40px;
 `;
 
+export const WrapperError = styled.div`
+  display: flex;
+  align-items: center;
+  color: #e10007;
+  img {
+    margin-right: 4px;
+    height: unset;
+  }
+  span {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+  }
+`;
 export const TitleDopDown = styled.label`
   font-style: normal;
   font-weight: normal;
@@ -30,7 +43,7 @@ export const TitleDopDown = styled.label`
   display: flex;
   align-items: center;
   letter-spacing: 0.03em;
-  color: #7b7979;
+  color: ${({ theme }) => theme.color.text.description};
   position: absolute;
   top: -6px;
 `;
@@ -43,10 +56,12 @@ export const Title = styled.label`
   display: flex;
   align-items: center;
   letter-spacing: 0.03em;
-  color: #7b7979;
+  color: ${({ theme }) => theme.color.text.description};
   position: absolute;
   top: 16px;
   transition: 0.3s;
+  user-select: none;
+  z-index: 1;
 `;
 
 export const InputTag = styled.input`
@@ -58,8 +73,12 @@ export const InputTag = styled.input`
   display: flex;
   align-items: center;
   letter-spacing: 0.03em;
-  color: #231f20;
-  text-align: center;
+  color: ${({ theme }) => theme.color.text.heading};
+  text-align: ${({ textAlign }) => textAlign};
+  z-index: 2;
+  background: none;
+  ${({ isValid, theme }) => (isValid ? "border-bottom: 1px solid " + theme.color.text.heading : "border-bottom: 1px solid #e10007")};
+
   &:active,
   &:focus,
   &:valid {
@@ -69,7 +88,7 @@ export const InputTag = styled.input`
     }
   }
   &::-webkit-input-placeholder {
-    color: #7b7979;
+    color: ${({ theme }) => theme.color.text.description};
     opacity: 0.6;
   }
   &::-webkit-outer-spin-button,

@@ -19,8 +19,13 @@ import {
   SET_TOKEN,
   GET_SITE,
   FETCH_MENU,
+  GET_MY_VOUCHER,
+  SET_MY_VOUCHER,
+  GGG_INTERNAL,
 } from "../constants";
-import { chain, get } from "lodash";
+import { chain, get, head } from "lodash";
+
+const hostApiGGG = "https://internal.ggg.systems";
 
 function* fetchConfig({ value }) {
   try {
@@ -28,7 +33,6 @@ function* fetchConfig({ value }) {
     const {
       data: [site],
     } = yield Axios.get(`${host}/sites?_limit=1&site_code=${value}`);
-
     yield put({ type: SET_INITIAL_SITE, value: site });
   } catch (e) {}
 }
@@ -55,7 +59,6 @@ function* putPublicConfig() {
       config: site.raw_config,
     });
     const response = yield Axios.post("/api/deploy", {}, { params: { site_code: site.site_code } });
-    console.dir(response);
     alert("Success");
   } catch (e) {
     alert(e);
@@ -66,7 +69,9 @@ function* fetchMedias({ _limit, _start, _q }) {
   try {
     const host = process.env.NEXT_PUBLIC_API_HOST;
     yield put({ type: UPDATE_API_STATUS, value: { loading: true }, path: ["medias"] });
-    const { data: medias } = yield Axios.get(`${host}/upload/files?_limit=${_limit}&_start=${_start}${_q ? `&_q=${_q}` : ""}`);
+    const { data: medias } = yield Axios.get(
+      `${host}/upload/files?_limit=${_limit}&_start=${_start}${_q ? `&_q=${_q}` : ""}`
+    );
     yield put({ type: SET_MEDIAS, value: medias });
     yield put({ type: UPDATE_API_STATUS, value: { success: true }, path: ["medias"] });
   } catch (e) {}
@@ -207,6 +212,33 @@ function* getSite({ site_code, pageName }) {
   }
 }
 
+function* getMyVoucher() {
+  try {
+    const { token, customerNumber } = yield select((s) => s.get("tokenUser").toJS());
+    yield put({ type: SET_MY_VOUCHER, value: { loading: true } });
+    const { data, error } = yield Axios.post(
+      `${GGG_INTERNAL}/my-voucher`,
+      {
+        type: "all",
+        memId: customerNumber,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "tgs-version": "2.6.10",
+        },
+      }
+    );
+    if (data.result) {
+      put({ type: SET_MY_VOUCHER, value: { loading: false, data: data.result } });
+    } else {
+      yield put({ type: SET_MY_VOUCHER, value: { loading: false, error: error ? error.message : data.message } });
+    }
+  } catch (e) {
+    yield put({ type: SET_MY_VOUCHER, value: { loading: false, error: e } });
+  }
+}
+
 function* fetchMenu({ urlKey = "gogi" } = {}) {
   try {
     yield put({ type: UPDATE_API_STATUS, value: { loading: true }, path: ["menu"] });
@@ -266,6 +298,7 @@ function* saga() {
   yield takeEvery(LOGIN, login);
   yield takeEvery(GET_SITE, getSite);
   yield takeEvery(FETCH_MENU, fetchMenu);
+  yield takeEvery(GET_MY_VOUCHER, getMyVoucher);
 }
 
 export default saga;

@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import ReactPageScroller from "../../../plugins/react-page-scroller";
 import loadable from "@loadable/component";
 import { Container } from "../../styles";
@@ -7,7 +7,6 @@ import { WrapperContentPromo, RightPromo, LeftPromo, WrapperEndpoint, Promo, Wra
 import SuccessRegister from "../../components/success-register";
 import ListRestaurant from "../../components/list-restaurant";
 import PromoInfo from "./PromoInfo";
-import useHistory from "../../hooks/useHistory";
 import IconTriangleLineTop from "../../components/icons/iconTriangleLineTop";
 import PointNavigation from "../../components/point-navigation";
 import RatioImage from "../../components/ratioImage";
@@ -18,28 +17,13 @@ const PhoneOTP = loadable(() => import("../../components/phone-opt"));
 const Popup = loadable(() => import("../../components/popup-wrapper"));
 const ListCondition = loadable(() => import("./Conditions"));
 
-const PromoDesktop = ({ listPromo, detailPromo, config, theme }) => {
-  const [currentPage, setCurrentPage] = useState(detailPromo ? detailPromo : 0);
-  console.log(detailPromo);
+const PromoDesktop = ({ listPromo, stateAction, setStateAction, onGetCode, viewMapRestaurant, onViewMyPromo }) => {
+  const { promoCode, showPopUpSuccess } = stateAction;
+  const [currentPage, setCurrentPage] = useState(promoCode ? promoCode : 0);
   const [listRestaurant, setListRestaurant] = useState();
   const [listCondition, setListCondition] = useState();
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const size = listPromo.length;
-  const [state, history] = useHistory();
-  const onGetValueOTP = (result) => {
-    if (result) {
-      setShowSuccess(true);
-    } else {
-      setShowSuccess(true);
-    }
-    setShowLogin(false);
-  };
-
-  const viewMapRestaurant = (value) => {
-    history.push(state, "Map", "/map");
-  };
 
   const PromoList = useMemo(
     () =>
@@ -59,7 +43,9 @@ const PromoDesktop = ({ listPromo, detailPromo, config, theme }) => {
                 <RightPromo className="RightPromo">
                   <PromoInfo
                     promo={item}
-                    onGetCode={() => setShowLogin(true)}
+                    hadGetCode={false}
+                    onGetCode={() => onGetCode(item.id)}
+                    onViewMyPromo={() => onViewMyPromo(item.id)}
                     getRestaurant={() => setListRestaurant(item.listRestaurant)}
                     getCondition={() => setListCondition(item.conditions)}
                   />
@@ -74,11 +60,13 @@ const PromoDesktop = ({ listPromo, detailPromo, config, theme }) => {
 
   return (
     <>
-      <WrapperContentPromo className="Wrapper-promo-desktop" style={{ height: `calc(100vh - (${headerHeight + 104 ?? 0}px ` }}>
+      <WrapperContentPromo className="Wrapper-promo-desktop" style={{ height: `calc(100vh - (${headerHeight}px ` }}>
         <ContentScroller className="content-scroller">
           <ReactPageScroller
+            renderAllPagesOnFirstRender={true}
             customPageNumber={+currentPage}
-            containerHeight={`calc(100vh - ${headerHeight + 104 ?? 0}px)`}
+            // containerHeight={`calc(100vh - ${headerHeight + 104 ?? 0}px)`}
+            containerHeight={`calc(100vh - ${headerHeight}px)`}
             pageOnChange={setCurrentPage}
           >
             {PromoList}
@@ -100,11 +88,11 @@ const PromoDesktop = ({ listPromo, detailPromo, config, theme }) => {
         </WrapperEndpoint>
       </WrapperContentPromo>
 
-      <Popup show={showLogin} onClose={() => setShowLogin(false)}>
+      {/* <Popup show={showLogin} onClose={() => setShowLogin(false)}>
         <PhoneOTP onResult={onGetValueOTP} />
-      </Popup>
+      </Popup> */}
 
-      <Popup show={showSuccess} onClose={() => setShowSuccess(false)}>
+      <Popup show={showPopUpSuccess} onClose={() => setStateAction({ ...stateAction, showPopUpSuccess: false })}>
         <SuccessRegister listRestaurant={listPromo[currentPage]?.listRestaurant} />
       </Popup>
 

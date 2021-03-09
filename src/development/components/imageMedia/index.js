@@ -18,7 +18,6 @@ const ImageMedia = ({ media, formats, preload = false, ...rest }) => {
       <>
         {preload && (
           <Head>
-            {console.log(url)}
             <link rel="preload" href={url} as="image" />
           </Head>
         )}

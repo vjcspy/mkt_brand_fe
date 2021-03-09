@@ -19,13 +19,14 @@ import {
 } from "./header.styled";
 import { Marker } from "./profileDropdown/styled";
 import { dummyLocation } from "../../components/drop-down/SelectLocation";
+import Link from "next/link";
 const ProfileDropdown = loadable(() => import("./profileDropdown"));
 
 const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
   const locale = useSelector((state) => state.getIn(["locale"]));
   const location = useSelector((state) => state.getIn(["location"]));
+  const { fullName, avatar } = useSelector((state) => state.get("userInfo"))?.toJS() ?? "";
   const [showProfile, setShowProfile] = useState(false);
-  const profile = useFromJS(["profile"]) ?? { name: "User name" };
   const itemLocation = dummyLocation.find((item) => item.id === location);
   return (
     <HeaderTopWrapper>
@@ -39,11 +40,11 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
             <TopMenuRight>
               <ItemTopMenuRight onClick={() => setPopupLanguageLocation(true)}>
                 {locale === "vi" ? (
-                  <img width={32} height={17} src="/images/ic/ic_vietnam_flag.svg" />
+                  <img width={32} height={17} src="/images/flag_vnam.jpg" />
                 ) : (
                   <img width={32} height={17} src="/images/ic/ic_usa_flag.svg" />
                 )}
-                <IconTriangleDown />
+                <IconTriangleDown color="#7B7979" />
               </ItemTopMenuRight>
               <ItemTopMenuRight>
                 <HoverWrapper>
@@ -53,28 +54,40 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
                 </HoverWrapper>
               </ItemTopMenuRight>
               <ItemTopMenuRight>
-                <HoverWrapper
-                  className={showProfile ? "active" : ""}
-                  onClick={() => {
-                    setShowProfile(true);
-                  }}
-                  onBlur={() => {
-                    setTimeout(() => {
-                      // setShowProfile(false);
-                    }, 100);
-                  }}
-                >
-                  <h6>{profile?.name ?? <FormattedMessage id="header.login" />}</h6>
+                <HoverWrapper className={showProfile ? "active" : ""}>
+                  {fullName ? (
+                    <h6
+                      onClick={() => {
+                        setShowProfile(true);
+                      }}
+                      onBlur={() => {
+                        setTimeout(() => {
+                          // setShowProfile(false);
+                        }, 100);
+                      }}
+                    >
+                      {fullName}
+                    </h6>
+                  ) : (
+                    <Link href="/login">
+                      <a>
+                        <h6>
+                          <FormattedMessage id="header.login" />
+                        </h6>
+                      </a>
+                    </Link>
+                  )}
                 </HoverWrapper>
                 {showProfile && (
                   <>
-                    <Marker onClick={() => setShowProfile(false)} /> <ProfileDropdown />
+                    <Marker onClick={() => setShowProfile(false)} />{" "}
+                    <ProfileDropdown setShowProfile={setShowProfile} avatar={avatar} userName={fullName} />
                   </>
                 )}
               </ItemTopMenuRight>
               <ItemTopMenuRight onClick={() => setPopupLanguageLocation(true)}>
                 <HoverWrapper>
-                  <IconMapMarker />
+                  <IconMapMarker color="#7B7979" />
                   <h6>{locale === "en" ? itemLocation.title : itemLocation.titleVN}</h6>
                 </HoverWrapper>
               </ItemTopMenuRight>

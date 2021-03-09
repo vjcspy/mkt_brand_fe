@@ -10,7 +10,6 @@ const AddSectionDialog = ({ dialog, onClose, addSection }) => {
   const size = useWindowResize();
   const ref = useRef();
   const bgClass = size.height > (ref.current?.innerHeight ?? 0) ? "center" : "top";
-
   return dialog?.show ? (
     <Portal className="development-dialog">
       <DialogBackground

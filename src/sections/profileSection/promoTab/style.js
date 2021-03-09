@@ -3,10 +3,13 @@ import styled from "styled-components";
 export const WrapperProfilePromo = styled.div`
   margin-top: 40px;
   overflow: hidden;
+  position: relative;
+  min-height: 300px;
 
   @media (max-width: 768px) {
     margin-left: -20px;
     margin-right: -20px;
+    min-height: unset;
   }
 `;
 
@@ -36,6 +39,8 @@ export const PromoProfile = styled.div`
   &:not(:last-child) {
     margin-right: 40px;
   }
+  display: flex;
+  flex-direction: column;
 `;
 
 export const ImageWrapper = styled.div`
@@ -46,6 +51,12 @@ export const ImageWrapper = styled.div`
 `;
 export const Title = styled.h3`
   margin-bottom: 20px;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 `;
 
 export const WrapperFlex = styled.div`

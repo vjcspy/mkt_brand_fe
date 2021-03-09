@@ -10,7 +10,7 @@ const languages = [
     id: "vi",
     title: "Vietnamese",
     titleVN: "Tiếng việt",
-    flag: "/images/ic/ic_vietnam_flag.svg",
+    flag: "/images/flag_vnam.jpg",
   },
   {
     id: "en",

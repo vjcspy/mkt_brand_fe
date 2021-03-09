@@ -4,7 +4,10 @@ export const Footer = styled.footer``;
 
 export const FooterWrapper = styled.div`
   margin-top: 140px;
+  // background: #e9e9e969;
+  // padding-top: 40px;
   @media (max-width: 767px) {
+    margin-top: 50px;
   }
 `;
 
@@ -98,6 +101,10 @@ export const SocialNetwork = styled.div`
     margin: 0 20px;
     svg {
       display: block;
+    }
+    img {
+      max-width: 36px;
+      max-height: 36px;
     }
   }
   a:first-child {

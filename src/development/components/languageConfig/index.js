@@ -8,7 +8,6 @@ import { WrapperLanguageConfig } from "./style";
 import Vietnamese from "./vietnamese";
 
 const LanguageConfig = ({ path, popStage, putStage }) => {
-  console.log(putStage);
   return (
     <SectionWrapper className="section-language">
       <WrapperLanguageConfig className="wrapper-language">

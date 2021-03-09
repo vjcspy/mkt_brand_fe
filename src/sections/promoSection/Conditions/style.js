@@ -8,6 +8,10 @@ export const ListConditionWrapper = styled.ul`
   overflow: auto;
   li {
     margin-bottom: 16px;
+    p {
+      color: ${({ theme }) => theme.color.text.description};
+      margin: 0;
+    }
   }
   li:last-child {
     margin-bottom: 0;

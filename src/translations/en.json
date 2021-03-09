@@ -123,6 +123,8 @@
 
   "login.sign_in": "Sign in",
   "login.sign_up": "Sign up",
+  "login.send_otp": "Send OTP",
+  "login.fail_phone_number": "Phone number not valid",
   "login.note_phone_number": "Please fill in the form below to create new account",
   "login.get_opt": "Get OTP",
   "login.nofity_get_otp": "We sent OTP to phone number",

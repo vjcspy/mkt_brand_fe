@@ -6,7 +6,7 @@ import LinkComponent from "./linkComponent";
 import MenuComponent from "./menu";
 import RangeComponent from "./rangeComponent";
 import TextComponent from "./textComponent";
-
+import RadioComponent from "./radioComponent"
 const ComponentType = {
   text: TextComponent,
   image: ImageComponent,
@@ -15,6 +15,7 @@ const ComponentType = {
   link: LinkComponent,
   group: GroupComponent,
   menu: MenuComponent,
+  radio: RadioComponent
 };
 
 const DevelopmentComponentType = ({ config, ...rest }) => {

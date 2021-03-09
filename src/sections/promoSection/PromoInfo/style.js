@@ -19,11 +19,28 @@ export const WrapperFlex = styled.div`
   span {
     text-align: right;
   }
+  h5 {
+    font-weight: normal;
+  }
 `;
 
 export const ContentField = styled.span`
   font-size: 16px;
   color: ${({ theme }) => theme.color.text.description};
+`;
+
+export const DescriptionPromo = styled.span`
+  cursor: pointer;
+  font-size: 16px;
+  color: ${({ theme }) => theme.color.text.description};
+  display: ${({ open }) => (open ? "block" : "-webkit-box")};
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+
+  span {
+    color: ${({ theme }) => theme.color.status.primary};
+  }
 `;
 
 export const WrapperButton = styled.div`

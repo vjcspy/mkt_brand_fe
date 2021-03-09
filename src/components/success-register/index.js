@@ -3,8 +3,6 @@ import Button from "../button";
 import { HeaderDesktop, HeaderMobile, WrapperQcCode, ContentHeader, WrapperInfo } from "./style";
 import { FormattedMessage } from "react-intl";
 import { ContentInfo, GroupButton, HeaderItemRestaurant, ItemRestaurant, ListRestaurant, TitleInfo } from "../popup-promo/style";
-import IconMap from "../icons/iconMap";
-import IconPhone from "../icons/iconPhone";
 import ScrollShowContent from "../scroll-show-content";
 import ItemRestaurantBooking from "../item-restaurant/item-restaurant-booking";
 

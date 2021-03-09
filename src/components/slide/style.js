@@ -34,7 +34,7 @@ export const ItemSlide = styled.div`
   user-select: none;
 
   a {
-    font-weight: 500;
+    font-weight: normal;
     cursor: pointer;
     text-decoration: underline !important;
     color: ${({ theme }) => theme.color.text.heading};

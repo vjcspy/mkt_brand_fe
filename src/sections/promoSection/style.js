@@ -97,6 +97,25 @@ export const LeftPromo = styled.div`
 export const RightPromo = styled.div`
   width: calc(50% - 40px);
   overflow: auto;
+  padding-right: 10px;
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
   button {
     width: 100%;
     margin: 17px 0 24px;

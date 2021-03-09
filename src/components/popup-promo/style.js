@@ -54,12 +54,12 @@ export const WrapperQcCode = styled.div`
     height: 82px;
   }
   .promo-code {
-    color: #7b7979;
+    color: ${({ theme }) => theme.color.text.description};
     text-align: center;
     line-height: 22px;
   }
   .code {
-    color: #231f20;
+    color: ${({ theme }) => theme.color.text.heading};
     text-align: center;
     line-height: 22px;
   }
@@ -121,7 +121,7 @@ export const ContentInfo = styled.h6`
 
 export const ItemRestaurant = styled.div`
   h6 {
-    color: #7b7979;
+    color: ${({ theme }) => theme.color.text.description};
     margin-bottom: 8px;
     max-width: 80%;
   }

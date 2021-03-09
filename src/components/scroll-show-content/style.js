@@ -1,11 +1,14 @@
 import styled, { keyframes } from "styled-components";
 
 export const WrapperScroll = styled.div`
-  overflow-y: auto;
-  padding-right: 15px;
-  margin-right: -15px;
   height: 100%;
-  max-height: ${({ maxHeight }) => (maxHeight > 0 ? maxHeight + "px" : 50 + "%")};
+`;
+
+export const WrapperContent = styled.div`
+  position: relative;
+  @media (max-width: 768px) {
+    position: unset;
+  }
 `;
 
 const animation = keyframes`
@@ -30,7 +33,13 @@ const animation = keyframes`
 `;
 
 export const Content = styled.div`
-  position: relative;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 15px;
+  margin-right: -15px;
+  @media (max-width: 768px) {
+    max-height: 100vh;
+  }
 `;
 
 export const HiddenContent = styled.div`

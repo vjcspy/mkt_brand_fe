@@ -23,8 +23,7 @@ const AcceptCookie = () => {
           <p>
             {/* <FormattedMessage id="cookie.content" />
              */}
-            Bằng việc tiếp tục sử dụng website, bạn đồng ý với các điều khoản Chính sách Về Cookie của chúng tôi.Bằng việc tiếp tục sử dụng
-            website, bạn đồng ý với các điều khoản{" "}
+            Bằng việc tiếp tục sử dụng website, bạn đồng ý với các điều khoản{" "}
             <a className="link" href="">
               Chính sách Về Cookie
             </a>{" "}

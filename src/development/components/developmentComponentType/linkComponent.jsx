@@ -1,12 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isArray, isObject } from "lodash";
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UPDATE_CONFIG, REMOVE_CONFIG } from "../../../constants";
 import { DevSecondaryButton } from "../../../styles/developmentStyle";
 import { ComponentWrapper, LinkWrapper, MultipleWrapper, RemoveMenuLink } from "./styled";
 
 const LinkComponent = ({ config, path }) => {
+  const locale = useSelector((s) => s.get("locale"));
   const dispatch = useDispatch();
   const updateConfig = useCallback((path, value) => dispatch({ type: UPDATE_CONFIG, value, path }), [dispatch]);
   const removeConfig = useCallback((path, value) => dispatch({ type: REMOVE_CONFIG, value, path }), [dispatch]);
@@ -22,9 +23,9 @@ const LinkComponent = ({ config, path }) => {
                 <label>Label</label>
                 <input
                   type="text"
-                  value={label}
+                  value={label[locale]}
                   onChange={(e) => {
-                    updateConfig([...path, subIndex, "label"], e.target.value);
+                    updateConfig([...path, subIndex, "label", locale], e.target.value);
                   }}
                 />
                 <label>Url</label>
@@ -49,7 +50,7 @@ const LinkComponent = ({ config, path }) => {
             onClick={() => {
               updateConfig([...path, config.value.length ?? 0], {
                 type: "link",
-                label: "Menu Label",
+                label: { vi: "Menu Label", en: "Menu Label" },
                 url: "/",
               });
             }}
@@ -63,9 +64,9 @@ const LinkComponent = ({ config, path }) => {
           <label>Label</label>
           <input
             type="text"
-            value={config.value.label}
+            value={config.value.label[locale]}
             onChange={(e) => {
-              updateConfig([...path, "label"], e.target.value);
+              updateConfig([...path, "label", locale], e.target.value);
             }}
           />
           <label>Url</label>

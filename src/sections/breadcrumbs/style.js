@@ -7,6 +7,9 @@ export const TitleLinkPagination = styled.div`
 
   h5 {
     cursor: pointer;
+    cursor: pointer;
+    font-weight: normal;
+    color: ${({ theme }) => theme.color.text.description};
     &:not(:first-child) {
       margin-left: 5px;
     }
@@ -18,6 +21,7 @@ export const TitleLinkPagination = styled.div`
 
 export const WrapperBreadcrumbs = styled.div`
   width: 100%;
+  height: 20px;
   @media (max-width: 768px) {
     display: none;
   }

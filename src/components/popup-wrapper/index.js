@@ -9,10 +9,12 @@ const Popup = ({ show, onClose, children }) => {
 
   useEffect(() => {
     if (refPopup.current) {
-      const height = refPopup.current.clientHeight;
-      dispatch({ type: SET_HEIGHT_POPUP, name: "popupWrapper", value: height - 80 });
+      setTimeout(() => {
+        const height = refPopup.current.clientHeight;
+        dispatch({ type: SET_HEIGHT_POPUP, name: "popupWrapper", value: height - 80 });
+      }, 100);
     }
-  });
+  }, [children]);
 
   return show ? (
     <Background>

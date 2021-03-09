@@ -6,6 +6,8 @@ export const JWT_TOKEN = "jwtToken";
  * REDUCER
  */
 
+export const GGG_INTERNAL = "https://internal.ggg.systems";
+
 export const SELECTED_SECTION = "SELECTED_SECTION";
 export const SELECTED_COMPONENT = "SELECTED_COMPONENT";
 export const CONFIG = "CONFIG";
@@ -48,6 +50,17 @@ export const ACCEPT_COOKIE = "ACCEPT_COOKIE";
 export const UPDATE_phoneOTP = "UPDATE_phoneOTP";
 export const UPDATE_VALUE_TRANSITION = "UPDATE_VALUE_TRANSITION";
 
+// NOTIFICATION
+
+export const HIDE_NOTIFICATION = "HIDE_NOTIFICATION";
+export const SHOW_NOTIFICATION = "SHOW_NOTIFICATION";
+
+export const SET_USER_INFO = "SET_USER_INFO";
+export const GET_INFO_USER = "GET_INFO_USER";
+export const SET_TOKEN_USER = "SET_TOKEN_USER";
+export const SHOW_LIST_BRAND = "SHOW_LIST_BRAND";
+export const SET_MY_VOUCHER = "SET_MY_VOUCHER";
+export const GET_MY_VOUCHER = "GET_MY_VOUCHER";
 /**
  * SAGA
  */

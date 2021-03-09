@@ -39,6 +39,8 @@ store.subscribe(() => {
   sessionStorage.setItem("firstLoad", firstLoad);
   saveState({
     // mode: state.get("mode"),
+    tokenUser: state.get("tokenUser"),
+    userInfo: state.get("userInfo"),
   });
 });
 

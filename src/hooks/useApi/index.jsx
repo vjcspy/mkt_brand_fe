@@ -1,21 +1,25 @@
 import Axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
-const useApi = (url, body, method = "GET") => {
-  const [data, setData] = useState();
-  useEffect(async () => {
+const useApi = (url, body, headers, method = "GET") => {
+  const [api, setApi] = useState({});
+
+  const action = useCallback(async () => {
+    setApi({ loading: true });
     try {
       const { data } = await Axios({
         url,
         method,
-        body,
+        data: body,
+        headers,
       });
-      setData(data);
+      setApi({ data });
     } catch (e) {
-      console.error(e);
+      setApi({ error: e });
     }
   }, [url, body, method]);
-  return data;
+
+  return [api, action];
 };
 
 export default useApi;

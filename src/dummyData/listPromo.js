@@ -1,5 +1,6 @@
 export const dummyPromoList = [
   {
+    id: 0,
     title: "Ăn Gogi trúng liền tay 1 tỷ",
     image: "https://ggg-api.s3.ap-southeast-1.amazonaws.com/promo1_8ff03668d9.jpg",
     location: "Hà Nội",
@@ -27,6 +28,7 @@ export const dummyPromoList = [
     ],
   },
   {
+    id: 1,
     title: "Ăn Gogi trúng vàng 9999",
     image: "https://ggg-api.s3.ap-southeast-1.amazonaws.com/promo2_cfa4d1effa.jpg",
     location: "Hà Nội",
@@ -54,6 +56,7 @@ export const dummyPromoList = [
     ],
   },
   {
+    id: 2,
     title: "Ăn Gogi trúng  1 tỷ",
     image: "https://ggg-api.s3.ap-southeast-1.amazonaws.com/promo1_mobile_de1bedf7da.jpg",
     location: "Hà Nội",

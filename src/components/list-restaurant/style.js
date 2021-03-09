@@ -41,7 +41,7 @@ export const ItemRestaurant = styled.div`
       line-height: 24px;
       text-align: right;
       letter-spacing: 0.03em;
-      color: #231f20;
+      color: ${({ theme }) => theme.color.text.heading};
     }
   }
 

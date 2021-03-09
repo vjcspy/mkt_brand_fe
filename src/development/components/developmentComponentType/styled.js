@@ -21,6 +21,22 @@ export const ComponentWrapper = styled.div`
   }
 `;
 
+export const WrapperRatio = styled.div`
+  display: flex;
+  border-radius: 4px;
+  justify-content: space-between;
+  padding: 5px 10px;
+  background: #fff;
+  margin-top: 10px;
+`;
+
+export const ItemRadio = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  height: 45px;
+`;
+
 /// Color component
 
 export const ColorWrapper = styled.button`

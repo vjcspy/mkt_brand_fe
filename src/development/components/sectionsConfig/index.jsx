@@ -18,13 +18,13 @@ const SectionsConfig = ({ putStage }) => {
   /// selector
   const pageName = useSelector((s) => s.get("pageName"));
   const header = useFromJS(["modifiedConfig", "header"]);
+  const footer = useFromJS(["modifiedConfig", "footer"]);
   const sections = useFromJS(["modifiedConfig", "pages", pageName, "sections"]);
   /// dispatch
   const dispatch = useDispatch();
   const addSection = (value) => dispatch({ type: ADD_SECTION, value });
   /// State
   const [addSectionDialog, setAddSection] = useState({});
-
   return (
     <SectionsWrapper>
       <SectionsBlock>
@@ -56,11 +56,25 @@ const SectionsConfig = ({ putStage }) => {
             <SectionTitleWrapper>{section.title}</SectionTitleWrapper>
           </SectionItem>
         ))}
-        <SectionItem add onClick={() => setAddSection({ show: true })}>
+        {/* <SectionItem add onClick={() => setAddSection({ show: true })}>
           <SectionThumbnailWrapper>
             <FontAwesomeIcon icon={["far", "plus-square"]} />
           </SectionThumbnailWrapper>
           Add Section
+        </SectionItem> */}
+      </SectionsBlock>
+
+      <SectionsBlock>
+        <SectionItem
+          onClick={() =>
+            putStage({
+              props: { path: ["modifiedConfig", "footer"] },
+              Component: SectionConfig,
+            })
+          }
+        >
+          <SectionThumbnail components={footer?.components} />
+          {footer?.title}
         </SectionItem>
       </SectionsBlock>
 

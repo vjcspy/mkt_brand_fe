@@ -1,11 +1,8 @@
 import ImageText from "./imageText";
 import Footer from "./footer";
 import Header from "./header";
-import OnePageScroller from "./onePageScroller";
-import Booking from "./booking";
 import OurMenuDetail from "./ourMenuDetail";
 import Breadcrumbs from "./breadcrumbs";
-import MenuOnePage from "./menusOnePage";
 import ProfileSection from "./profileSection";
 import MapAddress from "./mapAddress";
 import SectionSignIn from "./signIn";
@@ -13,6 +10,9 @@ import ListBlog from "./listBlog";
 import Article from "./article";
 import PromoSection from "./promoSection";
 import Comment from "./comment";
+import PromoBanner from "./PromoBanner";
+import BookingBanner from "./BookingBanner";
+import MeuBanner from "./MenuBanner";
 
 export const RenderHeader = ({ config }) => {
   const H = Headers[config?.name];
@@ -42,7 +42,7 @@ const pageHome = {
   path: "/",
   icon: "home",
   name: "home",
-  sections: [OnePageScroller.defaultConfig],
+  sections: [PromoBanner.defaultConfig],
   breadcrumbs: [],
 };
 const pagePromo = {
@@ -61,7 +61,7 @@ const pageOurMenu = {
   titleTranslate: "breadcrumbs.our_menu",
   path: "/our-menu",
   icon: "utensils",
-  sections: [MenuOnePage.defaultConfig],
+  sections: [MeuBanner.defaultConfig],
   breadcrumbs: [pageHome],
 };
 const pageOurMenuDetail = {
@@ -122,7 +122,7 @@ const pageBooking = {
   title: "Booking",
   path: "/booking",
   icon: "blog",
-  sections: [Booking.defaultConfig],
+  sections: [BookingBanner.defaultConfig],
 };
 
 export const Pages = {
@@ -144,14 +144,14 @@ export const Footers = { [Footer.defaultConfig.name]: Footer };
 export const Sections = {
   [ImageText.defaultConfig.name]: ImageText,
   [Breadcrumbs.defaultConfig.name]: Breadcrumbs,
-  [OnePageScroller.defaultConfig.name]: OnePageScroller,
   [OurMenuDetail.defaultConfig.name]: OurMenuDetail,
-  [MenuOnePage.defaultConfig.name]: MenuOnePage,
   [PromoSection.defaultConfig.name]: PromoSection,
   [ProfileSection.defaultConfig.name]: ProfileSection,
   [MapAddress.defaultConfig.name]: MapAddress,
   [SectionSignIn.defaultConfig.name]: SectionSignIn,
   [ListBlog.defaultConfig.name]: ListBlog,
   [Article.defaultConfig.name]: Article,
-  [Booking.defaultConfig.name]: Booking,
+  [PromoBanner.defaultConfig.name]: PromoBanner,
+  [BookingBanner.defaultConfig.name]: BookingBanner,
+  [MeuBanner.defaultConfig.name]: MeuBanner,
 };

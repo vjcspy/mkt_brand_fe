@@ -8,7 +8,6 @@ import IConViewMap from "../icons/iconViewMap";
 import { WrapperItemRestaurant, HeadRestaurant, WrapperAddress, GroupButton, Title, ItemContent, Content, ViewMap } from "./style";
 const ItemRestaurantBooking = ({ restaurant, onViewMap }) => {
   const { name, address, openClose, phone, aboutKm } = restaurant ?? {};
-  console.log(aboutKm);
   const [height, setHeight] = useState(0);
   const [sizeWidth] = useIframeResize();
 
@@ -25,7 +24,6 @@ const ItemRestaurantBooking = ({ restaurant, onViewMap }) => {
 
   useEffect(() => {
     if (sizeWidth.width <= 768) {
-      console.log("x");
       setHeight("auto");
     }
   });

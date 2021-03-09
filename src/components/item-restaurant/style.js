@@ -9,6 +9,10 @@ export const WrapperItemRestaurant = styled.div`
 export const HeadRestaurant = styled.div`
   display: flex;
   justify-content: space-between;
+  h5{
+    font-weight: normal;
+  }
+  h
 `;
 
 export const ViewMap = styled.div`
@@ -17,7 +21,7 @@ export const ViewMap = styled.div`
   line-height: 24px;
   text-align: right;
   letter-spacing: 0.03em;
-  color: #231f20;
+  color: ${({ theme }) => theme.color.text.heading};
   display: flex;
   svg {
     margin-top: 2px;
@@ -35,9 +39,13 @@ export const ItemContent = styled.div`
 export const Title = styled.h6`
   width: 22%;
   min-width: 90px;
-  color: #7b7979;
+  color: ${({ theme }) => theme.color.text.description};
 `;
-export const Content = styled.h6``;
+export const Content = styled.h6`
+  font-style: normal;
+  font-weight: normal;
+  color: ${({ theme }) => theme.color.text.description};
+`;
 export const GroupButton = styled.div`
   transition: 0.3s;
   display: flex;

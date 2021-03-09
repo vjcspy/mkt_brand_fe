@@ -7,6 +7,8 @@ import { MainContainer, MainWrapper } from "../../styles";
 import { useRouter } from "next/router";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import { SET_FIRST_LOAD } from "../../constants";
+import NotificationProvider from "../../components/notification";
+import ListBrand from "../../sections/list-brand";
 const PageContainer = ({ shouldHideFooter }) => {
   const pageName = useSelector((s) => s.get("pageName"));
   const header = useFromJS(["modifiedConfig", "header"]);
@@ -30,8 +32,10 @@ const PageContainer = ({ shouldHideFooter }) => {
       <MainWrapper className="main-content">
         <RenderSections sections={sections} />
       </MainWrapper>
+      <ListBrand />
       {!shouldHideFooter && <RenderFooter config={footer} />}
       <AcceptCookie />
+      <NotificationProvider />
     </MainContainer>
   );
 };

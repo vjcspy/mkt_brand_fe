@@ -20,6 +20,8 @@ const TextComponent = ({ config, path, ignoreLocale }) => {
   const onChange = useCallback(
     (e) => {
       const p = ignoreLocale ? path : [...path, locale];
+      // debugger;
+      // console.log(p);
       dispatch({ type: UPDATE_CONFIG, path: p, value: e.target.value });
     },
     [dispatch, path, locale, ignoreLocale]

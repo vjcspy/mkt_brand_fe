@@ -9,7 +9,7 @@ if (!global._babelPolyfill) {
   require("babel-polyfill");
 }
 
-const DEFAULT_ANIMATION_TIMER = 1000;
+const DEFAULT_ANIMATION_TIMER = 500;
 const DEFAULT_ANIMATION = "ease-in-out";
 const DEFAULT_CONTAINER_HEIGHT = "100vh";
 const DEFAULT_CONTAINER_WIDTH = "100vw";
@@ -43,6 +43,7 @@ const ReactPageScroller = ({
   pageOnChange,
   renderAllPagesOnFirstRender,
   transitionTimingFunction,
+  totalElement,
 }) => {
   const [componentIndex, setComponentIndex] = useState(DEFAULT_COMPONENT_INDEX);
   const [componentsToRenderLength, setComponentsToRenderLength] = useState(DEFAULT_COMPONENTS_TO_RENDER_LENGTH);
@@ -50,13 +51,12 @@ const ReactPageScroller = ({
   const scrollContainer = useRef(null);
   const pageContainer = useRef(null);
   const lastScrolledElement = useRef(null);
-
+  totalElement -= 1;
   const scrollPage = useCallback(
     (nextComponentIndex) => {
       if (onBeforePageScroll) {
         onBeforePageScroll(nextComponentIndex);
       }
-
       pageContainer.current.style.transform = `translate3d(0, ${nextComponentIndex * -100}%, 0)`;
     },
     [onBeforePageScroll]
@@ -65,7 +65,6 @@ const ReactPageScroller = ({
   const addNextComponent = useCallback(
     (componentsToRenderOnMountLength) => {
       let tempComponentsToRenderLength = 0;
-
       if (!isNil(componentsToRenderOnMountLength)) {
         tempComponentsToRenderLength = componentsToRenderOnMountLength;
       }
@@ -143,8 +142,8 @@ const ReactPageScroller = ({
       if (!isNil(containers[componentIndex + 1])) {
         disableScroll();
         isScrolling = true;
-        scrollPage(componentIndex + 1);
-
+        let nextIndex = componentIndex + 1 >= totalElement ? totalElement : componentIndex + 1;
+        scrollPage(nextIndex);
         setTimeout(() => {
           if (isMounted) {
             setComponentIndex((prevState) => prevState + 1);

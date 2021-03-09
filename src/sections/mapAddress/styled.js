@@ -94,6 +94,7 @@ export const MapWrapper = styled.div`
 export const MapItem = styled.div`
   p {
     margin-bottom: 0px;
+    color: ${({ theme }) => theme.color.text.description};
   }
 `;
 
@@ -114,6 +115,7 @@ export const MapItemTitle = styled.div`
 
   h4 {
     flex: 1;
+    font-weight: normal;
   }
 
   svg {

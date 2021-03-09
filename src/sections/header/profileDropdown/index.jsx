@@ -3,27 +3,29 @@ import React from "react";
 import Button from "../../../components/button";
 import Icon from "../../../components/icons";
 import LinkRouter from "../../../components/link-router";
-import useFromJS from "../../../hooks/useFromJS";
 import useSiteRouter from "../../../hooks/useSiteRouter";
 import { AvatarWrapper, Marker, DropDownWrapper, ProfileNameWrapper, ProfileWrapper, TabItem, TabsWrapper } from "./styled";
 import { FormattedMessage } from "react-intl";
-
-const ProfileDropdown = () => {
-  const profile = useFromJS(["profile"]) ?? { name: "User name" };
+import { useDispatch } from "react-redux";
+import { SET_TOKEN_USER, SET_USER_INFO } from "../../../constants";
+const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
   const router = useSiteRouter();
+  const dispatch = useDispatch();
+  const onLogout = () => {
+    dispatch({ type: SET_TOKEN_USER, value: {} });
+    dispatch({ type: SET_USER_INFO, value: {} });
+    setShowProfile(false);
+    router.push("/");
+  };
   return (
     <>
       <DropDownWrapper>
         <ProfileWrapper>
           <AvatarWrapper>
-            {has(profile, ["avatar", "url"]) ? (
-              <Image width="80" height="80" src={get(profile, ["avatar", "url"])} alt="avatar" title="Avatar" />
-            ) : (
-              <h1>{first(profile?.name)}</h1>
-            )}
+            {avatar ? <Image width="80" height="80" src={avatar} alt="avatar" title="Avatar" /> : <h1>{first(userName)}</h1>}
           </AvatarWrapper>
           <ProfileNameWrapper>
-            <h5>{profile?.name}</h5>
+            <h5>{userName}</h5>
             <Button
               width="100%"
               size="tiny"
@@ -71,14 +73,7 @@ const ProfileDropdown = () => {
           </LinkRouter>
         </TabsWrapper>
         <hr />
-        <Button
-          varian="outline"
-          width="100%"
-          size="tiny"
-          onClick={() => {
-            router.push("/login");
-          }}
-        >
+        <Button varian="outline" width="100%" size="tiny" onClick={onLogout}>
           <FormattedMessage id="header.log_out" />
         </Button>
       </DropDownWrapper>
