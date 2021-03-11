@@ -5,12 +5,12 @@ import { ACCEPT_COOKIE, SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSite } from "../../src/services/backend";
+import { getSite, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const site_code = process.env.SITE_CODE;
-  const site = await getSite(site_code);
+  const { data: site } = await getSiteServer(site_code);
   return {
     props: {
       config: site?.config ?? null,

@@ -201,9 +201,7 @@ const Header = ({ config = defaultConfig }) => {
   }, []);
 
   useEffect(() => {
-    if (pageName === "our-menu-detail") {
-      setIsEqualPageName("our-menu");
-    } else if (pageName === "home") {
+    if (pageName === "home") {
       setIsEqualPageName("");
     } else {
       setIsEqualPageName(pageName);

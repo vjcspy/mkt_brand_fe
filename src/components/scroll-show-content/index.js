@@ -50,7 +50,7 @@ const ScrollShowContent = ({ children, ...rest }) => {
   }, []);
   return (
     <WrapperContent>
-      <Content ref={parentScroll} onScroll={onScroll}>
+      <Content {...rest} ref={parentScroll} onScroll={onScroll}>
         <WrapperScroll>{children}</WrapperScroll>
         <HiddenContent className={`${isBottom ? "show" : ""}`} onClick={onMoveBottom}>
           <IconTriangleLineDown />

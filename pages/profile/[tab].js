@@ -6,23 +6,23 @@ import { SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/con
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSite } from "../../src/services/backend";
+import { getSite, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
-export async function getStaticPaths() {
-  const tabs = ["my-profile", "my-promo", "my-history", "register-promo"];
-  const tabPaths = map(tabs, (tab) => ({
-    params: { tab: tab },
-  }));
-  return {
-    paths: tabPaths,
-    fallback: false,
-  };
-}
+// export async function getStaticPaths() {
+//   const tabs = ["my-profile", "my-promo", "my-history", "register-promo"];
+//   const tabPaths = map(tabs, (tab) => ({
+//     params: { tab: tab },
+//   }));
+//   return {
+//     paths: tabPaths,
+//     fallback: false,
+//   };
+// }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const { tab } = params;
-  const site = await getSite(process.env.SITE_CODE);
+  const { data: site } = await getSiteServer(process.env.SITE_CODE);
   return {
     props: {
       config: site?.config ?? null,

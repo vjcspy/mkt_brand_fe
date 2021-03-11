@@ -8,6 +8,25 @@ export const InputWrapper = styled.div`
   height: 40px;
 `;
 
+export const InputWrapperDate = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  height: 40px;
+  ${({ theme }) => "border-bottom: 1px solid" + theme.color.text.heading};
+  .react-datepicker-popper {
+    z-index: 100;
+  }
+  svg {
+    position: absolute;
+    right: 10px;
+  }
+  #idInput {
+    width: 100%;
+  }
+`;
+
 export const InputPhoneWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -64,6 +83,22 @@ export const Title = styled.label`
   z-index: 1;
 `;
 
+export const TitleDate = styled.label`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.03em;
+  color: ${({ theme }) => theme.color.text.description};
+  position: absolute;
+  top: -6px;
+  transition: 0.3s;
+  user-select: none;
+  z-index: 1;
+`;
+
 export const InputTag = styled.input`
   width: 100%;
   font-style: normal;
@@ -77,7 +112,9 @@ export const InputTag = styled.input`
   text-align: ${({ textAlign }) => textAlign};
   z-index: 2;
   background: none;
-  ${({ isValid, theme }) => (isValid ? "border-bottom: 1px solid " + theme.color.text.heading : "border-bottom: 1px solid #e10007")};
+
+  ${({ isValid, theme }) =>
+    isValid ? "border-bottom: 1px solid " + theme.color.text.heading : "border-bottom: 1px solid #e10007"};
 
   &:active,
   &:focus,

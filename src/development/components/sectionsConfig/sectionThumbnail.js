@@ -6,13 +6,15 @@ import { SectionThumbnailWrapper } from "./styled";
 
 const SectionThumbnail = ({ components }) => {
   return useMemo(() => {
-    let image = find(toArray(components), (e) => e.type == "image");
+    let image = find(toArray(components), (e) => e?.type == "image");
 
     if (image) {
       if (isArray(image.value)) {
         return (
           <SectionThumbnailWrapper isGrid={true}>
-            {image.value.slice(0, 4).map((media) => (media ? <ImageMedia key={media.hash} media={media} formats="thumbnail" /> : null))}
+            {image.value
+              .slice(0, 4)
+              .map((media) => (media ? <ImageMedia key={media.hash} media={media} formats="thumbnail" /> : null))}
           </SectionThumbnailWrapper>
         );
       }

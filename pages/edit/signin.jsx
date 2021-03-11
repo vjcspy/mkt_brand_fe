@@ -6,7 +6,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { DevPrimaryButton } from "../../src/styles/developmentStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { LOGIN } from "../../src/constants";
-import { getSite } from "../../src/services/backend";
+import { getSite, getSiteServer } from "../../src/services/backend";
 import { useRouter } from "next/dist/client/router";
 
 const SigninWrapper = styled.div`
@@ -113,9 +113,9 @@ const ErrorMessage = styled.p`
   text-align: center;
 `;
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const site_code = process.env.SITE_CODE;
-  const site = await getSite(site_code);
+  const { data: site } = await getSiteServer(site_code);
   return {
     props: {
       logo: site?.logo ?? null,
@@ -132,7 +132,9 @@ const Signin = ({ site_code, logo }) => {
   const router = useRouter();
 
   const dispatch = useDispatch();
-  const login = useCallback(({ email, password, remember }) => dispatch({ type: LOGIN, email, password, remember }), [dispatch]);
+  const login = useCallback(({ email, password, remember }) => dispatch({ type: LOGIN, email, password, remember }), [
+    dispatch,
+  ]);
   const { error, loading } = useSelector((s) => s.getIn(["apiStatus", "login"])?.toJS() ?? {});
   const token = useSelector((s) => s.get("token"));
 

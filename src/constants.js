@@ -44,8 +44,10 @@ export const SET_PAGE_NAME = "SET_PAGE_NAME";
 export const SET_OUR_MENUS = "SET_OUR_MENUS";
 export const SET_HEADER_HEIGHT = "SET_HEADER_HEIGHT";
 export const SET_HOST = "SET_HOST";
-export const SET_ID_BLOG = "SET_ID_BLOG";
+export const SET_BLOG_SLUG = "SET_BLOG_SLUG";
 export const ACCEPT_COOKIE = "ACCEPT_COOKIE";
+export const SET_LIST_PROMO_ACTIVE = "SET_LIST_PROMO_ACTIVE";
+export const SET_LIST_BOOKING = "SET_LIST_BOOKING";
 
 export const UPDATE_phoneOTP = "UPDATE_phoneOTP";
 export const UPDATE_VALUE_TRANSITION = "UPDATE_VALUE_TRANSITION";
@@ -78,3 +80,6 @@ export const FETCH_MENU = "FETCH_MENU";
 
 export const SUBMIT_OPT = "SUBMIT_OTP";
 export const SUBMIT_PHONE = "SUBMIT_PHONE";
+
+export const GET_BLOGS_BY_IS_SHOW = "GET_BLOGS_BY_IS_SHOW";
+export const SET_LIST_BLOG_IS_SHOW = "SET_LIST_BLOG_IS_SHOW";

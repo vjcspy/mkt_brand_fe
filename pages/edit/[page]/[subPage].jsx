@@ -1,38 +1,45 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DEVELOPMENT_MODE, GET_SITE, SET_MODE, SET_OUR_MENUS, SET_PAGE_NAME, UPDATE_CONFIG } from "../../../src/constants";
+import {
+  DEVELOPMENT_MODE,
+  GET_SITE,
+  SET_MODE,
+  SET_OUR_MENUS,
+  SET_PAGE_NAME,
+  UPDATE_CONFIG,
+} from "../../../src/constants";
 import PageContainer from "../../../src/containers/pageContainer";
 import DevelopmentLayout from "../../../src/development/containers/developmentLayout";
 import { Pages } from "../../../src/sections";
 import { concat, get, isNil, map } from "lodash";
 import useSiteRouter from "../../../src/hooks/useSiteRouter";
-import { getSite } from "../../../src/services/backend";
+import { getSite, getSiteServer } from "../../../src/services/backend";
 import { List } from "immutable";
 
-export async function getStaticPaths() {
-  const site = await getSite(process.env.SITE_CODE);
-  const menus = get(site, ["menu", "children"], []);
-  const menuPaths = map(menus, (menu) => ({
-    params: { page: Pages["our-menu"].name, subPage: menu.url_key },
-  }));
+// export async function getStaticPaths() {
+//   const site = await getSiteServer(process.env.SITE_CODE);
+//   const menus = get(site, ["menu", "children"], []);
+//   const menuPaths = map(menus, (menu) => ({
+//     params: { page: Pages["our-menu"].name, subPage: menu.url_key },
+//   }));
 
-  const tabs = ["my-profile", "my-promo", "my-history", "register-promo"];
-  const tabPaths = map(tabs, (tab) => ({
-    params: { page: Pages.profile.name, subPage: tab },
-  }));
+//   const tabs = ["my-profile", "my-promo", "my-history", "register-promo"];
+//   const tabPaths = map(tabs, (tab) => ({
+//     params: { page: Pages.profile.name, subPage: tab },
+//   }));
 
-  // missing blog pages
+//   // missing blog pages
 
-  const pagePaths = concat(menuPaths, tabPaths);
+//   const pagePaths = concat(menuPaths, tabPaths);
 
-  return {
-    paths: pagePaths,
-    fallback: false,
-  };
-}
+//   return {
+//     paths: pagePaths,
+//     fallback: false,
+//   };
+// }
 
-export async function getStaticProps({ params }) {
-  const site = await getSite(process.env.SITE_CODE);
+export async function getServerSideProps({ params }) {
+  const { data: site } = await getSiteServer(process.env.SITE_CODE);
   const menus = get(site, ["menu", "children"], []);
   const { page, subPage } = params;
   const site_code = process.env.SITE_CODE;

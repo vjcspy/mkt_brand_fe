@@ -22,6 +22,7 @@ import useApi from "../../../hooks/useApi";
 import { GGG_INTERNAL, SET_USER_INFO } from "../../../constants";
 import PulseLoader from "../../../components/loading";
 import { showNotification } from "../../../components/notification";
+import InputDataPicker from "../../../components/input-date-picker";
 
 const ProfileTab = ({}) => {
   const dispatch = useDispatch();
@@ -140,7 +141,12 @@ const ProfileTab = ({}) => {
           </ProfileTabGrid>
           <ProfileTabGrid>
             <ProfileInputWrapper>
-              <InputComponent onChange={onChange} name="firstName" value={profile.firstName} title="profile.info_first_name" />
+              <InputComponent
+                onChange={onChange}
+                name="firstName"
+                value={profile.firstName}
+                title="profile.info_first_name"
+              />
               <InputComponent onChange={onChange} name="email" value={profile.email} title="profile.info_email" />
               <DropDown
                 onChangeGender={onChangeGender}
@@ -149,15 +155,32 @@ const ProfileTab = ({}) => {
                 title="profile.info_gender"
                 listData={genders}
               />
-              <InputComponent onChange={onChange} value={profile.provinceId} name={"provinceId"} title="profile.info_city" />
+              <InputComponent
+                onChange={onChange}
+                value={profile.provinceId}
+                name={"provinceId"}
+                title="profile.info_city"
+              />
             </ProfileInputWrapper>
           </ProfileTabGrid>
           <ProfileTabGrid>
             <ProfileInputWrapper>
-              <InputComponent onChange={onChange} name="lastName" value={profile.lastName} title="profile.info_last_name" />
-              <InputComponent onChange={onChange} name="dob" title="profile.info_birth_day" value={profile.dob} />
+              <InputComponent
+                onChange={onChange}
+                name="lastName"
+                value={profile.lastName}
+                title="profile.info_last_name"
+              />
+              {/* <InputComponent onChange={onChange} name="dob" title="profile.info_birth_day" value={profile.dob} />
+               */}
+              <InputDataPicker title="profile.info_birth_day" />
               <InputComponent onChange={onChange} name="address" value={profile.address} title="profile.info_address" />
-              <InputComponent onChange={onChange} value={profile.addresses} name="addresses" title="profile.info_country" />
+              <InputComponent
+                onChange={onChange}
+                value={profile.addresses}
+                name="addresses"
+                title="profile.info_country"
+              />
             </ProfileInputWrapper>
           </ProfileTabGrid>
         </>
@@ -206,8 +229,18 @@ const ProfileTab = ({}) => {
               </ProfileInfoItem>
             </ProfileInfoWrapper>
             <ProfileInputWrapper>
-              <InputComponent title="profile.info_first_name" name="firstName" value={profile.firstName} onChange={onChange} />
-              <InputComponent title="profile.info_last_name" name="lastName" value={profile.lastName} onChange={onChange} />
+              <InputComponent
+                title="profile.info_first_name"
+                name="firstName"
+                value={profile.firstName}
+                onChange={onChange}
+              />
+              <InputComponent
+                title="profile.info_last_name"
+                name="lastName"
+                value={profile.lastName}
+                onChange={onChange}
+              />
               <InputComponent title="profile.info_birth_day" name="dob" value={profile.dob} onChange={onChange} />
               <DropDown
                 style={{ borderBottom: "1px solid #231F20" }}
@@ -218,8 +251,18 @@ const ProfileTab = ({}) => {
               />
               <InputComponent title="profile.info_email" name="email" value={profile.email} onChange={onChange} />
               <InputComponent title="profile.info_address" name="address" value={profile.address} onChange={onChange} />
-              <InputComponent title="profile.info_city" name="provinceId" value={profile.provinceId} onChange={onChange} />
-              <InputComponent title="profile.info_country" name="addresses" value={profile.addresses} onChange={onChange} />
+              <InputComponent
+                title="profile.info_city"
+                name="provinceId"
+                value={profile.provinceId}
+                onChange={onChange}
+              />
+              <InputComponent
+                title="profile.info_country"
+                name="addresses"
+                value={profile.addresses}
+                onChange={onChange}
+              />
             </ProfileInputWrapper>
             <ProfileButtons>
               <Button varian="outline">

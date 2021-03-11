@@ -13,6 +13,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
     "@loadable/component": "^5.14.1",
     "@react-google-maps/api": "^2.1.0",
+    "@tinymce/tinymce-react": "^3.10.3",
     "axios": "^0.21.0",
     "byte-size": "^7.0.0",
     "classnames": "^2.2.6",
@@ -28,6 +29,7 @@
     "query-string": "^6.14.1",
     "react": "17.0.1",
     "react-color": "^2.19.3",
+    "react-datepicker": "^3.6.0",
     "react-dom": "17.0.1",
     "react-intl": "^5.10.9",
     "react-page-scroller": "^2.0.11-beta",
@@ -39,6 +41,7 @@
     "redux-saga": "^1.1.3",
     "sass": "^1.30.0",
     "shortid-36": "^0.1.2",
+    "slug": "^4.0.3",
     "styled-components": "^5.2.1",
     "swiper": "^6.4.15",
     "vhost": "^3.0.2"

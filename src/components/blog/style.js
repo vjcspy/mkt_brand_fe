@@ -10,6 +10,11 @@ export const WrapperImage = styled.div`
 
 export const Title = styled.h3`
   margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 `;
 
 export const DetailInfo = styled.div`

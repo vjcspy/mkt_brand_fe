@@ -29,7 +29,7 @@ import {
   UPDATE_VALUE_TRANSITION,
   SET_LOCATION,
   SET_HOST,
-  SET_ID_BLOG,
+  SET_BLOG_SLUG,
   SET_HEIGHT_POPUP,
   ACCEPT_COOKIE,
   SET_FIRST_LOAD,
@@ -39,6 +39,9 @@ import {
   SET_TOKEN_USER,
   SHOW_LIST_BRAND,
   SET_MY_VOUCHER,
+  SET_LIST_BLOG_IS_SHOW,
+  SET_LIST_PROMO_ACTIVE,
+  SET_LIST_BOOKING,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -52,6 +55,7 @@ export const initialState = fromJS({
   notifications: List([]),
   tokenUser: fromJS({}),
   showListBrand: false,
+  firstLoad: false,
 });
 
 export default function rootReducer(state = initialState, action) {
@@ -137,8 +141,8 @@ export default function rootReducer(state = initialState, action) {
       return state.updateIn(["modifiedConfig", "translation", ...action.path], () => action.value);
     case SET_HOST:
       return state.set("host", action.host).set("graphqlHost", action.graphqlHost);
-    case SET_ID_BLOG:
-      return state.set("idBlog", action.value);
+    case SET_BLOG_SLUG:
+      return state.set("blogSlug", action.value);
     case SET_HEIGHT_POPUP:
       return state.set("heightPopup", action.value);
     case ACCEPT_COOKIE:
@@ -161,6 +165,12 @@ export default function rootReducer(state = initialState, action) {
       return state.update("showListBrand", () => action.value);
     case SET_MY_VOUCHER:
       return state.set("myVoucher", action.value);
+    case SET_LIST_BLOG_IS_SHOW:
+      return state.set("listBlogIsHow", action.value);
+    case SET_LIST_PROMO_ACTIVE:
+      return state.set("listPromoActive", action.value);
+    case SET_LIST_BOOKING:
+      return state.set("listBooking", action.value);
     default:
       return state;
   }

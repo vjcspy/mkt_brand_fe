@@ -25,7 +25,6 @@ const PageContainer = ({ shouldHideFooter }) => {
       router.push("/our-menu");
     }
   }, [sizeWidth]);
-
   return (
     <MainContainer>
       <RenderHeader config={header} />

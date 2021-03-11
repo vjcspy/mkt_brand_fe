@@ -2,7 +2,16 @@ import React from "react";
 import { InputWrapper, Title, InputTag } from "./style";
 import { FormattedMessage } from "react-intl";
 
-const InputComponent = ({ title, name, textAlign = "left", isValid = true, value = "", onChange, placeHolder, ...rest }) => {
+const InputComponent = ({
+  title,
+  name,
+  textAlign = "left",
+  isValid = true,
+  value = "",
+  onChange,
+  placeHolder,
+  ...rest
+}) => {
   return (
     <InputWrapper {...rest}>
       <InputTag

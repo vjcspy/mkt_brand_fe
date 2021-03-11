@@ -64,6 +64,25 @@ const Slide = ({ slides, current = 0 }) => {
             </ItemSlide>
           </>
         </ListSlides>
+
+        {/* <ListSlides style={{ transform: `translateX(${-Math.abs(currentIndex * 100)}%)`, transition: `${transition}` }}>
+          <>
+            {slides?.map((item, index) => (
+              <ItemSlide key={index}>
+                {item.title.value[locale]}&nbsp;
+                <Button className="get-code" varian="link" href={`/promo?promoCode=${item.promoCode.value[locale]}`}>
+                  Nhận mã ngay
+                </Button>
+              </ItemSlide>
+            ))}
+            <ItemSlide>
+              {slides[0]?.title.value[locale]}&nbsp;
+              <Button varian="link" href={`/promo?promoCode=${slides[0].promoCode.value[locale]}`}>
+                Nhận mã ngay
+              </Button>
+            </ItemSlide>
+          </>
+        </ListSlides> */}
       </ContentSlide>
       {size > 1 && (
         <WrapperIcon onClick={onNext}>

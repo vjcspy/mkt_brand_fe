@@ -5,11 +5,11 @@ import { SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/con
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSite } from "../../src/services/backend";
+import { getSite, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
-export async function getStaticProps() {
-  const site = await getSite(process.env.SITE_CODE);
+export async function getServerSideProps() {
+  const { data: site } = await getSiteServer(process.env.SITE_CODE);
 
   return {
     props: {

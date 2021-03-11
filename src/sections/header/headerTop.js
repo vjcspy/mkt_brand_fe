@@ -25,16 +25,19 @@ const ProfileDropdown = loadable(() => import("./profileDropdown"));
 const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
   const locale = useSelector((state) => state.getIn(["locale"]));
   const location = useSelector((state) => state.getIn(["location"]));
+  const listPromoActive = useSelector((s) => s.get("listPromoActive"));
   const { fullName, avatar } = useSelector((state) => state.get("userInfo"))?.toJS() ?? "";
   const [showProfile, setShowProfile] = useState(false);
   const itemLocation = dummyLocation.find((item) => item.id === location);
+  console.log(slides);
   return (
     <HeaderTopWrapper>
       <Container>
         <WrapperContent>
           <FlexGrow />
           <SlideCode>
-            <Slide slides={slides?.value} />
+            {/* <Slide slides={listPromoActive} /> */}
+            <Slide slides={slides.value} />
           </SlideCode>
           <WrapperMenuRight>
             <TopMenuRight>

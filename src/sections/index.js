@@ -6,14 +6,13 @@ import Breadcrumbs from "./breadcrumbs";
 import ProfileSection from "./profileSection";
 import MapAddress from "./mapAddress";
 import SectionSignIn from "./signIn";
-import ListBlog from "./listBlog";
 import Article from "./article";
 import PromoSection from "./promoSection";
 import Comment from "./comment";
 import PromoBanner from "./PromoBanner";
 import BookingBanner from "./BookingBanner";
-import MeuBanner from "./MenuBanner";
-
+import MeuBanner from "./menuBanner";
+import BlogSection from "./BlogSection";
 export const RenderHeader = ({ config }) => {
   const H = Headers[config?.name];
   return H ? <H config={config} /> : null;
@@ -51,7 +50,7 @@ const pagePromo = {
   title: "Promo",
   path: "/promo",
   icon: "project-diagram",
-  sections: [Breadcrumbs.defaultConfig, PromoSection.defaultConfig, Comment.defaultConfig],
+  sections: [PromoSection.defaultConfig, Comment.defaultConfig],
   breadcrumbs: [pageHome],
 };
 
@@ -69,7 +68,7 @@ const pageOurMenuDetail = {
   title: "Our Menu Detail",
   path: "/our-menu/[menu]",
   icon: "utensils",
-  sections: [Breadcrumbs.defaultConfig, OurMenuDetail.defaultConfig],
+  sections: [OurMenuDetail.defaultConfig],
   breadcrumbs: [pageHome, pageOurMenu],
 };
 const pageMap = {
@@ -78,7 +77,7 @@ const pageMap = {
   titleTranslate: "breadcrumbs.address_restaurant",
   path: "/map",
   icon: "map",
-  sections: [Breadcrumbs.defaultConfig, MapAddress.defaultConfig],
+  sections: [MapAddress.defaultConfig],
   breadcrumbs: [pageHome],
 };
 const pageProfile = {
@@ -87,7 +86,7 @@ const pageProfile = {
   titleTranslate: "breadcrumbs.info_account",
   path: "/profile",
   icon: "user",
-  sections: [Breadcrumbs.defaultConfig, ProfileSection.defaultConfig],
+  sections: [ProfileSection.defaultConfig],
   breadcrumbs: [pageHome],
 };
 const pageLogin = {
@@ -102,19 +101,19 @@ const pageBlog = {
   name: "blog",
   title: "Blog",
   titleTranslate: "breadcrumbs.blog",
-  path: "/news",
+  path: "/blog",
   icon: "blog",
-  sections: [Breadcrumbs.defaultConfig, ListBlog.defaultConfig],
-  breadcrumbs: [pageHome],
+  sections: [BlogSection.defaultConfig],
+  breadcrumbs: [],
 };
 const pageBlogDetail = {
   name: "blog-detail",
   title: "Blog Detail",
   titleTranslate: "breadcrumbs.blog",
-  path: "/news/[article]",
+  path: "/blog/[slug]",
   icon: "blog",
-  sections: [Breadcrumbs.defaultConfig, Article.defaultConfig],
-  breadcrumbs: [pageHome, pageBlog],
+  sections: [Article.defaultConfig],
+  breadcrumbs: [],
 };
 
 const pageBooking = {
@@ -149,9 +148,9 @@ export const Sections = {
   [ProfileSection.defaultConfig.name]: ProfileSection,
   [MapAddress.defaultConfig.name]: MapAddress,
   [SectionSignIn.defaultConfig.name]: SectionSignIn,
-  [ListBlog.defaultConfig.name]: ListBlog,
   [Article.defaultConfig.name]: Article,
   [PromoBanner.defaultConfig.name]: PromoBanner,
   [BookingBanner.defaultConfig.name]: BookingBanner,
   [MeuBanner.defaultConfig.name]: MeuBanner,
+  [BlogSection.defaultConfig.name]: BlogSection,
 };

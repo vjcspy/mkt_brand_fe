@@ -21,13 +21,7 @@ const AcceptCookie = () => {
         </Title>
         <Content>
           <p>
-            {/* <FormattedMessage id="cookie.content" />
-             */}
-            Bằng việc tiếp tục sử dụng website, bạn đồng ý với các điều khoản{" "}
-            <a className="link" href="">
-              Chính sách Về Cookie
-            </a>{" "}
-            của chúng tôi.
+            <FormattedMessage id="cookie.content" values={{ a: (c) => <a href="/nref">{c}</a> }} />
           </p>
           {/* <Button onClick={onAcceptCookie}>
             <FormattedMessage id="cookie.confirm" />

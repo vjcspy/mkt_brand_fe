@@ -16,7 +16,16 @@ import {
   NameParentMenu,
 } from "./styled";
 
-const MenuTree = ({ indexParent, setIndexParent, indexChild, setIndexChild, indexGrandChild, setIndexGrandChild, menus, setPath }) => {
+const MenuTree = ({
+  indexParent,
+  setIndexParent,
+  indexChild,
+  setIndexChild,
+  indexGrandChild,
+  setIndexGrandChild,
+  menus,
+  setPath,
+}) => {
   const mode = useSelector((s) => s.get("mode"));
   const router = useSiteRouter();
   const {
@@ -71,7 +80,11 @@ const MenuTree = ({ indexParent, setIndexParent, indexChild, setIndexChild, inde
             <NameParentMenu isOpen={indexParent == index}>{item.name}</NameParentMenu>
             {get(item, ["children", "length"]) > 0 && (
               <CaretDownIcon isOpen={indexParent == index}>
-                <IconTriangleDown color={`${indexParent == index ? "#F89520" : "currentColor"}`} width={13} height={7} />
+                <IconTriangleDown
+                  color={`${indexParent == index ? "#F89520" : "currentColor"}`}
+                  width={20}
+                  height={20}
+                />
               </CaretDownIcon>
             )}
           </MenuItemButton>
@@ -98,7 +111,11 @@ const MenuTree = ({ indexParent, setIndexParent, indexChild, setIndexChild, inde
                       }
                     }}
                   >
-                    <h5 className={`${get(subItem, ["children", "length"]) > 0 ? "sup-item-1 have-sup-menu " : " sup-item-1"}`}>
+                    <h5
+                      className={`${
+                        get(subItem, ["children", "length"]) > 0 ? "sup-item-1 have-sup-menu " : " sup-item-1"
+                      }`}
+                    >
                       {subItem.name}
                     </h5>
                     {get(subItem, ["children", "length"]) > 0 && <MenuSubItemIcon isOpen={indexChild == subIndex} />}

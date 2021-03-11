@@ -6,7 +6,8 @@ import { DevSecondaryButton } from "../../../styles/developmentStyle";
 import ImageMedia from "../../components/imageMedia";
 import { ComponentWrapper, ImageWrapper, MediaWrapper, MediaGroupButton, MultipleWrapper } from "./styled";
 
-const ImageComponent = ({ config, path }) => {
+const ImageComponent = ({ config, path, onChangeImageBlog, notRemove, imageBlog }) => {
+  console.log(notRemove);
   const dispatch = useDispatch();
   const updateConfig = useCallback((path, value) => dispatch({ type: UPDATE_CONFIG, path, value }), [dispatch]);
   const removeConfig = useCallback((path, value) => dispatch({ type: REMOVE_CONFIG, value, path }), [dispatch]);
@@ -23,6 +24,10 @@ const ImageComponent = ({ config, path }) => {
                   showMedia({
                     show: true,
                     onSuccess: (media) => {
+                      if (onChangeImageBlog) {
+                        onChangeImageBlog(media);
+                        return;
+                      }
                       updateConfig([...path, subIndex], media);
                     },
                   });
@@ -36,6 +41,10 @@ const ImageComponent = ({ config, path }) => {
                     showMedia({
                       show: true,
                       onSuccess: (media) => {
+                        if (onChangeImageBlog) {
+                          onChangeImageBlog(media);
+                          return;
+                        }
                         updateConfig([...path, subIndex], media);
                       },
                     });
@@ -43,14 +52,16 @@ const ImageComponent = ({ config, path }) => {
                 >
                   Change
                 </DevSecondaryButton>
-                <DevSecondaryButton
-                  onClick={(e) => {
-                    e.preventDefault();
-                    removeConfig(path, subIndex);
-                  }}
-                >
-                  Remove
-                </DevSecondaryButton>
+                {!notRemove && (
+                  <DevSecondaryButton
+                    onClick={(e) => {
+                      e.preventDefault();
+                      removeConfig(path, subIndex);
+                    }}
+                  >
+                    Remove
+                  </DevSecondaryButton>
+                )}
               </MediaGroupButton>
             </MediaWrapper>
           ))}
@@ -71,12 +82,16 @@ const ImageComponent = ({ config, path }) => {
               showMedia({
                 show: true,
                 onSuccess: (media) => {
+                  if (onChangeImageBlog) {
+                    onChangeImageBlog(media);
+                    return;
+                  }
                   updateConfig(path, media);
                 },
               });
             }}
           >
-            <ImageMedia media={config.value} formats="thumbnail" />
+            <ImageMedia media={imageBlog ?? config.value} formats="thumbnail" />
           </ImageWrapper>
           <MediaGroupButton>
             <DevSecondaryButton
@@ -84,6 +99,10 @@ const ImageComponent = ({ config, path }) => {
                 showMedia({
                   show: true,
                   onSuccess: (media) => {
+                    if (onChangeImageBlog) {
+                      onChangeImageBlog(media);
+                      return;
+                    }
                     updateConfig(path, media);
                   },
                 });
@@ -91,14 +110,16 @@ const ImageComponent = ({ config, path }) => {
             >
               Change
             </DevSecondaryButton>
-            <DevSecondaryButton
-              onClick={(e) => {
-                e.preventDefault();
-                removeConfig(path);
-              }}
-            >
-              Remove
-            </DevSecondaryButton>
+            {!notRemove && (
+              <DevSecondaryButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  removeConfig(path);
+                }}
+              >
+                Remove
+              </DevSecondaryButton>
+            )}
           </MediaGroupButton>
         </MediaWrapper>
       )}

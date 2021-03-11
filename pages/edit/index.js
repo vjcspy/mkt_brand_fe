@@ -10,7 +10,7 @@ export async function getStaticProps() {
   const site_code = process.env.SITE_CODE;
   return {
     props: {
-      site_code: site_code,
+      site_code: site_code ?? null,
     },
   };
 }

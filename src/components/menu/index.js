@@ -18,7 +18,6 @@ import IconClose from "../icons/iconsClose";
 import IconTriangleRight from "../icons/iconTriangleLineRight";
 import ChildMenu from "./childMenu";
 import Button from "../button";
-import IconTriangleDown from "../icons/iconTriangleDown";
 import { connect, useSelector } from "react-redux";
 import { SHOW_LANGUAGE_LOCATION } from "../../constants";
 import { FormattedMessage } from "react-intl";
@@ -26,7 +25,7 @@ import LinkRouter from "../link-router";
 import SelectLocation from "../drop-down/SelectLocation";
 import SelectLanguage from "../drop-down/SelectLanguage";
 import useGraphql from "../../hooks/useApi/useGraphql";
-
+import useSiteRouter from "../../hooks/useSiteRouter";
 const mapDispatchToProp = (dispatch) => ({
   setShowLanguageLocation: (value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }),
 });
@@ -35,8 +34,11 @@ const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
   const [itemSubMenu, setItemSubMenu] = useState();
   const locale = useSelector((state) => state.getIn(["locale"]));
   const menu = useGraphql("menu");
-  const menus = useMemo(() => listMenu?.map((m) => (m.apiKey === "menu" ? { ...m, children: menu } : m)), [listMenu, menu]);
-
+  const menus = useMemo(() => listMenu?.map((m) => (m.apiKey === "menu" ? { ...m, children: menu } : m)), [
+    listMenu,
+    menu,
+  ]);
+  const router = useSiteRouter();
   const onCloseMenu = () => {
     // setClassNameMenu(null);
     // setClassNameMarker(null);
@@ -62,7 +64,10 @@ const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
                 {menus?.map((item, index) => (
                   <React.Fragment key={index}>
                     {item.children?.length > 0 ? (
-                      <ItemMenu onClick={() => setItemSubMenu(item)}>
+                      <ItemMenu
+                        className={`${router.pathname === "/our-menu/[menu]" ? "active" : ""}`}
+                        onClick={() => setItemSubMenu(item)}
+                      >
                         <h4>
                           {item.label?.[locale]}
                           {item.apiKey == "promo" && <span>{2}</span>}
@@ -70,7 +75,7 @@ const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
                         <IconTriangleRight width={15} height={15} />
                       </ItemMenu>
                     ) : (
-                      <ItemMenu>
+                      <ItemMenu className={`${router.pathname === item.url ? "active" : ""}`}>
                         <h4 onClick={onCloseMenu}>
                           <LinkRouter href={item.url} passHref>
                             <a>{item.label?.[locale]}</a>
@@ -102,7 +107,12 @@ const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
                 </FeatureMobile>
               </MainMenu>
               {itemSubMenu?.children?.length > 0 && (
-                <ChildMenu onCloseMenu={onCloseMenu} locale={locale} parent={itemSubMenu} setItemSubMenu={setItemSubMenu} />
+                <ChildMenu
+                  onCloseMenu={onCloseMenu}
+                  locale={locale}
+                  parent={itemSubMenu}
+                  setItemSubMenu={setItemSubMenu}
+                />
               )}
             </ContentMenu>
 

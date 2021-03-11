@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const OurMenusWrapper = styled.div`
   width: 100%;
+  margin-top: 40px;
 `;
 
 export const OurMenusContent = styled.div`
@@ -130,7 +131,8 @@ export const CaretDownIcon = styled.div`
 
 export const MenuSubItemWrapper = styled.div`
   border-top: 1px solid ${({ isOpen, theme }) => (isOpen ? theme.color.status.primary : theme.color.page.border)};
-  border-top: ${({ isOpen, theme }) => (isOpen ? "4px solid" + theme.color.status.primary : "1px solid" + theme.color.page.border)};
+  border-top: ${({ isOpen, theme }) =>
+    isOpen ? "4px solid" + theme.color.status.primary : "1px solid" + theme.color.page.border};
   padding-left: 18px;
   margin-top: 9px;
 `;

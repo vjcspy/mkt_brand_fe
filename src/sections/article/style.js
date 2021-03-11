@@ -4,6 +4,7 @@ import styled from "styled-components";
 export const WrapperBlog = styled.div`
   background: #ffffff;
   width: 100%;
+  margin-top: 40px;
 `;
 
 export const Content = styled.div`

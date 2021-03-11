@@ -4,12 +4,13 @@ import { ItemSubMenu, SubMenu, HeaderSubMenu, MainSubMenu } from "./style";
 import IconTriangleLineLeft from "../icons/iconTriangleLineLeft";
 import IconTriangleRight from "../icons/iconTriangleLineRight";
 import LinkRouter from "../link-router";
+import useSiteRouter from "../../hooks/useSiteRouter";
 
 function ChildMenu({ parent, setItemSubMenu, onCloseMenu, locale }) {
   const [itemChildMenu, setItemChildMenu] = useState();
   const [className, setClassName] = useState();
   const show = useDebounce("show", 500);
-
+  const router = useSiteRouter();
   useEffect(() => {
     setClassName(show);
   }, [show]);
@@ -40,7 +41,7 @@ function ChildMenu({ parent, setItemSubMenu, onCloseMenu, locale }) {
                 </div>
               </ItemSubMenu>
             ) : (
-              <ItemSubMenu key={index}>
+              <ItemSubMenu className={`${router.asPath === item.url ? "active" : ""}`} key={index}>
                 <h5 onClick={onCloseMenu}>
                   <LinkRouter href={item.url} passHref>
                     <a>{item.label?.[locale]}</a>
@@ -51,7 +52,9 @@ function ChildMenu({ parent, setItemSubMenu, onCloseMenu, locale }) {
           )}
         </MainSubMenu>
       </SubMenu>
-      {itemChildMenu && <ChildMenu locale={locale} parent={itemChildMenu} setItemSubMenu={setItemChildMenu} onCloseMenu={onCloseMenu} />}
+      {itemChildMenu && (
+        <ChildMenu locale={locale} parent={itemChildMenu} setItemSubMenu={setItemChildMenu} onCloseMenu={onCloseMenu} />
+      )}
     </>
   );
 }

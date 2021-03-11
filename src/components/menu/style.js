@@ -127,12 +127,13 @@ export const ItemMenu = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  &:not(:last-child) {
-    margin-bottom: 24px;
-  }
   cursor: pointer;
   padding: 0 40px;
   padding-right: 96px;
+
+  &:not(:last-child) {
+    margin-bottom: 24px;
+  }
 
   h4 {
     margin: 0;
@@ -154,6 +155,30 @@ export const ItemMenu = styled.div`
       border-radius: 22px;
       color: white;
       font-size: 16px;
+    }
+  }
+
+  &:hover {
+    h4 {
+      color: ${({ theme }) => theme.color.status.primary};
+    }
+  }
+
+  &.active {
+    h4 {
+      color: ${({ theme }) => theme.color.status.primary};
+      position: relative;
+      &: after {
+        position: absolute;
+        top: 100%;
+        left: auto;
+        right: 0px;
+        content: "";
+        width: 100%;
+        height: 2px;
+        background: ${({ theme }) => theme.color.status.primary};
+        transition: 0.3s width ease-in-out;
+      }
     }
   }
 
@@ -233,6 +258,30 @@ export const ItemSubMenu = styled.div`
 
   @media (max-width: 768px) {
     padding: 0 30px;
+  }
+
+  &:hover {
+    h5 {
+      color: ${({ theme }) => theme.color.status.primary};
+    }
+  }
+
+  &.active {
+    h5 {
+      color: ${({ theme }) => theme.color.status.primary};
+      position: relative;
+      &: after {
+        position: absolute;
+        top: 100%;
+        left: auto;
+        right: 0px;
+        content: "";
+        width: 100%;
+        height: 2px;
+        background: ${({ theme }) => theme.color.status.primary};
+        transition: 0.3s width ease-in-out;
+      }
+    }
   }
 `;
 

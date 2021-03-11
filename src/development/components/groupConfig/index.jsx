@@ -6,7 +6,7 @@ import { DevPrimaryButton, DevSecondaryButton } from "../../../styles/developmen
 import DevelopmentComponentType from "../developmentComponentType";
 import { SectionHeader, SectionWrapper } from "../sectionConfig/styled";
 
-const GroupConfig = ({ path, popStage }) => {
+const GroupConfig = ({ path, popStage, blog }) => {
   const config = useSelector((s) => s.getIn(path.slice(0, path.length - 2)))?.toJS();
   const components = useSelector((s) => s.getIn(path))?.toJS();
   return (
@@ -21,8 +21,8 @@ const GroupConfig = ({ path, popStage }) => {
         </DevPrimaryButton>
       </SectionHeader>
       {map(components, (config, index) => (
-        <React.Fragment key={config.name + index}>
-          <DevelopmentComponentType config={config} path={[...path, index, "value"]} />
+        <React.Fragment key={config?.name + index}>
+          <DevelopmentComponentType config={config} path={[...path, index, "value"]} blog={blog} />
         </React.Fragment>
       ))}
     </SectionWrapper>

@@ -14,11 +14,15 @@ const TextArea = styled.textarea`
   border-radius: 4px;
 `;
 
-const TextComponent = ({ config, path, ignoreLocale }) => {
+const TextComponent = ({ config, path, ignoreLocale, onChangeTextBlog }) => {
   const locale = useSelector((s) => s.get("locale"));
   const dispatch = useDispatch();
   const onChange = useCallback(
     (e) => {
+      if (onChangeTextBlog) {
+        onChangeTextBlog(e.target.value);
+        return;
+      }
       const p = ignoreLocale ? path : [...path, locale];
       // debugger;
       // console.log(p);

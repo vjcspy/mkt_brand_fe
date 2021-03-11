@@ -9,6 +9,7 @@ export const WrapperContentPromo = styled.div`
   position: relative;
   max-height: 100%;
   overflow: hidden;
+  margin-top: 40px;
 
   @media (max-width: 767px) {
     margin-top: 0;

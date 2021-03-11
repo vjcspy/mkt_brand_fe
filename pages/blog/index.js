@@ -1,48 +1,50 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
-  SET_LIST_BOOKING,
+  GET_BLOGS_BY_IS_SHOW,
+  SET_LIST_BLOG_IS_SHOW,
   SET_LIST_PROMO_ACTIVE,
   SET_MODIFIED_CONFIG,
   SET_PAGE_NAME,
-  SET_SHOW_MENU_HEADER,
   UPDATE_CONFIG,
 } from "../../src/constants";
 import Layout from "../../src/containers/layout";
-import PageContainer from "../../src/containers/pageContainer";
 import { Pages } from "../../src/sections";
+import { getBlogIsShow, getPromoActive, getSection, getSite, getSiteServer } from "../../src/services/backend";
+import { menus } from "../../src/dummyData/menus";
 import { formatConfig } from "../../src/services/frontend";
-import { getPromoActive, getSection, getSite, getSiteServer } from "../../src/services/backend";
+import PageContainer from "../../src/containers/pageContainer";
 
 export async function getServerSideProps() {
-  const site_code = process.env.SITE_CODE;
-  const { data: site } = await getSiteServer(site_code);
-  const sectionBooking = getSection(site, "booking", "bookingBanner");
+  // const site = await getSite(process.env.SITE_CODE);
+  const [{ data }, { data: site }] = await Promise.all([getBlogIsShow(), getSiteServer(process.env.SITE_CODE)]);
   const sectionPromo = getSection(site, "home", "promoBanner");
   const listPromoActive = getPromoActive(sectionPromo);
-  const listBooking = sectionBooking.components.bookingBanner.value;
   return {
     props: {
+      site_code: site?.site_code ?? null,
       config: site?.config ?? null,
-      site_code: site_code ?? null,
-      listBooking,
-      listPromoActive,
+      menus: menus,
+      blogs: data.data.blogs,
+      listPromoActive: listPromoActive,
     },
   };
 }
 
-const Site = ({ config, site_code, listBooking, listPromoActive }) => {
+const Site = ({ site_code, config, blogs, listPromoActive }) => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     const modifiedConfig = formatConfig(config);
-    dispatch({ type: SET_PAGE_NAME, value: Pages.booking.name });
+    dispatch({ type: SET_PAGE_NAME, value: Pages.blog.name });
     dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });
     dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
-    dispatch({ type: SET_SHOW_MENU_HEADER, value: true });
-    dispatch({ type: SET_LIST_BOOKING, value: listBooking });
+    dispatch({ type: SET_LIST_BLOG_IS_SHOW, value: blogs });
     dispatch({ type: SET_LIST_PROMO_ACTIVE, value: listPromoActive });
-    return () => dispatch({ type: SET_SHOW_MENU_HEADER, value: false });
+    // dispatch({
+    //   type: UPDATE_CONFIG,
+    //   path: ["breadcrumbs"],
+    //   value: List([Pages.home, Pages.blog]),
+    // });
   }, [config]);
 
   return (

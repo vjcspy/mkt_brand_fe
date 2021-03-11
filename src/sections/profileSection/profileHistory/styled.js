@@ -87,3 +87,79 @@ export const Pricewrapper = styled.div`
     }
   }
 `;
+
+export const WrapperViewDetail = styled.div``;
+
+export const Tittle = styled.h3`
+  max-width: 92%;
+  margin-bottom: 10px;
+  @media (max-width: 768px) {
+    max-width: unset;
+  }
+`;
+
+export const CodeBill = styled.p`
+  margin: 0;
+  margin-bottom: 20px;
+`;
+
+export const WrapperRatting = styled.div`
+  background: #d3d2d233;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 14px;
+  text-align: center;
+  h5 {
+    margin-bottom: 20px;
+  }
+`;
+
+export const ListRating = styled.div``;
+
+export const Restaurant = styled.div`
+  margin-bottom: 17px;
+  display: flex;
+`;
+
+export const LogoRestaurant = styled.div`
+  width: 70px;
+  min-width: 70px;
+  height: 70px;
+  border: 1px solid #d3d2d2;
+  border-radius: 4px;
+  margin-right: 17px;
+`;
+
+export const InfoRestaurant = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  p {
+    color: #7b7979;
+    margin: 0;
+  }
+`;
+
+export const DetailBill = styled.div`
+  border-top: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+  padding: 12px 0;
+  .show {
+    bottom: 0;
+    height: 35px;
+  }
+  margin-bottom: 20px;
+`;
+
+export const ItemDetail = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  span {
+    color: #7b7979;
+    font-size: 14px;
+  }
+`;
+
+export const FooterDetail = styled.div``;

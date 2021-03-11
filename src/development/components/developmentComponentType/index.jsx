@@ -6,7 +6,10 @@ import LinkComponent from "./linkComponent";
 import MenuComponent from "./menu";
 import RangeComponent from "./rangeComponent";
 import TextComponent from "./textComponent";
-import RadioComponent from "./radioComponent"
+import RadioComponent from "./radioComponent";
+import EditerComponent from "./editerComponent";
+import BlogComponent from "./blogComponent";
+import GroupBlogComponent from "./groupBlogComponent";
 const ComponentType = {
   text: TextComponent,
   image: ImageComponent,
@@ -15,7 +18,10 @@ const ComponentType = {
   link: LinkComponent,
   group: GroupComponent,
   menu: MenuComponent,
-  radio: RadioComponent
+  radio: RadioComponent,
+  editer: EditerComponent,
+  blog: BlogComponent,
+  groupBlog: GroupBlogComponent,
 };
 
 const DevelopmentComponentType = ({ config, ...rest }) => {

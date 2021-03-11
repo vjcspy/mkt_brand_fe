@@ -37,6 +37,54 @@ export const ItemRadio = styled.div`
   height: 45px;
 `;
 
+export const PopupWrapperEditer = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 50%;
+  left: 50%;
+  /* -webkit-transform: translate(-50%,-50%); */
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  padding: 20px;
+  background-color: #0000009e;
+`;
+
+export const ContentEditer = styled.div`
+  position: relative;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #ffff;
+  h3 {
+    margin-bottom: 10px;
+  }
+`;
+
+export const WrapperButtonSave = styled.div`
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const SectionTitleWrapper = styled.div`
+  flex: 1 0 0;
+`;
+
+export const GroupButton = styled.div`
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+  // button:not(:last-child) {
+  //   margin-right: 10px;
+  // }
+  button {
+    width: calc(50% - 5px);
+  }
+  .btn-edit-content {
+    padding: 0;
+  }
+`;
 /// Color component
 
 export const ColorWrapper = styled.button`

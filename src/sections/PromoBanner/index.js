@@ -56,9 +56,10 @@ const defaultConfig = {
 
 const PromoBanner = ({ config = defaultConfig }) => {
   const locale = useSelector((s) => s.get("locale"));
+  const listPromoActive = useSelector((s) => s.get("listPromoActive"));
   const { value: valuePromo } = config.components.promoBanner;
   const [currentPage, setCurrentPage] = useState(0);
-  const promoShouldShow = valuePromo.filter((item) => item.statusPromo.value.active === "Show") ?? [];
+  const promoShouldShow = listPromoActive ?? valuePromo.filter((item) => item.statusPromo.value.active === "Show");
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width }, ref] = useIframeResize();
   // console.log(promoShouldShow);

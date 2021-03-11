@@ -22,6 +22,8 @@ import {
   GET_MY_VOUCHER,
   SET_MY_VOUCHER,
   GGG_INTERNAL,
+  SET_LIST_BLOG_IS_SHOW,
+  GET_BLOGS_BY_IS_SHOW,
 } from "../constants";
 import { chain, get, head } from "lodash";
 
@@ -212,6 +214,30 @@ function* getSite({ site_code, pageName }) {
   }
 }
 
+function* getListBlogIsShow() {
+  try {
+    const host = process.env.NEXT_PUBLIC_API_HOST;
+    const token = yield select((s) => s.get("token"));
+    yield put({ type: SET_LIST_BLOG_IS_SHOW, value: { loading: true } });
+    const data = yield Axios.post(`${host}/graphql`, {
+      query: `query {
+          blogs (where: {isShow : true}){
+            avatar {
+              url
+            }
+          }
+        }`,
+    });
+    if (data.status === 200) {
+      yield put({ type: SET_LIST_BLOG_IS_SHOW, value: { loading: false, data: data.data } });
+    } else {
+      yield put({ type: SET_LIST_BLOG_IS_SHOW, value: { loading: false, error: "Cant get data" } });
+    }
+  } catch (e) {
+    yield put({ type: SET_LIST_BLOG_IS_SHOW, value: { loading: false, error: e } });
+  }
+}
+
 function* getMyVoucher() {
   try {
     const { token, customerNumber } = yield select((s) => s.get("tokenUser").toJS());
@@ -299,6 +325,7 @@ function* saga() {
   yield takeEvery(GET_SITE, getSite);
   yield takeEvery(FETCH_MENU, fetchMenu);
   yield takeEvery(GET_MY_VOUCHER, getMyVoucher);
+  yield takeEvery(GET_BLOGS_BY_IS_SHOW, getListBlogIsShow);
 }
 
 export default saga;

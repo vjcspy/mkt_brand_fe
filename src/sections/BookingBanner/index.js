@@ -75,7 +75,8 @@ const defaultConfig = {
 
 const BookingBanner = ({ config = defaultConfig }) => {
   const locale = useSelector((s) => s.get("locale"));
-  const { value: valueBooking } = config.components.bookingBanner;
+  const listBooking = useSelector((s) => s.get("listBooking"));
+  const valueBooking = listBooking ?? config.components.bookingBanner.value ?? [];
   const [currentPage, setCurrentPage] = useState(0);
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width }, ref] = useIframeResize();

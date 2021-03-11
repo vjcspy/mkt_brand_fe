@@ -6,20 +6,20 @@ import DevelopmentLayout from "../../../src/development/containers/developmentLa
 import { Pages } from "../../../src/sections";
 import { get, map } from "lodash";
 import useSiteRouter from "../../../src/hooks/useSiteRouter";
-import { getSite } from "../../../src/services/backend";
+import { getSite, getSiteServer } from "../../../src/services/backend";
 
-export async function getStaticPaths() {
-  const pagePaths = map(Pages, (page) => ({
-    params: { page: page.name },
-  }));
-  return {
-    paths: pagePaths,
-    fallback: false,
-  };
-}
+// export async function getStaticPaths() {
+//   const pagePaths = map(Pages, (page) => ({
+//     params: { page: page.name },
+//   }));
+//   return {
+//     paths: pagePaths,
+//     fallback: false,
+//   };
+// }
 
-export async function getStaticProps({ params }) {
-  const site = await getSite(process.env.SITE_CODE);
+export async function getServerSideProps({ params }) {
+  const { data: site } = await getSiteServer(process.env.SITE_CODE);
   const menus = get(site, ["menu", "children"], []);
   const { page } = params;
   const site_code = process.env.SITE_CODE;

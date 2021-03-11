@@ -23,7 +23,17 @@ const OurMenus = () => {
   const [indexParent, setIndexParent] = useState();
   const [indexChild, setIndexChild] = useState();
   const [indexGrandChild, setIndexGrandChild] = useState();
-  const props = { indexParent, indexChild, indexGrandChild, setIndexParent, setIndexChild, setIndexGrandChild, path, menus, setPath };
+  const props = {
+    indexParent,
+    indexChild,
+    indexGrandChild,
+    setIndexParent,
+    setIndexChild,
+    setIndexGrandChild,
+    path,
+    menus,
+    setPath,
+  };
 
   return (
     <OurMenusWrapper ref={ref}>

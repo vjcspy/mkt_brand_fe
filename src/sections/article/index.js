@@ -28,54 +28,49 @@ import {
 const defaultConfig = {
   type: "section",
   code: "code-dawdaw",
-  name: "blog",
+  name: "blog-detail",
   title: "",
   components: {},
 };
 
 const Article = ({ article }) => {
-  const idBlog = useSelector((state) => state.get("idBlog"));
-  const data = article ?? blogs.find((item) => item.id === idBlog);
+  const blogSlug = useSelector((state) => state.get("blogSlug"));
+  // const blogSlug = article ?? blogs.find((item) => item.id === idBlog);
   let count = 0;
   const blogRelative = useMemo(() => {
     return blogs.filter((item) => {
-      if (item.id !== idBlog && count < 2) {
+      if (item.id !== 1 && count < 2) {
         count++;
         return item;
       }
     }, []);
-  }, [idBlog]);
+  }, []);
   return (
     <WrapperBlog>
-      {data && (
+      {blogSlug && (
         <Content>
           <HeaderBlog>
-            <Title>{data.title}</Title>
+            <Title>{blogSlug.title}</Title>
             <Info>
               <LeftInfo>
-                <DatePost>{data.datePost}</DatePost>
+                <DatePost>{blogSlug.datePost}</DatePost>
                 <ItemSocial>
                   <IconView />
-                  <span>{data.view}</span>
+                  <span>{blogSlug.view}</span>
                 </ItemSocial>
                 <ItemSocial>
                   <IconLike />
-                  <span>{data.like}</span>
+                  <span>{blogSlug.like}</span>
                 </ItemSocial>
                 <ItemSocial>
                   <IconShare />
-                  <span>{data.share}</span>
+                  <span>{blogSlug.share}</span>
                 </ItemSocial>
               </LeftInfo>
             </Info>
           </HeaderBlog>
           <ContentBlog>
-            <Banner>
-              <RatioImage ratio="16:9">
-                <img width={1024} height={500} src={data.banner} />
-              </RatioImage>
-            </Banner>
-            <div dangerouslySetInnerHTML={{ __html: data.content.join("") }} />
+            <div dangerouslySetInnerHTML={{ __html: blogSlug.content }} />
           </ContentBlog>
           <FooterBlog>
             <a>Share</a>
@@ -91,11 +86,9 @@ const Article = ({ article }) => {
             <RenderListFlex>
               {blogRelative.map((item, index) => (
                 <React.Fragment key={index}>
-                  {item.id !== idBlog && (
+                  {item.id !== 1 && (
                     <Link href={`/news/${item.id}`}>
-                      <a>
-                        <Blog blog={item} />
-                      </a>
+                      <a>{/* <Blog blog={item} /> */}</a>
                     </Link>
                   )}
                 </React.Fragment>

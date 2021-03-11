@@ -20,6 +20,7 @@ const defaultConfig = {
 };
 
 const PromoSection = ({ config, theme }) => {
+  const listPromoActive = useSelector((s) => s.get("listPromoActive"));
   const [sizeWidth, ref] = useIframeResize();
   const routerSite = useSiteRouter();
   const [stateAction, setStateAction] = useState({
@@ -65,7 +66,16 @@ const PromoSection = ({ config, theme }) => {
     <>
       <MainPromo ref={ref} className="main-promo">
         {loading && (
-          <div style={{ background: "rgba(0, 0, 0, 0.6)", height: "100vh", width: "100vw", zIndex: "3000", position: "fixed", top: 0 }}>
+          <div
+            style={{
+              background: "rgba(0, 0, 0, 0.6)",
+              height: "100vh",
+              width: "100vw",
+              zIndex: "3000",
+              position: "fixed",
+              top: 0,
+            }}
+          >
             <PulseLoader color="#DA841E" loading fill />
           </div>
         )}

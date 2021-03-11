@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import Axios from "axios";
-import { get } from "lodash";
+import { each, get, sortBy } from "lodash";
 
 export const getGlobalToken = async () => {
   global.jwtToken;
@@ -36,6 +36,56 @@ export const getSitePaths = async () => {
 export const getSite = async (site_code) => {
   const sites = await getGlobalSites();
   return sites.find((site) => site.site_code === site_code);
+};
+
+export const getSiteServer = async (site_code) => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+  return Axios.get(`${host}/sites/config/${site_code}`);
+};
+
+export const getSection = (site, page, sectionName) => {
+  return site.config.pages[page].sections.find((item) => item.name === sectionName);
+};
+export const getPromoActive = (promoSection) => {
+  return promoSection.components?.promoBanner.value.filter((item) => item.statusPromo.value.active === "Show");
+};
+
+export const getSlug = async (slug) => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+  return Axios.post(`${host}/graphql`, {
+    query: `query {
+        blogs (where: {slug:"${slug}"}){
+          slug
+          title
+          content
+          like
+          view
+          share
+          comment
+        }
+        
+      }`,
+  });
+};
+
+export const getBlogIsShow = async () => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+
+  return Axios.post(`${host}/graphql`, {
+    query: `query {
+        blogs (where: {isShow : true}){
+          slug
+          title
+          like
+          view
+          share
+          comment
+          avatar {
+            url
+          }
+        }
+      }`,
+  });
 };
 
 export const fetchMenuCategories = async ({ pageSize = 20, currentPage = 1, urlKey = "gogi" } = {}) => {
@@ -119,7 +169,15 @@ export const fetchMenuCategories = async ({ pageSize = 20, currentPage = 1, urlK
     }
     `,
   });
-  return get(data, ["data", "categories", "items", 0]);
+  const menu = get(data, ["data", "categories", "items", 0]);
+  function sort(m) {
+    if (get(m, ["children", "length"]) > 0) {
+      m.children = sortBy(m.children, "position");
+      each(m.children, (m1) => sort(m1.children));
+    }
+    return m;
+  }
+  return sort(menu);
   // return reduceRight(groupBy(get(data, ["data", "categories", "items"]), "level"), (arr, current) =>
   //   map(current, (item) =>
   //     assign(item, {

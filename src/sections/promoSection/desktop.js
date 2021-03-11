@@ -3,7 +3,15 @@ import { useSelector, useDispatch } from "react-redux";
 import ReactPageScroller from "../../../plugins/react-page-scroller";
 import loadable from "@loadable/component";
 import { Container } from "../../styles";
-import { WrapperContentPromo, RightPromo, LeftPromo, WrapperEndpoint, Promo, WrapperPromo, ContentScroller } from "./style";
+import {
+  WrapperContentPromo,
+  RightPromo,
+  LeftPromo,
+  WrapperEndpoint,
+  Promo,
+  WrapperPromo,
+  ContentScroller,
+} from "./style";
 import SuccessRegister from "../../components/success-register";
 import ListRestaurant from "../../components/list-restaurant";
 import PromoInfo from "./PromoInfo";

@@ -2,7 +2,13 @@ import { List } from "immutable";
 import { each, get, isArray, map, sortBy } from "lodash";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { SET_MODIFIED_CONFIG, SET_OUR_MENUS, SET_PAGE_NAME, SET_SHOW_MENU_HEADER, UPDATE_CONFIG } from "../../src/constants";
+import {
+  SET_MODIFIED_CONFIG,
+  SET_OUR_MENUS,
+  SET_PAGE_NAME,
+  SET_SHOW_MENU_HEADER,
+  UPDATE_CONFIG,
+} from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
@@ -10,21 +16,35 @@ import { getSite } from "../../src/services/backend";
 import useSiteRouter from "../../src/hooks/useSiteRouter";
 import PageContainer from "../../src/containers/pageContainer";
 
-export async function getStaticPaths() {
-  const site = await getSite(process.env.SITE_CODE);
-  const menus = get(site, ["menu", "children"], []);
-  const menuPaths = map(menus, (menu) => ({
-    params: { menu: menu.url_key, menus },
-  }));
-  return {
-    paths: menuPaths,
-    fallback: false,
-  };
-}
+// export async function getStaticPaths() {
+//   const site = await getSite(process.env.SITE_CODE);
+//   const menus = get(site, ["menu", "children"], []);
+//   const menuPaths = map(menus, (menu) => ({
+//     params: { menu: menu.url_key, menus },
+//   }));
+//   return {
+//     paths: menuPaths,
+//     fallback: false,
+//   };
+// }
 
-export async function getStaticProps({}) {
-  const site = await getSite(process.env.SITE_CODE);
-  const menus = get(site, ["menu", "children"], []);
+// export async function getStaticProps({}) {
+//   const site = await getSite(process.env.SITE_CODE);
+//   console.log("this is default: ", site);
+//   const menus = get(site, ["menu", "children"], []);
+//   return {
+//     props: {
+//       site_code: site?.site_code ?? null,
+//       config: site?.config ?? null,
+//       menus: menus,
+//     },
+//   };
+// }
+
+export async function getServerSideProps({}) {
+  const site = await getSiteServer(process.env.SITE_CODE);
+  const menu = await fetchMenuCategories({ urlKey: process.env.SITE_CODE });
+  const menus = get(menu, ["children"], []);
   return {
     props: {
       site_code: site?.site_code ?? null,

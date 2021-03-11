@@ -6,7 +6,7 @@ import { UPDATE_CONFIG, REMOVE_CONFIG } from "../../../constants";
 import { DevSecondaryButton } from "../../../styles/developmentStyle";
 import { ComponentWrapper, LinkWrapper, MultipleWrapper, RemoveMenuLink, WrapperRatio, ItemRadio } from "./styled";
 
-const RadioComponent = ({ config, path }) => {
+const RadioComponent = ({ config, path, onChangeShowBlog }) => {
   let { active, titles } = config.value ?? false;
   const dispatch = useDispatch();
   const updateConfig = useCallback((path, value) => dispatch({ type: UPDATE_CONFIG, value, path }), [dispatch]);
@@ -27,6 +27,10 @@ const RadioComponent = ({ config, path }) => {
                 checked={active === item}
                 value={item}
                 onChange={(e) => {
+                  if (onChangeShowBlog) {
+                    onChangeShowBlog(e.target.value);
+                    return;
+                  }
                   updateConfig([...path, "active"], e.target.value);
                 }}
               />

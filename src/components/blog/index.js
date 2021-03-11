@@ -11,32 +11,32 @@ const Blog = ({ blog }) => {
     <WrapperBlog>
       <WrapperImage>
         <RatioImage>
-          <img src={blog.image} width={500} height={500} alt="" />
+          <img src={blog.avatar.url} width={500} height={500} alt="" />
         </RatioImage>
       </WrapperImage>
       <Title>{blog.title}</Title>
       <DetailInfo>
         <LeftInfo>
-          <DatePost>{blog.datePost}</DatePost>
+          {/* <DatePost>{blog.datePost}</DatePost> */}
           <ItemSocial>
             <IconView />
-            <span>{blog.view}</span>
+            <span>100</span>
           </ItemSocial>
           <ItemSocial>
             <IconLike />
-            <span>{blog.like}</span>
+            <span>100</span>
           </ItemSocial>
 
           <ItemSocial>
             <IconShare />
-            <span>{blog.share}</span>
+            <span>100</span>
           </ItemSocial>
         </LeftInfo>
-        {blog.rating && (
+        {/* {blog.rating && (
           <Rating>
             <IconStar />
           </Rating>
-        )}
+        )} */}
       </DetailInfo>
     </WrapperBlog>
   );

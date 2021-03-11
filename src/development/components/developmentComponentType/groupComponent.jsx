@@ -11,7 +11,7 @@ import { REMOVE_CONFIG, UPDATE_CONFIG } from "../../../constants";
 import { fromJS } from "immutable";
 import GroupConfig from "../groupConfig";
 
-const GroupComponent = ({ config, path, putStage }) => {
+const GroupBlogComponent = ({ config, path, putStage }) => {
   const dispatch = useDispatch();
   const updateConfig = useCallback((path, value) => dispatch({ type: UPDATE_CONFIG, value, path }), [dispatch]);
   const removeConfig = useCallback((path, value) => dispatch({ type: REMOVE_CONFIG, value, path }), [dispatch]);
@@ -60,4 +60,4 @@ const GroupComponent = ({ config, path, putStage }) => {
   );
 };
 
-export default GroupComponent;
+export default GroupBlogComponent;

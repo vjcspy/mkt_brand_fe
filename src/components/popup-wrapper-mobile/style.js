@@ -18,6 +18,7 @@ const closePopup = keyframes`
 
 export const WrapperPopupMobile = styled.div`
   position: fixed;
+  left: 0;
   width: 100%;
   height: 0;
   background: #ffffff;
