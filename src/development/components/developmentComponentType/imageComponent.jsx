@@ -7,7 +7,6 @@ import ImageMedia from "../../components/imageMedia";
 import { ComponentWrapper, ImageWrapper, MediaWrapper, MediaGroupButton, MultipleWrapper } from "./styled";
 
 const ImageComponent = ({ config, path, onChangeImageBlog, notRemove, imageBlog }) => {
-  console.log(notRemove);
   const dispatch = useDispatch();
   const updateConfig = useCallback((path, value) => dispatch({ type: UPDATE_CONFIG, path, value }), [dispatch]);
   const removeConfig = useCallback((path, value) => dispatch({ type: REMOVE_CONFIG, value, path }), [dispatch]);

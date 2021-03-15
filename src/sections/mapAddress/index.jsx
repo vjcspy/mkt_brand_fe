@@ -3,7 +3,17 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Button from "../../components/button";
 import maps from "../../dummyData/maps";
 import { Container } from "../../styles";
-import { LeftContent, MapAddressWrapper, MapButtons, MapItem, MapItemsWrapper, MapItemTitle, RightContent, HiddenContent } from "./styled";
+import {
+  LeftContent,
+  MapAddressWrapper,
+  MapButtons,
+  MapItem,
+  MapItemsWrapper,
+  MapItemTitle,
+  RightContent,
+  HiddenContent,
+  TitleListMobile,
+} from "./styled";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import IconMap from "../../components/icons/iconMap";
 import MapLayout from "./mapLayout";
@@ -52,6 +62,7 @@ const MapAddress = () => {
     <Container ref={measuredRef} onLoad={() => console.log("")}>
       <MapAddressWrapper headerHeight={top}>
         <LeftContent className={isEnd ? "end" : ""}>
+          {size.width <= 768 && <TitleListMobile>Địa chỉ nhà hàng</TitleListMobile>}
           <MapItemsWrapper ref={ref}>
             <ul>
               {map(maps, (item, index) => {

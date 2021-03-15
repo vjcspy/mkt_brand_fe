@@ -6,17 +6,17 @@ import IconTriangleLineLeft from "../icons/iconTriangleLineLeft";
 import { WrapperPopupMobile, ContentPopup, WrapperClose, Content } from "./style";
 const PopupMobile = ({ children, onBack, step, className }) => {
   const refPopup = useRef();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const setHeightPopup = () => dispatch({ type: SET_HEIGHT_POPUP, value: refPopup.current.clientHeight - 40 });
+  // const setHeightPopup = () => dispatch({ type: SET_HEIGHT_POPUP, value: refPopup.current.clientHeight - 40 });
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (refPopup.current) {
-        setHeightPopup();
-      }
-    }, 300);
-  }, [className]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (refPopup.current) {
+  //       setHeightPopup();
+  //     }
+  //   }, 300);
+  // }, [className]);
 
   return (
     <WrapperPopupMobile className={className}>

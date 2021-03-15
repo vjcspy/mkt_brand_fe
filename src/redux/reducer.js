@@ -42,6 +42,8 @@ import {
   SET_LIST_BLOG_IS_SHOW,
   SET_LIST_PROMO_ACTIVE,
   SET_LIST_BOOKING,
+  ADD_DYNAMIC_BLOCK,
+  REMOVE_DYNAMIC_BLOCK,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -90,11 +92,13 @@ export default function rootReducer(state = initialState, action) {
       const site = action.value;
       const rawConfig = site?.raw_config;
       const modifiedConfig = formatConfig(rawConfig);
+      const dynamicBlocks = rawConfig.dynamicBlocks ?? List([]);
       return state
         .set("site", fromJS(site))
         .set("modifiedConfig", fromJS(modifiedConfig))
         .set("pageName", action.pageName ?? Pages.home.name)
-        .set("site_code", site?.site_code);
+        .set("site_code", site?.site_code)
+        .set("dynamicBlocks", dynamicBlocks);
     case ADD_SECTION:
       return state.updateIn(["modifiedConfig", "pages", state.get("pageName"), "sections"], (sections) =>
         sections.concat?.([fromJS(action.value)])
@@ -166,11 +170,15 @@ export default function rootReducer(state = initialState, action) {
     case SET_MY_VOUCHER:
       return state.set("myVoucher", action.value);
     case SET_LIST_BLOG_IS_SHOW:
-      return state.set("listBlogIsHow", action.value);
+      return state.set("listBlogActive", action.value);
     case SET_LIST_PROMO_ACTIVE:
       return state.set("listPromoActive", action.value);
     case SET_LIST_BOOKING:
       return state.set("listBooking", action.value);
+    case ADD_DYNAMIC_BLOCK:
+      return state.setIn(action.path, action.value);
+    case REMOVE_DYNAMIC_BLOCK:
+      return state.deleteIn(action.path, () => action.value);
     default:
       return state;
   }

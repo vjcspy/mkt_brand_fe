@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { MainPromo } from "./style";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import { dummyPromoList } from "../../dummyData/listPromo";
-import Comment from "../comment";
 import { stringify } from "query-string";
 import PulseLoader from "../../components/loading";
 const PromoDesktop = loadable(() => import("./desktop"));
@@ -99,7 +98,6 @@ const PromoSection = ({ config, theme }) => {
           />
         )}
       </MainPromo>
-      <Comment />
     </>
   );
 };

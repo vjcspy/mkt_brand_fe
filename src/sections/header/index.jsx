@@ -10,7 +10,7 @@ import {
   LogoWrapper,
   MenuIconButton,
 } from "./header.styled";
-import { SET_HEADER_HEIGHT, SHOW_LANGUAGE_LOCATION } from "../../constants";
+import { DEVELOPMENT_MODE, SET_HEADER_HEIGHT, SHOW_LANGUAGE_LOCATION } from "../../constants";
 import { Container } from "../../styles";
 import IconMenu from "../../components/icons/iconMenu";
 import IconUserNoBorder from "../../components/icons/iconUserNoBorder";
@@ -182,6 +182,7 @@ const Header = ({ config = defaultConfig }) => {
   // const locale = useFromJS(["locale"]) ?? "en";
   const showMenuHeader = useSelector((state) => state.getIn(["showMenuHeader"]));
   const pageName = useSelector((state) => state.getIn(["pageName"]));
+  const mode = useSelector((state) => state.get("mode"));
   const router = useSiteRouter();
   const dispatch = useDispatch();
   const setPopupLanguageLocation = useCallback((value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }), []);
@@ -195,18 +196,19 @@ const Header = ({ config = defaultConfig }) => {
   const hambergerMenu = useMenu(components.hambergerMenu?.value);
   const [showProfileDropdownMobile, setShowProfileDropdownMobile] = useState(false);
   const { fullName, avatar } = useSelector((state) => state.get("userInfo"))?.toJS() ?? "";
-
   useEffect(() => {
     requestLocation();
   }, []);
 
   useEffect(() => {
-    if (pageName === "home") {
-      setIsEqualPageName("");
+    if (mode === DEVELOPMENT_MODE) {
+      let pageNameQuery = router.query.page ?? "home";
+      pageNameQuery = pageNameQuery === "home" ? "" : pageNameQuery;
+      setIsEqualPageName(pageNameQuery);
     } else {
-      setIsEqualPageName(pageName);
+      setIsEqualPageName(pageName === "home" ? "" : pageName);
     }
-  }, [pageName]);
+  }, [pageName, router.query.page]);
 
   useEffect(() => {
     dispatch({ type: SET_HEADER_HEIGHT, value: ref.current.offsetHeight });

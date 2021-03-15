@@ -12,7 +12,7 @@ import {
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSite } from "../../src/services/backend";
+import { getSite, getSiteServer, fetchMenuCategories } from "../../src/services/backend";
 import useSiteRouter from "../../src/hooks/useSiteRouter";
 import PageContainer from "../../src/containers/pageContainer";
 
@@ -42,8 +42,11 @@ import PageContainer from "../../src/containers/pageContainer";
 // }
 
 export async function getServerSideProps({}) {
-  const site = await getSiteServer(process.env.SITE_CODE);
-  const menu = await fetchMenuCategories({ urlKey: process.env.SITE_CODE });
+  const siteCode = process.env.SITE_CODE;
+  const [{ data: site }, menu] = await Promise.all([
+    getSiteServer(siteCode),
+    fetchMenuCategories({ urlKey: siteCode }),
+  ]);
   const menus = get(menu, ["children"], []);
   return {
     props: {
@@ -59,7 +62,6 @@ const Site = ({ site_code, config, menus }) => {
     query: { menu },
   } = useSiteRouter();
   const dispatch = useDispatch();
-
   useEffect(() => {
     const modifiedConfig = formatConfig(config);
     dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });

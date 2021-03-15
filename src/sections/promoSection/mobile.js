@@ -128,11 +128,15 @@ const PromoMobile = ({ listPromo, onViewMyPromo, onGetCode, viewMapRestaurant, s
 
             {showConditionOrRestaurant ? (
               <WrapperContentPopup style={{ height: "100%" }}>
-                <ListRestaurantBooking onBook={onBook} listRestaurant={listPromo[2].listRestaurant} onViewMap={viewMapPromo} />
+                <ListRestaurantBooking
+                  onBook={onBook}
+                  listRestaurant={listPromo[2]?.listRestaurant}
+                  onViewMap={viewMapPromo}
+                />
               </WrapperContentPopup>
             ) : (
               <WrapperContentPopup style={{ height: "100%" }}>
-                <ListCondition listCondition={listPromo[currentPage].conditions} />
+                <ListCondition listCondition={listPromo[currentPage]?.conditions} />
               </WrapperContentPopup>
             )}
             <WrapperContentPopup style={{ height: "100%" }}>

@@ -25,7 +25,7 @@ const defaultConfig = {
 };
 
 const BlogSection = ({ config = defaultConfig, limited = 4 }) => {
-  const listBlogIsHow = useSelector((s) => s.get("listBlogIsHow"));
+  const listBlogActive = useSelector((s) => s.get("listBlogActive"));
   return (
     <WrapperListBlog>
       <RenderListFlex numItemOnDesktop={2}>
@@ -36,7 +36,7 @@ const BlogSection = ({ config = defaultConfig, limited = 4 }) => {
               <Blog blog={item} />
             </a>
           ))} */}
-        {listBlogIsHow?.map((item, index) => (
+        {listBlogActive?.map((item, index) => (
           <a key={index} href={`/blog/${item.slug}`}>
             <Blog blog={item} />
           </a>

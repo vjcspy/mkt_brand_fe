@@ -3,6 +3,7 @@ import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { SET_TOKEN } from "../../../constants";
+import useSiteRouter from "../../../hooks/useSiteRouter";
 import { ClickableStyle } from "../../../styles/developmentStyle";
 import ImageMedia from "../../components/imageMedia";
 
@@ -61,7 +62,10 @@ const Item = styled.button`
 const Profile = ({ site }) => {
   const [show, setShow] = useState();
   const dispatch = useDispatch();
-  const logout = useCallback(() => dispatch({ type: SET_TOKEN, remember: true }), [dispatch]);
+  const logout = useCallback(() => {
+    location.href = "/edit/signin";
+    dispatch({ type: SET_TOKEN, remember: true });
+  }, [dispatch]);
 
   return (
     <ProfileWrapper

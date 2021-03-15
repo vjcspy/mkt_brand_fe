@@ -29,7 +29,6 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
   const { fullName, avatar } = useSelector((state) => state.get("userInfo"))?.toJS() ?? "";
   const [showProfile, setShowProfile] = useState(false);
   const itemLocation = dummyLocation.find((item) => item.id === location);
-  console.log(slides);
   return (
     <HeaderTopWrapper>
       <Container>

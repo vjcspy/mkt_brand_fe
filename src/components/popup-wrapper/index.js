@@ -7,14 +7,14 @@ const Popup = ({ show, onClose, children, ...rest }) => {
   const refPopup = useRef();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (refPopup.current) {
-      setTimeout(() => {
-        const height = refPopup.current.clientHeight;
-        dispatch({ type: SET_HEIGHT_POPUP, name: "popupWrapper", value: height - 80 });
-      }, 100);
-    }
-  }, [children]);
+  // useEffect(() => {
+  //   if (refPopup.current) {
+  //     setTimeout(() => {
+  //       const height = refPopup.current?.clientHeight;
+  //       dispatch({ type: SET_HEIGHT_POPUP, name: "popupWrapper", value: height - 80 });
+  //     }, 100);
+  //   }
+  // }, [children]);
 
   return show ? (
     <Background>

@@ -2,6 +2,7 @@ import styled, { keyframes } from "styled-components";
 
 export const MapAddressWrapper = styled.div`
   display: flex;
+  margin-top: 40px;
   width: 100%;
   max-height: calc(100vh - ${({ headerHeight }) => headerHeight ?? 0}px);
   padding-bottom: 40px;
@@ -11,7 +12,9 @@ export const MapAddressWrapper = styled.div`
     flex-wrap: wrap;
   }
 `;
-
+export const TitleListMobile = styled.h3`
+  margin-bottom: 20px;
+`;
 export const LeftContent = styled.div`
   width: 400px;
   margin-right: 40px;
@@ -103,7 +106,7 @@ export const MapMobileInfo = styled.div`
   @media (max-width: 768px) {
     display: block;
     > button {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
   }
 `;
@@ -134,7 +137,8 @@ export const MapButtons = styled.div`
   justify-content: space-between;
   margin-top: 20px;
 
-  button {
+  button,
+  a {
     width: calc(50% - 12px);
     display: flex;
     align-items: center;

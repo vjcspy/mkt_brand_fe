@@ -153,4 +153,5 @@ export const Sections = {
   [BookingBanner.defaultConfig.name]: BookingBanner,
   [MeuBanner.defaultConfig.name]: MeuBanner,
   [BlogSection.defaultConfig.name]: BlogSection,
+  [Comment.defaultConfig.name]: Comment,
 };

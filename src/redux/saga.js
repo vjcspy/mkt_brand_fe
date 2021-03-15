@@ -43,9 +43,18 @@ function* putConfig({ value: raw_config }) {
   try {
     const host = process.env.NEXT_PUBLIC_API_HOST;
     const [site] = yield select((s) => [s.get("site").toJS()]);
-    const { data } = yield Axios.put(`${host}/sites/${site.id}`, {
-      raw_config,
-    });
+    const [token] = yield select((s) => [s.get("token")]);
+    const { data } = yield Axios.put(
+      `${host}/sites/${site.id}`,
+      {
+        raw_config,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     yield put({ type: SET_SITE, value: { ...site, raw_config: data.raw_config } });
     alert("Success");
   } catch (e) {
@@ -57,10 +66,28 @@ function* putPublicConfig() {
   try {
     const host = process.env.NEXT_PUBLIC_API_HOST;
     const [site] = yield select((s) => [s.get("site").toJS()]);
-    yield Axios.put(`${host}/sites/${site.id}`, {
-      config: site.raw_config,
-    });
-    const response = yield Axios.post("/api/deploy", {}, { params: { site_code: site.site_code } });
+    const [token] = yield select((s) => [s.get("token")]);
+    yield Axios.put(
+      `${host}/sites/${site.id}`,
+      {
+        config: site.raw_config,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const response = yield Axios.post(
+      "/api/deploy",
+      {},
+      {
+        params: { site_code: site.site_code },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     alert("Success");
   } catch (e) {
     alert(e);
@@ -93,7 +120,10 @@ function* uploadFile({ file, fileInfo, url }) {
   const host = process.env.NEXT_PUBLIC_API_HOST;
   try {
     const formData = new FormData();
-    const headers = {};
+    const token = yield select((s) => s.get("token"));
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
 
     formData.append("files", file);
     formData.append("fileInfo", JSON.stringify(fileInfo));

@@ -33,7 +33,7 @@ const animation = keyframes`
 `;
 
 export const Content = styled.div`
-  max-height: 200px;
+  max-height: 300px;
   overflow-y: auto;
   padding-right: 15px;
   margin-right: -15px;

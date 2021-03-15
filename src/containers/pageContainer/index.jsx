@@ -9,14 +9,15 @@ import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import { SET_FIRST_LOAD } from "../../constants";
 import NotificationProvider from "../../components/notification";
 import ListBrand from "../../sections/list-brand";
-const PageContainer = ({ shouldHideFooter }) => {
-  const pageName = useSelector((s) => s.get("pageName"));
+const PageContainer = ({ shouldHideFooter, pageNameQueryRouter }) => {
+  const pageName = pageNameQueryRouter ?? useSelector((s) => s.get("pageName"));
   const header = useFromJS(["modifiedConfig", "header"]);
   const footer = useFromJS(["modifiedConfig", "footer"]);
   const sections = useFromJS(["modifiedConfig", "pages", pageName, "sections"]);
   const firstLoad = useSelector((s) => s.get("firstLoad"));
   const dispatch = useDispatch();
   const router = useRouter();
+
   const [sizeWidth, ref] = useIframeResize();
   // let data = router.pathname.include("/edit");
   useEffect(() => {
