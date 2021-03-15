@@ -1,3 +1,3 @@
-sudo yarn
-sudo node deploy.js
+yarn
+yarn build
 pm2 restart deploy.json
