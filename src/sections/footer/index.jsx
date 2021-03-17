@@ -98,7 +98,7 @@ const Footer = ({ config = defaultConfig }) => {
           </h6>
           <SocialNetwork>
             {socialNetwork.value.map((item, key) => (
-              <a target="_blank" href={item.link.value.url} key={key}>
+              <a target="_blank" href={item.link?.value.url} key={key}>
                 <img src={item.icon.value.url} />
               </a>
             ))}
