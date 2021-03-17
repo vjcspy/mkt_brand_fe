@@ -52,7 +52,7 @@ const CommentDesktop = ({ comments }) => {
               <p> {item.content.value[locale]}</p>
               <GroupActor>
                 <Avatar>
-                  <img width={90} height={90} src={item.avatar.value.url} />
+                  <img width={90} height={90} src={item.avatar?.value?.url} />
                 </Avatar>
                 <Actor>
                   <h5>{item.author.value[locale]}</h5>

@@ -36,7 +36,7 @@ const SectionSignIn = () => {
   const refOTP = useRef();
   const [showLogin, setShowLogin] = useState(true);
   const [showGetOTP, setShowGetOTP] = useState(true);
-  const [apiRequestOTP] = useApi(
+  const [apiRequestOTP, actionRequestOTP] = useApi(
     `${GGG_INTERNAL}/request-otp`,
     { cellphone: phoneNumber },
     { "tgs-version": "2.6.10" },
