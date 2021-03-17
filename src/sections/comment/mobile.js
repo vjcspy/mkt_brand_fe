@@ -3,9 +3,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import { CommentWrapper, WrapperEndpointComment, GroupActor, Actor, Avatar } from "./style";
 import PointNavigation from "../../components/point-navigation";
+import { useSelector } from "react-redux";
 
 const CommentMobile = ({ comments }) => {
   const [currentSlideMobile, setCurrentSlideMobile] = useState(0);
+  const locale = useSelector((s) => s.get("locale"));
 
   return (
     <>
@@ -17,14 +19,14 @@ const CommentMobile = ({ comments }) => {
         {comments.map((item, index) => (
           <SwiperSlide key={index}>
             <CommentWrapper key={index}>
-              <p> {item.content}</p>
+              <p> {item.content.value[locale]}</p>
               <GroupActor>
                 <Avatar>
-                  <img width={90} height={90} src={item.avatar} />
+                  <img width={90} height={90} src={item.avatar.value.url} />
                 </Avatar>
                 <Actor>
-                  <h5>{item.actor}</h5>
-                  <h6>{item.job}</h6>
+                  <h5>{item.author.value[locale]}</h5>
+                  <h6>{item.job.value[locale]}</h6>
                 </Actor>
               </GroupActor>
             </CommentWrapper>

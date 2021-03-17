@@ -65,7 +65,7 @@ const SectionConfig = ({ path, putStage, popStage }) => {
       </SectionHeader>
       {map(config?.components, (config, index) => (
         <DevelopmentComponentType
-          key={config.name}
+          key={index}
           config={config}
           popStage={popStage}
           putStage={putStage}

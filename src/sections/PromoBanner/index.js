@@ -29,27 +29,22 @@ const defaultConfig = {
           value: { vi: "Ăn gogi Trúng 1 tỷ", en: "Ăn gogi Trúng 1 tỷ" },
           name: "PromoName",
         },
-        promoCode: { type: "text", title: "Promo Code", value: { vi: "123", en: "123" }, name: "PromoCode" },
+        promoCode: { type: "textIgnoreLocale", title: "Promo Code", value: "" },
         imageDesktop: { type: "image", title: "Banner Desktop" },
         imageMobile: { type: "image", title: "Banner Mobile" },
         statusPromo: { type: "radio", title: "Status", value: { active: "Show", titles: ["Show", "Hidden"] } },
         typePromo: { type: "radio", title: "Type", value: { active: "Normal", titles: ["Normal", "Flash"] } },
-      },
-      value: [
-        {
-          title: {
-            type: "text",
-            title: "Promo Name",
-            value: { vi: "Ăn gogi Trúng 1 tỷ", en: "Ăn gogi Trúng 1 tỷ" },
-            name: "PromoName",
+        link: {
+          type: "link",
+          name: "link",
+          title: "Link",
+          value: {
+            label: { vi: "Xem ưu đãi", en: "Xem ưu đãi" },
+            url: "/",
           },
-          promoCode: { type: "text", title: "Promo Code", value: { vi: "123", en: "123" }, name: "PromoCode" },
-          imageDesktop: { type: "image", title: "Banner Desktop" },
-          imageMobile: { type: "image", title: "Banner Mobile" },
-          statusPromo: { type: "radio", title: "Status", value: { active: "Show", titles: ["Show", "Hidden"] } },
-          typePromo: { type: "radio", title: "Type", value: { active: "Normal", titles: ["Normal", "Flash"] } },
         },
-      ],
+      },
+      value: [],
     },
   },
 };
@@ -62,7 +57,6 @@ const PromoBanner = ({ config = defaultConfig }) => {
   const promoShouldShow = listPromoActive ?? valuePromo.filter((item) => item.statusPromo.value.active === "Show");
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width }, ref] = useIframeResize();
-  // console.log(promoShouldShow);
   const Images = useMemo(() => {
     return promoShouldShow?.map((item, index) => (
       <WrapperSection key={index}>
@@ -75,23 +69,22 @@ const PromoBanner = ({ config = defaultConfig }) => {
         />
 
         <GroupButton>
-          <LinkRouter href={`/promo?promoCode=${item.promoCode.value[locale]}`} passHref>
+          <LinkRouter href={`${item.link.value.url}`} passHref>
             <a className="link-banner">
               <Button className="button-banner">
-                <FormattedMessage id="banner.view_promo" />
+                <span>{item.link.value.label[locale]}</span>
               </Button>
             </a>
           </LinkRouter>
         </GroupButton>
       </WrapperSection>
     ));
-  }, [valuePromo, width]);
-
+  }, [promoShouldShow, width]);
   return (
     <WrapperOnePageScroller>
       <ReactPageScroller
         customPageNumber={currentPage}
-        containerHeight={`calc(100vh - ${headerHeight ?? 0}px)`}
+        containerHeight={`calc(100vh - ${width > 768 ? headerHeight : headerHeight * 2 ?? 0}px)`}
         pageOnChange={setCurrentPage}
         totalElement={promoShouldShow.length}
       >

@@ -116,7 +116,7 @@ const BookingBanner = ({ config = defaultConfig }) => {
         <>
           <ReactPageScroller
             customPageNumber={currentPage}
-            containerHeight={`calc(100vh - ${headerHeight ?? 0}px)`}
+            containerHeight={`calc(100vh - ${width > 768 ? headerHeight : headerHeight * 2 ?? 0}px)`}
             pageOnChange={setCurrentPage}
             totalElement={valueBooking.length}
           >

@@ -56,6 +56,7 @@ export const HeaderLinks = styled.div`
 
     h4 {
       color: currentColor;
+      font-size: 16px;
     }
 
     &:after {
@@ -272,12 +273,13 @@ export const MenuIconButton = styled.button`
 
   border: 0 none;
   outline: 0 none;
-  width: 24px;
-  height: 24px;
   background: transparent;
 
   &:not(:last-child) {
-    margin-right: 24px;
+    margin-right: 20px;
+  }
+  svg {
+    margin-top: 10px;
   }
 
   @media (min-width: 769px) {

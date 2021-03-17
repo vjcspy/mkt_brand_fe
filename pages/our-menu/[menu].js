@@ -68,11 +68,11 @@ const Site = ({ site_code, config, menus }) => {
     dispatch({ type: SET_OUR_MENUS, value: menus });
     dispatch({ type: SET_PAGE_NAME, value: Pages["our-menu-detail"].name });
     dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
-    dispatch({
-      type: UPDATE_CONFIG,
-      path: ["breadcrumbs"],
-      value: List([Pages.home, Pages["our-menu"]]),
-    });
+    // dispatch({
+    //   type: UPDATE_CONFIG,
+    //   path: ["breadcrumbs"],
+    //   value: List([Pages.home, Pages["our-menu"]]),
+    // });
     dispatch({ type: SET_SHOW_MENU_HEADER, value: false });
     return () => dispatch({ type: SET_SHOW_MENU_HEADER, value: true });
   }, [config]);
@@ -80,20 +80,20 @@ const Site = ({ site_code, config, menus }) => {
   useEffect(() => {
     dispatch({ type: UPDATE_CONFIG, path: ["menu-slug"], value: menu });
 
-    let menuName = menus.find((m) => m.url_key === menu)?.name ?? "";
-    dispatch({
-      type: UPDATE_CONFIG,
-      path: ["breadcrumbs"],
-      value: List([
-        Pages.home,
-        Pages["our-menu"],
-        {
-          ...Pages["our-menu-detail"],
-          path: "/our-menu/" + menu,
-          title: menuName,
-        },
-      ]),
-    });
+    // let menuName = menus.find((m) => m.url_key === menu)?.name ?? "";
+    // dispatch({
+    //   type: UPDATE_CONFIG,
+    //   path: ["breadcrumbs"],
+    //   value: List([
+    //     Pages.home,
+    //     Pages["our-menu"],
+    //     {
+    //       ...Pages["our-menu-detail"],
+    //       path: "/our-menu/" + menu,
+    //       title: menuName,
+    //     },
+    //   ]),
+    // });
   }, [menu]);
 
   useEffect(() => {}, []);

@@ -68,19 +68,19 @@ const PageEdit = ({ site_code, menus }) => {
     } else if (page === Pages["our-menu-detail"].name) {
       dispatch({ type: UPDATE_CONFIG, path: ["menu-slug"], value: subPage });
       let menuName = menus?.find((m) => m.url_key === subPage)?.name ?? "";
-      dispatch({
-        type: UPDATE_CONFIG,
-        path: ["breadcrumbs"],
-        value: List([
-          Pages.home,
-          Pages["our-menu"],
-          {
-            ...Pages["our-menu-detail"],
-            path: "/our-menu/" + subPage,
-            title: menuName,
-          },
-        ]),
-      });
+      // dispatch({
+      //   type: UPDATE_CONFIG,
+      //   path: ["breadcrumbs"],
+      //   value: List([
+      //     Pages.home,
+      //     Pages["our-menu"],
+      //     {
+      //       ...Pages["our-menu-detail"],
+      //       path: "/our-menu/" + subPage,
+      //       title: menuName,
+      //     },
+      //   ]),
+      // });
     }
   }, [page, subPage, menus]);
 

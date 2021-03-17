@@ -27,11 +27,11 @@ const Profile = ({ config, site_code }) => {
     dispatch({ type: SET_PAGE_NAME, value: Pages.profile.name });
     dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });
     dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
-    dispatch({
-      type: UPDATE_CONFIG,
-      path: ["breadcrumbs"],
-      value: List([Pages.home, Pages.profile]),
-    });
+    //   dispatch({
+    //     type: UPDATE_CONFIG,
+    //     path: ["breadcrumbs"],
+    //     value: List([Pages.home, Pages.profile]),
+    //   });
   }, [config]);
 
   return (

@@ -31,11 +31,11 @@ const Promo = ({ config, site_code, listPromoActive }) => {
     dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
     dispatch({ type: SET_LIST_PROMO_ACTIVE, value: listPromoActive });
 
-    dispatch({
-      type: UPDATE_CONFIG,
-      path: ["breadcrumbs"],
-      value: List([Pages.home, Pages.promo]),
-    });
+    // dispatch({
+    //   type: UPDATE_CONFIG,
+    //   path: ["breadcrumbs"],
+    //   value: List([Pages.home, Pages.promo]),
+    // });
   }, [config]);
 
   return (

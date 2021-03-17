@@ -36,7 +36,7 @@ const SectionSignIn = () => {
   const refOTP = useRef();
   const [showLogin, setShowLogin] = useState(true);
   const [showGetOTP, setShowGetOTP] = useState(true);
-  const [apiRequestOTP, actionRequestOTP] = useApi(
+  const [apiRequestOTP] = useApi(
     `${GGG_INTERNAL}/request-otp`,
     { cellphone: phoneNumber },
     { "tgs-version": "2.6.10" },
@@ -138,7 +138,7 @@ const SectionSignIn = () => {
                     value={phoneNumber}
                     onChange={(value) => setPhoneNumber(value)}
                   />
-                  <Button disabled={phoneNumber?.length !== 10} onClick={actionRequestOTP}>
+                  <Button disabled={phoneNumber?.length !== 10} onClick={() => actionRequestOTP()}>
                     {/* <Button onClick={getCheckGetCode}> */}
                     {apiRequestOTP.loading ? <PulseLoader loading fill /> : <FormattedMessage id="login.get_opt" />}
                   </Button>
@@ -150,10 +150,10 @@ const SectionSignIn = () => {
                     <span>{apiRequestOTP?.data?.message}</span>
                   </Info>
                   <PinInput length={4} ref={refOTP} value={otp} onChange={setOTP} />
-                  <Button disabled={otp.length < 4} onClick={actionGetToken}>
+                  <Button disabled={otp.length < 4} onClick={() => actionGetToken()}>
                     {apiGetToken?.loading ? <PulseLoader loading fill /> : <FormattedMessage id="login.sign_in" />}
                   </Button>
-                  <h5 onClick={actionGetToken}>
+                  <h5 onClick={() => actionGetToken()}>
                     <FormattedMessage id="login.fail_otp" /> <span className="underline">Resend</span>
                   </h5>
                 </Item>

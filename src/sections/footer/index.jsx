@@ -10,11 +10,6 @@ import {
   SocialNetwork,
   GroupDownload,
 } from "./style";
-
-import IconFacebookCircle from "../../components/icons/iconFacebookCircle";
-import IconYoutubeCircle from "../../components/icons/iconYoutubeCircle";
-import IconInstagramCircle from "../../components/icons/iconInstagramCircle";
-import ImageMedia from "../../development/components/imageMedia";
 const defaultConfig = {
   type: "footer",
   name: "footer",

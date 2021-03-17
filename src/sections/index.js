@@ -2,7 +2,7 @@ import ImageText from "./imageText";
 import Footer from "./footer";
 import Header from "./header";
 import OurMenuDetail from "./ourMenuDetail";
-import Breadcrumbs from "./breadcrumbs";
+// import Breadcrumbs from "./breadcrumbs";
 import ProfileSection from "./profileSection";
 import MapAddress from "./mapAddress";
 import SectionSignIn from "./signIn";
@@ -13,6 +13,7 @@ import PromoBanner from "./PromoBanner";
 import BookingBanner from "./BookingBanner";
 import MeuBanner from "./menuBanner";
 import BlogSection from "./BlogSection";
+import DynamicContentHTML from "./dynamicContentHTML";
 export const RenderHeader = ({ config }) => {
   const H = Headers[config?.name];
   return H ? <H config={config} /> : null;
@@ -37,7 +38,7 @@ export const RenderSections = ({ sections }) => {
 
 const pageHome = {
   title: "Home",
-  titleTranslate: "breadcrumbs.home",
+  // titleTranslate: "breadcrumbs.home",
   path: "/",
   icon: "home",
   name: "home",
@@ -46,12 +47,12 @@ const pageHome = {
 };
 const pagePromo = {
   name: "promo",
-  titleTranslate: "breadcrumbs.promo",
+  // titleTranslate: "breadcrumbs.promo",
   title: "Promo",
   path: "/promo",
   icon: "project-diagram",
   sections: [PromoSection.defaultConfig, Comment.defaultConfig],
-  breadcrumbs: [pageHome],
+  // breadcrumbs: [pageHome],
 };
 
 const pageOurMenu = {
@@ -69,16 +70,16 @@ const pageOurMenuDetail = {
   path: "/our-menu/[menu]",
   icon: "utensils",
   sections: [OurMenuDetail.defaultConfig],
-  breadcrumbs: [pageHome, pageOurMenu],
+  // breadcrumbs: [pageHome, pageOurMenu],
 };
 const pageMap = {
   name: "map",
   title: "Địa chỉ nhà hàng",
-  titleTranslate: "breadcrumbs.address_restaurant",
+  // titleTranslate: "breadcrumbs.address_restaurant",
   path: "/map",
   icon: "map",
   sections: [MapAddress.defaultConfig],
-  breadcrumbs: [pageHome],
+  // breadcrumbs: [pageHome],
 };
 const pageProfile = {
   name: "profile",
@@ -87,7 +88,7 @@ const pageProfile = {
   path: "/profile",
   icon: "user",
   sections: [ProfileSection.defaultConfig],
-  breadcrumbs: [pageHome],
+  // breadcrumbs: [pageHome],
 };
 const pageLogin = {
   name: "login",
@@ -95,7 +96,7 @@ const pageLogin = {
   path: "/login",
   icon: "user",
   sections: [SectionSignIn.defaultConfig],
-  breadcrumbs: [],
+  // breadcrumbs: [],
 };
 const pageBlog = {
   name: "blog",
@@ -104,7 +105,7 @@ const pageBlog = {
   path: "/blog",
   icon: "blog",
   sections: [BlogSection.defaultConfig],
-  breadcrumbs: [],
+  // breadcrumbs: [],
 };
 const pageBlogDetail = {
   name: "blog-detail",
@@ -113,7 +114,7 @@ const pageBlogDetail = {
   path: "/blog/[slug]",
   icon: "blog",
   sections: [Article.defaultConfig],
-  breadcrumbs: [],
+  // breadcrumbs: [],
 };
 
 const pageBooking = {
@@ -142,7 +143,7 @@ export const Footers = { [Footer.defaultConfig.name]: Footer };
 
 export const Sections = {
   [ImageText.defaultConfig.name]: ImageText,
-  [Breadcrumbs.defaultConfig.name]: Breadcrumbs,
+  // [Breadcrumbs.defaultConfig.name]: Breadcrumbs,
   [OurMenuDetail.defaultConfig.name]: OurMenuDetail,
   [PromoSection.defaultConfig.name]: PromoSection,
   [ProfileSection.defaultConfig.name]: ProfileSection,
@@ -154,4 +155,5 @@ export const Sections = {
   [MeuBanner.defaultConfig.name]: MeuBanner,
   [BlogSection.defaultConfig.name]: BlogSection,
   [Comment.defaultConfig.name]: Comment,
+  [DynamicContentHTML.defaultConfig.name]: DynamicContentHTML,
 };

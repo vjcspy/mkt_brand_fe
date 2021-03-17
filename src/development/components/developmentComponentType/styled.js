@@ -272,3 +272,159 @@ export const MultipleWrapper = styled.div`
     margin-top: 10px;
   }
 `;
+
+export const WrapperDropDown = styled.div`
+  position: relative;
+  margin-top: 10px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid ${({ theme }) => theme.devColor.border};
+`;
+
+export const Marker = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 1;
+`;
+
+export const TitleDropDown = styled.div`
+  background: #ffff;
+  padding: 14px 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  p {
+    margin: 0 63px 0 17px;
+  }
+
+  svg {
+    position: absolute;
+    right: 20px;
+  }
+
+  @media (max-width: 768px) {
+    p {
+      margin: 0 30px 0 17px;
+    }
+  }
+`;
+
+export const ListOption = styled.div`
+  position: absolute;
+  background: #ffffff;
+  width: 160px;
+  overflow: auto;
+  z-index: 10;
+  border: 1px solid #231f20;
+  box-sizing: border-box;
+  border-radius: 4px;
+  top: calc(100% - 18px);
+  width: 100%;
+  padding-top: 2px;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      background: #e9e9e9;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    svg {
+      color: ${({ theme }) => theme.color.status.primary};
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    div {
+      padding: 10px 16px;
+      p {
+        font-size: 14px;
+      }
+    }
+  }
+`;
+
+export const WrapperListCheckBox = styled.div`
+  margin-top: 18px;
+`;
+
+export const WrapperTitle = styled.div``;
+
+export const WrapperListOption = styled.div`
+  padding: 10px;
+  background: #ffff;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+export const ItemSelected = styled.div`
+  display: flex;
+  margin-right: 15px;
+  cursor: pointer;
+  width: 44%;
+  margin-bottom: 10px;
+  p {
+    margin: 0;
+  }
+`;
+
+export const Checkbox = styled.button`
+  padding-left: 20px;
+  cursor: pointer;
+  border: 0 none;
+  outline: 0 none;
+  border-radius: 5px;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 24px;
+  transition: all 0.3s ease-in-out;
+  background: transparent;
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  text-align: left;
+
+  // &:focus {
+  //   &:before {
+  //     box-shadow: 0 0 0 0.2rem ${({ theme }) => theme.color.status.primary};
+  //     color: transparent;
+  //   }
+  // }
+
+  &:before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: ${({ checked, theme }) => (checked ? "none" : "1px solid " + theme.devColor.border)};
+    border-radius: 4px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+  &:after {
+    content: "";
+    display: ${({ checked }) => (checked ? "block" : "none")};
+    width: 20px;
+    height: 20px;
+    background: url("/images/ic_checked_square.svg");
+    position: absolute;
+    top: 3px;
+    left: 1px;
+    background-repeat: no-repeat;
+  }
+`;

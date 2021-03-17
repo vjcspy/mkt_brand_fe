@@ -40,6 +40,13 @@ export const SectionItem = styled.div`
   }
 
   ${({ add, theme }) => (add ? `color: ${theme.devColor.btnBg};` : "")}
+
+  .icon-delete {
+    position: absolute;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 export const SectionThumbnailWrapper = styled.div`

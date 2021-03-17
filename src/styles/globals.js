@@ -9,10 +9,13 @@ export const GlobalStyle = createGlobalStyle`
   button {
     color: ${({ theme }) => theme.color.text.body};
   }
+  html{
+    height: -webkit-fill-available;
+    
+  }
   body{
-    height: 100vh;
-    height: calc(var(--vh, 1vh) * 100);
-
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
     ::-webkit-scrollbar {
      width: 0px;
     }

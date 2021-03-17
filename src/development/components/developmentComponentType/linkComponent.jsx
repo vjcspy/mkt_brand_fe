@@ -20,12 +20,20 @@ const LinkComponent = ({ config, path }) => {
           {isArray(config.value) &&
             config.value.map(({ label, url }, subIndex) => (
               <LinkWrapper key={subIndex}>
-                <label>Label</label>
+                <label>Label VI</label>
                 <input
                   type="text"
-                  value={label[locale]}
+                  value={label["vi"]}
                   onChange={(e) => {
-                    updateConfig([...path, subIndex, "label", locale], e.target.value);
+                    updateConfig([...path, subIndex, "label", "vi"], e.target.value);
+                  }}
+                />
+                <label>Label EN</label>
+                <input
+                  type="text"
+                  value={label["en"]}
+                  onChange={(e) => {
+                    updateConfig([...path, subIndex, "label", "en"], e.target.value);
                   }}
                 />
                 <label>Url</label>
@@ -61,12 +69,20 @@ const LinkComponent = ({ config, path }) => {
       )}
       {!config.multiple && isObject(config.value) && (
         <LinkWrapper>
-          <label>Label</label>
+          <label>Label Vi</label>
           <input
             type="text"
-            value={config.value.label[locale]}
+            value={config.value.label["vi"]}
             onChange={(e) => {
-              updateConfig([...path, "label", locale], e.target.value);
+              updateConfig([...path, "label", "vi"], e.target.value);
+            }}
+          />
+          <label>Label En</label>
+          <input
+            type="text"
+            value={config.value.label["en"]}
+            onChange={(e) => {
+              updateConfig([...path, "label", "en"], e.target.value);
             }}
           />
           <label>Url</label>

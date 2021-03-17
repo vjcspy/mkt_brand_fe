@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DEVELOPMENT_MODE, GET_SITE, SET_MODE, SET_OUR_MENUS } from "../../src/constants";
+import { DEVELOPMENT_MODE, GET_SITE, SET_MODE, SET_OUR_MENUS, SET_PAGE_NAME } from "../../src/constants";
 import PageContainer from "../../src/containers/pageContainer";
 import DevelopmentLayout from "../../src/development/containers/developmentLayout";
 import { menus } from "../../src/dummyData/menus";
@@ -34,7 +34,7 @@ const Home = ({ site_code, menus }) => {
       dispatch({ type: SET_OUR_MENUS, value: menus });
       dispatch({ type: GET_SITE, site_code });
     }
-  }, [token, site_code]);
+  }, [token, site_code, router.query.page]);
   return (
     <DevelopmentLayout>
       <PageContainer pageNameQueryRouter={router.query.page ?? "home"} />

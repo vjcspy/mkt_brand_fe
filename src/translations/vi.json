@@ -18,26 +18,11 @@
   "header.register_to_get_promo": "Đăng ký nhận tin ưu đãi",
   "header.log_out": "Đăng xuất",
 
-  "banner.view_promo": "Xem ưu đãi",
-
-  "menu.menu": "Thực đơn",
-  "menu.reservation": "Đặt bàn",
-  "menu.promo": "Ưu đãi",
-  "menu.delivery": "Giao hàng",
-  "menu.about_us": "Về chúng tôi",
-  "menu.news": "Tin tức",
-  "menu.contact": "Liên lạc",
+  "menu.reservation": "Reservation",
   "menu.download_app": "Tải app",
   "menu.language": "Tiếng việt",
   "menu.helper": "Trợ giúp",
   "menu.login": "Đăng nhập",
-
-  "breadcrumbs.home": "Trang chủ",
-  "breadcrumbs.promo": "Ưu đãi",
-  "breadcrumbs.info_account": "Thông tin tài khoản",
-  "breadcrumbs.our_menu": "Menu",
-  "breadcrumbs.address_restaurant": "Địa chỉ nhà hàng",
-  "breadcrumbs.blog": "Tin tức",
 
   "page.home": "Trang chủ",
   "page.our_menu": "Thực đơn",

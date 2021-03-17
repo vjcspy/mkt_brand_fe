@@ -21,7 +21,16 @@ const AcceptCookie = () => {
         </Title>
         <Content>
           <p>
-            <FormattedMessage id="cookie.content" values={{ a: (c) => <a href="/nref">{c}</a> }} />
+            <FormattedMessage
+              id="cookie.content"
+              values={{
+                a: (c) => (
+                  <a className="link" href="/">
+                    {c}
+                  </a>
+                ),
+              }}
+            />
           </p>
           {/* <Button onClick={onAcceptCookie}>
             <FormattedMessage id="cookie.confirm" />

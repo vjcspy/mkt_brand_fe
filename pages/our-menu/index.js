@@ -41,11 +41,11 @@ const Site = ({ site_code, config, menus, listPromoActive }) => {
     dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
     dispatch({ type: SET_SHOW_MENU_HEADER, value: true });
     dispatch({ type: SET_LIST_PROMO_ACTIVE, value: listPromoActive });
-    dispatch({
-      type: UPDATE_CONFIG,
-      path: ["breadcrumbs"],
-      value: List([Pages.home, Pages["our-menu"]]),
-    });
+    // dispatch({
+    //   type: UPDATE_CONFIG,
+    //   path: ["breadcrumbs"],
+    //   value: List([Pages.home, Pages["our-menu"]]),
+    // });
   }, [config]);
 
   return (

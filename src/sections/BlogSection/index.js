@@ -10,7 +10,7 @@ const defaultConfig = {
   code: "code-dawdaw",
   name: "blog",
   title: "List blog",
-  titleTranslate: "breadcrumbs.blog",
+  // titleTranslate: "breadcrumbs.blog",
   components: {
     listBlog: {
       type: "groupBlog",

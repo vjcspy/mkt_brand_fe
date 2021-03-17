@@ -14,15 +14,15 @@ const TextArea = styled.textarea`
   border-radius: 4px;
 `;
 
-const TextComponent = ({ config, path, ignoreLocale, onChangeTextBlog }) => {
+const TextIgnoreLocaleComponent = ({ config, path, ignoreLocale, onChangeTextBlog }) => {
   const dispatch = useDispatch();
   const onChange = useCallback(
-    (e, locale) => {
+    (e) => {
       if (onChangeTextBlog) {
         onChangeTextBlog(e.target.value);
         return;
       }
-      const p = ignoreLocale ? path : [...path, locale];
+      const p = ignoreLocale ? path : [...path];
       // debugger;
       // console.log(p);
       dispatch({ type: UPDATE_CONFIG, path: p, value: e.target.value });
@@ -31,26 +31,17 @@ const TextComponent = ({ config, path, ignoreLocale, onChangeTextBlog }) => {
   );
   return (
     <ComponentWrapper>
-      <label>{config.title} Vi</label>
+      <label>{config.title}</label>
       <TextArea
         type="text"
-        value={ignoreLocale ? config.value : config.value?.["vi"]}
+        value={ignoreLocale ? config.value : config.value}
         style={{
           height: 75,
         }}
-        onChange={(e) => onChange(e, "vi")}
-      />
-      <label>{config.title} En</label>
-      <TextArea
-        type="text"
-        value={ignoreLocale ? config.value : config.value?.["en"]}
-        style={{
-          height: 75,
-        }}
-        onChange={(e) => onChange(e, "en")}
+        onChange={(e) => onChange(e)}
       />
     </ComponentWrapper>
   );
 };
 
-export default TextComponent;
+export default TextIgnoreLocaleComponent;

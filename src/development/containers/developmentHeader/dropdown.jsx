@@ -18,7 +18,7 @@ const DropDown = () => {
   /// Dispatch
   const dispatch = useDispatch();
   // const setPageName = useCallback((value) => dispatch({ type: SET_PAGE_NAME, value }), [dispatch]);
-  const setBreadcrumbs = (value) => dispatch({ type: UPDATE_CONFIG, path: ["breadcrumbs"], value: List(value) });
+  // const setBreadcrumbs = (value) => dispatch({ type: UPDATE_CONFIG, path: ["breadcrumbs"], value: List(value) });
   const menuSlug = useSelector((s) => s.get("menu-slug"));
 
   const [item, setItem] = useState();
@@ -26,6 +26,7 @@ const DropDown = () => {
 
   const setPageRouter = (itemPage) => {
     setItem(itemPage);
+    dispatch({ type: SET_PAGE_NAME, value: itemPage.name });
     if (itemPage.name === "home") {
       router.push("/edit");
     } else {

@@ -112,6 +112,7 @@ export const InputTag = styled.input`
   text-align: ${({ textAlign }) => textAlign};
   z-index: 2;
   background: none;
+  border-radius: unset;
 
   ${({ isValid, theme }) =>
     isValid ? "border-bottom: 1px solid " + theme.color.text.heading : "border-bottom: 1px solid #e10007"};

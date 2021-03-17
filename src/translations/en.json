@@ -18,26 +18,11 @@
   "header.register_to_get_promo": "Register to get code",
   "header.log_out": "Log out",
 
-  "banner.view_promo": "View promo",
-
-  "menu.menu": "Menu",
   "menu.reservation": "Reservation",
-  "menu.promo": "Promo",
-  "menu.delivery": "Delivery",
-  "menu.about_us": "About us",
-  "menu.news": "News",
-  "menu.contact": "Contact",
   "menu.download_app": "Download App",
   "menu.language": "English",
   "menu.helper": "Help",
   "menu.login": "Login",
-
-  "breadcrumbs.home": "Home",
-  "breadcrumbs.promo": "Promo",
-  "breadcrumbs.info_account": "Information account",
-  "breadcrumbs.our_menu": "Menu",
-  "breadcrumbs.address_restaurant": "Địa chỉ nhà hàng",
-  "breadcrumbs.blog": "News",
 
   "page.home": "Trang chủ",
   "page.our_menu": "Thực đơn",

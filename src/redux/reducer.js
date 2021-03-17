@@ -44,6 +44,7 @@ import {
   SET_LIST_BOOKING,
   ADD_DYNAMIC_BLOCK,
   REMOVE_DYNAMIC_BLOCK,
+  UPDATE_TITLE_BLOCK,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -92,17 +93,16 @@ export default function rootReducer(state = initialState, action) {
       const site = action.value;
       const rawConfig = site?.raw_config;
       const modifiedConfig = formatConfig(rawConfig);
-      const dynamicBlocks = rawConfig.dynamicBlocks ?? List([]);
+      modifiedConfig.dynamicBlocks = modifiedConfig.dynamicBlocks ?? List([]);
       return state
         .set("site", fromJS(site))
         .set("modifiedConfig", fromJS(modifiedConfig))
         .set("pageName", action.pageName ?? Pages.home.name)
-        .set("site_code", site?.site_code)
-        .set("dynamicBlocks", dynamicBlocks);
+        .set("site_code", site?.site_code);
     case ADD_SECTION:
-      return state.updateIn(["modifiedConfig", "pages", state.get("pageName"), "sections"], (sections) =>
-        sections.concat?.([fromJS(action.value)])
-      );
+      return state.updateIn(["modifiedConfig", "pages", state.get("pageName"), "sections"], (sections) => {
+        return sections.concat?.([fromJS(action.value)]);
+      });
     case REMOVE_SECTION:
       return state.deleteIn(["modifiedConfig", "pages", state.get("pageName"), "sections", action.value]);
     case SET_MEDIAS:
@@ -176,9 +176,11 @@ export default function rootReducer(state = initialState, action) {
     case SET_LIST_BOOKING:
       return state.set("listBooking", action.value);
     case ADD_DYNAMIC_BLOCK:
-      return state.setIn(action.path, action.value);
+      return state.updateIn(action.path, (db) => (db ?? List([])).push(action.value));
     case REMOVE_DYNAMIC_BLOCK:
-      return state.deleteIn(action.path, () => action.value);
+      return state.deleteIn(action.path);
+    case UPDATE_TITLE_BLOCK:
+      return state.updateIn(action.path, () => action.value);
     default:
       return state;
   }

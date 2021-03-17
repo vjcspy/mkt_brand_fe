@@ -133,7 +133,7 @@ const ProfileTab = ({}) => {
                 <Button varian="outline">
                   <FormattedMessage id="profile.info_cancel" />
                 </Button>
-                <Button onClick={onUpdateUserInfo} varian="primary">
+                <Button onClick={() => onUpdateUserInfo()} varian="primary">
                   {loading ? <PulseLoader loading fill /> : <FormattedMessage id="profile.info_save" />}
                 </Button>
               </ProfileButtons>

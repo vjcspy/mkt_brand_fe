@@ -22,6 +22,7 @@ import useMenu from "../../hooks/useMenu";
 import { Marker } from "./profileDropdown/styled";
 import ProfileDropdown from "./profileDropdown";
 import ImageMedia from "../../development/components/imageMedia";
+import Link from "next/link";
 const MenuRight = loadable(() => import("../../components/menu"));
 const PopupLanguageLocation = loadable(() => import("./popup-language-location"));
 
@@ -156,7 +157,8 @@ function requestLocation() {
   }
   navigator.geolocation.getCurrentPosition(
     (position) => {
-      alert(`latitude: ${position.coords.latitude}\nlongitude: ${position.coords.longitude}`);
+      // call api
+      // alert(`latitude: ${position.coords.latitude}\nlongitude: ${position.coords.longitude}`);
     },
     (error) => {
       switch (error.code) {
@@ -259,8 +261,17 @@ const Header = ({ config = defaultConfig }) => {
             </HeaderLinks>
             <FlexGrow style={{ textAlign: "right" }}>
               <GroupFlexBox>
-                <MenuIconButton hideDesktop={true} onClick={() => setShowProfileDropdownMobile(true)}>
-                  <IconUserNoBorder />
+                <MenuIconButton hideDesktop={true}>
+                  {fullName ? (
+                    <IconUserNoBorder height={36} width={36} onClick={() => setShowProfileDropdownMobile(true)} />
+                  ) : (
+                    <Link href="/login">
+                      <a>
+                        <IconUserNoBorder height={36} width={36} />
+                      </a>
+                    </Link>
+                  )}
+
                   {showProfileDropdownMobile && (
                     <>
                       <Marker
@@ -278,7 +289,7 @@ const Header = ({ config = defaultConfig }) => {
                   )}
                 </MenuIconButton>
                 <MenuIconButton onClick={() => setShowMenu(true)}>
-                  <IconMenu />
+                  <IconMenu height={36} width={36} />
                 </MenuIconButton>
               </GroupFlexBox>
             </FlexGrow>

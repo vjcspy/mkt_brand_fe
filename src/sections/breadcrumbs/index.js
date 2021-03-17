@@ -14,10 +14,11 @@ const defaultConfig = {
   components: {},
 };
 const Breadcrumbs = () => {
-  const breadcrumbs = useFromJS(["breadcrumbs"]);
-  return (
-    <WrapperBreadcrumbs>
-      {/* <Container>
+  // const breadcrumbs = useFromJS(["breadcrumbs"]);
+  return null;
+  // <WrapperBreadcrumbs>
+  {
+    /* <Container>
         <TitleLinkPagination>
           {map(breadcrumbs, (item, index) => (
             <Fragment key={index}>
@@ -30,9 +31,9 @@ const Breadcrumbs = () => {
             </Fragment>
           ))}
         </TitleLinkPagination>
-      </Container> */}
-    </WrapperBreadcrumbs>
-  );
+      </Container> */
+  }
+  // </WrapperBreadcrumbs>
 };
 
 Breadcrumbs.defaultConfig = defaultConfig;

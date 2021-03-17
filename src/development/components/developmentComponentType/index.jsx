@@ -10,6 +10,7 @@ import RadioComponent from "./radioComponent";
 import EditerComponent from "./editerComponent";
 import BlogComponent from "./blogComponent";
 import GroupBlogComponent from "./groupBlogComponent";
+import TextIgnoreLocaleComponent from "./textIgnoreLocaleComponent";
 const ComponentType = {
   text: TextComponent,
   image: ImageComponent,
@@ -22,6 +23,7 @@ const ComponentType = {
   editer: EditerComponent,
   blog: BlogComponent,
   groupBlog: GroupBlogComponent,
+  textIgnoreLocale: TextIgnoreLocaleComponent,
 };
 
 const DevelopmentComponentType = ({ config, ...rest }) => {
