@@ -52,14 +52,14 @@ const Slide = ({ slides, current = 0 }) => {
               <ItemSlide key={index}>
                 {item.text.value[locale]}&nbsp;
                 <Button className="get-code" varian="link" href={item.link.url}>
-                  {item.link.value?.label[locale]}
+                  {item.link?.value?.label[locale]}
                 </Button>
               </ItemSlide>
             ))}
             <ItemSlide>
               {slides[0]?.text.value[locale]}&nbsp;
               <Button varian="link" href={slides[0]?.link.url}>
-                {slides[0]?.link.value?.label[locale]}
+                {slides[0]?.link?.value?.label[locale]}
               </Button>
             </ItemSlide>
           </>
