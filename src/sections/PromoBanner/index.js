@@ -74,7 +74,7 @@ const PromoBanner = ({ config = defaultConfig }) => {
           <LinkRouter href={`${item.link?.value?.url ?? "/promo "}`} passHref>
             <a className="link-banner">
               <Button className="button-banner">
-                <span>{item.link.value.label[locale] ?? "Xem ưu đãi"}</span>
+                <span>{item.link?.value?.label[locale] ?? "Xem ưu đãi"}</span>
               </Button>
             </a>
           </LinkRouter>
