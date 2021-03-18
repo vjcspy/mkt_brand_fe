@@ -58,11 +58,11 @@ const SectionSignIn = () => {
 
   useEffect(() => {
     if (apiRequestOTP.data) {
-      const { messageCode, message } = apiRequestOTP.data;
+      const { messageCode, message, error } = apiRequestOTP.data;
       if (messageCode === 1) {
         setShowGetOTP(false);
       } else {
-        showNotification(dispatch, { content: message, status: "error" });
+        showNotification(dispatch, { content: message ?? error.message, status: "error" });
       }
     }
     if (apiRequestOTP.error) {

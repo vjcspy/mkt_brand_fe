@@ -62,7 +62,7 @@ export const GroupButton = styled.div`
       display: none;
     }
     button {
-      margin-bottom: 96px;
+      margin-bottom: 90px;
     }
 
     .show-popup {

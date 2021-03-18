@@ -10,12 +10,12 @@ export const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.color.text.body};
   }
   html{
-    height: -webkit-fill-available;
-    
+    height: var(--app-height);
+    overflow-y: hidden;
   }
   body{
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+    height: 100%;
+    overflow-y: auto;
     ::-webkit-scrollbar {
      width: 0px;
     }
@@ -185,6 +185,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .rps-scroll--disabled {
     position: fixed;
+    height: unset !important;
     top: 0px;
     left: 0px;
     width: 100%;

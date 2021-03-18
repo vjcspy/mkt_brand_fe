@@ -9,6 +9,7 @@ import ReactPageScroller from "../../../plugins/react-page-scroller";
 import ImageMedia from "../../development/components/imageMedia";
 import PointNavigation from "../../components/point-navigation";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
+import useAppHeight from "../../hooks/useAppHeight";
 const IconTriangleLineTop = loadable(() => import("../../components/icons/iconTriangleLineTop"));
 const IconTriangleLineDown = loadable(() => import("../../components/icons/iconTriangleLineDown"));
 const defaultConfig = {
@@ -80,6 +81,8 @@ const BookingBanner = ({ config = defaultConfig }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width }, ref] = useIframeResize();
+  const appHeight = useAppHeight();
+
   const Images = useMemo(() => {
     return valueBooking?.map((item, index) => {
       const { imageDesktop, imageMobile, linkBooking, head, showHead, showContent, content } = item;
@@ -116,7 +119,7 @@ const BookingBanner = ({ config = defaultConfig }) => {
         <>
           <ReactPageScroller
             customPageNumber={currentPage}
-            containerHeight={`calc(100vh - ${width > 768 ? headerHeight : headerHeight * 2 ?? 0}px)`}
+            containerHeight={appHeight - headerHeight}
             pageOnChange={setCurrentPage}
             totalElement={valueBooking.length}
           >

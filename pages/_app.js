@@ -28,13 +28,6 @@ const HostWrapper = ({ children, host, graphqlHost }) => {
 };
 
 function App({ Component, pageProps, host, graphqlHost }) {
-  useEffect(() => {
-    if (process.browser) {
-      let vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty("--vh", `${vh}px`);
-    }
-  }, []);
-
   return (
     <Provider store={store}>
       <HostWrapper host={host} graphqlHost={graphqlHost}>

@@ -9,6 +9,7 @@ import IconTriangleLineDown from "../../components/icons/iconTriangleLineDown";
 import ImageMedia from "../../development/components/imageMedia";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import LinkRouter from "../../components/link-router";
+import useAppHeight from "../../hooks/useAppHeight";
 
 const defaultConfig = {
   type: "section",
@@ -78,6 +79,7 @@ const MenuBanner = ({ config = defaultConfig }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width }, ref] = useIframeResize();
+  const appHeight = useAppHeight();
 
   const Images = useMemo(() => {
     return valueMenu?.map((item, index) => {
@@ -113,7 +115,7 @@ const MenuBanner = ({ config = defaultConfig }) => {
     <MenuScrollWrapper>
       <ReactPageScroller
         customPageNumber={currentPage}
-        containerHeight={`calc(100vh - ${width > 768 ? headerHeight : headerHeight * 2 ?? 0}px)`}
+        containerHeight={appHeight - headerHeight}
         pageOnChange={setCurrentPage}
         totalElement={valueMenu.length}
       >

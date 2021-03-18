@@ -8,9 +8,9 @@ const useApi = (url, body, headers, method = "GET") => {
     async (newUrl) => {
       setApi({ loading: true });
       try {
-        const { data } = await Axios({
-          url: newUrl ?? url,
+        const { data } = await Axios(`${newUrl ?? url}`, {
           method,
+          credentials: "omit",
           data: body,
           headers,
         });

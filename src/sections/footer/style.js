@@ -181,6 +181,7 @@ export const SocialNetwork = styled.div`
 
 export const WrapperListIcon = styled.div`
   display: flex;
+  align-items: center;
   h6 {
     display: none;
   }

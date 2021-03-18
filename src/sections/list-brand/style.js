@@ -133,7 +133,7 @@ export const ItemLogo = styled.div`
 
   img {
     height: 57%;
-    object-fit: cover;
+    object-fit: contain;
     position: absolute;
     top: 50%;
     left: 50%;

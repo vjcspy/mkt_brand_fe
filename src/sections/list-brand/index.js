@@ -49,11 +49,7 @@ const defaultConfig = {
 const ListBrand = () => {
   const showListBrand = useSelector((state) => state.get("showListBrand"));
   const [brand, setBrand] = useState(Hotpot);
-  const [listLogoFilter, setListLogoFilter] = useState([]);
-  useEffect(() => {
-    const listLogo = dataBrands.find((item) => item.name === brand)?.logos;
-    setListLogoFilter(listLogo);
-  }, [brand]);
+
   return (
     showListBrand && (
       <WrapperListBrand>
@@ -67,11 +63,13 @@ const ListBrand = () => {
               ))}
             </ListBrandNameTab>
             <ListLogoBrand>
-              {listLogoFilter?.map((item, index) => (
-                <ItemLogo key={index}>
-                  <img src={`/images/logobrands/${item}`} />
-                </ItemLogo>
-              ))}
+              {dataBrands
+                .find((item) => item.name === brand)
+                ?.logos.map((itemLogo, index) => (
+                  <ItemLogo key={index}>
+                    <img src={`/images/logobrands/${itemLogo}`} />
+                  </ItemLogo>
+                ))}
             </ListLogoBrand>
           </ContentList>
         </Container>
