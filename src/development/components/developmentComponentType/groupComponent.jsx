@@ -26,7 +26,6 @@ const GroupBlogComponent = ({ config, path, putStage }) => {
   const onDragStart = (e, index) => {
     indexChange = index;
   };
-  console.log(config);
 
   const handleDrop = (e) => {
     const indexByChange = +e.target.dataset.index;

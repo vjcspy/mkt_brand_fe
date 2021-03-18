@@ -105,8 +105,8 @@ const Footer = ({ config = defaultConfig }) => {
         <Container>
           <ContentTop>
             <WrapperInfo>
-              <img class="logo-golden" src="/images/logo_goldengate.svg" />
-              <h6 class="main-layout">
+              <img className="logo-golden" src="/images/logo_goldengate.svg" />
+              <h6 className="main-layout">
                 Công ty Cổ phần Thương mại Dịch vụ Cổng Vàng
                 <br /> Số 60 Giang Văn Minh, Quận Ba Đình, Hà Nội
               </h6>
@@ -117,7 +117,7 @@ const Footer = ({ config = defaultConfig }) => {
                 </h6>
                 <h6>
                   <img src="/images/ic/ic_mail_footer.svg" />
-                  Email:support.hn@ggg.com.vn
+                  Email: support.hn@ggg.com.vn
                 </h6>
               </FlexWrapper>
             </WrapperInfo>

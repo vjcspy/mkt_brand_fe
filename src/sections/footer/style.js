@@ -83,7 +83,6 @@ export const FlexWrapper = styled.div`
   h6 {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
   }
 `;
 
@@ -155,6 +154,13 @@ export const SocialNetwork = styled.div`
   display: flex;
 
   a {
+    background: #c4c4c4;
+    width: 51px;
+    height: 51px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
     cursor: pointer;
     margin: 0 20px;
     svg {

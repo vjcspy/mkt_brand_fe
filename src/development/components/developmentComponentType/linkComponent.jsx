@@ -11,7 +11,6 @@ const LinkComponent = ({ config, path }) => {
   const dispatch = useDispatch();
   const updateConfig = useCallback((path, value) => dispatch({ type: UPDATE_CONFIG, value, path }), [dispatch]);
   const removeConfig = useCallback((path, value) => dispatch({ type: REMOVE_CONFIG, value, path }), [dispatch]);
-
   return (
     <ComponentWrapper>
       <label>{config.title}</label>

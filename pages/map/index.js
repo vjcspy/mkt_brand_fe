@@ -5,7 +5,7 @@ import { SET_GOOGLE_MAP_API, SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG }
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSite, getSiteServer, getApiKeyGoogleMap } from "../../src/services/backend";
+import { getApiKeyGoogleMap, getSite, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
 export async function getServerSideProps() {
@@ -22,7 +22,6 @@ export async function getServerSideProps() {
 
 const Map = ({ config, site_code, googleMapApi }) => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     const modifiedConfig = formatConfig(config);
     dispatch({ type: SET_GOOGLE_MAP_API, value: googleMapApi });

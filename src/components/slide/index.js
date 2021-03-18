@@ -37,7 +37,6 @@ const Slide = ({ slides, current = 0 }) => {
       setCurrentIndex(currentIndex - 1);
     }
   };
-
   return size > 0 ? (
     <WrapperSlide className={`${size === 1 ? "center" : ""}`}>
       {size > 1 && (
@@ -51,14 +50,14 @@ const Slide = ({ slides, current = 0 }) => {
             {slides?.map((item, index) => (
               <ItemSlide key={index}>
                 {item.text.value[locale]}&nbsp;
-                <Button className="get-code" varian="link" href={item.link.url}>
+                <Button className="get-code" varian="link" href={item.link?.value?.url}>
                   {item.link.value?.label[locale]}
                 </Button>
               </ItemSlide>
             ))}
             <ItemSlide>
               {slides[0]?.text.value[locale]}&nbsp;
-              <Button varian="link" href={slides[0]?.link.url}>
+              <Button varian="link" href={slides[0]?.link?.value?.url}>
                 {slides[0]?.link.value?.label[locale]}
               </Button>
             </ItemSlide>

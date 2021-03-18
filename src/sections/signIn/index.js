@@ -39,7 +39,7 @@ const SectionSignIn = () => {
   const [apiRequestOTP, actionRequestOTP] = useApi(
     `${GGG_INTERNAL}/request-otp`,
     { cellphone: phoneNumber },
-    { "tgs-version": "2.6.10" },
+    { "tgs-version": "2.6.10", "Content-Type": "application/json" },
     "POST"
   );
 

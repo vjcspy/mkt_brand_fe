@@ -69,10 +69,10 @@ const PromoBanner = ({ config = defaultConfig }) => {
         />
 
         <GroupButton>
-          <LinkRouter href={`${item.link?.value?.url ?? "/promo"}`} passHref>
+          <LinkRouter href={`${item.link?.value?.url ?? "/promo "}`} passHref>
             <a className="link-banner">
               <Button className="button-banner">
-                <span>{item.link?.value.label[locale] ?? "Xem ưu đãi"}</span>
+                <span>{item.link?.value?.label[locale] ?? "Xem ưu đãi"}</span>
               </Button>
             </a>
           </LinkRouter>

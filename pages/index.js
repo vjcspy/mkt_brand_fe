@@ -38,9 +38,7 @@ const Site = ({ config, site_code, listPromoActive }) => {
     dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
     dispatch({ type: SET_SHOW_MENU_HEADER, value: true });
     dispatch({ type: SET_LIST_PROMO_ACTIVE, value: listPromoActive });
-    // dispatch({ type: SHOW_LIST_BRAND, value: true });
     return () => {
-      // dispatch({ type: SHOW_LIST_BRAND, value: false });
       dispatch({ type: SET_SHOW_MENU_HEADER, value: false });
     };
   }, [config]);
