@@ -78,16 +78,16 @@ function* putPublicConfig() {
         },
       }
     );
-    const response = yield Axios.post(
-      "/api/deploy",
-      {},
-      {
-        params: { site_code: site.site_code },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    // const response = yield Axios.post(
+    //   "/api/deploy",
+    //   {},
+    //   {
+    //     params: { site_code: site.site_code },
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   }
+    // );
     alert("Success");
   } catch (e) {
     alert(e);
