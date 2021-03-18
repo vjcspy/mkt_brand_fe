@@ -1,14 +1,17 @@
 import React from "react";
 import { Container } from "../../styles";
+import ListBrand from "../list-brand";
 import {
-  Content,
+  ContentTop,
   ContentFooter,
   FooterWrapper,
-  LeftContent,
-  RightContent,
   WrapperFeature,
+  FlexWrapper,
   SocialNetwork,
   GroupDownload,
+  WrapperInfo,
+  WrapperListIcon,
+  ContentBottom,
 } from "./style";
 const defaultConfig = {
   type: "footer",
@@ -20,13 +23,14 @@ const defaultConfig = {
       title: "Social Network",
       name: "socialNetwork",
       defaultConfig: {
-        text: { type: "text", title: "Text", value: { vi: "Instagram", en: "Instagram" }, name: "text" },
+        text: { type: "text", title: "Text", value: { vi: "Social Network", en: "Social Network" }, name: "text" },
         icon: { type: "image" },
         link: {
           type: "link",
           name: "link",
           title: "Link",
           value: {
+            label: { vi: "Social Network", en: "Social Network" },
             url: "/",
           },
         },
@@ -92,37 +96,52 @@ const Footer = ({ config = defaultConfig }) => {
               <img width={190} height={60} src="/images/googleplay.jpg" />
             </a>
           </GroupDownload>
-          <h6>
-            The Golden Spoon – Siêu ứng dụng cho tín đồ ẩm thực.
-            <br /> Tải App Hôm Nay Chạm Ngay Ưu Đãi.
-          </h6>
-          <SocialNetwork>
-            {socialNetwork.value.map((item, key) => (
-              <a target="_blank" href={item.link?.value.url} key={key}>
-                <img src={item.icon.value.url} />
-              </a>
-            ))}
-          </SocialNetwork>
+          <h5>Siêu ứng dụng cho tín đồ ẩm thực. </h5>
         </WrapperFeature>
       </Container>
+      <ListBrand />
+
       <ContentFooter>
         <Container>
-          <Content>
-            <LeftContent>
-              <h6>
+          <ContentTop>
+            <WrapperInfo>
+              <img class="logo-golden" src="/images/logo_goldengate.svg" />
+              <h6 class="main-layout">
                 Công ty Cổ phần Thương mại Dịch vụ Cổng Vàng
-                <br />
-                Trụ sở chính: Số 60 Phố Giang Văn Minh, Phường Đội Cấn,
-                <br /> Quận Ba Đình, Thành phố Hà Nội, Việt Nam
-                <br /> GPĐK: 0102721191 cấp ngày 09/04/2008
-                <br /> ĐT: 043 222 3000 Email: support.hn@ggg.com.vi
+                <br /> Số 60 Giang Văn Minh, Quận Ba Đình, Hà Nội
               </h6>
-            </LeftContent>
-            <RightContent>
-              <img width={126} height={48} src="/images/icon_bct.png" />
-              <h6> © 2011 Golden Gate ., JSC. All rights reserved</h6>
-            </RightContent>
-          </Content>
+              <FlexWrapper>
+                <h6>
+                  <img src="/images/ic/ic_phone_footer.svg" />
+                  043 222 3000
+                </h6>
+                <h6>
+                  <img src="/images/ic/ic_mail_footer.svg" />
+                  Email:support.hn@ggg.com.vn
+                </h6>
+              </FlexWrapper>
+            </WrapperInfo>
+            <WrapperListIcon>
+              <h6>Kết nối với chúng tôi</h6>
+              <SocialNetwork>
+                {socialNetwork.value.map((item, key) => (
+                  <a target="_blank" href={item.link?.value?.url} key={key}>
+                    <img src={item.icon.value?.url} />
+                  </a>
+                ))}
+              </SocialNetwork>
+            </WrapperListIcon>
+            <hr />
+          </ContentTop>
+          <hr />
+          <ContentBottom>
+            <h6 className="info-desktop">
+              © 2011 Bản quyền của Công ty Cổ phần Thương mại Dịch vụ Cổng Vàng <br /> Giấy chứng nhận Đăng ký Kinh
+              doanh số 0102721191 cấp ngày 09/04/2008
+            </h6>
+            <h5 className="info-mobile">© 2011 Golden Gate Restaurant Group</h5>
+            <img width={126} height={48} src="/images/icon_bct.png" />
+          </ContentBottom>
         </Container>
       </ContentFooter>
     </FooterWrapper>

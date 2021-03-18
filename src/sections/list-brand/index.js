@@ -1,14 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container } from "../../styles";
-import { BrandName, ContentList, ItemListBrand, ItemLogo, ListLogo, WrapperListBrand } from "./style";
+import {
+  BrandName,
+  ContentList,
+  ItemListBrand,
+  ItemLogo,
+  ListLogo,
+  WrapperListBrand,
+  ListBrandNameTab,
+  ListLogoBrand,
+  NameBrand,
+} from "./style";
 import { useSelector } from "react-redux";
+
+const Hotpot = "Hotpot";
+const BBQ = "BBQ";
+const Japanese = "Japanese";
+const Western = "Western";
+const Other = "Orther";
+
 const dataBrands = [
-  { name: "Hotpot", title: "Concept", logos: ["ashima.svg", "kichi_kichi.svg", "hutong.svg", "manwah.svg", "ktop.svg"] },
-  { name: "BBQ", title: "Concept", logos: ["gogi.svg", "sumo.svg", "kpub.svg", "gogi_bakery.svg"] },
-  { name: "Japanese", title: "Concept", logos: ["isushi.svg", "mask_japan.svg", "shogun.svg"] },
-  { name: "beer", title: "Concept", logos: ["vuvuzela.svg"] },
-  { name: "Western", title: "Concept", logos: ["cowboy.svg", "cowboy_pizzeria.svg", "grill_bar.svg"] },
-  { name: "Other", title: "Concept", logos: ["icook.svg", "yutang.svg", "pho_ngon_37.svg", "coffe_inn.svg", "crystal_jade.svg"] },
+  {
+    name: Hotpot,
+    title: "Concept",
+    logos: ["hotpot_ashima.png", "hotpot_kichi.png", "hotpot_hutong.png", "hotpot_manwah.png", "hotpot_ktop.png"],
+  },
+  { name: BBQ, title: "Concept", logos: ["bbq_gogi.png", "bbq_hanquoc.png", "bbq_kpup.png", "bbq_sumo.png"] },
+  { name: Japanese, title: "Concept", logos: ["japan_isushi.png", "japan_mask.png", "japan_shogun.png"] },
+  {
+    name: Western,
+    title: "Concept",
+    logos: ["wester_chilis.png", "wester_cowboy_pizzeria.png", "wester_cowboy_jack.png"],
+  },
+  {
+    name: Other,
+    title: "Concept",
+    logos: ["other_icook.png", "other_yutang.png", "other_37_street.png", "other_the_coffee.png", "other_crystal.png"],
+  },
 ];
 
 const defaultConfig = {
@@ -20,26 +48,31 @@ const defaultConfig = {
 
 const ListBrand = () => {
   const showListBrand = useSelector((state) => state.get("showListBrand"));
+  const [brand, setBrand] = useState(Hotpot);
+  const [listLogoFilter, setListLogoFilter] = useState([]);
+  useEffect(() => {
+    const listLogo = dataBrands.find((item) => item.name === brand)?.logos;
+    setListLogoFilter(listLogo);
+  }, [brand]);
   return (
     showListBrand && (
       <WrapperListBrand>
         <Container>
           <ContentList>
-            {dataBrands.map((item, key) => (
-              <ItemListBrand key={key}>
-                <BrandName>
-                  <h4>{item.name}</h4>
-                  <p>{item.title}</p>
-                </BrandName>
-                <ListLogo>
-                  {item.logos.map((itemLogo, key) => (
-                    <ItemLogo key={key}>
-                      <img src={`/images/logobrands/${itemLogo}`} />
-                    </ItemLogo>
-                  ))}
-                </ListLogo>
-              </ItemListBrand>
-            ))}
+            <ListBrandNameTab>
+              {dataBrands.map((item, index) => (
+                <NameBrand active={item.name === brand} onClick={() => setBrand(item.name)} key={index}>
+                  {item.name}
+                </NameBrand>
+              ))}
+            </ListBrandNameTab>
+            <ListLogoBrand>
+              {listLogoFilter?.map((item, index) => (
+                <ItemLogo key={index}>
+                  <img src={`/images/logobrands/${item}`} />
+                </ItemLogo>
+              ))}
+            </ListLogoBrand>
           </ContentList>
         </Container>
       </WrapperListBrand>

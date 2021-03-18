@@ -45,6 +45,7 @@ import {
   ADD_DYNAMIC_BLOCK,
   REMOVE_DYNAMIC_BLOCK,
   UPDATE_TITLE_BLOCK,
+  SET_GOOGLE_MAP_API,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -57,7 +58,7 @@ export const initialState = fromJS({
   acceptCookie: false,
   notifications: List([]),
   tokenUser: fromJS({}),
-  showListBrand: false,
+  showListBrand: true,
   firstLoad: false,
 });
 
@@ -181,6 +182,8 @@ export default function rootReducer(state = initialState, action) {
       return state.deleteIn(action.path);
     case UPDATE_TITLE_BLOCK:
       return state.updateIn(action.path, () => action.value);
+    case SET_GOOGLE_MAP_API:
+      return state.set("googleMapApi", action.value);
     default:
       return state;
   }

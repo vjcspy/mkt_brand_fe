@@ -96,11 +96,11 @@ const BookingBanner = ({ config = defaultConfig }) => {
           <GroupButton>
             {showHead.value.active === "Show" && <h1>{head.value[locale]}</h1>}
             {showContent.value.active === "Show" && <h3>{content.value[locale]}</h3>}
-            <LinkRouter href={`${linkBooking.value.url}`} passHref>
+            <LinkRouter href={`${linkBooking.value?.url}`} passHref>
               <a className="link-banner">
                 <Button className="button-banner">
                   {/* <FormattedMessage id="banner.view_promo" /> */}
-                  <span>{linkBooking.value.label[locale]}</span>
+                  <span>{linkBooking.value?.label[locale]}</span>
                 </Button>
               </a>
             </LinkRouter>

@@ -3,10 +3,12 @@ import React, { forwardRef } from "react";
 import Button from "../../components/button";
 import IconTel from "../../components/icons/iconTel";
 import { MapButtons, MapItem, MapItemTitle, MapLayoutWrapper, MapMobileInfo, MapWrapper } from "./styled";
+import { useSelector } from "react-redux";
 
 const MapLayout = forwardRef(({ onBack, item, center = { lat: 10.7770335, lng: 106.693882 } }, ref) => {
+  const googleMapApi = useSelector((state) => state.get("googleMapApi"));
   return (
-    <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}>
+    <LoadScript googleMapsApiKey={googleMapApi?.value}>
       <MapLayoutWrapper>
         {item && (
           <MapMobileInfo>

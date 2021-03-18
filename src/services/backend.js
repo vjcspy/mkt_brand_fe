@@ -43,6 +43,11 @@ export const getSiteServer = async (site_code) => {
   return Axios.get(`${host}/sites/config/${site_code}`);
 };
 
+export const getApiKeyGoogleMap = async () => {
+  const host = process.env.GGG_INTERNAL;
+  return Axios.get(`${host}/get-configs`);
+};
+
 export const getSection = (site, page, sectionName) => {
   return site.config.pages[page].sections.find((item) => item.name === sectionName);
 };

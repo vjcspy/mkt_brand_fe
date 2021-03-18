@@ -95,7 +95,7 @@ const MenuBanner = ({ config = defaultConfig }) => {
           <GroupButton>
             {showHead.value.active === "Show" && <h1>{headMenu.value[locale]}</h1>}
             {showContent.value.active === "Show" && <h3>{contentMenu.value[locale]}</h3>}
-            <LinkRouter href={`${linkMenu.value.url}`} passHref>
+            <LinkRouter href={`${linkMenu.value?.url}`} passHref>
               <a className="link-banner">
                 <Button className="button-banner">
                   {/* <FormattedMessage id="banner.view_promo" /> */}

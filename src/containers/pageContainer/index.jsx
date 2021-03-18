@@ -32,7 +32,6 @@ const PageContainer = ({ shouldHideFooter, pageNameQueryRouter }) => {
       <MainWrapper className="main-content">
         <RenderSections sections={sections} />
       </MainWrapper>
-      <ListBrand />
       {!shouldHideFooter && <RenderFooter config={footer} />}
       <AcceptCookie />
       <NotificationProvider />
