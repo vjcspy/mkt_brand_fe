@@ -55,7 +55,7 @@ export const HiddenContent = styled.div`
   align-items: center;
   justify-content: center;
 
-  transition: 0.3s;
+  transition: 0.1s;
   opacity: 0;
   visibility: hidden;
   z-index: 100;

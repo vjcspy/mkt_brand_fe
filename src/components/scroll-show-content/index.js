@@ -15,15 +15,24 @@ const ScrollShowContent = ({ children, ...rest }) => {
     const scrollHeight = parentScroll.current?.scrollHeight;
     const scroolTop = parentScroll.current?.scrollTop;
     const clientHeight = parentScroll.current?.clientHeight;
-    if (scroolTop + 2 >= scrollHeight - clientHeight) {
+    if (scroolTop + 2 >= scrollHeight - clientHeight - 10) {
       return false;
     } else {
       return true;
     }
   }, []);
 
-  const onScroll = useCallback(() => {
+  const onScroll = useCallback((e) => {
     setIsBottom(checkIsBottom());
+  }, []);
+
+  useEffect(() => {
+    document.body.style.setProperty("overflow-y", `hidden`);
+    document.body.style.setProperty("height", `100vh`);
+    return () => {
+      document.body.style.removeProperty("overflow-y");
+      document.body.style.removeProperty("height");
+    };
   }, []);
 
   useEffect(() => {

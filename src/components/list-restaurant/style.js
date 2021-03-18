@@ -18,6 +18,11 @@ export const List = styled.div`
     border-top: 1px solid #e9e9e9;
     padding-top: 20px;
   }
+  @media (max-width: 768px) {
+    & > div:last-child {
+      margin-bottom: 100px;
+    }
+  }
 `;
 
 export const ItemRestaurant = styled.div`

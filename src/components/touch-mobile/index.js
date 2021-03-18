@@ -2,44 +2,80 @@ import React, { useRef, useState, useEffect } from "react";
 
 import IconRectangle from "../icons/iconRectangle";
 import IconClose from "../icons/iconsClose";
+import useAppHeight from "../../hooks/useAppHeight";
 import { WrapperDrag, ContentDrag, IconDrag, IconCloseDrag, Content } from "./style";
+let postionStart;
 const DragMobile = ({ isShowDefault, children }) => {
   const refDrag = useRef();
   const [statusTop, setStatusTop] = useState(false);
-  const [height, setHeight] = useState(300);
+  const [transition, setTransition] = useState(false);
+  const [height, setHeight] = useState(260);
+  const appHeight = useAppHeight();
 
-  const onTouchStart = () => {};
-  const onTouchMove = (e) => {
-    setHeight(window.innerHeight - e.touches[0].clientY);
+  const onMouseDown = (e) => {
+    postionStart = e.clientY;
+    setTransition(false);
   };
+  const onMouseMove = (e) => {
+    if (postionStart) {
+      setHeight(260 + postionStart - e.clientY);
+    }
+  };
+  const onMouseUp = (e) => {
+    postionStart = undefined;
+    setStatusTop(true);
+    setTransition(true);
+  };
+
+  const onTouchStart = (e) => {
+    setTransition(false);
+    document.body.style.setProperty("overflow-y", `hidden`);
+  };
+
+  const onTouchMove = (e) => {
+    setHeight(appHeight - e.touches[0].clientY);
+  };
+
   const onTouchEnd = () => {
     setStatusTop(true);
+    setTransition(true);
   };
   const onClose = () => {
-    setStatusTop(false);
-    setHeight(300);
+    setHeight(260);
+    document.body.style.removeProperty("overflow-y");
+    setTimeout(() => {
+      setStatusTop(false);
+    });
   };
   const onOpen = () => {
     setStatusTop(true);
-    setHeight("calc(100% - 114px)");
+    setHeight(appHeight);
   };
 
-  // mac dinh se show neu click xem uu dai o home page
   useEffect(() => {
     if (isShowDefault) {
       onOpen();
     }
   }, [isShowDefault]);
   return (
-    <WrapperDrag style={{ height: height }}>
-      <ContentDrag ref={refDrag}>
-        <IconDrag>
-          {statusTop ? (
+    <WrapperDrag style={{ transition: transition ? "0.3s" : "unset", height }} ref={refDrag}>
+      <ContentDrag>
+        {statusTop ? (
+          <IconDrag>
             <IconClose className="close" onClick={onClose} />
-          ) : (
-            <IconRectangle onClick={onOpen} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onTouchMove={(e) => onTouchMove(e)} />
-          )}
-        </IconDrag>
+          </IconDrag>
+        ) : (
+          <IconDrag
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            onTouchMove={onTouchMove}
+          >
+            <IconRectangle />
+          </IconDrag>
+        )}
 
         <Content className={`${statusTop ? "content show" : "content"}`}>{children}</Content>
       </ContentDrag>

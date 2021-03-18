@@ -3,8 +3,9 @@ import styled from "styled-components";
 export const WrapperPopup = styled.div`
   background: #ffffff;
   border-radius: 10px 10px 0px 0px;
+  max-height: calc(100% - 35px);
 
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
 
@@ -14,7 +15,7 @@ export const WrapperPopup = styled.div`
   transition: 0.3s;
 
   &.show {
-    height: calc(100% - 117px);
+    height: 100%;
   }
 `;
 

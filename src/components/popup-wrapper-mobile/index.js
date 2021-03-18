@@ -1,10 +1,12 @@
 import React, { useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { SET_HEIGHT_POPUP } from "../../constants";
+import useAppHeight from "../../hooks/useAppHeight";
 
 import IconTriangleLineLeft from "../icons/iconTriangleLineLeft";
 import { WrapperPopupMobile, ContentPopup, WrapperClose, Content } from "./style";
 const PopupMobile = ({ children, onBack, step, className }) => {
+  const appHeight = useAppHeight();
   const refPopup = useRef();
   // const dispatch = useDispatch();
 
@@ -19,7 +21,7 @@ const PopupMobile = ({ children, onBack, step, className }) => {
   // }, [className]);
 
   return (
-    <WrapperPopupMobile className={className}>
+    <WrapperPopupMobile style={{ height: appHeight }} className={className}>
       <WrapperClose onClick={onBack}>
         <IconTriangleLineLeft /> <h5>Back</h5>
       </WrapperClose>

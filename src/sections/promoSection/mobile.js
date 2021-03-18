@@ -8,6 +8,7 @@ import { WrapperContentPopup } from "../../components/popup-wrapper-mobile/style
 
 import PromoInfo from "./PromoInfo";
 import Head from "next/head";
+import useAppHeight from "../../hooks/useAppHeight";
 const ListRestaurant = loadable(() => import("../../components/list-restaurant"));
 const ListRestaurantBooking = loadable(() => import("../../components/list-restaurant/list-restaurant-booking"));
 const CSSTransition = loadable(() => import("../../components/css-transition"));
@@ -32,6 +33,7 @@ const PromoMobile = ({ listPromo, onViewMyPromo, onGetCode, viewMapRestaurant, s
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [stepFlowPopupMobile, setStepFlowPopupMobile] = useState(0);
   const [showPopupRegisterMobile, setShowPopupRegisterMobile] = useState(false);
+  const appHeight = useAppHeight();
 
   const size = listPromo.length;
 
@@ -73,12 +75,12 @@ const PromoMobile = ({ listPromo, onViewMyPromo, onGetCode, viewMapRestaurant, s
 
   return (
     <>
-      <WrapperContentPromo className="promo-mobile" style={{ height: `calc(100vh - (${headerHeight ?? 0}px ` }}>
+      <WrapperContentPromo className="promo-mobile" style={{ height: appHeight - headerHeight }}>
         <WrapperScroller className="wrapper-scroller">
           <ReactPageScroller
             className="scroller"
             customPageNumber={+currentPage}
-            containerHeight={`calc(100vh - (${headerHeight ?? 0}px + 270px))`}
+            containerHeight={appHeight - headerHeight - 300 + 50}
             pageOnChange={setCurrentPage}
           >
             {listPromo.map((item, index) => (

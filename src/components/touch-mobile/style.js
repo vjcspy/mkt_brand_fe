@@ -8,9 +8,9 @@ export const WrapperDrag = styled.div`
   left: 0;
   width: 100%;
   overflow: hidden;
-  transition: 0.3s;
-  max-height: calc(100% - 114px);
-  min-height: 300px;
+  // transition: 0.3s;
+  max-height: calc(100% - 35px);
+  min-height: 260px;
 `;
 
 export const ContentDrag = styled.div`
@@ -20,8 +20,10 @@ export const ContentDrag = styled.div`
 export const IconDrag = styled.div`
   width: 100%;
   height: 45px;
+  border-radius: 10px;
   background: #ffffff;
   position: relative;
+  user-select: none;
   svg {
     position: absolute;
     top: 20px;
@@ -50,5 +52,11 @@ export const Content = styled.div`
   padding: 0 20px 50px;
   &.show {
     overflow: auto;
+  }
+  @media (max-width: 768px) {
+    &.show {
+      overflow: auto;
+      padding-bottom: 50px;
+    }
   }
 `;
