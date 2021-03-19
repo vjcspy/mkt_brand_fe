@@ -127,6 +127,7 @@ function* uploadFile({ file, fileInfo, url }) {
 
     formData.append("files", file);
     formData.append("fileInfo", JSON.stringify(fileInfo));
+    formData.append("path", "/assets");
 
     const request = yield Axios({
       method: "POST",
