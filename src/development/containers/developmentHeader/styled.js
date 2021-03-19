@@ -1,16 +1,63 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { ClickableStyle, DevSecondaryButton } from "../../../styles/developmentStyle";
 
 export const HeaderWrapper = styled.header`
   grid-area: header;
-  min-height: 60px;
+
   background: #f3f3f3;
   border-bottom: 1px solid ${({ theme }) => theme.color.page.border};
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 60px;
+  transition: 0.3s;
+
+  &.viewPreview {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
+    height: 0;
+    transform: translateY(-100%);
+  }
 `;
 
+const animation = keyframes`
+  0%{
+    transform: translateY(-10%);
+  }
+  25%{
+    transform: translateY(0);
+  }
+  50%{
+    transform: translateY(10%);
+
+  }
+  75%{
+    transform: translateY(0);
+
+  }
+  100%{
+    transform: translateY(-10%);
+
+  }
+`;
+export const ButtonClose = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  z-index: 10;
+  background: #ffffff;
+  width: 33px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: ${animation} 1s infinite;
+`;
 export const LeftWrapper = styled.div`
   height: 60px;
   flex: 1 0 0;

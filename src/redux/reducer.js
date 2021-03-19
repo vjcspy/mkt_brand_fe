@@ -187,7 +187,7 @@ export default function rootReducer(state = initialState, action) {
     case SET_GOOGLE_MAP_API:
       return state.set("googleMapApi", action.value);
     case SET_PREVIEW_MODE:
-      return state.update("previewMode", () => action.value);
+      return state.update("viewPreview", () => action.value);
     default:
       return state;
   }

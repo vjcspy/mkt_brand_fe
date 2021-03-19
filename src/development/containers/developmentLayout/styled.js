@@ -9,7 +9,7 @@ export const DevelopmentMainContent = styled.div`
   grid-areas: main;
   overflow: auto;
   flex: 1;
-  padding: 20px;
+  padding: ${({ viewPreview }) => (viewPreview ? "0" : "20px")};
   background: #ddd;
   position: relative;
 `;
@@ -22,7 +22,10 @@ export const GridWrapper = styled.div`
   transition: grid-template-columns 0.2s cubic-bezier(0.64, 0, 0.35, 1);
   grid-template-columns: 300px 1fr;
   grid-template-rows: auto 1fr auto auto;
-  grid-template-areas:
-    "header header"
-    "sidebar main";
+  grid-template-areas: "header header" "sidebar main";
+
+  &.viewPreview {
+    display: flex;
+    flex-direction: column;
+  }
 `;

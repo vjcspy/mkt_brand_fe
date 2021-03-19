@@ -2,8 +2,7 @@ import React, { useCallback, useState } from "react";
 import { LeftContentWrapper } from "./styled";
 import SectionsConfig from "../../components/sectionsConfig";
 import { last } from "lodash";
-
-const DevelopmentLeftContent = () => {
+const DevelopmentLeftContent = ({ viewPreview }) => {
   const [stage, setStage] = useState([
     {
       props: {},
@@ -24,7 +23,7 @@ const DevelopmentLeftContent = () => {
 
   const { props, Component } = last(stage);
   return (
-    <LeftContentWrapper>
+    <LeftContentWrapper show={viewPreview}>
       <Component {...props} putStage={putStage} popStage={popStage} />
     </LeftContentWrapper>
   );

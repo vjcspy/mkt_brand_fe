@@ -23,6 +23,7 @@ const Home = ({ site_code, menus }) => {
   const token = useSelector((s) => s.get("token"));
   const router = useSiteRouter();
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch({ type: SET_MODE, value: DEVELOPMENT_MODE });
   }, []);

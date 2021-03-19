@@ -34,14 +34,16 @@ const store = createStore(rootReducer, persistedState, applyMiddleware(sagaMiddl
 sagaMiddleware.run(saga);
 
 store.subscribe(() => {
-  let state = store.getState();
-  const firstLoad = state.get("firstLoad");
-  sessionStorage.setItem("firstLoad", firstLoad);
-  saveState({
-    // mode: state.get("mode"),
-    tokenUser: state.get("tokenUser"),
-    userInfo: state.get("userInfo"),
-  });
+  if (process.browser) {
+    let state = store.getState();
+    const firstLoad = state.get("firstLoad");
+    sessionStorage?.setItem("firstLoad", firstLoad);
+    saveState({
+      // mode: state.get("mode"),
+      tokenUser: state.get("tokenUser"),
+      userInfo: state.get("userInfo"),
+    });
+  }
 });
 
 export default store;

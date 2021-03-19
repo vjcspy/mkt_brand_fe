@@ -8,4 +8,6 @@ export const LeftContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: auto;
+
+  display: ${({ show }) => (show ? "none  " : "flex")};
 `;
