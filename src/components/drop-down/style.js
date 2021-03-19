@@ -15,7 +15,7 @@ export const TitleLocation = styled.div`
   }
   @media (max-width: 768px) {
     p {
-      margin: 0 30px 0 17px;
+      margin: 0 10px 0 5px;
     }
   }
 `;

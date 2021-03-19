@@ -12,9 +12,12 @@ export const GlobalStyle = createGlobalStyle`
   html{
     height: var(--app-height);
     overflow-y: hidden;
+    max-height: 100vh;
   }
+  
   body{
     height: 100%;
+    max-height: 100vh;
     overflow-y: auto;
     ::-webkit-scrollbar {
      width: 0px;

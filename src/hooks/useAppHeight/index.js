@@ -5,7 +5,7 @@ const useAppHeight = () => {
   useEffect(() => {
     const appHeight = () => {
       const doc = document.documentElement;
-      doc.style.setProperty("--app-height", `${window.innerHeight}px`);
+      doc.style.setProperty("--app-height", `${window.innerHeight}px` || "100vh");
       doc.style.setProperty("overflow-y", `hidden`);
       setAppHeight(window.innerHeight);
     };

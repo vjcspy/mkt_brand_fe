@@ -26,10 +26,10 @@ export const MarkerLayout = styled.div`
   backdrop-filter: blur(4px);
   transition: 0.3s;
   background: rgba(0, 0, 0, 0.6);
-  opacity: 0;
+  opacity: ${({ show }) => (show ? 1 : 0)};
 
-  &.show {
-    opacity: 1;
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
@@ -50,12 +50,7 @@ export const WrapperContentMenu = styled.div`
   margin: 0;
   transition: 0.2s;
 
-  transform: translateX(100%);
-
-  &.show {
-    transform: translateX(0%);
-  }
-
+  transform: translateX(${({ show }) => (show ? "0%" : "100%")});
   hr {
     border-style: inset;
     background: #717171;
@@ -321,21 +316,6 @@ export const LanguageLocation = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 30px;
-
-  // div {
-  //   display: flex;
-  //   cursor: pointer;
-  //   align-items: center;
-
-  //   h5 {
-  //     font-style: normal;
-  //     font-weight: normal;
-  //   }
-
-  //   p {
-  //     margin: 0;
-  //   }
-  // }
   @media (max-width: 768px) {
     margin-top: 50px;
   }

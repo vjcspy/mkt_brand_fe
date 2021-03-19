@@ -26,10 +26,10 @@ import SelectLocation from "../drop-down/SelectLocation";
 import SelectLanguage from "../drop-down/SelectLanguage";
 import useGraphql from "../../hooks/useApi/useGraphql";
 import useSiteRouter from "../../hooks/useSiteRouter";
+import useAppHeight from "../../hooks/useAppHeight";
 const mapDispatchToProp = (dispatch) => ({
   setShowLanguageLocation: (value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }),
 });
-
 const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
   const [itemSubMenu, setItemSubMenu] = useState();
   const locale = useSelector((state) => state.getIn(["locale"]));
@@ -38,6 +38,7 @@ const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
     listMenu,
     menu,
   ]);
+  const appHeight = useAppHeight();
   const router = useSiteRouter();
   const onCloseMenu = () => {
     // setClassNameMenu(null);
@@ -48,10 +49,10 @@ const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
   };
 
   return (
-    <WrapperMenu className={`${show ? "show" : "close"}`}>
+    <WrapperMenu style={{ height: appHeight }} className={`${show ? "show" : "close"}`}>
       <ContentPosition>
-        <MarkerLayout className={`${show ? "show" : ""}`} onClick={onCloseMenu} />
-        <WrapperContentMenu className={`${show ? "show" : ""}`}>
+        <MarkerLayout show={show} onClick={onCloseMenu} />
+        <WrapperContentMenu show={show}>
           <ContentRelative>
             <HeaderMenu>
               <div>
