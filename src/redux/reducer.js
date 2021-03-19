@@ -46,6 +46,7 @@ import {
   REMOVE_DYNAMIC_BLOCK,
   UPDATE_TITLE_BLOCK,
   SET_GOOGLE_MAP_API,
+  SET_PREVIEW_MODE,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -60,6 +61,7 @@ export const initialState = fromJS({
   tokenUser: fromJS({}),
   showListBrand: true,
   firstLoad: false,
+  viewPreview: false,
 });
 
 export default function rootReducer(state = initialState, action) {
@@ -184,6 +186,8 @@ export default function rootReducer(state = initialState, action) {
       return state.updateIn(action.path, () => action.value);
     case SET_GOOGLE_MAP_API:
       return state.set("googleMapApi", action.value);
+    case SET_PREVIEW_MODE:
+      return state.update("previewMode", () => action.value);
     default:
       return state;
   }

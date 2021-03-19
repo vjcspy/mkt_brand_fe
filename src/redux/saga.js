@@ -27,8 +27,6 @@ import {
 } from "../constants";
 import { chain, get, head } from "lodash";
 
-const hostApiGGG = "https://internal.ggg.systems";
-
 function* fetchConfig({ value }) {
   try {
     const host = process.env.NEXT_PUBLIC_API_HOST;
