@@ -14,6 +14,7 @@ import BookingBanner from "./BookingBanner";
 import MeuBanner from "./menuBanner";
 import BlogSection from "./BlogSection";
 import DynamicContentHTML from "./dynamicContentHTML";
+import PolicyCookie from "./policyCookie";
 export const RenderHeader = ({ config }) => {
   const H = Headers[config?.name];
   return H ? <H config={config} /> : null;
@@ -124,7 +125,13 @@ const pageBooking = {
   icon: "blog",
   sections: [BookingBanner.defaultConfig],
 };
-
+const pagePolicyCookie = {
+  name: "policy-cookie",
+  title: "Policy Cookie",
+  path: "/policy-cookie",
+  icon: "blog",
+  sections: [PolicyCookie.defaultConfig],
+};
 export const Pages = {
   home: pageHome,
   promo: pagePromo,
@@ -136,6 +143,7 @@ export const Pages = {
   blog: pageBlog,
   "blog-detail": pageBlogDetail,
   booking: pageBooking,
+  "policy-cookie": pagePolicyCookie,
 };
 
 export const Headers = { [Header.defaultConfig.name]: Header };
@@ -156,4 +164,5 @@ export const Sections = {
   [BlogSection.defaultConfig.name]: BlogSection,
   [Comment.defaultConfig.name]: Comment,
   [DynamicContentHTML.defaultConfig.name]: DynamicContentHTML,
+  [PolicyCookie.defaultConfig.name]: PolicyCookie,
 };

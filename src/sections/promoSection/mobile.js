@@ -86,10 +86,10 @@ const PromoMobile = ({ listPromo, onViewMyPromo, onGetCode, viewMapRestaurant, s
             {listPromo.map((item, index) => (
               <React.Fragment key={index}>
                 <Head>
-                  <link rel="preload" as="image" href={item.image} />
+                  <link rel="preload" as="image" href={item?.image} />
                 </Head>
                 <RatioImage ratio="1:1">
-                  <img width={500} height={500} src={item.image} alt={item.title} />
+                  <img width={500} height={500} src={item?.image} alt={item?.title} />
                 </RatioImage>
               </React.Fragment>
             ))}

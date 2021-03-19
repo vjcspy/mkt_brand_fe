@@ -21,6 +21,12 @@ export const ComponentWrapper = styled.div`
   }
 `;
 
+export const WrapperButtonEditer = styled.div`
+  display: flex;
+  margin-top: 20px;
+  justify-content: flex-end;
+`;
+
 export const WrapperRatio = styled.div`
   display: flex;
   border-radius: 4px;
@@ -80,6 +86,7 @@ export const GroupButton = styled.div`
   // }
   button {
     width: calc(50% - 5px);
+    padding: 0;
   }
   .btn-edit-content {
     padding: 0;

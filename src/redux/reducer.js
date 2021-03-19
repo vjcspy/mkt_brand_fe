@@ -77,8 +77,6 @@ export default function rootReducer(state = initialState, action) {
     case SET_SELECTED_COMPONENT:
       return state.set("selectedComponent", action.value);
     case UPDATE_CONFIG:
-      // debugger;
-      // console.log(action.path, action.value);
       return state.updateIn(action.path, () => action.value);
     case REMOVE_CONFIG:
       if (state.getIn(action.path) instanceof List) {

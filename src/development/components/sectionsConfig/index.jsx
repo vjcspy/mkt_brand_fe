@@ -33,6 +33,7 @@ const SectionsConfig = ({ putStage }) => {
   const sections = useFromJS(["modifiedConfig", "pages", pageQueryRouter, "sections"]);
   const listDynamicBlock = useFromJS(["modifiedConfig", "dynamicBlocks"]);
   /// dispatch
+  console.log(useFromJS(["modifiedConfig", "pages"]));
   const dispatch = useDispatch();
   const addSection = (value) => dispatch({ type: ADD_SECTION, value });
   /// State
@@ -69,6 +70,7 @@ const SectionsConfig = ({ putStage }) => {
 
   return (
     <SectionsWrapper>
+      {/* Header Config*/}
       <SectionsBlock>
         <SectionItem
           onClick={() =>
@@ -83,6 +85,7 @@ const SectionsConfig = ({ putStage }) => {
         </SectionItem>
       </SectionsBlock>
 
+      {/* List Section Config*/}
       <SectionsBlock
         onDragOver={(e) => {
           e.preventDefault();
@@ -118,6 +121,7 @@ const SectionsConfig = ({ putStage }) => {
         </SectionItem>
       </SectionsBlock>
 
+      {/* Footer Config*/}
       <SectionsBlock>
         <SectionItem
           onClick={() =>
@@ -132,6 +136,7 @@ const SectionsConfig = ({ putStage }) => {
         </SectionItem>
       </SectionsBlock>
 
+      {/* Theme Config*/}
       <SettingItemWrapper>
         <SettingItem
           onClick={() => {
@@ -147,6 +152,7 @@ const SectionsConfig = ({ putStage }) => {
         </SettingItem>
       </SettingItemWrapper>
 
+      {/* Menus Config*/}
       <SettingItemWrapper>
         <SettingItem
           onClick={() => {
@@ -162,6 +168,7 @@ const SectionsConfig = ({ putStage }) => {
         </SettingItem>
       </SettingItemWrapper>
 
+      {/* Language Config*/}
       <SettingItemWrapper>
         <SettingItem
           onClick={() => {
@@ -177,12 +184,32 @@ const SectionsConfig = ({ putStage }) => {
         </SettingItem>
       </SettingItemWrapper>
 
-      <AddSectionDialog
+      {/* Cookie Config*/}
+      {/* <SettingItemWrapper>
+        <SettingItem
+          onClick={() => {
+            putStage({
+              props: { path: ["modifiedConfig", "cookie"] },
+              Component: LanguageConfig,
+            });
+          }}
+        >
+          <FontAwesomeIcon icon="project-diagram" />
+          <ThemeItemTitle>Language Settings</ThemeItemTitle>
+          <FontAwesomeIcon icon="chevron-right" />
+        </SettingItem>
+      </SettingItemWrapper> */}
+
+      {/* Popup Add Section*/}
+      <>
+        {/* <AddSectionDialog
         dialog={addSectionDialog}
         onClose={() => setAddSection({})}
         addSection={({ defaultConfig }) => addSection({ ...defaultConfig, code: generate() })}
-      />
+      /> */}
+      </>
 
+      {/* Add dynamicBlock */}
       <SectionsBlock>
         {listDynamicBlock?.map((item, key) => (
           <SectionsBlock key={key}>
