@@ -2,8 +2,8 @@ import React from "react";
 
 const IconTriangleLineLeft = ({ width = 20, height = 20, color = "currentColor", ...rest }) => {
   return (
-    <svg {...rest} width={width} height={height} viewBox="0 0 8 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M7 1L2 6.5L7 12" stroke={color} strokeWidth="2" strokeMiterlimit="10" />
+    <svg width={width} height={height} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15.75 4.5L9 11.625L15.75 18.75" stroke={color} stroke-width="2" stroke-miterlimit="10" />
     </svg>
   );
 };

@@ -14,7 +14,6 @@ import ScrollShowContent from "../scroll-show-content";
 import ItemRestaurantBooking from "../item-restaurant/item-restaurant-booking";
 
 const SuccessRegister = ({ itemPromoGetCode }) => {
-  console.log(itemPromoGetCode);
   return (
     <>
       <HeaderDesktop>

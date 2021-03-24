@@ -154,3 +154,19 @@ export const WrapperDragMobile = styled.div`
     }
   }
 `;
+
+export const PopupTransition = styled.div`
+  height: 0;
+  overflow: hidden;
+  width: 100vw;
+  position: fixed;
+  bottom: 0;
+  z-index: 100000;
+  background: #ffffff;
+  left: 0;
+  transition: 0.3s;
+
+  &.open {
+    // height: 100vh;
+  }
+`;

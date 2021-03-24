@@ -11,7 +11,7 @@ const PromoInfo = ({ promo, onGetCode, onViewMyPromo, hadGetCode, getRestaurant,
   const [shouldShow, setShouldShow] = useState(false);
   const refShow = useRef();
   const [{ width }] = useIframeResize();
-  const endDate = Math.round((promo.endDateInTimeStamp * 1000 - new Date().getTime()) / (1000 * 60 * 60 * 24));
+  const endDate = promo && Math.round((promo.endDateInTimeStamp * 1000 - new Date().getTime()) / (1000 * 60 * 60 * 24));
 
   // useEffect(() => {
   //   const timer = setInterval(() => {
@@ -41,18 +41,18 @@ const PromoInfo = ({ promo, onGetCode, onViewMyPromo, hadGetCode, getRestaurant,
   }, [width]);
   return (
     <>
-      <NamePromo>{promo.title}</NamePromo>
+      <NamePromo>{promo?.title}</NamePromo>
       <WrapperFlex>
         <h5>
           <FormattedMessage id="promo.date_apply" />
         </h5>
-        <ContentField>{promo.expireDate}</ContentField>
+        <ContentField>{promo?.expireDate}</ContentField>
       </WrapperFlex>
       <WrapperFlex>
         <h5>
           <FormattedMessage id="promo.vouchers" />
         </h5>
-        <ContentField>{promo.clmIsCashVoucher}</ContentField>
+        <ContentField>{promo?.clmIsCashVoucher}</ContentField>
       </WrapperFlex>
       <WrapperFlex>
         <h5>
@@ -87,8 +87,8 @@ const PromoInfo = ({ promo, onGetCode, onViewMyPromo, hadGetCode, getRestaurant,
             }}
             className={`${openDescription ? "open" : ""}`}
           >
-            <div dangerouslySetInnerHTML={{ __html: promo.content }} />
-            {showButtonHide && shouldShow && (
+            <div dangerouslySetInnerHTML={{ __html: promo?.content }} />
+            {showButtonHide && (
               <span
                 onClick={(e) => {
                   e.stopPropagation();

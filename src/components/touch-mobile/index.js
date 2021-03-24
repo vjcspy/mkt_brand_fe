@@ -69,26 +69,24 @@ const DragMobile = ({ isShowDefault, children }) => {
     }
   }, [isShowDefault]);
   return (
-    <WrapperDrag
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-      onTouchMove={onTouchMove}
-      style={{ height }}
-      ref={refDrag}
-    >
+    <WrapperDrag style={{ height }} ref={refDrag}>
       <ContentDrag>
-        {statusTop ? (
+        {/* {statusTop ? (
           <IconDrag>
             <IconClose className="close" onClick={onClose} />
           </IconDrag>
-        ) : (
-          <IconDrag>
-            <IconRectangle />
-          </IconDrag>
-        )}
+        ) : ( */}
+        <IconDrag
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          onTouchMove={onTouchMove}
+        >
+          <IconRectangle />
+        </IconDrag>
+        {/* )} */}
 
         <Content className={`${statusTop ? "content show" : "content"}`}>{children}</Content>
       </ContentDrag>

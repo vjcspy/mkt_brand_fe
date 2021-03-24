@@ -52,7 +52,7 @@ export const Content = styled.div`
   height: 100%;
   padding: 0 20px 50px;
   &.show {
-    overflow: auto;
+    overflow: scroll;
   }
   @media (max-width: 768px) {
     &.show {

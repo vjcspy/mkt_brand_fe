@@ -41,7 +41,7 @@ const ItemRestaurantViewMap = ({ restaurant, onViewMap, promoId }) => {
     <WrapperItemRestaurant>
       <HeadRestaurant>
         <h5>{name}</h5>
-        <ViewMap className="view-map" onClick={() => onViewMap()}>
+        <ViewMap className="view-map">
           <span>{aboutKm}km</span>
           <span>
             <IConViewMap color="#7B7979" />
@@ -72,12 +72,19 @@ const ItemRestaurantViewMap = ({ restaurant, onViewMap, promoId }) => {
             {tel}
           </Button>
         </Link>
-        <Link href={`/map?idRestaurant=${code}`} passHref>
-          <Button target="_blank" varian="outline-a" size="tiny">
+        {sizeWidth.width > 768 ? (
+          <Link href={`/map?idRestaurant=${code}`} passHref>
+            <Button target="_blank" varian="outline-a" size="tiny">
+              <IConViewMap />
+              <FormattedMessage id="promo.view_map" />
+            </Button>
+          </Link>
+        ) : (
+          <Button onClick={() => onViewMap(restaurant)} target="_blank" varian="outline" size="tiny">
             <IConViewMap />
             <FormattedMessage id="promo.view_map" />
           </Button>
-        </Link>
+        )}
       </GroupButton>
     </WrapperItemRestaurant>
   );

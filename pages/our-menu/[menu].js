@@ -42,19 +42,29 @@ import PageContainer from "../../src/containers/pageContainer";
 // }
 
 export async function getServerSideProps({}) {
-  const siteCode = process.env.SITE_CODE;
-  const [{ data: site }, menu] = await Promise.all([
-    getSiteServer(siteCode),
-    fetchMenuCategories({ urlKey: siteCode }),
-  ]);
-  const menus = get(menu, ["children"], []);
-  return {
-    props: {
-      site_code: site?.site_code ?? null,
-      config: site?.config ?? null,
-      menus: menus,
-    },
-  };
+  try {
+    const siteCode = process.env.SITE_CODE;
+    const [{ data: site }, menu] = await Promise.all([
+      getSiteServer(siteCode),
+      fetchMenuCategories({ urlKey: siteCode }),
+    ]);
+    const menus = get(menu, ["children"], []);
+    return {
+      props: {
+        site_code: site?.site_code ?? null,
+        config: site?.config ?? null,
+        menus: menus,
+      },
+    };
+  } catch (e) {
+    return {
+      props: {
+        site_code: null,
+        config: null,
+        menus: null,
+      },
+    };
+  }
 }
 
 const Site = ({ site_code, config, menus }) => {

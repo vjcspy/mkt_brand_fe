@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-export default function CSSTransition({ show, classTransition, timing = 300, children }) {
+export default function CSSTransition({ show, classTransition, timing = 400, children }) {
   const [className, setClassName] = useState();
   const [isEnabled, setEnabled] = useState();
 

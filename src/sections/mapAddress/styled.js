@@ -102,6 +102,11 @@ export const MapWrapper = styled.div`
     overflow: hidden;
     border: 1px solid ${({ theme }) => theme.color.page.border};
   }
+  .gm-fullscreen-control,
+  .gm-svpc,
+  .gmnoprint {
+    display: none;
+  }
 `;
 
 export const MapItem = styled.div`

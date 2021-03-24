@@ -16,31 +16,32 @@ const ListRestaurant = ({ listRestaurant, onCallPhone, onViewMap, promoId }) => 
       </Title>
       <ScrollShowContent>
         <List>
-          {listRestaurant?.map((item, index) => (
-            <ItemRestaurantViewMap promoId={promoId} restaurant={item} key={index} />
-            // <ItemRestaurant key={index}>
-            //   <h5>
-            //     <span>
-            //       <IconPoint /> {item.name}
-            //     </span>
-            //   </h5>
-            //   <p>
-            //     {item.address}
-            //     <br />
-            //     {item.openClose}
-            //   </p>
-            //   <GroupButton>
-            //     <Button size="tiny" varian="outline">
-            //       <IConPhone />
-            //       {item.phone}
-            //     </Button>
-            //     <Button size="tiny" varian="outline" onClick={() => onViewMap(true)}>
-            //       <IConViewMap />
-            //       <FormattedMessage id="promo.view_map" />
-            //     </Button>
-            //   </GroupButton>
-            // </ItemRestaurant>
-          ))}
+          {listRestaurant &&
+            listRestaurant.map((item, index) => (
+              <ItemRestaurantViewMap onViewMap={onViewMap} promoId={promoId} restaurant={item} key={index} />
+              // <ItemRestaurant key={index}>
+              //   <h5>
+              //     <span>
+              //       <IconPoint /> {item.name}
+              //     </span>
+              //   </h5>
+              //   <p>
+              //     {item.address}
+              //     <br />
+              //     {item.openClose}
+              //   </p>
+              //   <GroupButton>
+              //     <Button size="tiny" varian="outline">
+              //       <IConPhone />
+              //       {item.phone}
+              //     </Button>
+              //     <Button size="tiny" varian="outline" onClick={() => onViewMap(true)}>
+              //       <IConViewMap />
+              //       <FormattedMessage id="promo.view_map" />
+              //     </Button>
+              //   </GroupButton>
+              // </ItemRestaurant>
+            ))}
         </List>
       </ScrollShowContent>
     </WrapperListRestaurant>
