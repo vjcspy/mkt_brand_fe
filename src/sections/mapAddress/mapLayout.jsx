@@ -29,9 +29,7 @@ const MapLayout = forwardRef(({ listRestaurant, restaurantViewMap, onBack, item,
                 <h4>{item.name}</h4>
                 <p>{item.distance + "km"}</p>
               </MapItemTitle>
-
-              <div dangerouslySetInnerHTML={{ __html: item.description }}></div>
-              <div dangerouslySetInnerHTML={{ __html: item.openHour }}></div>
+              <p>{item?.address}</p>
 
               <MapButtons>
                 <Button varian="outline-a" href="tel:19006622">

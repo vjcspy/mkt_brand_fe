@@ -107,13 +107,19 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
                           <IconPhone width={200} />
                           <span>{item.tel}</span>
                         </Button>
-                        <Link href="https://booking.ggg.com.vn" passHref>
-                          <a target="_blank" href="https://booking.ggg.com.vn">
-                            <Button>
-                              <FormattedMessage id="map.booking" />
-                            </Button>
-                          </a>
-                        </Link>
+                        {size.width > 768 ? (
+                          <Link href="https://booking.ggg.com.vn" passHref>
+                            <a target="_blank" href="https://booking.ggg.com.vn">
+                              <Button>
+                                <FormattedMessage id="map.booking" />
+                              </Button>
+                            </a>
+                          </Link>
+                        ) : (
+                          <Button onClick={() => setSItem(item)}>
+                            <FormattedMessage id="map.booking" />
+                          </Button>
+                        )}
                       </MapButtons>
                     </MapItem>
                     {index < listRestaurant.length - 1 && <hr />}
@@ -126,18 +132,17 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
             <IconTriangleLineDown />
           </HiddenContent>
         </LeftContent>
-        {size.width > 768 || sItem ? (
-          <RightContent headerHeight={headerHeight}>
-            <MapLayout
-              iconMarker={iconMarker}
-              listRestaurant={listRestaurant}
-              restaurantViewMap={restaurantViewMap}
-              item={sItem}
-              onBack={() => setSItem(null)}
-              ref={mapRef}
-            />
-          </RightContent>
-        ) : null}
+
+        <RightContent className={`${sItem ? "open" : ""}`} headerHeight={headerHeight}>
+          <MapLayout
+            iconMarker={iconMarker}
+            listRestaurant={listRestaurant}
+            restaurantViewMap={restaurantViewMap}
+            item={sItem}
+            onBack={() => setSItem(false)}
+            ref={mapRef}
+          />
+        </RightContent>
       </MapAddressWrapper>
     </Container>
   );

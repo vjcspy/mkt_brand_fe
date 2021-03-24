@@ -79,12 +79,17 @@ export const RightContent = styled.div`
   @media (max-width: 768px) {
     position: fixed;
     top: ${({ headerHeight }) => headerHeight}px;
-    left: 0px;
-    right: 0px;
+    left: 100%;
+    width: 100vw;
+    z-index: 10;
     bottom: 0px;
     padding: 24px 20px 0px;
     background: white;
+    transition: 0.3s;
     height: calc(100% - ${({ headerHeight }) => headerHeight}px);
+    &.open {
+      left: 0%;
+    }
   }
 `;
 
