@@ -272,7 +272,7 @@ function* getMyVoucher() {
     const { token, customerNumber } = yield select((s) => s.get("tokenUser").toJS());
     yield put({ type: SET_MY_VOUCHER, value: { loading: true } });
     const { data, error } = yield Axios.post(
-      `${GGG_INTERNAL}/my-voucher`,
+      `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/my-voucher`,
       {
         type: "all",
         memId: customerNumber,

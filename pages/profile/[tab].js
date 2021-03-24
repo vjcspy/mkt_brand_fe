@@ -1,12 +1,12 @@
 import { List } from "immutable";
 import { map } from "lodash";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/constants";
+import { SET_GOOGLE_MAP_API, SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSite, getSiteServer } from "../../src/services/backend";
+import { getApiKeyGoogleMap, getSite, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
 // export async function getStaticPaths() {
@@ -22,25 +22,27 @@ import PageContainer from "../../src/containers/pageContainer";
 
 export async function getServerSideProps({ params }) {
   const { tab } = params;
-  const { data: site } = await getSiteServer(process.env.SITE_CODE);
+  const [{ data: googleMapApi }, { data: site }] = await Promise.all([
+    getApiKeyGoogleMap(),
+    getSiteServer(process.env.SITE_CODE),
+  ]);
   return {
     props: {
       config: site?.config ?? null,
       site_code: site?.site_code ?? null,
       tab: tab ?? null,
+      googleMapApi,
     },
   };
 }
 
-const Profile = ({ config, site_code, tab }) => {
+const Profile = ({ config, site_code, tab, googleMapApi }) => {
   const dispatch = useDispatch();
+  const modifiedConfig = useMemo(() => formatConfig(config), [config]);
 
   useEffect(() => {
-    const modifiedConfig = formatConfig(config);
-    dispatch({ type: SET_PAGE_NAME, value: Pages.profile.name });
-    dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });
-    dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
     dispatch({ type: UPDATE_CONFIG, path: ["profile-tab"], value: tab });
+    dispatch({ type: SET_GOOGLE_MAP_API, path: ["profile-tab"], value: googleMapApi[0] });
     //   dispatch({
     //     type: UPDATE_CONFIG,
     //     path: ["breadcrumbs"],
@@ -50,7 +52,7 @@ const Profile = ({ config, site_code, tab }) => {
 
   return (
     <Layout>
-      <PageContainer />
+      <PageContainer pageName={Pages.profile.name} siteCode={site_code} modifiedConfig={modifiedConfig} />
     </Layout>
   );
 };

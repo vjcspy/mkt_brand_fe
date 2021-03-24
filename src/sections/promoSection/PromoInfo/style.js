@@ -33,13 +33,16 @@ export const DescriptionPromo = styled.span`
   cursor: pointer;
   font-size: 16px;
   color: ${({ theme }) => theme.color.text.description};
-  display: ${({ open }) => (open ? "block" : "-webkit-box")};
+  display: -webkit-box;
   -webkit-line-clamp: 2;
   overflow: hidden;
   -webkit-box-orient: vertical;
 
   span {
     color: ${({ theme }) => theme.color.status.primary};
+  }
+  &.open {
+    display: block;
   }
 `;
 

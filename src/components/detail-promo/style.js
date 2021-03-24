@@ -15,9 +15,13 @@ export const HeaderMobile = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
-  button {
+  button,
+  a {
     width: 100%;
     margin-bottom: 20px;
+    button {
+      margin: 0;
+    }
   }
   h3 {
     text-align: center;

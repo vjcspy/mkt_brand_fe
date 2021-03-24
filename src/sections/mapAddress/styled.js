@@ -6,6 +6,7 @@ export const MapAddressWrapper = styled.div`
   width: 100%;
   max-height: calc(100vh - ${({ headerHeight }) => headerHeight ?? 0}px);
   padding-bottom: 40px;
+  height: 100vh;
 
   @media (max-width: 768px) {
     max-height: none;
@@ -19,10 +20,15 @@ export const LeftContent = styled.div`
   width: 400px;
   margin-right: 40px;
   position: relative;
+  height: 100%;
+  padding-bottom: 10px;
 
   @media (max-width: 768px) {
     margin-right: 0px;
     width: 100%;
+    &:after {
+      display: none;
+    }
   }
 
   &:after {
@@ -66,6 +72,9 @@ export const MapItemsWrapper = styled.div`
 
 export const RightContent = styled.div`
   flex: 1 0 0;
+  padding-bottom: 10px;
+  border-radius: 10px;
+  height: 100%;
 
   @media (max-width: 768px) {
     position: fixed;
@@ -73,8 +82,9 @@ export const RightContent = styled.div`
     left: 0px;
     right: 0px;
     bottom: 0px;
-    padding: 24px 20px 20px;
+    padding: 24px 20px 0px;
     background: white;
+    height: calc(100% - ${({ headerHeight }) => headerHeight}px);
   }
 `;
 
@@ -148,6 +158,11 @@ export const MapButtons = styled.div`
       margin-right: 12px;
     }
   }
+  a {
+    button {
+      width: 100%;
+    }
+  }
 `;
 const animation = keyframes`
   0%{
@@ -172,10 +187,12 @@ const animation = keyframes`
 
 export const HiddenContent = styled.div`
   position: absolute;
-  bottom: -40px;
+  bottom: -20px;
   left: 0;
   width: 100%;
   height: 80px;
+  pointer-events: none;
+  user-select: none;
 
   background: rgb(255, 255, 255);
   background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5172443977591037) 100%);
@@ -197,9 +214,12 @@ export const HiddenContent = styled.div`
   &.show {
     opacity: 1;
     visibility: visible;
+    pointer-events: none;
+    user-select: none;
   }
 
   @media (max-width: 768px) {
+    display: none;
     bottom: -20px;
   }
 `;

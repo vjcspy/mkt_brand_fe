@@ -1,5 +1,5 @@
 import { List } from "immutable";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { ACCEPT_COOKIE, SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/constants";
 import Layout from "../../src/containers/layout";
@@ -21,18 +21,20 @@ export async function getServerSideProps() {
 
 const Login = ({ config, site_code }) => {
   const dispatch = useDispatch();
+  const modifiedConfig = useMemo(() => formatConfig(config), [config]);
 
   useEffect(() => {
-    const modifiedConfig = formatConfig(config);
-    dispatch({ type: SET_PAGE_NAME, value: Pages.login.name });
-    dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });
-    dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
     dispatch({ type: ACCEPT_COOKIE, value: true });
   }, [config]);
 
   return (
     <Layout>
-      <PageContainer shouldHideFooter={true} />
+      <PageContainer
+        pageName={Pages.login.name}
+        siteCode={site_code}
+        modifiedConfig={modifiedConfig}
+        shouldHideFooter={true}
+      />
     </Layout>
   );
 };

@@ -11,6 +11,7 @@ export const WrapperDrag = styled.div`
   // transition: 0.3s;
   max-height: calc(100% - 35px);
   min-height: 260px;
+  transition: 0.3s;
 `;
 
 export const ContentDrag = styled.div`

@@ -1,22 +1,16 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import { Title } from "../../../components/list-restaurant/style";
-import { ListConditionWrapper } from "./style";
-const ListCondition = ({ listCondition }) => {
+import ScrollShowContent from "../../../components/scroll-show-content";
+const ListCondition = ({ condition }) => {
   return (
     <>
       <Title>
         <FormattedMessage id="promo.condition_apply" />
       </Title>
-      {/* <ScrollShowContent> */}
-      <ListConditionWrapper>
-        {listCondition?.map((item, index) => (
-          <li key={index}>
-            <p>{item}</p>
-          </li>
-        ))}
-      </ListConditionWrapper>
-      {/* </ScrollShowContent> */}
+      <ScrollShowContent>
+        <div dangerouslySetInnerHTML={{ __html: condition }} />
+      </ScrollShowContent>
     </>
   );
 };

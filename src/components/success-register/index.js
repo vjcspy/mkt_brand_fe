@@ -2,11 +2,19 @@ import React from "react";
 import Button from "../button";
 import { HeaderDesktop, HeaderMobile, WrapperQcCode, ContentHeader, WrapperInfo } from "./style";
 import { FormattedMessage } from "react-intl";
-import { ContentInfo, GroupButton, HeaderItemRestaurant, ItemRestaurant, ListRestaurant, TitleInfo } from "../popup-promo/style";
+import {
+  ContentInfo,
+  GroupButton,
+  HeaderItemRestaurant,
+  ItemRestaurant,
+  ListRestaurant,
+  TitleInfo,
+} from "../popup-promo/style";
 import ScrollShowContent from "../scroll-show-content";
 import ItemRestaurantBooking from "../item-restaurant/item-restaurant-booking";
 
-const SuccessRegister = ({ listRestaurant }) => {
+const SuccessRegister = ({ itemPromoGetCode }) => {
+  console.log(itemPromoGetCode);
   return (
     <>
       <HeaderDesktop>
@@ -63,8 +71,7 @@ const SuccessRegister = ({ listRestaurant }) => {
             <FormattedMessage id="successRegister.content_event" />
           </TitleInfo>
           <ContentInfo>
-            Hỡi các thực thần tứ phương, cùng lên đường thẳng tiến GoGi để có 100% CƠ HỘI nhận hàng ngàn quà tặng cùng giải thưởng tiền mặt
-            trao tay tổng trị giá 1 TỶ ĐỒNG
+            <div dangerouslySetInnerHTML={{ __html: itemPromoGetCode.content }} />
           </ContentInfo>
           <TitleInfo>
             <FormattedMessage id="successRegister.location" />
@@ -78,7 +85,7 @@ const SuccessRegister = ({ listRestaurant }) => {
             <FormattedMessage id="successRegister.restaurant_apply" />
           </TitleInfo>
           <ListRestaurant>
-            {listRestaurant?.map((item, index) => (
+            {itemPromoGetCode?.restaurants?.map((item, index) => (
               <li key={index}>
                 {/* <ItemRestaurant>
                   <HeaderItemRestaurant>
@@ -102,7 +109,7 @@ const SuccessRegister = ({ listRestaurant }) => {
                     </Button>
                   </GroupButton>
                 </ItemRestaurant> */}
-                <ItemRestaurantBooking restaurant={item} />
+                <ItemRestaurantBooking promoId={itemPromoGetCode.id} restaurant={item} />
               </li>
             ))}
           </ListRestaurant>

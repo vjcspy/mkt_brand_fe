@@ -10,6 +10,7 @@ const defaultConfig = {
     image: {
       type: "image",
       name: "image",
+      value: null,
     },
     title: {
       type: "text",

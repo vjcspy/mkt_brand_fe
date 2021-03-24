@@ -1,46 +1,47 @@
 import { List } from "immutable";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { SET_LIST_PROMO_ACTIVE, SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/constants";
+import { SET_GOOGLE_MAP_API } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getPromoActive, getSection, getSite, getSiteServer } from "../../src/services/backend";
+import { getListPromo, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
 export async function getServerSideProps({}) {
   const site_code = process.env.SITE_CODE;
-  const { data: site } = await getSiteServer(site_code);
-  const sectionPromo = getSection(site, "home", "promoBanner");
-  const listPromoActive = getPromoActive(sectionPromo);
-  return {
-    props: {
-      config: site?.config ?? null,
-      site_code: site?.site_code ?? null,
-      listPromoActive,
-    },
-  };
+  try {
+    const [{ data: promoListApi }, { data: site }] = await Promise.all([getListPromo(), getSiteServer(site_code)]);
+    console.log("this data: ", promoListApi);
+    return {
+      props: {
+        config: site?.config ?? null,
+        site_code: site?.site_code ?? null,
+        promoListApi: promoListApi.result.find((item) => item.type === "gift-promotion")?.data,
+      },
+    };
+  } catch (e) {
+    return {
+      props: {
+        config: null,
+        site_code: null,
+        promoListApi: [],
+      },
+    };
+  }
 }
 
-const Promo = ({ config, site_code, listPromoActive }) => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const modifiedConfig = formatConfig(config);
-    dispatch({ type: SET_PAGE_NAME, value: Pages.promo.name });
-    dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });
-    dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
-    dispatch({ type: SET_LIST_PROMO_ACTIVE, value: listPromoActive });
-
-    // dispatch({
-    //   type: UPDATE_CONFIG,
-    //   path: ["breadcrumbs"],
-    //   value: List([Pages.home, Pages.promo]),
-    // });
-  }, [config]);
-
+const Promo = ({ config, site_code, promoListApi }) => {
+  console.log(promoListApi);
+  const modifiedConfig = useMemo(() => formatConfig(config), [config]);
   return (
     <Layout>
-      <PageContainer />
+      <PageContainer
+        promoListApi={promoListApi}
+        pageName={Pages.promo.name}
+        siteCode={site_code}
+        modifiedConfig={modifiedConfig}
+      />
     </Layout>
   );
 };

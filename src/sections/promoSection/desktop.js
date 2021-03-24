@@ -21,41 +21,52 @@ import RatioImage from "../../components/ratioImage";
 import IconTriangleLineDown from "../../components/icons/iconTriangleLineDown";
 import Head from "next/head";
 
-const PhoneOTP = loadable(() => import("../../components/phone-opt"));
 const Popup = loadable(() => import("../../components/popup-wrapper"));
 const ListCondition = loadable(() => import("./Conditions"));
 
-const PromoDesktop = ({ listPromo, stateAction, setStateAction, onGetCode, viewMapRestaurant, onViewMyPromo }) => {
+const PromoDesktop = ({
+  listPromo,
+  promoListApi,
+  stateAction,
+  setStateAction,
+  onGetCode,
+  viewMapRestaurant,
+  onViewMyPromo,
+}) => {
   const { promoCode, showPopUpSuccess } = stateAction;
   const [currentPage, setCurrentPage] = useState(promoCode ? promoCode : 0);
   const [listRestaurant, setListRestaurant] = useState();
-  const [listCondition, setListCondition] = useState();
+  const [condition, setCondition] = useState();
   const headerHeight = useSelector((s) => s.get("headerHeight"));
-  const size = listPromo.length;
+  const [itemPromoGetCode, setItemPromoGetCode] = useState();
+  const size = promoListApi.length;
 
   const PromoList = useMemo(
     () =>
-      listPromo.map((item, index) => (
+      promoListApi.map((item, index) => (
         <React.Fragment key={index}>
           <Head>
-            <link rel="preload" as="image" href={item.image} />
+            <link rel="preload" as="image" href={item.thumbnail} />
           </Head>
           <Container key={index} style={{ height: "100%" }}>
             <WrapperPromo>
               <Promo className="Promo">
                 <LeftPromo className="LeftPromo">
                   <RatioImage ratio="1:1">
-                    <img width={500} height={500} src={item.image} alt={item.title} />
+                    <img width={500} height={500} src={item.thumbnail} alt={item.thumbnail} />
                   </RatioImage>
                 </LeftPromo>
                 <RightPromo className="RightPromo">
                   <PromoInfo
                     promo={item}
                     hadGetCode={false}
-                    onGetCode={() => onGetCode(item.id)}
+                    onGetCode={() => {
+                      onGetCode(item.id, item.clmIsCashVoucher);
+                      setItemPromoGetCode(item);
+                    }}
                     onViewMyPromo={() => onViewMyPromo(item.id)}
-                    getRestaurant={() => setListRestaurant(item.listRestaurant)}
-                    getCondition={() => setListCondition(item.conditions)}
+                    getRestaurant={() => setListRestaurant({ restaurants: item.restaurants, promoId: item.id })}
+                    getCondition={() => setCondition(item.condition)}
                   />
                 </RightPromo>
               </Promo>
@@ -63,7 +74,7 @@ const PromoDesktop = ({ listPromo, stateAction, setStateAction, onGetCode, viewM
           </Container>
         </React.Fragment>
       )),
-    [listPromo]
+    [promoListApi]
   );
 
   return (
@@ -101,15 +112,19 @@ const PromoDesktop = ({ listPromo, stateAction, setStateAction, onGetCode, viewM
       </Popup> */}
 
       <Popup show={showPopUpSuccess} onClose={() => setStateAction({ ...stateAction, showPopUpSuccess: false })}>
-        <SuccessRegister listRestaurant={listPromo[currentPage]?.listRestaurant} />
+        <SuccessRegister itemPromoGetCode={itemPromoGetCode} />
       </Popup>
 
-      <Popup show={listRestaurant} onClose={() => setListRestaurant(null)}>
-        <ListRestaurant listRestaurant={listRestaurant} onViewMap={viewMapRestaurant} />
+      <Popup show={listRestaurant?.restaurants} onClose={() => setListRestaurant(null)}>
+        <ListRestaurant
+          promoId={listRestaurant?.promoId}
+          listRestaurant={listRestaurant?.restaurants}
+          onViewMap={viewMapRestaurant}
+        />
       </Popup>
 
-      <Popup show={listCondition} onClose={() => setListCondition(null)}>
-        <ListCondition listCondition={listCondition} />
+      <Popup show={condition} onClose={() => setCondition(null)}>
+        <ListCondition condition={condition} />
       </Popup>
     </>
   );

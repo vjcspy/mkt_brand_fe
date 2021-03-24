@@ -4,6 +4,7 @@ import { HeaderDesktop, HeaderMobile, WrapperQcCode, ContentHeader, NameRestaura
 import { FormattedMessage } from "react-intl";
 import { ContentInfo, TitleInfo } from "../popup-promo/style";
 import IconTriangleDown from "../icons/iconTriangleDown";
+import Link from "next/link";
 
 const DetailPromo = ({ promo, onShowListRestaurant, onShowListCondition }) => {
   return (
@@ -13,7 +14,7 @@ const DetailPromo = ({ promo, onShowListRestaurant, onShowListCondition }) => {
           <img width={82} height={82} src="/images/demo_qc.png" />
         </WrapperQcCode>
         <ContentHeader>
-          <h3>{promo?.title}</h3>
+          <h3>{promo?.promotionTitle}</h3>
           <p>
             <FormattedMessage id="profile.promo_popup_send_email" />
           </p>
@@ -24,36 +25,41 @@ const DetailPromo = ({ promo, onShowListRestaurant, onShowListCondition }) => {
       </HeaderDesktop>
 
       <HeaderMobile>
-        <h3>{promo?.title}</h3>
+        <h3>{promo?.promotionTitle}</h3>
         <WrapperQcCode>
           <img width={82} height={82} src="/images/demo_qc.png" />
         </WrapperQcCode>
         <p>
           <FormattedMessage id="profile.promo_popup_promo_code" />
         </p>
-        <h4>CQR42000V</h4>
+        <h4>{promo?.clmGiftCode}</h4>
         <p className="notify">
           <FormattedMessage id="profile.promo_popup_send_email" />
         </p>
-        <Button>
-          <FormattedMessage id="profile.promo_reservation" />
-        </Button>
+        <Link href="https://booking.ggg.com.vn" passHref>
+          <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
+            <Button>
+              <FormattedMessage id="profile.promo_reservation" />
+            </Button>
+          </a>
+        </Link>
       </HeaderMobile>
       <TitleInfo>
-        <FormattedMessage id="profile.promo_reservation" />
+        <FormattedMessage id="popupPromo.content_event" />
       </TitleInfo>
       <ContentInfo>
-        Hỡi các thực thần tứ phương, cùng lên đường thẳng tiến GoGi để có 100% CƠ HỘI nhận hàng ngàn quà tặng cùng giải thưởng tiền mặt trao
-        tay tổng trị giá 1 TỶ ĐỒNG
+        <div dangerouslySetInnerHTML={{ __html: promo?.promotionContent }} />
       </ContentInfo>
       <TitleInfo>
         <FormattedMessage id="profile.promo_location" />
       </TitleInfo>
-      <ContentInfo>Hà Nội</ContentInfo>
+      <ContentInfo>{promo?.location}</ContentInfo>
       <TitleInfo>
         <FormattedMessage id="profile.promo_date_of_promo" />
       </TitleInfo>
-      <ContentInfo>01/12/2020 - 31/12/2020</ContentInfo>
+      <ContentInfo>
+        {promo?.startDate} - {promo?.endDate}
+      </ContentInfo>
       <TitleInfo onClick={onShowListRestaurant}>
         <FormattedMessage id="profile.promo_restaurant_apply" />
         <IconTriangleDown width={20} height={20} />

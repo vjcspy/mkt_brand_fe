@@ -1,42 +1,34 @@
 import { List } from "immutable";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/constants";
+import { SET_GOOGLE_MAP_API, SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSite, getSiteServer } from "../../src/services/backend";
+import { getApiKeyGoogleMap, getSite, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
 export async function getServerSideProps() {
-  const { data: site } = await getSiteServer(process.env.SITE_CODE);
-
+  const site_code = process.env.SITE_CODE;
+  const [{ data: googleMapApi }, { data: site }] = await Promise.all([getApiKeyGoogleMap(), getSiteServer(site_code)]);
   return {
     props: {
       config: site?.config ?? null,
       site_code: site?.site_code ?? null,
+      googleMapApi,
     },
   };
 }
 
-const Profile = ({ config, site_code }) => {
+const Profile = ({ config, site_code, googleMapApi }) => {
   const dispatch = useDispatch();
-
+  const modifiedConfig = useMemo(() => formatConfig(config), [config]);
   useEffect(() => {
-    const modifiedConfig = formatConfig(config);
-    dispatch({ type: SET_PAGE_NAME, value: Pages.profile.name });
-    dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });
-    dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
-    //   dispatch({
-    //     type: UPDATE_CONFIG,
-    //     path: ["breadcrumbs"],
-    //     value: List([Pages.home, Pages.profile]),
-    //   });
+    dispatch({ type: SET_GOOGLE_MAP_API, value: googleMapApi });
   }, [config]);
-
   return (
     <Layout>
-      <PageContainer />
+      <PageContainer pageName={Pages.profile.name} sideCode={site_code} modifiedConfig={modifiedConfig} />
     </Layout>
   );
 };

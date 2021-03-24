@@ -1,6 +1,6 @@
 import { List } from "immutable";
 import { each, get, isArray, map, sortBy } from "lodash";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import {
   SET_MODIFIED_CONFIG,
@@ -62,12 +62,9 @@ const Site = ({ site_code, config, menus }) => {
     query: { menu },
   } = useSiteRouter();
   const dispatch = useDispatch();
+  const modifiedConfig = useMemo(() => formatConfig(config), [config]);
+
   useEffect(() => {
-    const modifiedConfig = formatConfig(config);
-    dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });
-    dispatch({ type: SET_OUR_MENUS, value: menus });
-    dispatch({ type: SET_PAGE_NAME, value: Pages["our-menu-detail"].name });
-    dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
     // dispatch({
     //   type: UPDATE_CONFIG,
     //   path: ["breadcrumbs"],
@@ -100,7 +97,12 @@ const Site = ({ site_code, config, menus }) => {
 
   return (
     <Layout>
-      <PageContainer />
+      <PageContainer
+        menus={menus}
+        pageName={Pages["our-menu-detail"].name}
+        siteCode={site_code}
+        modifiedConfig={modifiedConfig}
+      />
     </Layout>
   );
 };

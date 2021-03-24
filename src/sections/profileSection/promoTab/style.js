@@ -17,6 +17,9 @@ export const MarkerList = styled.div`
   display: flex;
   justify-content: center;
   position: relative;
+  .option {
+    bottom: -20px !important;
+  }
 `;
 
 export const WrapperSlideList = styled.div`
@@ -63,6 +66,9 @@ export const WrapperFlex = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 7px;
+  h5 {
+    font-weight: normal;
+  }
   p {
     margin: 0;
     font-size: 16px;
@@ -79,6 +85,13 @@ export const GroupButton = styled.div`
   button {
     width: calc(50% - 10px);
     padding: 0 10px;
+  }
+  .booking-profile {
+    width: calc(50% - 10px);
+    padding: 0 10px;
+    button {
+      width: 100%;
+    }
   }
 `;
 export const WrapperIcon = styled.div`

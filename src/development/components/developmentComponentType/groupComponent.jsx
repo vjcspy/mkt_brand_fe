@@ -53,7 +53,7 @@ const GroupBlogComponent = ({ config, path, putStage }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 putStage({
-                  props: { path: [...path, subIndex] },
+                  props: { path: [...path, subIndex], putStage },
                   Component: GroupConfig,
                 });
               }}

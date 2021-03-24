@@ -24,11 +24,11 @@ const defaultConfig = {
   },
 };
 
-const BlogSection = ({ config = defaultConfig, limited = 4 }) => {
-  const listBlogActive = useSelector((s) => s.get("listBlogActive"));
+const BlogSection = ({ blogs }) => {
+  const listBlog = blogs ?? useSelector((state) => state.get("listBlogEditPage")) ?? [];
   return (
     <WrapperListBlog>
-      <RenderListFlex numItemOnDesktop={2}>
+      <RenderListFlex numItemOnDesktop={blogs?.length > 2 ? 2 : blogs?.length}>
         {/* {blogs
           ?.filter((_e, i) => i < limited)
           .map((item, index) => (
@@ -36,11 +36,14 @@ const BlogSection = ({ config = defaultConfig, limited = 4 }) => {
               <Blog blog={item} />
             </a>
           ))} */}
-        {listBlogActive?.map((item, index) => (
-          <a key={index} href={`/blog/${item.slug}`}>
-            <Blog blog={item} />
-          </a>
-        ))}
+        {listBlog?.map(
+          (item, index) =>
+            item.isShow && (
+              <a key={index} href={`/blog/${item.slug}`}>
+                <Blog blog={item} />
+              </a>
+            )
+        )}
       </RenderListFlex>
     </WrapperListBlog>
   );

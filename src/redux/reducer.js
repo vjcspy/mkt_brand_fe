@@ -47,6 +47,7 @@ import {
   UPDATE_TITLE_BLOCK,
   SET_GOOGLE_MAP_API,
   SET_PREVIEW_MODE,
+  SET_LIST_BLOG_EDIT_PAGE,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -62,6 +63,7 @@ export const initialState = fromJS({
   showListBrand: true,
   firstLoad: false,
   viewPreview: false,
+  showMenuHeader: false,
 });
 
 export default function rootReducer(state = initialState, action) {
@@ -141,7 +143,7 @@ export default function rootReducer(state = initialState, action) {
     case SET_HEADER_HEIGHT:
       return state.set("headerHeight", action.value);
     case SET_SHOW_MENU_HEADER:
-      return state.set("showMenuHeader", action.value);
+      return state.update("showMenuHeader", () => action.value);
     case UPDATE_VALUE_TRANSITION:
       return state.updateIn(["modifiedConfig", "translation", ...action.path], () => action.value);
     case SET_HOST:
@@ -186,6 +188,8 @@ export default function rootReducer(state = initialState, action) {
       return state.set("googleMapApi", action.value);
     case SET_PREVIEW_MODE:
       return state.update("viewPreview", () => action.value);
+    case SET_LIST_BLOG_EDIT_PAGE:
+      return state.set("listBlogEditPage", action.value);
     default:
       return state;
   }

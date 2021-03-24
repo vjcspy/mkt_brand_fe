@@ -9,10 +9,10 @@ export const WrapperContentPromo = styled.div`
   position: relative;
   max-height: 100%;
   overflow: hidden;
-  margin-top: 40px;
+  padding-top: 40px;
 
   @media (max-width: 767px) {
-    margin-top: 0;
+    padding-top: 0;
     height: 100%;
     overflow: auto;
 
@@ -24,6 +24,9 @@ export const WrapperContentPromo = styled.div`
 
 export const WrapperScroller = styled.div`
   position: relative;
+  img {
+    border-radius: 0px;
+  }
 `;
 
 export const ContentScroller = styled.div``;

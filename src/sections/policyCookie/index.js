@@ -19,7 +19,6 @@ const defaultConfig = {
 
 const PolicyCookie = ({ config = defaultConfig }) => {
   const locale = useSelector((s) => s.get("locale"));
-
   const cookieContent = config.components.policyCookie.value[locale];
   return (
     <WrapperContentCookie>

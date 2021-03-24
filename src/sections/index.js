@@ -15,24 +15,27 @@ import MeuBanner from "./menuBanner";
 import BlogSection from "./BlogSection";
 import DynamicContentHTML from "./dynamicContentHTML";
 import PolicyCookie from "./policyCookie";
-export const RenderHeader = ({ config }) => {
+import TabBanner from "./tab-banner";
+import DynamicFooter from "./dynamic-footer";
+export const RenderHeader = ({ config, menus, pageName }) => {
   const H = Headers[config?.name];
-  return H ? <H config={config} /> : null;
+  return H ? <H config={config} menus={menus} pageName={pageName} /> : null;
 };
 
 export const RenderFooter = ({ config }) => {
-  const F = Footers[config?.name];
-  return F ? <F config={config} /> : null;
+  // const F = DynamicFooter[config?.name];
+  // console.log(F);
+  return <DynamicFooter config={config} />;
 };
 
-export const RenderSections = ({ sections }) => {
+export const RenderSections = ({ sections, ...rest }) => {
   return (
     sections?.map((config) => {
       const Section = Sections[config.name];
       if (!Section) {
         return null;
       }
-      return <Section key={config.code} config={config} />;
+      return <Section {...rest} key={config.code} config={config} />;
     }) ?? null
   );
 };
@@ -43,7 +46,7 @@ const pageHome = {
   path: "/",
   icon: "home",
   name: "home",
-  sections: [PromoBanner.defaultConfig],
+  sections: [TabBanner.defaultConfig],
   breadcrumbs: [],
 };
 const pagePromo = {
@@ -145,10 +148,9 @@ export const Pages = {
   booking: pageBooking,
   "policy-cookie": pagePolicyCookie,
 };
-
 export const Headers = { [Header.defaultConfig.name]: Header };
 export const Footers = { [Footer.defaultConfig.name]: Footer };
-
+export const DynamicFooters = { [DynamicFooter.defaultConfig.name]: DynamicFooter };
 export const Sections = {
   [ImageText.defaultConfig.name]: ImageText,
   // [Breadcrumbs.defaultConfig.name]: Breadcrumbs,
@@ -165,4 +167,5 @@ export const Sections = {
   [Comment.defaultConfig.name]: Comment,
   [DynamicContentHTML.defaultConfig.name]: DynamicContentHTML,
   [PolicyCookie.defaultConfig.name]: PolicyCookie,
+  [TabBanner.defaultConfig.name]: TabBanner,
 };

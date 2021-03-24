@@ -3,7 +3,7 @@ import { FormattedMessage } from "react-intl";
 import { WrapperListRestaurant, Title, List } from "./style";
 import ScrollShowContent from "../scroll-show-content";
 import ItemRestaurantBooking from "../item-restaurant/item-restaurant-booking";
-const ListRestaurantBooking = ({ listRestaurant, onBook, onViewMap }) => {
+const ListRestaurantBooking = ({ listRestaurant, onBook, onViewMap, promoId }) => {
   return (
     <WrapperListRestaurant>
       <Title>
@@ -12,7 +12,13 @@ const ListRestaurantBooking = ({ listRestaurant, onBook, onViewMap }) => {
       <ScrollShowContent>
         <List>
           {listRestaurant?.map((item, index) => (
-            <ItemRestaurantBooking key={index} restaurant={item} />
+            <ItemRestaurantBooking
+              promoId={promoId}
+              key={index}
+              restaurant={item}
+              onViewMap={onViewMap}
+              onBook={onBook}
+            />
           ))}
         </List>
       </ScrollShowContent>

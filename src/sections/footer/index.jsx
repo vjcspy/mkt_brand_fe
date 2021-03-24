@@ -24,7 +24,7 @@ const defaultConfig = {
       name: "socialNetwork",
       defaultConfig: {
         text: { type: "text", title: "Text", value: { vi: "Social Network", en: "Social Network" }, name: "text" },
-        icon: { type: "image" },
+        icon: { type: "image", value: null },
         link: {
           type: "link",
           name: "link",
@@ -38,7 +38,7 @@ const defaultConfig = {
       value: [
         {
           text: { type: "text", title: "Text", value: { vi: "Facebook", en: "Facebook" }, name: "text" },
-          icon: { type: "image", name: "Facebook" },
+          icon: { type: "image", name: "Facebook", value: null },
           link: {
             type: "link",
             name: "link",
@@ -51,7 +51,7 @@ const defaultConfig = {
         },
         {
           text: { type: "text", title: "Text", value: { vi: "Youtube", en: "Youtube" }, name: "text" },
-          icon: { type: "image", name: "Youtube" },
+          icon: { type: "image", name: "Youtube", value: null },
           link: {
             type: "link",
             name: "link",
@@ -64,7 +64,7 @@ const defaultConfig = {
         },
         {
           text: { type: "text", title: "Text", value: { vi: "Instagram", en: "Instagram" }, name: "text" },
-          icon: { type: "image", name: "Instagram" },
+          icon: { type: "image", name: "Instagram", value: null },
           link: {
             type: "link",
             name: "link",
@@ -77,6 +77,7 @@ const defaultConfig = {
         },
       ],
     },
+    dynamicContent: {},
   },
 };
 

@@ -24,7 +24,7 @@ const defaultConfig = {
           value: "Title feedback",
           name: "titleFeedback",
         },
-        avatar: { type: "image" },
+        avatar: { type: "image", value: null },
         content: { type: "text", title: "Content", value: { vi: "", en: "" }, name: "titleFeedback" },
         author: { type: "text", title: "Author", value: { vi: "", en: "" }, name: "author" },
         job: { type: "text", title: "Jobs", value: { vi: "", en: "" }, name: "jobs" },

@@ -1,5 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import { MarkerList, GroupButton, List, WrapperFlex, PromoProfile, WrapperIcon, Title, ImageWrapper, WrapperSlideList } from "./style";
+import {
+  MarkerList,
+  GroupButton,
+  List,
+  WrapperFlex,
+  PromoProfile,
+  WrapperIcon,
+  Title,
+  ImageWrapper,
+  WrapperSlideList,
+} from "./style";
 
 import RatioImage from "../../../components/ratioImage";
 import Button from "../../../components/button";
@@ -8,6 +18,7 @@ import IconLeftCircle from "../../../components/icons/iconLeftCircle";
 import useIframeResize from "../../../hooks/useWindowResize/useIframeResize";
 import { FormattedMessage } from "react-intl";
 import PopupPromo from "../../../components/popup-promo";
+import Link from "next/link";
 
 const PromoTabDesktop = ({ profilePromo }) => {
   const [sizeWidth, ref] = useIframeResize();
@@ -17,7 +28,6 @@ const PromoTabDesktop = ({ profilePromo }) => {
   const refItem = useRef();
   const [translate, setTranslate] = useState(0);
   const [listScroll, setListScroll] = useState({});
-
   useEffect(() => {
     if (refScroll.current) {
       const totalWidth = refScroll.current.scrollWidth;
@@ -77,9 +87,13 @@ const PromoTabDesktop = ({ profilePromo }) => {
                 <Button varian="outline" onClick={() => setCurrentPromo(item)}>
                   <FormattedMessage id="profile.promo_view_detail" />
                 </Button>
-                <Button>
-                  <FormattedMessage id="profile.promo_reservation" />
-                </Button>
+                <Link href="https://booking.ggg.com.vn" passHref>
+                  <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
+                    <Button>
+                      <FormattedMessage id="profile.promo_reservation" />
+                    </Button>
+                  </a>
+                </Link>
               </GroupButton>
             </PromoProfile>
           ))}

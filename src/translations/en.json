@@ -50,6 +50,7 @@
   "profile.info_country": "Quốc gia",
   "profile.promo_view_detail": "Xem chi tiết",
   "profile.promo_reservation": "Đặt bàn ngay",
+  "profile.promo_booking": "Đặt bàn",
   "profile.promo_location": "Khu vực",
   "profile.promo_date_of_promo": "Thời gian áp dụng",
   "profile.promo_popup_send_email": "Mã voucher đã được gửi về Email và ví voucher của bạn.",
@@ -136,5 +137,8 @@
 
   "cookie.title": "Use of cookies",
   "cookie.content": "Bằng việc tiếp tục sử dụng website, bạn đồng ý với các điều khoản <a>Chính sách Về Cookie</a> của chúng tôi.",
-  "cookie.confirm": "Đồng ý"
+  "cookie.confirm": "Đồng ý",
+
+  "map.booking": "Đặt bàn",
+  "map.address_restaurant": "Địa chỉ nhà hàng"
 }

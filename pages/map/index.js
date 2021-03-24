@@ -1,33 +1,51 @@
-import { List } from "immutable";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { SET_GOOGLE_MAP_API, SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/constants";
+import { SET_GOOGLE_MAP_API } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getApiKeyGoogleMap, getSite, getSiteServer } from "../../src/services/backend";
+import { getApiKeyGoogleMap, getListPromo, getListRestaurant, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
-export async function getServerSideProps() {
-  const site_code = process.env.SITE_CODE;
-  const [{ data: googleMapApi }, { data: site }] = await Promise.all([getApiKeyGoogleMap(), getSiteServer(site_code)]);
-  return {
-    props: {
-      config: site?.config ?? null,
-      site_code: site?.site_code ?? null,
-      googleMapApi: googleMapApi[0],
-    },
-  };
+export async function getServerSideProps({ query }) {
+  try {
+    const { idRestaurant } = query;
+    const site_code = process.env.SITE_CODE;
+    const [{ data: googleMapApi }, { data: site }, { data: dataForMap }] = await Promise.all([
+      getApiKeyGoogleMap(),
+      getSiteServer(site_code),
+      getListRestaurant({ brandId: 7, provinceId: 5 }),
+    ]);
+    let restaurantViewMap = idRestaurant ? dataForMap.result?.find((item) => item.code === idRestaurant) ?? {} : null;
+
+    return {
+      props: {
+        config: site?.config ?? null,
+        site_code: site?.site_code ?? null,
+        googleMapApi: googleMapApi[0],
+        restaurantViewMap,
+        listRestaurant: dataForMap.result,
+      },
+    };
+  } catch (e) {
+    return {
+      props: {
+        config: null,
+        site_code: null,
+        googleMapApi: null,
+        restaurantViewMap: null,
+        listRestaurant: null,
+      },
+    };
+  }
 }
 
-const Map = ({ config, site_code, googleMapApi }) => {
+const Map = ({ config, site_code, googleMapApi, restaurantViewMap, listRestaurant }) => {
   const dispatch = useDispatch();
+  const modifiedConfig = useMemo(() => formatConfig(config), [config]);
+
   useEffect(() => {
-    const modifiedConfig = formatConfig(config);
     dispatch({ type: SET_GOOGLE_MAP_API, value: googleMapApi });
-    dispatch({ type: SET_PAGE_NAME, value: Pages.map.name });
-    dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });
-    dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
     // dispatch({
     //   type: UPDATE_CONFIG,
     //   path: ["breadcrumbs"],
@@ -37,7 +55,13 @@ const Map = ({ config, site_code, googleMapApi }) => {
 
   return (
     <Layout>
-      <PageContainer />
+      <PageContainer
+        promoViewMap={restaurantViewMap}
+        listRestaurant={listRestaurant}
+        pageName={Pages.map.name}
+        siteCode={site_code}
+        modifiedConfig={modifiedConfig}
+      />
     </Layout>
   );
 };

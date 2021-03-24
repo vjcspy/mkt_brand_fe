@@ -25,7 +25,7 @@ const AcceptCookie = () => {
               id="cookie.content"
               values={{
                 a: (c) => (
-                  <a className="link" href="/policy-cookie">
+                  <a target="_blank" className="link" href="/policy-cookie">
                     {c}
                   </a>
                 ),

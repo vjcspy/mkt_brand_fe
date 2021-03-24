@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useRef, useState, useEffect } from "react";
 import { FormattedMessage } from "react-intl";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
@@ -5,12 +6,21 @@ import Button from "../button";
 import IconPhone from "../icons/iconPhone";
 import IconPoint from "../icons/IconPoint";
 import IConViewMap from "../icons/iconViewMap";
-import { WrapperItemRestaurant, HeadRestaurant, WrapperAddress, GroupButton, Title, ItemContent, Content, ViewMap } from "./style";
-const ItemRestaurantBooking = ({ restaurant, onViewMap }) => {
-  const { name, address, openClose, phone, aboutKm } = restaurant ?? {};
+import {
+  WrapperItemRestaurant,
+  HeadRestaurant,
+  WrapperAddress,
+  GroupButton,
+  Title,
+  ItemContent,
+  Content,
+  ViewMap,
+} from "./style";
+const ItemRestaurantBooking = ({ restaurant, onViewMap, promoId }) => {
+  const { name, address, openTime, closeTime, tel, aboutKm, code } = restaurant ?? {};
   const [height, setHeight] = useState(0);
   const [sizeWidth] = useIframeResize();
-
+  console.log(restaurant);
   const refGroupButton = useRef();
 
   const onMouseOut = () => {
@@ -32,7 +42,7 @@ const ItemRestaurantBooking = ({ restaurant, onViewMap }) => {
     <WrapperItemRestaurant onMouseOut={onMouseOut} onMouseLeave={onMouseLeave}>
       <HeadRestaurant>
         <h5>{name}</h5>
-        <ViewMap className="view-map" onClick={() => onViewMap()}>
+        <ViewMap className="view-map">
           <span>{aboutKm}km</span>
           <span>
             <IConViewMap color="#7B7979" />
@@ -51,17 +61,29 @@ const ItemRestaurantBooking = ({ restaurant, onViewMap }) => {
           <Title>
             <FormattedMessage id="promo.restaurant_openClose" />:
           </Title>
-          <Content>{openClose}</Content>
+          <Content>
+            {openTime}-{closeTime}
+          </Content>
         </ItemContent>
       </WrapperAddress>
       <GroupButton ref={refGroupButton} style={{ height }} className="group-button">
-        <Button varian="outline" size="tiny">
-          <IconPhone />
-          {phone}
-        </Button>
-        <Button size="tiny">
-          <FormattedMessage id="promo.reservation" />
-        </Button>
+        <Link href={`tel:${tel}`} passHref>
+          <Button varian="outline-a" size="tiny">
+            <IconPhone />
+            {tel}
+          </Button>
+        </Link>
+        {sizeWidth.width > 768 ? (
+          <Link href={`/map?idRestaurant=${code}`} passHref>
+            <Button target="_blank" varian="primary" size="tiny">
+              <FormattedMessage id="promo.reservation" />
+            </Button>
+          </Link>
+        ) : (
+          <Button varian="primary" size="tiny" onClick={() => onViewMap(restaurant)}>
+            <FormattedMessage id="promo.reservation" />
+          </Button>
+        )}
       </GroupButton>
     </WrapperItemRestaurant>
   );

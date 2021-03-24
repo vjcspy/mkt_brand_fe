@@ -8,7 +8,7 @@ import { WrapperListRestaurant, ItemRestaurant, Title, List, GroupButton } from 
 import ScrollShowContent from "../scroll-show-content";
 import ItemRestaurantViewMap from "../item-restaurant/item-restaurant-view-map";
 
-const ListRestaurant = ({ listRestaurant, onCallPhone, onViewMap }) => {
+const ListRestaurant = ({ listRestaurant, onCallPhone, onViewMap, promoId }) => {
   return (
     <WrapperListRestaurant>
       <Title>
@@ -17,7 +17,7 @@ const ListRestaurant = ({ listRestaurant, onCallPhone, onViewMap }) => {
       <ScrollShowContent>
         <List>
           {listRestaurant?.map((item, index) => (
-            <ItemRestaurantViewMap restaurant={item} key={index} />
+            <ItemRestaurantViewMap promoId={promoId} restaurant={item} key={index} />
             // <ItemRestaurant key={index}>
             //   <h5>
             //     <span>

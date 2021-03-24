@@ -33,7 +33,6 @@ const SectionsConfig = ({ putStage }) => {
   const sections = useFromJS(["modifiedConfig", "pages", pageQueryRouter, "sections"]);
   const listDynamicBlock = useFromJS(["modifiedConfig", "dynamicBlocks"]);
   /// dispatch
-  console.log(useFromJS(["modifiedConfig", "pages"]));
   const dispatch = useDispatch();
   const addSection = (value) => dispatch({ type: ADD_SECTION, value });
   /// State

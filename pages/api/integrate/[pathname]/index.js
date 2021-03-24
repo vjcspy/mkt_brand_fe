@@ -27,7 +27,7 @@ async function handler(req, res) {
     return;
   }
   const response = await Axios.post(
-    `${process.env.GGG_INTERNAL}/${req.query.pathname}`,
+    `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/${req.query.pathname}`,
     { ...req.body },
     {
       headers: {

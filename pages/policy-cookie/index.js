@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/constants";
 import Layout from "../../src/containers/layout";
@@ -19,23 +19,11 @@ export async function getServerSideProps() {
 }
 
 const PolicyCookie = ({ config, site_code }) => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const modifiedConfig = formatConfig(config);
-    dispatch({ type: SET_PAGE_NAME, value: Pages["policy-cookie"].name });
-    dispatch({ type: SET_MODIFIED_CONFIG, value: modifiedConfig });
-    dispatch({ type: UPDATE_CONFIG, path: ["site_code"], value: site_code });
-    //   dispatch({
-    //     type: UPDATE_CONFIG,
-    //     path: ["breadcrumbs"],
-    //     value: List([Pages.home, Pages.profile]),
-    //   });
-  }, [config]);
+  const modifiedConfig = useMemo(() => formatConfig(config), [config]);
 
   return (
     <Layout>
-      <PageContainer />
+      <PageContainer pageName={Pages["policy-cookie"].name} siteCode={site_code} modifiedConfig={modifiedConfig} />
     </Layout>
   );
 };

@@ -21,16 +21,21 @@ import { useSelector } from "react-redux";
 import IconPhone from "../../components/icons/iconPhone";
 import IconTriangleLineDown from "../../components/icons/iconTriangleLineDown";
 import { FormattedMessage } from "react-intl";
+import { Content, ItemContent, Title, WrapperAddress } from "../../components/item-restaurant/style";
+import Link from "next/link";
 
 const defaultConfig = {
   name: "Địa chỉ nhà hàng",
   code: "map",
   id: "map",
-  title: "Address Map",
-  components: {},
+  title: "Image Marker",
+  components: {
+    imageMarker: { type: "image", title: "Image Marker", value: null },
+  },
 };
 
-const MapAddress = () => {
+const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant }) => {
+  const iconMarker = config.components.imageMarker.value;
   const mapRef = useRef();
   const [isEnd, setEnd] = useState();
   const [top, setTop] = useState();
@@ -60,12 +65,16 @@ const MapAddress = () => {
 
   return (
     <Container ref={measuredRef} onLoad={() => console.log("")}>
-      <MapAddressWrapper headerHeight={top}>
+      <MapAddressWrapper headerHeight={headerHeight}>
         <LeftContent className={isEnd ? "end" : ""}>
-          {size.width <= 768 && <TitleListMobile>Địa chỉ nhà hàng</TitleListMobile>}
+          {size.width <= 768 && (
+            <TitleListMobile>
+              <FormattedMessage id="map.address_restaurant" />
+            </TitleListMobile>
+          )}
           <MapItemsWrapper ref={ref}>
             <ul>
-              {map(maps, (item, index) => {
+              {map(listRestaurant, (item, index) => {
                 return (
                   <li key={index}>
                     <MapItem>
@@ -75,24 +84,39 @@ const MapAddress = () => {
                         }}
                       >
                         <h4>{item.name}</h4>
-                        <p>{item.distance + "km"}</p>
+                        <p>{"km"}</p>
                         <IconMap className="text-description" />
                       </MapItemTitle>
 
-                      <div dangerouslySetInnerHTML={{ __html: item.description }}></div>
-                      <div dangerouslySetInnerHTML={{ __html: item.openHour }}></div>
+                      <WrapperAddress>
+                        <ItemContent>
+                          <Content>{item?.address}</Content>
+                        </ItemContent>
+                        <ItemContent>
+                          <Title style={{ minWidth: 80 }}>
+                            <FormattedMessage id="promo.restaurant_openClose" />:
+                          </Title>
+                          <Content>
+                            {item?.openTime}-{item?.closeTime}
+                          </Content>
+                        </ItemContent>
+                      </WrapperAddress>
 
                       <MapButtons>
                         <Button varian="outline" href="tel:19006622">
                           <IconPhone width={200} />
-                          <span>19006622</span>
+                          <span>{item.tel}</span>
                         </Button>
-                        <Button>
-                          <FormattedMessage id="header.reservation" />
-                        </Button>
+                        <Link href="https://booking.ggg.com.vn" passHref>
+                          <a target="_blank" href="https://booking.ggg.com.vn">
+                            <Button>
+                              <FormattedMessage id="map.booking" />
+                            </Button>
+                          </a>
+                        </Link>
                       </MapButtons>
                     </MapItem>
-                    {index < maps.length - 1 && <hr />}
+                    {index < listRestaurant.length - 1 && <hr />}
                   </li>
                 );
               })}
@@ -104,7 +128,14 @@ const MapAddress = () => {
         </LeftContent>
         {size.width > 768 || sItem ? (
           <RightContent headerHeight={headerHeight}>
-            <MapLayout item={sItem} onBack={() => setSItem(null)} ref={mapRef} />
+            <MapLayout
+              iconMarker={iconMarker}
+              listRestaurant={listRestaurant}
+              restaurantViewMap={restaurantViewMap}
+              item={sItem}
+              onBack={() => setSItem(null)}
+              ref={mapRef}
+            />
           </RightContent>
         ) : null}
       </MapAddressWrapper>

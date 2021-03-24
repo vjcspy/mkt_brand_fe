@@ -8,6 +8,7 @@ export const WrapperContent = styled.div`
   position: relative;
   @media (max-width: 768px) {
     position: unset;
+    height: 100%;
   }
 `;
 
@@ -38,7 +39,7 @@ export const Content = styled.div`
   padding-right: 15px;
   margin-right: -15px;
   @media (max-width: 768px) {
-    max-height: 100vh;
+    max-height: 100%;
   }
 `;
 

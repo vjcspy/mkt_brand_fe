@@ -9,8 +9,6 @@ const ScrollShowContent = ({ children, ...rest }) => {
   const parentScroll = useRef();
   const [isBottom, setIsBottom] = useState(true);
   const size = useWindowResize();
-  const heightPopup = useSelector((state) => state.get("heightPopup"));
-  const [maxHeight, setMaxHeight] = useState();
   const checkIsBottom = useCallback(() => {
     const scrollHeight = parentScroll.current?.scrollHeight;
     const scroolTop = parentScroll.current?.scrollTop;
@@ -44,12 +42,6 @@ const ScrollShowContent = ({ children, ...rest }) => {
     setIsBottom(checkIsBottom());
   }, [size, children]);
 
-  useEffect(() => {
-    if (parentScroll.current) {
-      setMaxHeight(heightPopup - parentScroll.current.offsetTop);
-    }
-  }, [heightPopup]);
-
   const onMoveBottom = useCallback(() => {
     refScroll.current.scrollTo({
       top: 1000,
@@ -61,7 +53,7 @@ const ScrollShowContent = ({ children, ...rest }) => {
     <WrapperContent>
       <Content {...rest} ref={parentScroll} onScroll={onScroll}>
         <WrapperScroll>{children}</WrapperScroll>
-        <HiddenContent className={`${isBottom ? "show" : ""}`} onClick={onMoveBottom}>
+        <HiddenContent className={`${isBottom ? "show option" : "option"}`} onClick={onMoveBottom}>
           <IconTriangleLineDown />
         </HiddenContent>
       </Content>

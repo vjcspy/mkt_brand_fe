@@ -5,7 +5,7 @@ import { ComponentWrapper, MultipleWrapper, SectionTitleWrapper } from "./styled
 import { useDispatch, useSelector } from "react-redux";
 import { DevSecondaryButton } from "../../../styles/developmentStyle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { REMOVE_CONFIG, UPDATE_CONFIG } from "../../../constants";
+import { REMOVE_CONFIG, SET_LIST_BLOG_EDIT_PAGE, UPDATE_CONFIG } from "../../../constants";
 import useApi from "../../../hooks/useApi";
 import PulseLoader from "../../../components/loading";
 import BlogComponent from "./blogComponent";
@@ -14,7 +14,7 @@ const GroupBlogComponent = ({ config, path, putStage }) => {
   const token = useSelector((s) => s.get("token"));
   const siteCode = useSelector((s) => s.getIn(["site", "site_code"]));
   const host = process.env.NEXT_PUBLIC_API_HOST;
-
+  const listBlog = useSelector((state) => state.get("listBlogEditPage"));
   const { data, loading, error } = useSelector((s) => s.get("listBlog")) ?? {};
   const dispatch = useDispatch();
   const updateConfig = useCallback((path, value) => dispatch({ type: UPDATE_CONFIG, value, path }), [dispatch]);
@@ -50,22 +50,26 @@ const GroupBlogComponent = ({ config, path, putStage }) => {
       d["type"] = "Blog";
       return d;
     });
-    setNewData(newData);
+    dispatch({ type: SET_LIST_BLOG_EDIT_PAGE, value: newData });
   }, [dataListBlog]);
 
   const addNewBlog = () => {
-    setNewData((preState) => [
-      ...preState,
-      {
-        content: "",
-        author: "",
-        avatar: "",
-        isShow: true,
-        title: "Title Blog",
-        siteCode,
-        date: Date(),
+    putStage({
+      props: {
+        path: [...path, listBlog.length],
+        blog: {
+          content: "",
+          author: "",
+          avatar: "",
+          isShow: true,
+          title: "Title Blog",
+          siteCode,
+          slug: slug("Title Blog"),
+          date: Date(),
+        },
       },
-    ]);
+      Component: BlogComponent,
+    });
   };
 
   const onDeleteBlog = (blog, index) => {
@@ -73,12 +77,9 @@ const GroupBlogComponent = ({ config, path, putStage }) => {
       const result = confirm("Delete this blog ?");
       if (result) {
         actionDeleteBlog(`${host}/blogs/${blog.id}`);
-        newData.splice(index, 1);
-        setNewData([...newData]);
+        listBlog.splice(index, 1);
+        dispatch({ type: SET_LIST_BLOG_EDIT_PAGE, value: [...listBlog] });
       }
-    } else {
-      newData.splice(index, 1);
-      setNewData([...newData]);
     }
   };
 
@@ -90,7 +91,7 @@ const GroupBlogComponent = ({ config, path, putStage }) => {
       ) : (
         <MultipleWrapper>
           {loadingDeleteBlog && <PulseLoader loading fill />}
-          {newData?.map((blog, subIndex) => (
+          {listBlog?.map((blog, subIndex) => (
             <SectionItem
               key={subIndex}
               onClick={() => {
@@ -119,13 +120,7 @@ const GroupBlogComponent = ({ config, path, putStage }) => {
             </SectionItem>
           ))}
 
-          <SectionItem
-            add
-            // onClick={() => {
-            //   updateConfig([...path, config.value.length ?? 0], fromJS(config.defaultConfig));
-            // }}
-            onClick={addNewBlog}
-          >
+          <SectionItem add onClick={addNewBlog}>
             <SectionThumbnailWrapper>
               <FontAwesomeIcon icon={["far", "plus-square"]} />
             </SectionThumbnailWrapper>

@@ -16,11 +16,9 @@ import { showNotification } from "../../components/notification";
 export const genders = [
   { title: "woman", value: 0 },
   { title: "man", value: 1 },
-  { title: "other_gender", value: 2 },
 ];
 
 const CreateInfo = ({ getCheckGetCode }) => {
-  const router = useSiteRouter();
   const dispatch = useDispatch();
   const refOTP = useRef();
   const tokenUser = useSelector((state) => state.get("tokenUser")).toJS();
@@ -36,7 +34,7 @@ const CreateInfo = ({ getCheckGetCode }) => {
   });
 
   const [dataCreate, action] = useApi(
-    `${GGG_INTERNAL}/update-profile`,
+    `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/update-profile`,
     {
       ...info,
       customerNumber: tokenUser.customerNumber,

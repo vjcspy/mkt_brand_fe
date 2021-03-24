@@ -1,11 +1,21 @@
+import Head from "next/head";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DEVELOPMENT_MODE, GET_SITE, SET_MODE, SET_OUR_MENUS, SET_PAGE_NAME } from "../../src/constants";
+import { showNotification } from "../../src/components/notification";
+import {
+  DEVELOPMENT_MODE,
+  GET_SITE,
+  SET_LIST_BLOG_EDIT_PAGE,
+  SET_MODE,
+  SET_OUR_MENUS,
+  SET_PAGE_NAME,
+} from "../../src/constants";
 import PageContainer from "../../src/containers/pageContainer";
 import DevelopmentLayout from "../../src/development/containers/developmentLayout";
 import { menus } from "../../src/dummyData/menus";
+import useFromJS from "../../src/hooks/useFromJS";
 import useSiteRouter from "../../src/hooks/useSiteRouter";
-import { fetchMenuCategories } from "../../src/services/backend";
+import { fetchMenuCategories, getListBlog } from "../../src/services/backend";
 
 export async function getStaticProps() {
   const site_code = process.env.SITE_CODE;
@@ -21,6 +31,7 @@ export async function getStaticProps() {
 const Home = ({ site_code, menus }) => {
   /// Selector
   const token = useSelector((s) => s.get("token"));
+  const modifiedConfig = useFromJS(["modifiedConfig"]);
   const router = useSiteRouter();
   const dispatch = useDispatch();
 
@@ -35,10 +46,28 @@ const Home = ({ site_code, menus }) => {
       dispatch({ type: SET_OUR_MENUS, value: menus });
       dispatch({ type: GET_SITE, site_code });
     }
-  }, [token, site_code, router.query.page]);
+  }, [token, site_code]);
+  useEffect(async () => {
+    switch (router.query.page) {
+      case "blog":
+        try {
+          const { data } = await getListBlog();
+          dispatch({ type: SET_LIST_BLOG_EDIT_PAGE, value: data?.data?.blogs });
+        } catch (e) {
+          showNotification(dispatch, "Fail load data");
+        }
+        break;
+    }
+  }, [router.query.page]);
   return (
     <DevelopmentLayout>
-      <PageContainer pageNameQueryRouter={router.query.page ?? "home"} />
+      <Head>
+        <script
+          src={`https://cdn.tiny.cloud/1/${process.env.NEXT_PUBLIC_KEY_TINY_EDITOR}/tinymce/5/tinymce.min.js`}
+          referrerpolicy="origin"
+        ></script>
+      </Head>
+      <PageContainer modifiedConfig={modifiedConfig} pageNameQueryRouter={router.query.page ?? "home"} />
     </DevelopmentLayout>
   );
 };

@@ -6,7 +6,7 @@ import { PopupWrapperEditer, ContentEditer, GroupButton, WrapperButtonSave } fro
 import { Editor } from "@tinymce/tinymce-react";
 import Button from "../../../components/button";
 import ImageComponent from "./imageComponent";
-import TextComponent from "./textComponent";
+import TextIgnoreLocaleComponent from "./textIgnoreLocaleComponent";
 import RadioComponent from "./radioComponent";
 import useApi from "../../../hooks/useApi";
 import { showNotification } from "../../../components/notification";
@@ -19,7 +19,6 @@ const BlogComponent = ({ path, blog, ...rest }) => {
   const { id } = blog;
   /* const titleBlogDefault = useSelector((s) => s.getIn(path.slice(0, path.length - 2)))?.toJS();*/
   const token = useSelector((s) => s.get("token"));
-  const siteCode = useSelector((s) => s.getIn(["site", "site_code"])); // id site brand
   const dispatch = useDispatch();
   const host = process.env.NEXT_PUBLIC_API_HOST;
   const [openEdit, setOpenEdit] = useState(false);
@@ -93,7 +92,7 @@ const BlogComponent = ({ path, blog, ...rest }) => {
         </DevSecondaryButton>
         <h4>Blog</h4>
       </SectionHeader>
-      <TextComponent
+      <TextIgnoreLocaleComponent
         ignoreLocale={true}
         config={{ title: "Title Blog", value: blogApi.title }}
         onChangeTextBlog={onChangeTitle}
@@ -104,7 +103,7 @@ const BlogComponent = ({ path, blog, ...rest }) => {
         imageBlog={blogApi.avatar}
         onChangeImageBlog={onChangeImageBlog}
       />
-      <TextComponent
+      <TextIgnoreLocaleComponent
         ignoreLocale={true}
         config={{ title: "Author", value: blogApi.author }}
         onChangeTextBlog={onChangeAuthor}

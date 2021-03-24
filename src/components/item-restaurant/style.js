@@ -37,8 +37,8 @@ export const ItemContent = styled.div`
   display: flex;
 `;
 export const Title = styled.h6`
-  width: 22%;
-  min-width: 90px;
+  width: 19%;
+  min-width: 121px;
   color: ${({ theme }) => theme.color.text.description};
 `;
 export const Content = styled.h6`
@@ -50,6 +50,7 @@ export const GroupButton = styled.div`
   transition: 0.3s;
   display: flex;
 
+  a,
   button {
     width: 50%;
     max-width: 167px;
@@ -61,7 +62,11 @@ export const GroupButton = styled.div`
       margin-right: 4px;
     }
   }
-  button:first-child {
+
+  a:first-child {
+    margin-right: 20px;
+  }
+  .phone {
     margin-right: 20px;
   }
 `;

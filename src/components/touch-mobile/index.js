@@ -8,37 +8,48 @@ let postionStart;
 const DragMobile = ({ isShowDefault, children }) => {
   const refDrag = useRef();
   const [statusTop, setStatusTop] = useState(false);
-  const [transition, setTransition] = useState(false);
   const [height, setHeight] = useState(260);
   const appHeight = useAppHeight();
 
   const onMouseDown = (e) => {
     postionStart = e.clientY;
-    setTransition(false);
   };
   const onMouseMove = (e) => {
     if (postionStart) {
-      setHeight(260 + postionStart - e.clientY);
+      if (postionStart < e.clientY + 50) {
+        setHeight(260);
+        setStatusTop(false);
+      } else if (postionStart > e.clientY - 50) {
+        setHeight("100%");
+      }
     }
   };
   const onMouseUp = (e) => {
     postionStart = undefined;
-    setStatusTop(true);
-    setTransition(true);
+    if (height !== 260) {
+      setStatusTop(true);
+    }
   };
 
   const onTouchStart = (e) => {
-    setTransition(false);
+    postionStart = e.touches[0].clientY;
     document.body.style.setProperty("overflow-y", `hidden`);
   };
 
   const onTouchMove = (e) => {
-    setHeight(appHeight - e.touches[0].clientY);
+    if (postionStart < e.touches[0].clientY + 50) {
+      setHeight(260);
+      setStatusTop(false);
+    } else if (postionStart > e.touches[0].clientY - 50) {
+      setHeight("100%");
+    }
   };
 
-  const onTouchEnd = () => {
-    setStatusTop(true);
-    setTransition(true);
+  const onTouchEnd = (e) => {
+    postionStart = undefined;
+    if (height !== 260) {
+      setStatusTop(true);
+    }
   };
   const onClose = () => {
     setHeight(260);
@@ -58,21 +69,23 @@ const DragMobile = ({ isShowDefault, children }) => {
     }
   }, [isShowDefault]);
   return (
-    <WrapperDrag style={{ transition: transition ? "0.3s" : "unset", height }} ref={refDrag}>
+    <WrapperDrag
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      onTouchMove={onTouchMove}
+      style={{ height }}
+      ref={refDrag}
+    >
       <ContentDrag>
         {statusTop ? (
           <IconDrag>
             <IconClose className="close" onClick={onClose} />
           </IconDrag>
         ) : (
-          <IconDrag
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
-            onTouchMove={onTouchMove}
-          >
+          <IconDrag>
             <IconRectangle />
           </IconDrag>
         )}

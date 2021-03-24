@@ -57,7 +57,7 @@ const ProfileTab = ({}) => {
   });
 
   const [{ loading, error, data }, onUpdateUserInfo] = useApi(
-    `${GGG_INTERNAL}/update-profile`,
+    `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/update-profile`,
     profile,
     { "tgs-version": "2.6.10", Authorization: `Bearer ${token}` },
     "POST"

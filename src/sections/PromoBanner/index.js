@@ -3,7 +3,6 @@ import Button from "../../components/button";
 import { useSelector } from "react-redux";
 import LinkRouter from "../../components/link-router";
 import { WrapperOnePageScroller, GroupButton, WrapperListPoint, WrapperSection } from "./style";
-import { FormattedMessage } from "react-intl";
 import loadable from "@loadable/component";
 
 import ReactPageScroller from "../../../plugins/react-page-scroller";
@@ -31,8 +30,8 @@ const defaultConfig = {
           name: "PromoName",
         },
         promoCode: { type: "textIgnoreLocale", title: "Promo Code", value: "" },
-        imageDesktop: { type: "image", title: "Banner Desktop" },
-        imageMobile: { type: "image", title: "Banner Mobile" },
+        imageDesktop: { type: "image", title: "Banner Desktop", value: null },
+        imageMobile: { type: "image", title: "Banner Mobile", value: null },
         statusPromo: { type: "radio", title: "Status", value: { active: "Show", titles: ["Show", "Hidden"] } },
         typePromo: { type: "radio", title: "Type", value: { active: "Normal", titles: ["Normal", "Flash"] } },
         link: {
@@ -50,9 +49,8 @@ const defaultConfig = {
   },
 };
 
-const PromoBanner = ({ config = defaultConfig }) => {
+const PromoBanner = ({ config = defaultConfig, listPromoActive }) => {
   const locale = useSelector((s) => s.get("locale"));
-  const listPromoActive = useSelector((s) => s.get("listPromoActive"));
   const { value: valuePromo } = config.components.promoBanner;
   const [currentPage, setCurrentPage] = useState(0);
   const promoShouldShow = listPromoActive ?? valuePromo.filter((item) => item.statusPromo.value.active === "Show");
@@ -83,7 +81,7 @@ const PromoBanner = ({ config = defaultConfig }) => {
     ));
   }, [promoShouldShow, width]);
   return (
-    <WrapperOnePageScroller>
+    <WrapperOnePageScroller ref={ref}>
       <ReactPageScroller
         customPageNumber={currentPage}
         containerHeight={appHeight - headerHeight}

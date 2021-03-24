@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import loadable from "@loadable/component";
 import {
@@ -9,6 +9,7 @@ import {
   GroupFlexBox,
   LogoWrapper,
   MenuIconButton,
+  HeaderLine,
 } from "./header.styled";
 import { DEVELOPMENT_MODE, SET_HEADER_HEIGHT, SHOW_LANGUAGE_LOCATION } from "../../constants";
 import { Container } from "../../styles";
@@ -23,6 +24,7 @@ import { Marker } from "./profileDropdown/styled";
 import ProfileDropdown from "./profileDropdown";
 import ImageMedia from "../../development/components/imageMedia";
 import Link from "next/link";
+import { stringifyUrl } from "query-string";
 const MenuRight = loadable(() => import("../../components/menu"));
 const PopupLanguageLocation = loadable(() => import("./popup-language-location"));
 
@@ -180,10 +182,8 @@ function requestLocation() {
   );
 }
 
-const Header = ({ config = defaultConfig }) => {
-  // const locale = useFromJS(["locale"]) ?? "en";
+const Header = ({ config = defaultConfig, menus, pageName }) => {
   const showMenuHeader = useSelector((state) => state.getIn(["showMenuHeader"]));
-  const pageName = useSelector((state) => state.getIn(["pageName"]));
   const mode = useSelector((state) => state.get("mode"));
   const router = useSiteRouter();
   const dispatch = useDispatch();
@@ -191,25 +191,28 @@ const Header = ({ config = defaultConfig }) => {
   const components = config.components;
   const [isShowMenu, setShowMenu] = useState(false);
   const ref = useRef();
+  const linkRef = useRef();
   const size = useWindowResize();
-  const [isEqualPageName, setIsEqualPageName] = useState(pageName);
   const locale = useSelector((s) => s.get("locale"));
-  const navMenu = useMenu(components.navMenu?.value);
-  const hambergerMenu = useMenu(components.hambergerMenu?.value);
+  const navMenu = menus?.find((m) => m.name == components.navMenu?.value);
+  const hambergerMenu = menus?.find((m) => m.name == components.hambergerMenu?.value);
   const [showProfileDropdownMobile, setShowProfileDropdownMobile] = useState(false);
   const { fullName, avatar } = useSelector((state) => state.get("userInfo"))?.toJS() ?? "";
+  const [percentage, setPercentage] = useState(0);
+  const [transition, setTransition] = useState(true);
+  const [width, setWidth] = useState(0);
+  const [index, setIndex] = useState(0);
+
   useEffect(() => {
     requestLocation();
   }, []);
 
-  useEffect(() => {
+  const isHomePage = useMemo(() => {
     if (mode === DEVELOPMENT_MODE) {
       let pageNameQuery = router.query.page ?? "home";
-      pageNameQuery = pageNameQuery === "home" ? "" : pageNameQuery;
-      setIsEqualPageName(pageNameQuery);
-    } else {
-      setIsEqualPageName(pageName === "home" ? "" : pageName);
+      return pageNameQuery === "home";
     }
+    return pageName === "home";
   }, [pageName, router.query.page]);
 
   useEffect(() => {
@@ -217,13 +220,22 @@ const Header = ({ config = defaultConfig }) => {
   }, [dispatch, size]);
 
   useEffect(() => {
-    if (!process.browser) {
-      return;
-    }
-    if (sessionStorage.getItem("redirect") != "true" && size <= 768) {
-      router.push("/our-menu");
-    }
-    sessionStorage.setItem("redirect", "true");
+    const listener = (e) => {
+      if (linkRef.current) {
+        let width = linkRef.current.children[e.index].offsetWidth;
+        let left = linkRef.current.children[e.index].offsetLeft;
+        let w = width + 60; // px
+        let p = e.percentage / 100; // %
+        let p2 = linkRef.current.offsetWidth / 100; // %
+        let percentage = (left + w * p) / p2;
+        setWidth(width);
+        setPercentage(percentage);
+        setTransition(e.transition);
+        setIndex(e.index);
+      }
+    };
+    window.addEventListener("tabbanner", listener);
+    return () => window.removeEventListener("tabbanner", listener);
   }, []);
 
   return (
@@ -250,14 +262,23 @@ const Header = ({ config = defaultConfig }) => {
                 </LogoWrapper>
               </LinkRouter>
             </FlexGrow>
-            <HeaderLinks showMobile={showMenuHeader}>
-              {navMenu?.children.map((e, index) => (
-                <LinkRouter key={index} href={e.url} passHref={true}>
-                  <a className={`${"/" + isEqualPageName === e.url ? "active" : ""}`}>
+            <HeaderLinks ref={linkRef} showMobile={showMenuHeader}>
+              {navMenu?.children.map((e, i) => (
+                <LinkRouter key={i} href={e.url} passHref={true} shallow>
+                  <a className={`${index === i && isHomePage ? "active" : ""}`}>
                     <h4>{e.label?.[locale]}</h4>
                   </a>
                 </LinkRouter>
               ))}
+              {isHomePage && (
+                <HeaderLine
+                  style={{
+                    left: percentage + "%",
+                    transition: transition ? "left 0.3s ease-out, width 0.3s ease-out" : "none",
+                    width: width,
+                  }}
+                />
+              )}
             </HeaderLinks>
             <FlexGrow style={{ textAlign: "right" }}>
               <GroupFlexBox>

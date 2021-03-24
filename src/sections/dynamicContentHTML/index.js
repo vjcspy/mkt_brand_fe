@@ -27,7 +27,7 @@ const defaultConfig = {
 const DynamicContentHTML = ({ config = defaultConfig }) => {
   const locale = useSelector((state) => state.get("locale"));
   const contentHTML = get(config, ["components", "contentHTML", "value"]);
-  return <div dangerouslySetInnerHTML={{ __html: contentHTML }} />;
+  return <div style={{ width: "100%" }} dangerouslySetInnerHTML={{ __html: contentHTML }} />;
 };
 
 DynamicContentHTML.defaultConfig = defaultConfig;

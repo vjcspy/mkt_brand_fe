@@ -1,5 +1,5 @@
-import { defaultsDeep, filter, first, get, isEmpty, map, reduce, cloneDeep, find, isObject } from "lodash";
-import { Footers, Headers, Sections, Pages } from "../sections";
+import { defaultsDeep, first, get, isEmpty, map, reduce, cloneDeep, find, isNil, isObject, forEach } from "lodash";
+import { Headers, Pages, DynamicFooters } from "../sections";
 import { DefaultTheme } from "../styles/theme";
 import defaultTranslation from "../translations";
 /// Frontend
@@ -43,40 +43,108 @@ export const capitalize = (strInput, lower) => {
   return (lower ? strInput.toLowerCase() : strInput).replace(/(?:^|\s)\S/g, (a) => a.toUpperCase());
 };
 
-export const mergeConfig = (defaultConfig, config) => {
-  if (!config) {
-    return cloneDeep(defaultConfig);
+export const mergeObject = (a, b) => {
+  if (isNil(b)) {
+    return a;
   }
-  let { components: dComponent, ...dRest } = cloneDeep(defaultConfig);
-  let { components: cComponent, ...cRest } = config;
-  let components = {};
-  Object.keys(dComponent).map((key) => {
-    let value = cloneDeep(dComponent[key].value);
-    components[key] = {
-      ...dComponent[key],
-      value: isObject(dComponent[key]?.value)
-        ? defaultsDeep(cComponent[key]?.value ?? value, value)
-        : cComponent[key]?.value,
-    };
+  if (isNil(a)) {
+    return b;
+  }
+  var c = {};
+  map(a, (valueA, k) => {
+    let valueB = b[k];
+    if (k === "defaultConfig") {
+      c[k] = valueA;
+    } else if (!valueB) {
+      c[k] = valueA;
+    } else if (Array.isArray(valueA)) {
+      var defaultConfig = {};
+      if (k === "value") {
+        defaultConfig = a.defaultConfig;
+      }
+      c[k] = mergeArray(valueA, valueB, defaultConfig);
+    } else if (isObject(valueA)) {
+      c[k] = mergeObject(valueA, valueB);
+    } else if (typeof valueA === typeof valueB) {
+      c[k] = valueB;
+    } else {
+      c[k] = valueA;
+    }
   });
-  return {
-    ...dRest,
-    ...cRest,
-    components,
-  };
+  // map(b, (valueB, k) => {
+  //   if (!a[k]) {
+  //     c[k] = valueB;
+  //   }
+  // });
+  return c;
+};
+
+export const mergeArray = (a, b, defaultConfig) => {
+  if (isNil(a)) {
+    return b;
+  }
+  if (isNil(b)) {
+    return a;
+  }
+  var c = [];
+  forEach(b, (valueB, k) => {
+    let valueA = a[k];
+    if (!valueA && isObject(valueB)) {
+      c.push(mergeObject(defaultConfig, valueB));
+    } else if (!valueA) {
+      c.push(valueB);
+    } else if (Array.isArray(valueB)) {
+      c.push(mergeArray(valueA, valueB));
+    } else if (isObject(valueB)) {
+      c.push(mergeObject(valueA, valueB));
+    } else if (typeof valueA === typeof valueB) {
+      c.push(valueB);
+    } else {
+      c.push(valueA);
+    }
+  });
+
+  return c;
+};
+
+export const mergeConfig = (defaultConfig, config) => {
+  let a = cloneDeep(defaultConfig);
+  if (!config) {
+    return a;
+  }
+  return mergeObject(a, config);
+
+  // let { components: dComponent, ...dRest } = cloneDeep(defaultConfig);
+  // let { components: cComponent, ...cRest } = config;
+  // let components = {};
+  // Object.keys(dComponent).map((key) => {
+  //   let value = cloneDeep(dComponent[key].value);
+  //   components[key] = {
+  //     ...dComponent[key],
+  //     value: isObject(dComponent[key]?.value)
+  //       ? defaultsDeep(cComponent[key]?.value ?? value, value)
+  //       : cComponent[key]?.value,
+  //   };
+  // });
+  // return {
+  //   ...dRest,
+  //   ...cRest,
+  //   components,
+  // };
 };
 
 export const formatConfig = (config) => {
   const header = config?.header;
-  const footer = config?.footer;
+  const dynamicFooters = config?.footer;
   const theme = config?.theme;
   const menus = config?.menus ?? [];
   const translation = config?.translation;
   let headerConfig = (Headers[header?.name] ?? first(map(Headers))).defaultConfig;
-  let footerConfig = (Footers[footer?.name] ?? first(map(Footers))).defaultConfig;
+  let footerConfig = (DynamicFooters[dynamicFooters?.name] ?? first(map(DynamicFooters))).defaultConfig;
+
   const modifiedConfig = {
     header: mergeConfig(headerConfig, header),
-    footer: mergeConfig(footerConfig, footer),
+    footer: mergeConfig(footerConfig, dynamicFooters),
     pages: reduce(
       Pages,
       (pages, page, pageName) => ({

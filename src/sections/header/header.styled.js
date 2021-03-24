@@ -29,6 +29,7 @@ export const LogoWrapper = styled.a`
 `;
 
 export const HeaderLinks = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -40,11 +41,11 @@ export const HeaderLinks = styled.div`
 
     &.active {
       color: ${({ theme }) => theme.color.status.primary};
-      &: after {
-        content: "";
-        background: ${({ theme }) => theme.color.status.primary};
-        width: 100%;
-      }
+      // &: after {
+      //   content: "";
+      //   background: ${({ theme }) => theme.color.status.primary};
+      //   width: 100%;
+      // }
     }
 
     &:first-child {
@@ -71,12 +72,14 @@ export const HeaderLinks = styled.div`
       transition: 0.3s width ease-in-out;
     }
 
-    &:hover {
-      color: ${({ theme }) => theme.color.status.primary};
-      &:after {
-        width: 100%;
-        left: 0px;
-        right: auto;
+    @media (min-width: 769px) {
+      &:hover {
+        color: ${({ theme }) => theme.color.status.primary};
+        &:after {
+          width: 100%;
+          left: 0px;
+          right: auto;
+        }
       }
     }
   }
@@ -98,6 +101,21 @@ export const HeaderLinks = styled.div`
       color: ${({ theme }) => theme.color.status.primary};
       text-decoration: underline;
     }
+  }
+`;
+
+export const HeaderLine = styled.div`
+  height: 2px;
+  background: ${({ theme }) => theme.color.status.primary};
+  width: 100px;
+  position: absolute;
+  top: 100%;
+  left: auto;
+  right: 0px;
+
+  @media (max-width: 768px) {
+    top: auto;
+    bottom: 16px;
   }
 `;
 

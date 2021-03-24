@@ -33,9 +33,7 @@ const defaultConfig = {
   components: {},
 };
 
-const Article = ({ article }) => {
-  const blogSlug = useSelector((state) => state.get("blogSlug"));
-  // const blogSlug = article ?? blogs.find((item) => item.id === idBlog);
+const Article = ({ blog }) => {
   let count = 0;
   const blogRelative = useMemo(() => {
     return blogs.filter((item) => {
@@ -47,30 +45,30 @@ const Article = ({ article }) => {
   }, []);
   return (
     <WrapperBlog>
-      {blogSlug && (
+      {blog && (
         <Content>
           <HeaderBlog>
-            <Title>{blogSlug.title}</Title>
+            <Title>{blog.title}</Title>
             <Info>
               <LeftInfo>
-                <DatePost>{blogSlug.datePost}</DatePost>
+                <DatePost>{blog.datePost}</DatePost>
                 <ItemSocial>
                   <IconView />
-                  <span>{blogSlug.view}</span>
+                  <span>{blog.view}</span>
                 </ItemSocial>
                 <ItemSocial>
                   <IconLike />
-                  <span>{blogSlug.like}</span>
+                  <span>{blog.like}</span>
                 </ItemSocial>
                 <ItemSocial>
                   <IconShare />
-                  <span>{blogSlug.share}</span>
+                  <span>{blog.share}</span>
                 </ItemSocial>
               </LeftInfo>
             </Info>
           </HeaderBlog>
           <ContentBlog>
-            <div dangerouslySetInnerHTML={{ __html: blogSlug.content }} />
+            <div dangerouslySetInnerHTML={{ __html: blog.content }} />
           </ContentBlog>
           <FooterBlog>
             <a>Share</a>

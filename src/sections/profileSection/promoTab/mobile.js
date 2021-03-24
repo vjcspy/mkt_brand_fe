@@ -13,6 +13,7 @@ import { WrapperContentPopup } from "../../../components/popup-wrapper-mobile/st
 import ListRestaurantBooking from "../../../components/list-restaurant/list-restaurant-booking";
 import ListCondition from "../../promoSection/Conditions";
 import ViewMapRestaurant from "../../../components/view-map-restaurant";
+import Link from "next/link";
 const CSSTransition = loadable(() => import("../../../components/css-transition"));
 const listRestaurant = [
   {
@@ -70,7 +71,7 @@ const PromoTabMobile = ({ profilePromo }) => {
   const [currentPromoMobile, setPromoMobile] = useState();
   const [stepFlowPopupMobile, setStepFlowPopupMobile] = useState(0);
   const [showConditionOrRestaurant, setShowConditionOrRestaurant] = useState(true);
-
+  const [viewRestaurant, setViewRestaurant] = useState();
   const onBackPopup = () => {
     if (stepFlowPopupMobile === 0) {
       setStepFlowPopupMobile(0);
@@ -80,8 +81,9 @@ const PromoTabMobile = ({ profilePromo }) => {
     }
   };
 
-  const onViewMap = () => {
+  const onViewMap = (restaurant) => {
     setStepFlowPopupMobile(2);
+    setViewRestaurant(restaurant);
   };
 
   const onShowListRestaurant = () => {
@@ -98,61 +100,78 @@ const PromoTabMobile = ({ profilePromo }) => {
       <h3>
         <FormattedMessage id="profile.title_my_promo" />
       </h3>
-      <WrapperScroller>
-        <ReactPageScroller
-          className="scroller"
-          containerHeight={`calc(100vh - (${headerHeight + 301 ?? 0}px ))`}
-          pageOnChange={setCurrentPage}
-        >
-          {profilePromo.map((item, index) => (
-            <RatioImage key={index} ratio="1:1">
-              <img width={364} height={364} src={item.image} />
-            </RatioImage>
-          ))}
-        </ReactPageScroller>
-        <WrapperEndpoint>
-          <PointNavigation display="block" size={profilePromo.length} currentIndex={currentPage} />
-        </WrapperEndpoint>
-      </WrapperScroller>
+      {profilePromo && (
+        <WrapperScroller>
+          <ReactPageScroller
+            className="scroller"
+            containerHeight={`calc(100vh - (${headerHeight + 301 ?? 0}px ))`}
+            pageOnChange={setCurrentPage}
+          >
+            {profilePromo.map((item, index) => (
+              <RatioImage key={index} ratio="1:1">
+                <img width={364} height={364} src={item.promotionThumbnail} />
+              </RatioImage>
+            ))}
+          </ReactPageScroller>
+          <WrapperEndpoint>
+            <PointNavigation display="block" size={profilePromo?.length} currentIndex={currentPage} />
+          </WrapperEndpoint>
+        </WrapperScroller>
+      )}
+
       <ContentMobile>
-        <h4>{profilePromo[currentPage].title}</h4>
+        <h4>{profilePromo?.[currentPage]?.promotionTitle}</h4>
         <WrapperFlex>
           <h5>
             <FormattedMessage id="profile.promo_location" />
           </h5>
-          <span>{profilePromo[currentPage]?.location}</span>
+          <span>{profilePromo?.[currentPage]?.location}</span>
         </WrapperFlex>
         <WrapperFlex>
           <h5>
             <FormattedMessage id="profile.promo_date_of_promo" />
           </h5>
-          <span>{profilePromo[currentPage]?.date}</span>
+          <span>{profilePromo?.[currentPage]?.startDate}</span>
         </WrapperFlex>
         <GroupButton>
-          <Button varian="outline" onClick={() => setPromoMobile(profilePromo[currentPage])}>
+          <Button varian="outline" onClick={() => setPromoMobile(profilePromo?.[currentPage])}>
             <FormattedMessage id="profile.promo_view_detail" />
           </Button>
-          <Button>
-            <FormattedMessage id="profile.promo_reservation" />
-          </Button>
+          <Link href="https://booking.ggg.com.vn" passHref>
+            <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
+              <Button>
+                <FormattedMessage id="profile.promo_reservation" />
+              </Button>
+            </a>
+          </Link>
         </GroupButton>
       </ContentMobile>
       <CSSTransition show={currentPromoMobile} classTransition="bottom-top">
         <PopupMobile step={stepFlowPopupMobile} onBack={onBackPopup}>
           <WrapperContentPopup>
-            <DetailPromo promo={currentPromoMobile} onShowListRestaurant={onShowListRestaurant} onShowListCondition={onShowListCondition} />
+            <DetailPromo
+              promo={currentPromoMobile}
+              onShowListRestaurant={onShowListRestaurant}
+              onShowListCondition={onShowListCondition}
+            />
           </WrapperContentPopup>
 
           <WrapperContentPopup style={{ height: "100%" }}>
             {showConditionOrRestaurant ? (
-              <ListRestaurantBooking onBook={onViewMap} listRestaurant={listRestaurant} onViewMap={onViewMap} />
+              <ListRestaurantBooking
+                onBook={onViewMap}
+                currentPage="profile-promo"
+                promoId={profilePromo?.[currentPage]?.promotionId}
+                listRestaurant={profilePromo?.[currentPage]?.restaurants}
+                onViewMap={onViewMap}
+              />
             ) : (
-              <ListCondition listCondition={conditions} />
+              <ListCondition listCondition={profilePromo?.[currentPage]?.restaurants} />
             )}
           </WrapperContentPopup>
 
-          <WrapperContentPopup style={{ height: "100%" }}>
-            <ViewMapRestaurant />
+          <WrapperContentPopup restaurant={profilePromo?.[currentPage]?.restaurants} style={{ height: "100%" }}>
+            <ViewMapRestaurant restaurant={viewRestaurant} />
           </WrapperContentPopup>
         </PopupMobile>
       </CSSTransition>

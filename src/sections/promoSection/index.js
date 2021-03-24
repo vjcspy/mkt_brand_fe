@@ -9,6 +9,8 @@ import PulseLoader from "../../components/loading";
 const PromoDesktop = loadable(() => import("./desktop"));
 const PromoMobile = loadable(() => import("./mobile"));
 import useSiteRouter from "../../hooks/useSiteRouter";
+import { pickUpVoucher } from "../../services/backend";
+import { showNotification } from "../../components/notification";
 
 const defaultConfig = {
   type: "section",
@@ -18,36 +20,48 @@ const defaultConfig = {
   components: {},
 };
 
-const PromoSection = ({ config, theme }) => {
-  const listPromoActive = useSelector((s) => s.get("listPromoActive"));
-  const [sizeWidth, ref] = useIframeResize();
+const PromoSection = ({ config, theme, promoListApi }) => {
+  const [{ width, height }, ref] = useIframeResize();
+  const headerHeight = useSelector((s) => s.get("headerHeight"));
+  const dispatch = useDispatch();
   const routerSite = useSiteRouter();
   const [stateAction, setStateAction] = useState({
     promoCode: routerSite.query.promoCode,
     showPopUpSuccess: false,
   });
   const [loading, setLoading] = useState(false);
-
   const { token } = useSelector((s) => s.get("tokenUser"))?.toJS() ?? {};
 
-  const fetchCodePromo = (code) => {
+  const fetchCodePromo = async (code, quantity) => {
     setLoading(true);
-    setTimeout(() => {
-      setStateAction({ ...stateAction, showPopUpSuccess: true, loadingPromo: false });
+    try {
+      const { data } = await pickUpVoucher({ code, quantity, token });
+
+      if (data.error) {
+        showNotification(dispatch, { content: data.error?.message ?? "Loi mang", status: "error" });
+      }
+      if (data.messageCode === 0) {
+        showNotification(dispatch, { content: data.message ?? "Loi mang", status: "warning" });
+      }
+      // handel success
       setLoading(false);
-    }, [2000]);
+    } catch (e) {
+      showNotification(dispatch, { content: "Loi mang", status: "error" });
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     const { already, promoCode } = routerSite.query ?? {};
     if (already === "succeed" && promoCode && token) {
       fetchCodePromo(promoCode);
+      routerSite.push("/promo");
     }
   }, []);
 
-  const onGetCode = useCallback((code) => {
+  const onGetCode = useCallback((code, quantity) => {
     if (token) {
-      fetchCodePromo(code);
+      fetchCodePromo(code, quantity);
     } else {
       routerSite.push(`/login?${stringify({ promoCode: code, redirect_url: encodeURIComponent("/promo") })}`);
     }
@@ -60,7 +74,6 @@ const PromoSection = ({ config, theme }) => {
   const viewMapRestaurant = useCallback((value) => {
     history.push(state, "Map", "/map");
   }, []);
-
   return (
     <>
       <MainPromo ref={ref} className="main-promo">
@@ -78,7 +91,7 @@ const PromoSection = ({ config, theme }) => {
             <PulseLoader color="#DA841E" loading fill />
           </div>
         )}
-        {sizeWidth.width > 768 ? (
+        {width > 768 ? (
           <PromoDesktop
             onViewMyPromo={onViewMyPromo}
             onGetCode={onGetCode}
@@ -86,6 +99,7 @@ const PromoSection = ({ config, theme }) => {
             viewMapRestaurant={viewMapRestaurant}
             stateAction={stateAction}
             setStateAction={setStateAction}
+            promoListApi={promoListApi}
           />
         ) : (
           <PromoMobile
@@ -95,6 +109,7 @@ const PromoSection = ({ config, theme }) => {
             viewMapRestaurant={viewMapRestaurant}
             stateAction={stateAction}
             setStateAction={setStateAction}
+            promoListApi={promoListApi}
           />
         )}
       </MainPromo>

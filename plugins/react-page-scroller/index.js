@@ -14,12 +14,12 @@ const DEFAULT_ANIMATION = "ease-in-out";
 const DEFAULT_CONTAINER_HEIGHT = "100vh";
 const DEFAULT_CONTAINER_WIDTH = "100vw";
 const DEFAULT_COMPONENT_INDEX = 0;
-const DEFAULT_COMPONENTS_TO_RENDER_LENGTH = 0;
+const DEFAULT_COMPONENTS_TO_RENDER_LENGTH = 3;
 
 const DEFAULT_ANIMATION_TIMER_BUFFER = 200;
 const KEY_UP = 38;
 const KEY_DOWN = 40;
-const MINIMAL_DELTA_Y_DIFFERENCE = 1;
+const MINIMAL_DELTA_Y_DIFFERENCE = 50;
 const DISABLED_CLASS_NAME = "rps-scroll--disabled";
 
 let previousTouchMove = null;
@@ -200,10 +200,13 @@ const ReactPageScroller = ({
   const touchMove = useCallback(
     (event) => {
       if (!isNull(previousTouchMove)) {
-        if (event.touches[0].clientY > previousTouchMove) {
-          scrollWindowUp();
-        } else {
-          scrollWindowDown();
+        let deltaY = Math.abs(event.touches[0].clientY - previousTouchMove);
+        if (deltaY > MINIMAL_DELTA_Y_DIFFERENCE) {
+          if (event.touches[0].clientY > previousTouchMove) {
+            scrollWindowUp();
+          } else {
+            scrollWindowDown();
+          }
         }
       } else {
         previousTouchMove = event.touches[0].clientY;

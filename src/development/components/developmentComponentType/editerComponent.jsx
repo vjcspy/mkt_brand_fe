@@ -11,7 +11,6 @@ const EditerComponent = ({ config, path }) => {
   const { title, value } = config;
   const dispatch = useDispatch();
   const refEditer = useRef();
-  console.log(value);
   const onChangeText = (value) => {
     dispatch({ type: UPDATE_CONFIG, path: [...path, showEditerLanguage], value });
   };

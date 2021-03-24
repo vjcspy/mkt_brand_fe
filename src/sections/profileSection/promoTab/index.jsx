@@ -16,7 +16,7 @@ const PromoTab = () => {
   const dispatch = useDispatch();
   // const { loading, data, error } = useSelector((s) => s.get("myVoucher")) ?? {};
   const [{ loading, data, error }, getVoucher] = useApi(
-    `${GGG_INTERNAL}/my-voucher`,
+    `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/my-voucher`,
     {
       memId: "04031742",
       type: "all",
@@ -39,6 +39,7 @@ const PromoTab = () => {
       console.log(data);
     }
     if (error) {
+      showNotification(dispatch, { content: error.message ?? "Lỗi mạng", status: "error" });
       console.log(error);
     }
   }, [data, error]);
@@ -59,7 +60,13 @@ const PromoTab = () => {
       {loading ? (
         <PulseLoader loading fill color="#F89520" />
       ) : data ? (
-        <>{sizeWidth.width > 768 ? <PromoTabDesktop profilePromo={data?.result} /> : <PromoTabMobile profilePromo={data?.result} />}</>
+        <>
+          {sizeWidth.width > 768 ? (
+            <PromoTabDesktop profilePromo={data?.result} />
+          ) : (
+            <PromoTabMobile profilePromo={data?.result} />
+          )}
+        </>
       ) : null}
     </WrapperProfilePromo>
   );

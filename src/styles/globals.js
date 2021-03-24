@@ -19,6 +19,7 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
     max-height: 100vh;
     overflow-y: auto;
+    overscroll-behavior-x: none;
     ::-webkit-scrollbar {
      width: 0px;
     }

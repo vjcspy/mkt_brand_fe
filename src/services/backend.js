@@ -1,4 +1,3 @@
-import fs from "fs";
 import path from "path";
 import Axios from "axios";
 import { each, get, sortBy } from "lodash";
@@ -44,7 +43,7 @@ export const getSiteServer = async (site_code) => {
 };
 
 export const getApiKeyGoogleMap = async () => {
-  const host = process.env.GGG_INTERNAL;
+  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
   return Axios.get(`${host}/get-configs`);
 };
 
@@ -73,12 +72,13 @@ export const getSlug = async (slug) => {
   });
 };
 
-export const getBlogIsShow = async () => {
+export const getListBlog = async () => {
   const host = process.env.NEXT_PUBLIC_API_HOST;
 
   return Axios.post(`${host}/graphql`, {
     query: `query {
-        blogs (where: {isShow : true}){
+        blogs{
+          isShow
           slug
           title
           like
@@ -190,4 +190,61 @@ export const fetchMenuCategories = async ({ pageSize = 20, currentPage = 1, urlK
   //     })
   //   )
   // );
+};
+
+// get promo
+
+export const getListPromo = (provinceId = 5) => {
+  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
+  return Axios.get(`${host}/get-posts`, {
+    params: {
+      provinceId,
+    },
+    headers: {
+      "tgs-version": "2.6.10",
+    },
+  });
+};
+
+// pickUpVoucher
+
+export const pickUpVoucher = ({ code, quantity = 1, token }) => {
+  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
+  return Axios.post(
+    `${host}/pick-up-voucher`,
+    {
+      promotionId: code,
+      quantity: quantity,
+    },
+    {
+      headers: {
+        "tgs-version": "2.6.10",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+// get list restaurant by Id
+
+export const getListRestaurant = ({ brandId = 7, provinceId = 5 }) => {
+  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
+  return Axios.get(`${host}/restaurant`, {
+    params: {
+      brandId,
+      provinceId,
+    },
+    headers: {
+      "tgs-version": "2.6.10",
+    },
+  });
+};
+
+export const getProvinces = () => {
+  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
+  return Axios.get(`${host}/province`, {
+    headers: {
+      "tgs-version": "2.6.10",
+    },
+  });
 };

@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { List } from "immutable";
 import { isObject, map } from "lodash";
 import { useRouter } from "next/dist/client/router";
+import { stringifyUrl } from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_OUR_MENUS, SET_PAGE_NAME, UPDATE_CONFIG } from "../../../constants";
@@ -28,12 +29,18 @@ const DropDown = () => {
     setItem(itemPage);
     dispatch({ type: SET_PAGE_NAME, value: itemPage.name });
     if (itemPage.name === "home") {
-      router.push("/edit");
+      router.push(stringifyUrl({ url: "/edit", query: router.query }), undefined, { shallow: true });
     } else {
-      router.push({
-        pathname: "/edit",
-        search: `?page=${itemPage.name}`,
-      });
+      const query = router.query;
+      query.page = itemPage.name;
+      router.push(
+        stringifyUrl({
+          url: "/edit",
+          query: query,
+        }),
+        undefined,
+        { shallow: true }
+      );
     }
   };
   useEffect(() => {
@@ -44,24 +51,8 @@ const DropDown = () => {
   }, [pages, page]);
 
   useEffect(() => {
-    // if (!pageName || !pages || item?.name === pageName || !pages[pageName]) {
-    //   return;
-    // }
-    // setItem(pages[pageName]);
-    // switch (pageName) {
-    //   case Pages["our-menu-detail"].name:
-    //     let p = { ...Pages["our-menu-detail"], path: "/our-menu/" + menuSlug };
-    //     setBreadcrumbs([Pages.home, Pages["our-menu"], p]);
-    //     break;
-    //   default:
-    //     let currentPage = Pages[pageName];
-    //     setBreadcrumbs(currentPage.breadcrumbs?.concat(currentPage));
-    //     break;
-    // }
-    // if (page != pageName) {
-    //   router.push(`/edit/${pageName}`, undefined, { shallow: true });
-    // }
-  }, [page, item, pages]);
+    dispatch({ type: SET_PAGE_NAME, value: page });
+  }, []);
 
   return (
     <DropDownWrapper>

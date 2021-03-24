@@ -29,8 +29,8 @@ const defaultConfig = {
           value: { vi: "Booking 1", en: "Booking 1" },
           name: "BookingName",
         },
-        imageDesktop: { type: "image", title: "Banner Desktop" },
-        imageMobile: { type: "image", title: "Banner Mobile" },
+        imageDesktop: { type: "image", title: "Banner Desktop", value: null },
+        imageMobile: { type: "image", title: "Banner Mobile", value: null },
         head: { type: "text", title: "Head", value: { vi: "Booking header", en: "Booking header" } },
         showHead: { type: "radio", title: "Show Head", value: { active: "Show", titles: ["Show", "Hidden"] } },
         content: { type: "text", title: "Content", value: { vi: "Booking content", en: "Booking content" } },
@@ -53,8 +53,8 @@ const defaultConfig = {
             value: { vi: "Booking 1", en: "Booking 1" },
             name: "BookingName",
           },
-          imageDesktop: { type: "image", title: "Banner Desktop" },
-          imageMobile: { type: "image", title: "Banner Mobile" },
+          imageDesktop: { type: "image", title: "Banner Desktop", value: null },
+          imageMobile: { type: "image", title: "Banner Mobile", value: null },
           head: { type: "text", title: "Head", value: { vi: "Booking header", en: "Booking header" } },
           showHead: { type: "radio", title: "Show Head", value: { active: "Show", titles: ["Show", "Hidden"] } },
           content: { type: "text", title: "Content", value: { vi: "Booking content", en: "Booking content" } },
@@ -76,8 +76,7 @@ const defaultConfig = {
 
 const BookingBanner = ({ config = defaultConfig }) => {
   const locale = useSelector((s) => s.get("locale"));
-  const listBooking = useSelector((s) => s.get("listBooking"));
-  const valueBooking = listBooking ?? config.components.bookingBanner.value ?? [];
+  const valueBooking = config.components.bookingBanner.value ?? [];
   const [currentPage, setCurrentPage] = useState(0);
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width }, ref] = useIframeResize();

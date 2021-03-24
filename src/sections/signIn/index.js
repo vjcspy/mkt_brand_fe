@@ -37,14 +37,14 @@ const SectionSignIn = () => {
   const [showLogin, setShowLogin] = useState(true);
   const [showGetOTP, setShowGetOTP] = useState(true);
   const [apiRequestOTP, actionRequestOTP] = useApi(
-    `${GGG_INTERNAL}/request-otp`,
+    `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/request-otp`,
     { cellphone: phoneNumber },
     { "tgs-version": "2.6.10", "Content-Type": "application/json" },
     "POST"
   );
 
   const [apiGetToken, actionGetToken] = useApi(
-    `${GGG_INTERNAL}/get-token`,
+    `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/get-token`,
     { cellphone: phoneNumber, otp },
     { "tgs-version": "2.6.10" },
     "POST"
@@ -90,7 +90,7 @@ const SectionSignIn = () => {
         const { profile, authentication } = result;
         dispatch({ type: SET_TOKEN_USER, value: authentication });
         dispatch({ type: SET_USER_INFO, value: profile });
-        if (!profile.firstName || !profile.email) {
+        if (!profile.firstName || !profile.email || profile.email.includes("@tgsfake.ggg.com.vn")) {
           setShowLogin(false); // show form register
         } else {
           getCheckGetCode();

@@ -20,6 +20,7 @@ import IconPhone from "../icons/iconPhone";
 import ScrollShowContent from "../scroll-show-content";
 import Popup from "../popup-wrapper";
 import ItemRestaurantBooking from "../item-restaurant/item-restaurant-booking";
+import Link from "next/link";
 
 const listRestaurant = [
   {
@@ -64,7 +65,8 @@ const listRestaurant = [
   },
 ];
 
-const PopupPromo = ({ onClose }) => {
+const PopupPromo = ({ promo, onClose }) => {
+  console.log(promo);
   const onClosePopup = useCallback(() => {
     onClose(null);
   }, [onClose]);
@@ -78,16 +80,20 @@ const PopupPromo = ({ onClose }) => {
             <h6 className="promo-code">
               <FormattedMessage id="popupPromo.promoCode" />
             </h6>
-            <h6 className="code">CQR42000V</h6>
+            <h6 className="code">{promo?.clmGiftCode}</h6>
           </WrapperQcCode>
           <ContentHeader>
-            <h3>Ăn Gogi trúng liền tay 1 tỷ</h3>
+            <h3>{promo?.promotionTitle}</h3>
             <h6>
               <FormattedMessage id="popupPromo.notification" />
             </h6>
-            <Button>
-              <FormattedMessage id="popupPromo.reservation_now" />
-            </Button>
+            <Link href="https://booking.ggg.com.vn" passHref>
+              <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
+                <Button>
+                  <FormattedMessage id="popupPromo.reservation_now" />
+                </Button>
+              </a>
+            </Link>
           </ContentHeader>
         </HeaderDesktop>
         <HeaderMobile>
@@ -96,15 +102,21 @@ const PopupPromo = ({ onClose }) => {
             <h6 className="promo-code">
               <FormattedMessage id="popupPromo.promoCode" />
             </h6>
-            <h6 className="code">CQR42000V</h6>
+            <h6 className="code">{promo?.clmGiftCode}</h6>
           </WrapperQcCode>
           <ContentHeader>
-            <h3>Ăn Gogi trúng liền tay 1 tỷ</h3>
+            <h3>Ă{promo?.promotionTitle}</h3>
             <h6>
               <FormattedMessage id="popupPromo.notification" />
             </h6>
             <Button>
-              <FormattedMessage id="popupPromo.reservation_now" />
+              <Link href="https://booking.ggg.com.vn" passHref>
+                <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
+                  <Button>
+                    <FormattedMessage id="popupPromo.reservation_now" />
+                  </Button>
+                </a>
+              </Link>
             </Button>
           </ContentHeader>
         </HeaderMobile>
@@ -119,25 +131,26 @@ const PopupPromo = ({ onClose }) => {
               <FormattedMessage id="popupPromo.content_event" />
             </TitleInfo>
             <ContentInfo>
-              Hỡi các thực thần tứ phương, cùng lên đường thẳng tiến GoGi để có 100% CƠ HỘI nhận hàng ngàn quà tặng cùng giải thưởng tiền
-              mặt trao tay tổng trị giá 1 TỶ ĐỒNG
+              <div dangerouslySetInnerHTML={{ __html: promo?.promotionContent }} />
             </ContentInfo>
 
             <TitleInfo>
               <FormattedMessage id="popupPromo.location" />
             </TitleInfo>
-            <ContentInfo>Hà Nội</ContentInfo>
+            <ContentInfo>{promo?.location}</ContentInfo>
 
             <TitleInfo>
               <FormattedMessage id="popupPromo.date_apply" />
             </TitleInfo>
-            <ContentInfo>01/12/2020 - 31/12/2020</ContentInfo>
+            <ContentInfo>
+              {promo?.startDate} - {promo?.endDate}
+            </ContentInfo>
 
             <TitleInfo>
               <FormattedMessage id="popupPromo.restaurant_apply" />
             </TitleInfo>
             <ListRestaurant>
-              {listRestaurant.map((item, index) => (
+              {promo?.restaurants?.map((item, index) => (
                 <li key={index}>
                   <ItemRestaurantBooking restaurant={item} />
                 </li>
