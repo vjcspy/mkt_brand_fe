@@ -18,7 +18,6 @@ const BannerItem = ({ config }) => {
   const locale = useSelector((s) => s.get("locale"));
   const [currentPage, setCurrentPage] = useState(0);
   const tabShouldShow = config.value.filter((item) => item.statusTab.value.active === "Show");
-  console.log(config);
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width, height }, ref] = useIframeResize();
   const Images = useMemo(() => {

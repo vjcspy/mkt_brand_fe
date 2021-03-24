@@ -66,7 +66,6 @@ const listRestaurant = [
 ];
 
 const PopupPromo = ({ promo, onClose }) => {
-  console.log(promo);
   const onClosePopup = useCallback(() => {
     onClose(null);
   }, [onClose]);

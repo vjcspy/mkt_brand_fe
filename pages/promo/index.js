@@ -32,7 +32,6 @@ export async function getServerSideProps({}) {
 }
 
 const Promo = ({ config, site_code, promoListApi }) => {
-  console.log(promoListApi);
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
   return (
     <Layout>

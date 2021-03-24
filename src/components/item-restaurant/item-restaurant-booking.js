@@ -20,7 +20,6 @@ const ItemRestaurantBooking = ({ restaurant, onViewMap, promoId }) => {
   const { name, address, openTime, closeTime, tel, aboutKm, code } = restaurant ?? {};
   const [height, setHeight] = useState(0);
   const [sizeWidth] = useIframeResize();
-  console.log(restaurant);
   const refGroupButton = useRef();
 
   const onMouseOut = () => {
