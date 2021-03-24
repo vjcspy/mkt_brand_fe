@@ -24,7 +24,7 @@ const PageContainer = ({ modifiedConfig, pageName, shouldHideFooter, pageNameQue
     if (sizeWidth.width <= 768 && firstLoad && router.pathname.split("/")[1] !== "edit") {
       dispatch({ type: SET_FIRST_LOAD, value: false });
       dispatch({ type: SET_PAGE_NAME, value: pageName });
-      router.push("/our-menu");
+      router.push("/?tabBanner=menu");
     }
   }, [sizeWidth]);
   return (
