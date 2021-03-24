@@ -96,6 +96,7 @@ export const HeaderLinks = styled.div`
     background: #242424cc;
     a {
       color: #ffffff;
+      margin: 0;
     }
     a:hover {
       color: ${({ theme }) => theme.color.status.primary};
