@@ -16,10 +16,10 @@ const DragMobile = ({ isShowDefault, children }) => {
   };
   const onMouseMove = (e) => {
     if (postionStart) {
-      if (postionStart < e.clientY + 50) {
+      if (postionStart < e.clientY) {
         setHeight(260);
         setStatusTop(false);
-      } else if (postionStart > e.clientY - 50) {
+      } else if (postionStart > e.clientY) {
         setHeight("100%");
       }
     }
