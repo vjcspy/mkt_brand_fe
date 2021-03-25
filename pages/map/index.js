@@ -6,6 +6,7 @@ import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
 import { getApiKeyGoogleMap, getListPromo, getListRestaurant, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
+import Head from "next/head";
 
 export async function getServerSideProps({ query }) {
   try {

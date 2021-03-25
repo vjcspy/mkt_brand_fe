@@ -10,7 +10,7 @@ export const WrapperDrag = styled.div`
   overflow: hidden;
   // transition: 0.3s;
   max-height: calc(100% - 35px);
-  min-height: 260px;
+  min-height: 230px;
   transition: 0.3s;
 `;
 

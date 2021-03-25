@@ -68,23 +68,25 @@ export const WrapperQcCode = styled.div`
     line-height: 22px;
   }
 `;
-export const ContentHeader = styled.div`
-  p {
-    font-size: 16px;
-    margin: 10px 0 14px;
-  }
-  button {
+export const ContentHeader = styled.div``;
+
+export const GroupButtonSuccess = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  & > a {
     padding: 0;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     width: calc(50% - 20px);
     margin-right: 24px;
   }
-  button:last-child {
-    margin-right: 0;
-  }
-  button:hover {
-    z-index: 0;
+  a:last-child {
+    margin: 0;
+    padding: 0;
+    a {
+      width: 100%;
+    }
   }
 `;

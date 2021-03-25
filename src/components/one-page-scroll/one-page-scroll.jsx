@@ -1,3 +1,4 @@
+import { isNil } from "lodash";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const KEY_UP = 38;
@@ -12,6 +13,7 @@ const OnePageScroll = ({
   containerWidth = "100vw",
   minDeltaWheel = 5,
   minDeltaTouch = 50,
+  customPageNumber,
 }) => {
   const scrollRef = useRef();
   const containerRef = useRef();
@@ -26,6 +28,12 @@ const OnePageScroll = ({
     positive: false,
   });
   const [isScrolling, setIsScrolling] = useState(false);
+
+  useEffect(() => {
+    if (!isNil(customPageNumber)) {
+      setTranslateY(-customPageNumber);
+    }
+  }, [customPageNumber]);
 
   const onTouchStart = useCallback((event) => {
     const Y = event.touches[0].pageY;

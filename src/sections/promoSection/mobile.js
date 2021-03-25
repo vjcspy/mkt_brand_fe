@@ -3,28 +3,26 @@ import { useSelector } from "react-redux";
 import ReactPageScroller from "../../../plugins/react-page-scroller";
 import loadable from "@loadable/component";
 
-import { WrapperContentPromo, WrapperEndpoint, WrapperPopupContent, WrapperDragMobile, WrapperScroller } from "./style";
+import { WrapperContentPromo, WrapperEndpoint, WrapperDragMobile, WrapperScroller } from "./style";
 import { WrapperContentPopup } from "../../components/popup-wrapper-mobile/style";
 
 import PromoInfo from "./PromoInfo";
 import Head from "next/head";
 import useAppHeight from "../../hooks/useAppHeight";
+import OnePageScroll from "../../components/one-page-scroll/one-page-scroll";
 const ListRestaurant = loadable(() => import("../../components/list-restaurant"));
 const ListRestaurantBooking = loadable(() => import("../../components/list-restaurant/list-restaurant-booking"));
 const CSSTransition = loadable(() => import("../../components/css-transition"));
 const PointNavigation = loadable(() => import("../../components/point-navigation"));
 const RatioImage = loadable(() => import("../../components/ratioImage"));
-const PhoneOTP = loadable(() => import("../../components/phone-opt"));
 const DragMobile = loadable(() => import("../../components/touch-mobile"));
 const PopupMobile = loadable(() => import("../../components/popup-wrapper-mobile"));
-const PopupBottomToMobile = loadable(() => import("../../components/popup-bottom-top-mobile"));
 const ViewMapRestaurant = loadable(() => import("../../components/view-map-restaurant"));
 const SuccessRegisterMobile = loadable(() => import("../../components/succes-register-mobile"));
 const ListCondition = loadable(() => import("./Conditions"));
 
-const PromoMobile = ({ promoListApi, onViewMyPromo, onGetCode, viewMapRestaurant, stateAction, setStateAction }) => {
-  const { promoCode, showPopUpSuccess } = stateAction;
-  const [currentPage, setCurrentPage] = useState(promoCode ? promoCode : 0);
+const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode, indexPromoParam }) => {
+  const [currentPage, setCurrentPage] = useState(0);
   const [viewRestaurant, setViewRestaurant] = useState();
   const [condition, setCondition] = useState();
   const [showConditionOrRestaurant, setShowConditionOrRestaurant] = useState(); // true: restaurant, false:condition
@@ -32,34 +30,23 @@ const PromoMobile = ({ promoListApi, onViewMyPromo, onGetCode, viewMapRestaurant
   const [stepFlowPopupMobile, setStepFlowPopupMobile] = useState(0);
   const appHeight = useAppHeight();
 
+  const { data: promoUser } = useSelector((state) => state.get("promoOfUser")) ?? {};
   const [restaurantViewMap, setRestaurantViewMap] = useState();
   const size = promoListApi.length;
-
-  // update step flow popup on mobile, = 1 => show success register mobile
-  const onGetValueOTP = (result) => {
-    setStepFlowPopupMobile(1);
-  };
-
-  // update step flow popup on mobile = 2  => show list restaurant have booking on mobile
   const onShowListRestaurant = () => {
     setStepFlowPopupMobile(stepFlowPopupMobile + 1);
     setShowConditionOrRestaurant(true);
   };
 
-  // update step flow popup on mobile = 2 => show list condition of promo success register
   const onShowConditionRegister = () => {
     setStepFlowPopupMobile(stepFlowPopupMobile + 1);
     setShowConditionOrRestaurant(false);
   };
 
-  // update step flow popup on mobile = 3 => show map of restaurant have promo
-  const viewMapPromo = () => {
+  const viewMapPromo = (restaurant) => {
+    setRestaurantViewMap(restaurant);
     setStepFlowPopupMobile(stepFlowPopupMobile + 1);
   };
-
-  const onReservation = () => {};
-
-  const onBook = (value) => {};
 
   const onViewMapMobile = (restaurant) => {
     setStepFlowPopupMobile(1);
@@ -68,7 +55,7 @@ const PromoMobile = ({ promoListApi, onViewMyPromo, onGetCode, viewMapRestaurant
 
   const onBackPopup = () => {
     if (stepFlowPopupMobile === 0) {
-      setStateAction({ ...stateAction, showPopUpSuccess: false });
+      setResultGetCode(false);
       setStepFlowPopupMobile(0);
       setCondition(false);
       setViewRestaurant(false);
@@ -79,10 +66,10 @@ const PromoMobile = ({ promoListApi, onViewMyPromo, onGetCode, viewMapRestaurant
 
   const promoMobile = useMemo(() => {
     return (
-      <ReactPageScroller
+      <OnePageScroll
         className="scroller"
-        customPageNumber={+currentPage}
-        containerHeight={appHeight - headerHeight - 300 + 50}
+        customPageNumber={indexPromoParam ?? currentPage}
+        containerHeight={appHeight - headerHeight - 230 + 30}
         pageOnChange={setCurrentPage}
       >
         {promoListApi.map((item, index) => (
@@ -95,10 +82,9 @@ const PromoMobile = ({ promoListApi, onViewMyPromo, onGetCode, viewMapRestaurant
             </RatioImage>
           </React.Fragment>
         ))}
-      </ReactPageScroller>
+      </OnePageScroll>
     );
-  }, [promoListApi, headerHeight, appHeight]);
-
+  }, [promoListApi, headerHeight, appHeight, indexPromoParam]);
   return (
     <>
       <WrapperContentPromo className="promo-mobile" style={{ height: appHeight - headerHeight }}>
@@ -113,39 +99,41 @@ const PromoMobile = ({ promoListApi, onViewMyPromo, onGetCode, viewMapRestaurant
           <WrapperDragMobile>
             <PromoInfo
               promo={promoListApi[currentPage]}
-              hadGetCode={false}
+              hadGetCode={
+                promoUser ? promoUser.find((item) => item?.promotionId === promoListApi[currentPage].id) : false
+              }
               onGetCode={() => onGetCode(promoListApi[currentPage]?.id, promoListApi[currentPage]?.clmIsCashVoucher)}
-              onViewMyPromo={() => onViewMyPromo(promoListApi[currentPage]?.id)}
               getRestaurant={() => setViewRestaurant(promoListApi[currentPage]?.restaurants)}
               getCondition={() => setCondition(promoListApi[currentPage]?.condition)}
             />
           </WrapperDragMobile>
         </DragMobile>
 
-        <PopupMobile show={showPopUpSuccess} step={stepFlowPopupMobile} onBack={onBackPopup}>
-          <WrapperContentPopup>
+        <PopupMobile show={resultGetCode} step={stepFlowPopupMobile} onBack={onBackPopup}>
+          <WrapperContentPopup style={{ height: "100%" }}>
             <SuccessRegisterMobile
-              onReservation={onReservation}
+              itemPromoGetCode={promoListApi.find((item) => item.id === resultGetCode?.promotionId)}
+              resultGetCode={resultGetCode}
               onShowListRestaurant={onShowListRestaurant}
               onShowCondition={onShowConditionRegister}
             />
           </WrapperContentPopup>
-
-          {showConditionOrRestaurant ? (
-            <WrapperContentPopup style={{ height: "100%" }}>
-              <ListRestaurantBooking
-                onBook={onBook}
-                viewRestaurant={promoListApi[2]?.viewRestaurant}
-                onViewMap={viewMapPromo}
-              />
-            </WrapperContentPopup>
-          ) : (
-            <WrapperContentPopup style={{ height: "100%" }}>
-              <ListCondition condition={promoListApi[currentPage]?.conditions} />
-            </WrapperContentPopup>
-          )}
           <WrapperContentPopup style={{ height: "100%" }}>
-            <ViewMapRestaurant />
+            {stepFlowPopupMobile === 1 && (
+              <>
+                {showConditionOrRestaurant ? (
+                  <ListRestaurantBooking
+                    listRestaurant={promoListApi[currentPage]?.restaurants}
+                    onViewMap={viewMapPromo}
+                  />
+                ) : (
+                  <ListCondition condition={promoListApi[currentPage]?.condition} />
+                )}
+              </>
+            )}
+          </WrapperContentPopup>
+          <WrapperContentPopup style={{ height: "100%" }}>
+            <ViewMapRestaurant restaurant={restaurantViewMap} />
           </WrapperContentPopup>
         </PopupMobile>
 

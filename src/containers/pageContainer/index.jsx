@@ -31,7 +31,7 @@ const PageContainer = ({ modifiedConfig, pageName, shouldHideFooter, pageNameQue
     <MainContainer>
       <RenderHeader pageName={pageName} config={header} menus={modifiedConfig?.menus} />
       <MainWrapper className="main-content">
-        <RenderSections {...rest} sections={sections} />
+        <RenderSections {...rest} sections={sections} footer={footer} />
       </MainWrapper>
       {!shouldHideFooter && <DynamicFooter config={footer} />}
       <AcceptCookie />

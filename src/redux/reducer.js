@@ -48,6 +48,8 @@ import {
   SET_GOOGLE_MAP_API,
   SET_PREVIEW_MODE,
   SET_LIST_BLOG_EDIT_PAGE,
+  SET_PROMO_OF_USER,
+  SET_ICON_VIEW_MAP,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -170,8 +172,6 @@ export default function rootReducer(state = initialState, action) {
       return state.set("tokenUser", fromJS(action.value));
     case SHOW_LIST_BRAND:
       return state.update("showListBrand", () => action.value);
-    case SET_MY_VOUCHER:
-      return state.set("myVoucher", action.value);
     case SET_LIST_BLOG_IS_SHOW:
       return state.set("listBlogActive", action.value);
     case SET_LIST_PROMO_ACTIVE:
@@ -190,6 +190,10 @@ export default function rootReducer(state = initialState, action) {
       return state.update("viewPreview", () => action.value);
     case SET_LIST_BLOG_EDIT_PAGE:
       return state.set("listBlogEditPage", action.value);
+    case SET_PROMO_OF_USER:
+      return state.set("promoOfUser", action.value);
+    case SET_ICON_VIEW_MAP:
+      return state.set("iconViewMap", action.value);
     default:
       return state;
   }

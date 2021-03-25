@@ -4,16 +4,25 @@ import Button from "../../../components/button";
 import Icon from "../../../components/icons";
 import LinkRouter from "../../../components/link-router";
 import useSiteRouter from "../../../hooks/useSiteRouter";
-import { AvatarWrapper, Marker, DropDownWrapper, ProfileNameWrapper, ProfileWrapper, TabItem, TabsWrapper } from "./styled";
+import {
+  AvatarWrapper,
+  Marker,
+  DropDownWrapper,
+  ProfileNameWrapper,
+  ProfileWrapper,
+  TabItem,
+  TabsWrapper,
+} from "./styled";
 import { FormattedMessage } from "react-intl";
 import { useDispatch } from "react-redux";
-import { SET_TOKEN_USER, SET_USER_INFO } from "../../../constants";
+import { SET_PROMO_OF_USER, SET_TOKEN_USER, SET_USER_INFO } from "../../../constants";
 const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
   const router = useSiteRouter();
   const dispatch = useDispatch();
   const onLogout = () => {
     dispatch({ type: SET_TOKEN_USER, value: {} });
     dispatch({ type: SET_USER_INFO, value: {} });
+    dispatch({ type: SET_PROMO_OF_USER, value: {} });
     setShowProfile(false);
     router.push("/");
   };
@@ -22,7 +31,11 @@ const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
       <DropDownWrapper>
         <ProfileWrapper>
           <AvatarWrapper>
-            {avatar ? <Image width="80" height="80" src={avatar} alt="avatar" title="Avatar" /> : <h1>{first(userName)}</h1>}
+            {avatar ? (
+              <Image width="80" height="80" src={avatar} alt="avatar" title="Avatar" />
+            ) : (
+              <h1>{first(userName)}</h1>
+            )}
           </AvatarWrapper>
           <ProfileNameWrapper>
             <h5>{userName}</h5>

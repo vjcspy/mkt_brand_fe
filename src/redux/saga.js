@@ -24,6 +24,8 @@ import {
   GGG_INTERNAL,
   SET_LIST_BLOG_IS_SHOW,
   GET_BLOGS_BY_IS_SHOW,
+  SET_PROMO_OF_USER,
+  GET_PROMO_OF_USER,
 } from "../constants";
 import { chain, get, head } from "lodash";
 
@@ -267,33 +269,6 @@ function* getListBlogIsShow() {
   }
 }
 
-function* getMyVoucher() {
-  try {
-    const { token, customerNumber } = yield select((s) => s.get("tokenUser").toJS());
-    yield put({ type: SET_MY_VOUCHER, value: { loading: true } });
-    const { data, error } = yield Axios.post(
-      `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/my-voucher`,
-      {
-        type: "all",
-        memId: customerNumber,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "tgs-version": "2.6.10",
-        },
-      }
-    );
-    if (data.result) {
-      put({ type: SET_MY_VOUCHER, value: { loading: false, data: data.result } });
-    } else {
-      yield put({ type: SET_MY_VOUCHER, value: { loading: false, error: error ? error.message : data.message } });
-    }
-  } catch (e) {
-    yield put({ type: SET_MY_VOUCHER, value: { loading: false, error: e } });
-  }
-}
-
 function* fetchMenu({ urlKey = "gogi" } = {}) {
   try {
     yield put({ type: UPDATE_API_STATUS, value: { loading: true }, path: ["menu"] });
@@ -341,6 +316,34 @@ function* fetchMenu({ urlKey = "gogi" } = {}) {
     console.error(e);
   }
 }
+function* getMyVoucher({ value: { type = "all" } }) {
+  try {
+    const { token, customerNumber } = yield select((s) => s.get("tokenUser").toJS());
+    yield put({ type: SET_PROMO_OF_USER, value: { loading: true, loaded: false } });
+    const { data } = yield Axios.post(
+      `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/my-voucher`,
+      {
+        memId: customerNumber,
+        type,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "tgs-version": "2.6.10",
+        },
+      }
+    );
+    if (data.result) {
+      yield put({ type: SET_PROMO_OF_USER, value: { data: data.result, loading: false, loaded: true } });
+    } else if (data.messageCode === 0) {
+      yield put({ type: SET_PROMO_OF_USER, value: { warning: data.message, loading: false, loaded: true } });
+    } else if (data.error) {
+      yield put({ type: SET_PROMO_OF_USER, value: { error: data.error.message, loading: false, loaded: true } });
+    }
+  } catch (e) {
+    yield put({ type: SET_PROMO_OF_USER, value: { loading: false, error: "Lỗi mạng", loaded: true } });
+  }
+}
 
 function* saga() {
   yield takeEvery(FETCH_CONFIG, fetchConfig);
@@ -353,8 +356,8 @@ function* saga() {
   yield takeEvery(LOGIN, login);
   yield takeEvery(GET_SITE, getSite);
   yield takeEvery(FETCH_MENU, fetchMenu);
-  yield takeEvery(GET_MY_VOUCHER, getMyVoucher);
   yield takeEvery(GET_BLOGS_BY_IS_SHOW, getListBlogIsShow);
+  yield takeEvery(GET_PROMO_OF_USER, getMyVoucher);
 }
 
 export default saga;

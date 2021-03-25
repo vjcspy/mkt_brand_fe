@@ -3,14 +3,16 @@ import loadable from "@loadable/component";
 import { useDispatch, useSelector } from "react-redux";
 import { MainPromo } from "./style";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
-import { dummyPromoList } from "../../dummyData/listPromo";
 import { stringify } from "query-string";
 import PulseLoader from "../../components/loading";
 const PromoDesktop = loadable(() => import("./desktop"));
-const PromoMobile = loadable(() => import("./mobile"));
+// const PromoMobile = loadable(() => import("./mobile"));
+import PromoMobile from "./mobile";
+
 import useSiteRouter from "../../hooks/useSiteRouter";
 import { pickUpVoucher } from "../../services/backend";
 import { showNotification } from "../../components/notification";
+import { GET_PROMO_OF_USER } from "../../constants";
 
 const defaultConfig = {
   type: "section",
@@ -20,27 +22,30 @@ const defaultConfig = {
   components: {},
 };
 
-const PromoSection = ({ config, theme, promoListApi }) => {
+const PromoSection = ({ promoListApi }) => {
   const [{ width, height }, ref] = useIframeResize();
-  const headerHeight = useSelector((s) => s.get("headerHeight"));
   const dispatch = useDispatch();
   const routerSite = useSiteRouter();
-  const [stateAction, setStateAction] = useState({
-    promoCode: routerSite.query.promoCode,
-    showPopUpSuccess: false,
-  });
+  const [resultGetCode, setResultGetCode] = useState();
+  const { promoCode } = routerSite.query;
   const [loading, setLoading] = useState(false);
   const { token } = useSelector((s) => s.get("tokenUser"))?.toJS() ?? {};
-
+  const indexPromoParam = promoCode ? promoListApi.findIndex((item) => item.id == promoCode) : null;
   const fetchCodePromo = async (code, quantity) => {
     setLoading(true);
     try {
-      const { data } = await pickUpVoucher({ code, quantity, token });
+      const { data } = await pickUpVoucher({
+        code,
+        quantity,
+        token,
+      });
 
-      if (data.error) {
+      if (data.result) {
+        setResultGetCode(data.result[0]);
+        dispatch({ type: GET_PROMO_OF_USER, value: { type: "all" } });
+      } else if (data.error) {
         showNotification(dispatch, { content: data.error?.message ?? "Loi mang", status: "error" });
-      }
-      if (data.messageCode === 0) {
+      } else if (data.messageCode === 0) {
         showNotification(dispatch, { content: data.message ?? "Loi mang", status: "warning" });
       }
       // handel success
@@ -67,13 +72,6 @@ const PromoSection = ({ config, theme, promoListApi }) => {
     }
   }, []);
 
-  const onViewMyPromo = useCallback((id) => {
-    console.log("to profile to view my promo: ", id);
-  }, []);
-
-  const viewMapRestaurant = useCallback((value) => {
-    history.push(state, "Map", "/map");
-  }, []);
   return (
     <>
       <MainPromo ref={ref} className="main-promo">
@@ -93,23 +91,19 @@ const PromoSection = ({ config, theme, promoListApi }) => {
         )}
         {width > 768 ? (
           <PromoDesktop
-            onViewMyPromo={onViewMyPromo}
             onGetCode={onGetCode}
-            listPromo={dummyPromoList}
-            viewMapRestaurant={viewMapRestaurant}
-            stateAction={stateAction}
-            setStateAction={setStateAction}
             promoListApi={promoListApi}
+            resultGetCode={resultGetCode}
+            setResultGetCode={setResultGetCode}
+            indexPromoParam={indexPromoParam}
           />
         ) : (
           <PromoMobile
-            listPromo={dummyPromoList}
-            onViewMyPromo={onViewMyPromo}
             onGetCode={onGetCode}
-            viewMapRestaurant={viewMapRestaurant}
-            stateAction={stateAction}
-            setStateAction={setStateAction}
             promoListApi={promoListApi}
+            resultGetCode={resultGetCode}
+            setResultGetCode={setResultGetCode}
+            indexPromoParam={indexPromoParam}
           />
         )}
       </MainPromo>

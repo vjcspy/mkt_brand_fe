@@ -71,7 +71,7 @@ const defaultConfig = {
   },
 };
 
-const TabBanner = ({ config = defaultConfig }) => {
+const TabBanner = ({ config = defaultConfig, footer }) => {
   const router = useRouter();
   const tabBanner = router.query.tabBanner;
   const length = config.components.tabBanner.value.length;
@@ -201,7 +201,7 @@ const TabBanner = ({ config = defaultConfig }) => {
         }}
       >
         {config.components.tabBanner.value.map((config, index) => (
-          <BannerItem key={index} config={config.tab} />
+          <BannerItem key={index} config={config.tab} footer={footer} />
         ))}
       </TabContainerWrapper>
     </TabScrollWrapper>

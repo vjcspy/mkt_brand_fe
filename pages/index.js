@@ -36,6 +36,7 @@ const Site = ({ config, site_code }) => {
         siteCode={site_code}
         pageName={Pages.home.name}
         modifiedConfig={modifiedConfig}
+        shouldHideFooter={true}
       />
     </Layout>
   );

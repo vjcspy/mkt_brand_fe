@@ -1,12 +1,13 @@
 import { List } from "immutable";
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { SET_GOOGLE_MAP_API } from "../../src/constants";
+import { SET_GOOGLE_MAP_API, SET_ICON_VIEW_MAP } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
 import { getApiKeyGoogleMap, getListPromo, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
+import { get } from "lodash";
 
 export async function getServerSideProps({}) {
   const site_code = process.env.SITE_CODE;
@@ -16,11 +17,25 @@ export async function getServerSideProps({}) {
       getListPromo(),
       getSiteServer(site_code),
     ]);
+    let promoListResult = [];
+    promoListApi.result.map((listPromoItem) => {
+      if (listPromoItem.type === "gift-promotion") {
+        listPromoItem.data.map((promo) => {
+          promo.typeFilter = "gift-promotion";
+          promoListResult.push(promo);
+        });
+      } else if (listPromoItem.type === "limited-gift-promotion") {
+        listPromoItem.data.map((promo) => {
+          promo.typeFilter = "limited-gift-promotion";
+          promoListResult.push(promo);
+        });
+      }
+    });
     return {
       props: {
         config: site?.config ?? null,
         site_code: site?.site_code ?? null,
-        promoListApi: promoListApi.result.find((item) => item.type === "gift-promotion")?.data,
+        promoListApi: promoListResult ?? [],
         googleMapApi: googleMapApi[0],
       },
     };
@@ -37,8 +52,10 @@ export async function getServerSideProps({}) {
 
 const Promo = ({ config, site_code, promoListApi, googleMapApi }) => {
   const dispatch = useDispatch();
+  const iconMap = get(config, ["pages", "map", "sections", 0, "components", "imageMarker", "value"]);
   useEffect(() => {
     dispatch({ type: SET_GOOGLE_MAP_API, value: googleMapApi });
+    dispatch({ type: SET_ICON_VIEW_MAP, value: iconMap });
   }, [config]);
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
   return (

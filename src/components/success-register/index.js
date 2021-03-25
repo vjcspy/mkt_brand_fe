@@ -1,19 +1,13 @@
 import React from "react";
 import Button from "../button";
-import { HeaderDesktop, HeaderMobile, WrapperQcCode, ContentHeader, WrapperInfo } from "./style";
+import { HeaderDesktop, HeaderMobile, WrapperQcCode, ContentHeader, WrapperInfo, GroupButtonSuccess } from "./style";
 import { FormattedMessage } from "react-intl";
-import {
-  ContentInfo,
-  GroupButton,
-  HeaderItemRestaurant,
-  ItemRestaurant,
-  ListRestaurant,
-  TitleInfo,
-} from "../popup-promo/style";
+import { ContentInfo, ListRestaurant, TitleInfo } from "../popup-promo/style";
 import ScrollShowContent from "../scroll-show-content";
 import ItemRestaurantBooking from "../item-restaurant/item-restaurant-booking";
+import Link from "next/link";
 
-const SuccessRegister = ({ itemPromoGetCode }) => {
+const SuccessRegister = ({ itemPromoGetCode, resultGetCode }) => {
   return (
     <>
       <HeaderDesktop>
@@ -22,7 +16,7 @@ const SuccessRegister = ({ itemPromoGetCode }) => {
           <h6 className="promo-code">
             <FormattedMessage id="successRegister.promo_code" />
           </h6>
-          <h6 className="code">CQR42000V</h6>
+          <h6 className="code">{resultGetCode?.code}</h6>
         </WrapperQcCode>
         <ContentHeader>
           <h3>
@@ -31,12 +25,16 @@ const SuccessRegister = ({ itemPromoGetCode }) => {
           <p>
             <FormattedMessage id="successRegister.send_voucher_email" />
           </p>
-          <Button className="view-my-promo" varian="outline">
-            <FormattedMessage id="successRegister.view_my_promo" />
-          </Button>
-          <Button>
-            <FormattedMessage id="successRegister.reservation_now" />
-          </Button>
+          <GroupButtonSuccess>
+            <Link href="/profile/my-promo">
+              <Button varian="outline-a" className="view-my-promo">
+                <FormattedMessage id="successRegister.view_my_promo" />
+              </Button>
+            </Link>
+            <Button varian="primary-router" href="https://booking.ggg.com.vn">
+              <FormattedMessage id="successRegister.reservation_now" />
+            </Button>
+          </GroupButtonSuccess>
         </ContentHeader>
       </HeaderDesktop>
 
@@ -53,16 +51,20 @@ const SuccessRegister = ({ itemPromoGetCode }) => {
         <p>
           <FormattedMessage id="successRegister.promo_code" />
         </p>
-        <h4>CQR42000V</h4>
+        <h4>{resultGetCode?.code}</h4>
         <p>
           <FormattedMessage id="successRegister.send_voucher_email" />
         </p>
-        <Button>
-          <FormattedMessage id="successRegister.reservation_now" />
-        </Button>
-        <Button varian="outline">
-          <FormattedMessage id="successRegister.view_my_promo" />
-        </Button>
+        <GroupButtonSuccess>
+          <Link href="/profile/my-promo">
+            <Button varian="outline-a" className="view-my-promo">
+              <FormattedMessage id="successRegister.view_my_promo" />
+            </Button>
+          </Link>
+          <Button varian="primary-router" href="https://booking.ggg.com.vn">
+            <FormattedMessage id="successRegister.reservation_now" />
+          </Button>
+        </GroupButtonSuccess>
       </HeaderMobile>
       <ScrollShowContent>
         <WrapperInfo>
@@ -70,45 +72,25 @@ const SuccessRegister = ({ itemPromoGetCode }) => {
             <FormattedMessage id="successRegister.content_event" />
           </TitleInfo>
           <ContentInfo>
-            <div dangerouslySetInnerHTML={{ __html: itemPromoGetCode.content }} />
+            <div dangerouslySetInnerHTML={{ __html: itemPromoGetCode?.content }} />
           </ContentInfo>
           <TitleInfo>
             <FormattedMessage id="successRegister.location" />
           </TitleInfo>
-          <ContentInfo>Hà Nội</ContentInfo>
+          <ContentInfo>{itemPromoGetCode?.location}</ContentInfo>
           <TitleInfo>
             <FormattedMessage id="successRegister.date_apply" />
           </TitleInfo>
-          <ContentInfo>01/12/2020 - 31/12/2020</ContentInfo>
+          <ContentInfo>
+            {itemPromoGetCode?.startDate} - {itemPromoGetCode?.endDate}
+          </ContentInfo>
           <TitleInfo>
             <FormattedMessage id="successRegister.restaurant_apply" />
           </TitleInfo>
           <ListRestaurant>
             {itemPromoGetCode?.restaurants?.map((item, index) => (
               <li key={index}>
-                {/* <ItemRestaurant>
-                  <HeaderItemRestaurant>
-                    <p>• {item.name}</p>
-                    <p className="view-map">
-                      0.7km
-                      <IconMap color="#7B7979" />
-                    </p>
-                  </HeaderItemRestaurant>
-                  <h6>
-                    {item.address}
-                    <br />
-                    {item.openClose}
-                  </h6>
-                  <GroupButton>
-                    <Button size="tiny" varian="outline">
-                      <IconPhone /> {item.phone}
-                    </Button>
-                    <Button size="tiny">
-                      <FormattedMessage id="successRegister.reservation" />
-                    </Button>
-                  </GroupButton>
-                </ItemRestaurant> */}
-                <ItemRestaurantBooking promoId={itemPromoGetCode.id} restaurant={item} />
+                <ItemRestaurantBooking restaurant={item} />
               </li>
             ))}
           </ListRestaurant>

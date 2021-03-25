@@ -5,6 +5,10 @@ export const NamePromo = styled.h2`
   @media (max-width: 767px) {
     margin-bottom: 10px;
     font-size: 24px;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
   }
 `;
 

@@ -24,23 +24,13 @@ import Head from "next/head";
 const Popup = loadable(() => import("../../components/popup-wrapper"));
 const ListCondition = loadable(() => import("./Conditions"));
 
-const PromoDesktop = ({
-  listPromo,
-  promoListApi,
-  stateAction,
-  setStateAction,
-  onGetCode,
-  viewMapRestaurant,
-  onViewMyPromo,
-}) => {
-  const { promoCode, showPopUpSuccess } = stateAction;
-  const [currentPage, setCurrentPage] = useState(promoCode ? promoCode : 0);
+const PromoDesktop = ({ promoListApi, onGetCode, resultGetCode, setResultGetCode, indexPromoParam }) => {
+  const [currentPage, setCurrentPage] = useState(indexPromoParam > 0 ? indexPromoParam : 0);
   const [listRestaurant, setListRestaurant] = useState();
   const [condition, setCondition] = useState();
   const headerHeight = useSelector((s) => s.get("headerHeight"));
-  const [itemPromoGetCode, setItemPromoGetCode] = useState();
-  const size = promoListApi.length;
-
+  const size = promoListApi?.length;
+  const { data: promoUser } = useSelector((state) => state.get("promoOfUser")) ?? {};
   const PromoList = useMemo(
     () =>
       promoListApi.map((item, index) => (
@@ -59,12 +49,10 @@ const PromoDesktop = ({
                 <RightPromo className="RightPromo">
                   <PromoInfo
                     promo={item}
-                    hadGetCode={false}
+                    hadGetCode={promoUser ? promoUser.find((promo) => promo.promotionId === item.id) : false}
                     onGetCode={() => {
                       onGetCode(item.id, item.clmIsCashVoucher);
-                      setItemPromoGetCode(item);
                     }}
-                    onViewMyPromo={() => onViewMyPromo(item.id)}
                     getRestaurant={() => setListRestaurant({ restaurants: item.restaurants, promoId: item.id })}
                     getCondition={() => setCondition(item.condition)}
                   />
@@ -74,7 +62,7 @@ const PromoDesktop = ({
           </Container>
         </React.Fragment>
       )),
-    [promoListApi]
+    [promoListApi, promoUser]
   );
 
   return (
@@ -107,20 +95,15 @@ const PromoDesktop = ({
         </WrapperEndpoint>
       </WrapperContentPromo>
 
-      {/* <Popup show={showLogin} onClose={() => setShowLogin(false)}>
-        <PhoneOTP onResult={onGetValueOTP} />
-      </Popup> */}
-
-      <Popup show={showPopUpSuccess} onClose={() => setStateAction({ ...stateAction, showPopUpSuccess: false })}>
-        <SuccessRegister itemPromoGetCode={itemPromoGetCode} />
+      <Popup show={resultGetCode} onClose={() => setResultGetCode(false)}>
+        <SuccessRegister
+          resultGetCode={resultGetCode}
+          itemPromoGetCode={promoListApi.find((item) => item.id === resultGetCode?.promotionId)}
+        />
       </Popup>
 
       <Popup show={listRestaurant?.restaurants} onClose={() => setListRestaurant(null)}>
-        <ListRestaurant
-          promoId={listRestaurant?.promoId}
-          listRestaurant={listRestaurant?.restaurants}
-          onViewMap={viewMapRestaurant}
-        />
+        <ListRestaurant promoId={listRestaurant?.promoId} listRestaurant={listRestaurant?.restaurants} />
       </Popup>
 
       <Popup show={condition} onClose={() => setCondition(null)}>

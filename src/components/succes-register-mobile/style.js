@@ -80,3 +80,13 @@ export const WrapperScroll = styled.div`
 export const Item = styled.div`
   margin-bottom: 20px;
 `;
+
+export const GroupButtonMobile = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  a {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+`;

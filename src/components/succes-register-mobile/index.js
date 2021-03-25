@@ -3,8 +3,9 @@ import Button from "../button";
 import IconTriangleDown from "../icons/iconTriangleDown";
 import { FormattedMessage } from "react-intl";
 
-import { HeaderMobile, WrapperImageCode, WrapperScroll, Item } from "./style";
-const SuccessRegisterMobile = ({ onReservation, onShowListRestaurant, onShowCondition }) => {
+import { HeaderMobile, WrapperImageCode, WrapperScroll, Item, GroupButtonMobile } from "./style";
+import Link from "next/link";
+const SuccessRegisterMobile = ({ itemPromoGetCode, resultGetCode, onShowListRestaurant, onShowCondition }) => {
   return (
     <>
       <HeaderMobile>
@@ -22,39 +23,43 @@ const SuccessRegisterMobile = ({ onReservation, onShowListRestaurant, onShowCond
         <h6>
           <FormattedMessage id="successRegister.promo_code" />
         </h6>
-        <h4>CQR42000V</h4>
+        <h4>{resultGetCode?.code}</h4>
         <p>
           <FormattedMessage id="successRegister.send_voucher_email" />
         </p>
-        <Button onClick={onReservation}>
-          <FormattedMessage id="successRegister.reservation_now" />
-        </Button>
-        <Button varian="outline">
-          <FormattedMessage id="successRegister.view_my_promo" />
-        </Button>
+        <GroupButtonMobile>
+          <Button varian="primary-router" target="_blank" href="https://booking.ggg.com.vn">
+            <FormattedMessage id="successRegister.reservation_now" />
+          </Button>
+          <Link href="/profile/my-promo">
+            <Button varian="outline-a" href="/profile/my-promo">
+              <FormattedMessage id="successRegister.view_my_promo" />
+            </Button>
+          </Link>
+        </GroupButtonMobile>
       </HeaderMobile>
-
       <WrapperScroll>
         <Item>
           <h5>
             <FormattedMessage id="successRegister.content_event" />
           </h5>
           <h6>
-            Hỡi các thực thần tứ phương, cùng lên đường thẳng tiến GoGi để có 100% CƠ HỘI nhận hàng ngàn quà tặng cùng giải thưởng tiền mặt
-            trao tay tổng trị giá 1 TỶ ĐỒNG
+            <div dangerouslySetInnerHTML={{ __html: itemPromoGetCode?.content }} />
           </h6>
         </Item>
         <Item>
           <h5>
             <FormattedMessage id="successRegister.location" />
           </h5>
-          <h6>Hà Nội</h6>
+          <h6>{itemPromoGetCode?.location}</h6>
         </Item>
         <Item>
           <h5>
             <FormattedMessage id="successRegister.date_apply" />
           </h5>
-          <h6>01/12/2020 - 31/12/2020</h6>
+          <h6>
+            {itemPromoGetCode?.startDate} - {itemPromoGetCode?.endDate}
+          </h6>
         </Item>
         <Item onClick={onShowListRestaurant}>
           <h5>

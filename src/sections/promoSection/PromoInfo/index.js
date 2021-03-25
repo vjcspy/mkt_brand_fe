@@ -4,31 +4,43 @@ import Button from "../../../components/button";
 import IconTriangleDown from "../../../components/icons/iconTriangleDown";
 import { FormattedMessage } from "react-intl";
 import useIframeResize from "../../../hooks/useWindowResize/useIframeResize";
+import Link from "next/link";
+import { useSelector } from "react-redux";
+const PROMO_FLASH_SALE = "limited-gift-promotion";
+const PROMO_NORMAL = "gift-promotion";
 
-const PromoInfo = ({ promo, onGetCode, onViewMyPromo, hadGetCode, getRestaurant, getCondition }) => {
+const PromoInfo = ({ promo, onGetCode, hadGetCode, getRestaurant, getCondition }) => {
+  const locale = useSelector((s) => s.get("locale"));
   const [openDescription, setOpenDescription] = useState(false);
   const [showButtonHide, setShowButtonHide] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
   const refShow = useRef();
   const [{ width }] = useIframeResize();
-  const endDate = promo && Math.round((promo.endDateInTimeStamp * 1000 - new Date().getTime()) / (1000 * 60 * 60 * 24));
+  const [endDateFlashSale, setEndDateFlashSale] = useState();
+  useEffect(() => {
+    let timer;
+    if (promo?.typeFilter === PROMO_FLASH_SALE) {
+      timer = setInterval(() => {
+        let time = promo.endDateInTimeStamp * 1000 - new Date().getTime();
+        let date = Math.floor(time / (1000 * 60 * 60 * 24));
+        let dateConlai = time % (1000 * 60 * 60 * 24);
+        let hour = Math.floor(dateConlai / (1000 * 60 * 60));
+        let hConlai = dateConlai % (1000 * 60 * 60);
+        let minute = Math.floor(hConlai / (1000 * 60));
+        let minuteConlai = hConlai % (1000 * 60);
+        let second = Math.floor(minuteConlai / 1000);
+        setEndDateFlashSale(
+          `${date} ${locale === "vi" ? "ngày" : "days"} ${hour < 10 ? "0" + hour : hour}:${
+            minute < 10 ? "0" + minute : minute
+          }:${second < 10 ? "0" + second : second} `
+        );
+      }, 1000);
+    }
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     let time = promo.endDateInTimeStamp * 1000 - new Date().getTime();
-  //     let date = Math.floor(time / (1000 * 60 * 60 * 24));
-  //     let dateConlai = time % (1000 * 60 * 60 * 24);
-  //     let hour = Math.floor(dateConlai / (1000 * 60 * 60));
-  //     let hConlai = dateConlai % (1000 * 60 * 60);
-  //     let minute = Math.floor(hConlai / (1000 * 60));
-  //     let minuteConlai = hConlai % (1000 * 60);
-  //     let second = Math.floor(minuteConlai / 1000);
-  //     console.log(date, hour, minute, second);
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, []);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [promo]);
 
   useEffect(() => {
     if (refShow.current) {
@@ -48,25 +60,31 @@ const PromoInfo = ({ promo, onGetCode, onViewMyPromo, hadGetCode, getRestaurant,
         </h5>
         <ContentField>{promo?.expireDate}</ContentField>
       </WrapperFlex>
-      <WrapperFlex>
-        <h5>
-          <FormattedMessage id="promo.vouchers" />
-        </h5>
-        <ContentField>{promo?.clmIsCashVoucher}</ContentField>
-      </WrapperFlex>
-      <WrapperFlex>
-        <h5>
-          <FormattedMessage id="promo.expired" />
-        </h5>
-        <ContentField>
-          {endDate} <FormattedMessage id="promo.date" />
-        </ContentField>
-      </WrapperFlex>
+
+      {promo?.typeFilter === PROMO_NORMAL && (
+        <WrapperFlex>
+          <h5>
+            <FormattedMessage id="promo.vouchers" />
+          </h5>
+          <ContentField>{promo?.clmIsCashVoucher}</ContentField>
+        </WrapperFlex>
+      )}
+      {promo?.typeFilter === PROMO_FLASH_SALE && (
+        <WrapperFlex>
+          <h5>
+            <FormattedMessage id="promo.expired" />
+          </h5>
+          <ContentField>{endDateFlashSale}</ContentField>
+        </WrapperFlex>
+      )}
+
       <WrapperButton>
         {hadGetCode ? (
-          <Button onClick={onViewMyPromo}>
-            <FormattedMessage id="successRegister.view_my_promo" />
-          </Button>
+          <Link href="/profile/my-promo">
+            <Button varian="primary" href="/profile/my-promo">
+              <FormattedMessage id="successRegister.view_my_promo" />
+            </Button>
+          </Link>
         ) : (
           <Button onClick={onGetCode}>
             <FormattedMessage id="promo.get_otp" />

@@ -8,7 +8,7 @@ let postionStart;
 const DragMobile = ({ isShowDefault, children }) => {
   const refDrag = useRef();
   const [statusTop, setStatusTop] = useState(false);
-  const [height, setHeight] = useState(260);
+  const [height, setHeight] = useState(230);
   const appHeight = useAppHeight();
 
   const onMouseDown = (e) => {
@@ -17,7 +17,7 @@ const DragMobile = ({ isShowDefault, children }) => {
   const onMouseMove = (e) => {
     if (postionStart) {
       if (postionStart < e.clientY) {
-        setHeight(260);
+        setHeight(230);
         setStatusTop(false);
       } else if (postionStart > e.clientY) {
         setHeight("100%");
@@ -26,7 +26,7 @@ const DragMobile = ({ isShowDefault, children }) => {
   };
   const onMouseUp = (e) => {
     postionStart = undefined;
-    if (height !== 260) {
+    if (height !== 230) {
       setStatusTop(true);
     }
   };
@@ -38,7 +38,7 @@ const DragMobile = ({ isShowDefault, children }) => {
 
   const onTouchMove = (e) => {
     if (postionStart < e.touches[0].clientY + 50) {
-      setHeight(260);
+      setHeight(230);
       setStatusTop(false);
     } else if (postionStart > e.touches[0].clientY - 50) {
       setHeight("100%");
@@ -47,12 +47,12 @@ const DragMobile = ({ isShowDefault, children }) => {
 
   const onTouchEnd = (e) => {
     postionStart = undefined;
-    if (height !== 260) {
+    if (height !== 230) {
       setStatusTop(true);
     }
   };
   const onClose = () => {
-    setHeight(260);
+    setHeight(230);
     document.body.style.removeProperty("overflow-y");
     setTimeout(() => {
       setStatusTop(false);

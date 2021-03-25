@@ -34,7 +34,7 @@ const Button = forwardRef(({ varian = "primary", children, ...rest }, ref) => {
     case "back":
       return (
         <ButtonBack {...rest} ref={ref}>
-          <IconTriangleLineLeft width="11" height="13" />
+          <IconTriangleLineLeft width="20" height="20" />
           {children}
         </ButtonBack>
       );
