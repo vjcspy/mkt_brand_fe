@@ -1,5 +1,5 @@
 import { isNil } from "lodash";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const KEY_UP = 38;
 const KEY_DOWN = 40;
@@ -17,14 +17,14 @@ const OnePageScroll = ({
 }) => {
   const scrollRef = useRef();
   const containerRef = useRef();
-  const length = children.length;
+  const length = children?.length ?? 0;
 
   const [transition, setTransition] = useState(true);
   const [translateY, setTranslateY] = useState(0);
-  const [startPos, setStartPos] = useState(0);
-  const [movePos, setMovePos] = useState(0);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [movePos, setMovePos] = useState({ x: 0, y: 0 });
   const [delta, setDelta] = useState({
-    current: 0,
+    current: { x: 0, y: 0 },
     positive: false,
   });
   const [isScrolling, setIsScrolling] = useState(false);
@@ -37,28 +37,39 @@ const OnePageScroll = ({
 
   const onTouchStart = useCallback((event) => {
     const Y = event.touches[0].pageY;
-    setStartPos(Y);
-    setMovePos(Y);
+    const X = event.touches[0].pageX;
+    setStartPos({ x: X, y: Y });
+    setMovePos({ x: X, y: Y });
     setTransition(false);
     setDelta({
-      start: Y,
-      current: Y,
+      start: { x: X, y: Y },
+      current: { x: X, y: Y },
       positive: undefined,
     });
   }, []);
 
-  const onTouchMove = useCallback((event) => {
-    const Y = event.touches[0].pageY;
-    setMovePos(Y);
-    setDelta(({ current, start }) => {
-      return {
-        start: start,
-        current: Y,
-        next: Y < start,
-        positive: Math.abs(start - Y) <= minDeltaTouch ? undefined : current > Y,
-      };
-    });
-  }, []);
+  const onTouchMove = useCallback(
+    (event) => {
+      const Y = event.touches[0].pageY;
+      const X = event.touches[0].pageX;
+      if (Math.abs(startPos.x - X) > Math.abs(startPos.y - Y)) {
+        setMovePos(startPos);
+        setTransition(true);
+      } else {
+        setTransition(false);
+        setMovePos({ x: X, y: Y });
+      }
+      setDelta(({ current, start }) => {
+        return {
+          start: start,
+          current: { x: X, y: Y },
+          next: Y < start.y,
+          positive: Math.abs(start.y - Y) <= minDeltaTouch ? undefined : current.y > Y,
+        };
+      });
+    },
+    [startPos]
+  );
 
   const onTouchEnd = useCallback(() => {
     setTransition(true);
@@ -73,8 +84,8 @@ const OnePageScroll = ({
         });
       }
     }
-    setMovePos(0);
-    setStartPos(0);
+    setMovePos({ x: 0, y: 0 });
+    setStartPos({ x: 0, y: 0 });
   }, [delta]);
 
   const onWheel = useCallback(
@@ -142,6 +153,21 @@ const OnePageScroll = ({
     };
   }, [isScrolling]);
 
+  useEffect(() => {
+    return () => {
+      let win = window.frames[0]?.window ?? window;
+      win.document.body.classList.remove(DISABLED_CLASS_NAME);
+      win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
+    };
+  }, []);
+
+  const top = useMemo(() => {
+    if (children?.[Math.abs(translateY)] && containerRef.current) {
+      return -containerRef.current.children[Math.abs(translateY)]?.offsetTop;
+    }
+    return 0;
+  }, [translateY]);
+
   return (
     <div
       ref={scrollRef}
@@ -154,6 +180,7 @@ const OnePageScroll = ({
         height: containerHeight || 0,
         width: containerWidth,
         overflow: "hidden",
+        outline: "none",
       }}
       tabIndex="0"
     >
@@ -161,7 +188,7 @@ const OnePageScroll = ({
         ref={containerRef}
         style={{
           height: "100%",
-          transform: `translate3d(0px, ${(translateY + (movePos - startPos) / containerHeight) * 100}%, 0px)`,
+          transform: `translate3d(0px, ${top + (movePos.y - startPos.y)}px, 0px)`,
           transition: transition ? `transform ${TIMESCROLL}ms ease-out` : "none",
         }}
       >

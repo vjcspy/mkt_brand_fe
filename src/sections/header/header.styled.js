@@ -237,15 +237,21 @@ export const HoverWrapper = styled.button`
     background: ${({ theme }) => theme.color.status.primary};
     transition: 0.3s width ease-in-out;
   }
-
-  h6,
+  .user-name {
+    white-space: nowrap;
+  }
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+  p,
   svg {
     transition: 0.3s color ease-in-out;
   }
 
   &:hover,
   &.active {
-    h6,
+    p,
     svg {
       color: ${({ theme }) => theme.color.status.primary};
     }
@@ -274,7 +280,7 @@ export const WrapperMenuRight = styled.div`
   flex: 1 0 0;
   display: flex;
   justify-content: flex-end;
-  min-width: 345px;
+  min-width: 380px;
 
   // @media (max-width: 1068px) {
   //   min-width: 335px;

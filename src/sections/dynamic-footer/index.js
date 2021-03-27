@@ -12,7 +12,7 @@ const defaultConfig = {
 const DynamicFooter = ({ config = defaultConfig }) => {
   const locale = useSelector((s) => s.get("locale"));
   const content = get(config, ["components", "contentHTML", "value", locale]);
-  return <div style={{ width: "100%" }} dangerouslySetInnerHTML={{ __html: content }} />;
+  return <div style={{ width: "100%", height: "100%" }} dangerouslySetInnerHTML={{ __html: content }} />;
 };
 
 DynamicFooter.defaultConfig = defaultConfig;

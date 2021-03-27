@@ -62,8 +62,8 @@ const Item = styled.button`
 const Profile = ({ site }) => {
   const [show, setShow] = useState();
   const dispatch = useDispatch();
+
   const logout = useCallback(() => {
-    location.href = "/edit/signin";
     dispatch({ type: SET_TOKEN, remember: true });
   }, [dispatch]);
 

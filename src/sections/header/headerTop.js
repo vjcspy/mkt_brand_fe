@@ -25,7 +25,7 @@ const ProfileDropdown = loadable(() => import("./profileDropdown"));
 const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
   const locale = useSelector((state) => state.getIn(["locale"]));
   const location = useSelector((state) => state.getIn(["location"]));
-  const listPromoActive = useSelector((s) => s.get("listPromoActive"));
+  const provinceSelected = useSelector((state) => state.get("provinceSelected"))?.toJS()
   const { fullName, avatar } = useSelector((state) => state.get("userInfo"))?.toJS() ?? "";
   const [showProfile, setShowProfile] = useState(false);
   const itemLocation = dummyLocation.find((item) => item.id === location);
@@ -50,15 +50,16 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
               </ItemTopMenuRight>
               <ItemTopMenuRight>
                 <HoverWrapper>
-                  <h6>
+                  <p>
                     <FormattedMessage id="header.helper" />
-                  </h6>
+                  </p>
                 </HoverWrapper>
               </ItemTopMenuRight>
               <ItemTopMenuRight>
                 <HoverWrapper className={showProfile ? "active" : ""}>
                   {fullName ? (
-                    <h6
+                    <p
+                      className="user-name"
                       onClick={() => {
                         setShowProfile(true);
                       }}
@@ -69,13 +70,13 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
                       }}
                     >
                       {fullName}
-                    </h6>
+                    </p>
                   ) : (
                     <Link href="/login">
                       <a>
-                        <h6>
+                        <p>
                           <FormattedMessage id="header.login" />
-                        </h6>
+                        </p>
                       </a>
                     </Link>
                   )}
@@ -90,7 +91,7 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
               <ItemTopMenuRight onClick={() => setPopupLanguageLocation(true)}>
                 <HoverWrapper>
                   <IconMapMarker color="#7B7979" />
-                  <h6>{locale === "en" ? itemLocation.title : itemLocation.titleVN}</h6>
+                  <h6>{provinceSelected?.name}</h6>
                 </HoverWrapper>
               </ItemTopMenuRight>
             </TopMenuRight>

@@ -44,4 +44,9 @@ export const ItemSlide = styled.div`
 export const WrapperIcon = styled.div`
   cursor: pointer;
   display: flex;
+  &.icon-left {
+    svg {
+      transform: rotateY(180deg);
+    }
+  }
 `;

@@ -189,9 +189,9 @@ export const shadeColor = (color, percent) => {
   return "#" + RR + GG + BB;
 };
 
-export const getBrowserLink = (site_code, link) => {
-  if (process.browser && new RegExp(`^/${site_code}`).test(location.pathname)) {
-    return `/${site_code}${link}`;
+export const getBrowserLink = (edit, link) => {
+  if (process.browser && new RegExp(`^/${edit}`).test(location.pathname)) {
+    return `/${edit}${link}`;
   }
   return link;
 };

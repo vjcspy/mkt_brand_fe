@@ -10,14 +10,13 @@ import GoogleMapReact from "google-map-react";
 
 const MapLayout = forwardRef(({ listRestaurant, restaurantViewMap, onBack, item, iconMarker }, ref) => {
   const googleMapApi = useSelector((state) => state.get("googleMapApi"));
-  console.log(iconMarker.url);
   let center = item
     ? { lat: item.latitude, lng: item.longitude }
     : restaurantViewMap
-    ? { lat: restaurantViewMap.latitude, lng: restaurantViewMap.longitude }
-    : listRestaurant
-    ? { lat: listRestaurant[0].latitude, lng: listRestaurant[0].longitude }
-    : { lat: 10.7770335, lng: 106.693882 };
+      ? { lat: restaurantViewMap.latitude, lng: restaurantViewMap.longitude }
+      : listRestaurant
+        ? { lat: listRestaurant[0].latitude, lng: listRestaurant[0].longitude }
+        : { lat: 10.7770335, lng: 106.693882 };
   return (
     <MapLayoutWrapper>
       {item && (
@@ -26,7 +25,7 @@ const MapLayout = forwardRef(({ listRestaurant, restaurantViewMap, onBack, item,
             Back
           </Button>
           <MapItem>
-            <MapItemTitle onClick={() => {}}>
+            <MapItemTitle onClick={() => { }}>
               <h4>{item.name}</h4>
               <p>{item.distance + "km"}</p>
             </MapItemTitle>
@@ -51,7 +50,7 @@ const MapLayout = forwardRef(({ listRestaurant, restaurantViewMap, onBack, item,
       <MapWrapper>
         {googleMapApi?.value && (
           <GoogleMapReact bootstrapURLKeys={{ key: googleMapApi.value }} center={center} defaultZoom={8}>
-            {!item &&
+            {!item && !restaurantViewMap &&
               listRestaurant?.map((restaurant, index) => (
                 <Marker
                   lat={restaurant?.latitude ?? null}

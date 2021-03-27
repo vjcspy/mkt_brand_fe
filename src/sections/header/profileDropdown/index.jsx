@@ -1,21 +1,14 @@
-import { first, has } from "lodash";
+import { first } from "lodash";
 import React from "react";
 import Button from "../../../components/button";
 import Icon from "../../../components/icons";
 import LinkRouter from "../../../components/link-router";
 import useSiteRouter from "../../../hooks/useSiteRouter";
-import {
-  AvatarWrapper,
-  Marker,
-  DropDownWrapper,
-  ProfileNameWrapper,
-  ProfileWrapper,
-  TabItem,
-  TabsWrapper,
-} from "./styled";
+import { AvatarWrapper, DropDownWrapper, ProfileNameWrapper, ProfileWrapper, TabItem, TabsWrapper } from "./styled";
 import { FormattedMessage } from "react-intl";
 import { useDispatch } from "react-redux";
-import { SET_PROMO_OF_USER, SET_TOKEN_USER, SET_USER_INFO } from "../../../constants";
+import { SET_TOKEN_USER, SET_USER_INFO } from "../../../constants";
+
 const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
   const router = useSiteRouter();
   const dispatch = useDispatch();
@@ -24,8 +17,9 @@ const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
     dispatch({ type: SET_USER_INFO, value: {} });
     dispatch({ type: SET_PROMO_OF_USER, value: {} });
     setShowProfile(false);
-    router.push("/");
+    router.pushQuery("/");
   };
+  
   return (
     <>
       <DropDownWrapper>
@@ -43,7 +37,7 @@ const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
               width="100%"
               size="tiny"
               onClick={() => {
-                router.push("/profile");
+                router.pushQuery("/profile");
               }}
             >
               <FormattedMessage id="header.edit_info" />

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import Button from "../button";
 import {
   HeaderDesktop,
@@ -14,58 +14,30 @@ import {
   HeaderMobile,
 } from "./style";
 import { FormattedMessage } from "react-intl";
-import IconClose from "../icons/iconsClose";
-import IconMap from "../icons/iconMap";
-import IconPhone from "../icons/iconPhone";
 import ScrollShowContent from "../scroll-show-content";
 import Popup from "../popup-wrapper";
 import ItemRestaurantBooking from "../item-restaurant/item-restaurant-booking";
 import Link from "next/link";
-
-const listRestaurant = [
-  {
-    name: " Gogi House Trần Phú",
-    address: "Hà Đông - 146 Trần Phú, Mỗ Lao, Hà Đông, Hà Nội",
-    openClose: "10:30 AM - 11:00 PM",
-    phone: "19006622",
-    aboutKm: "0.7",
-    map: {},
-  },
-  {
-    name: " Gogi House Trần Phú",
-    address: "Hà Đông - 146 Trần Phú, Mỗ Lao, Hà Đông, Hà Nội",
-    openClose: "10:30 AM - 11:00 PM",
-    phone: "19006622",
-    aboutKm: "0.7",
-    map: {},
-  },
-  {
-    name: " Gogi House Trần Phú",
-    address: "Hà Đông - 146 Trần Phú, Mỗ Lao, Hà Đông, Hà Nội",
-    openClose: "10:30 AM - 11:00 PM",
-    phone: "19006622",
-    aboutKm: "0.7",
-    map: {},
-  },
-  {
-    name: " Gogi House Trần Phú",
-    address: "Hà Đông - 146 Trần Phú, Mỗ Lao, Hà Đông, Hà Nội",
-    openClose: "10:30 AM - 11:00 PM",
-    phone: "19006622",
-    aboutKm: "0.7",
-    map: {},
-  },
-  {
-    name: " Gogi House Trần Phú",
-    address: "Hà Đông - 146 Trần Phú, Mỗ Lao, Hà Đông, Hà Nội",
-    openClose: "10:30 AM - 11:00 PM",
-    phone: "19006622",
-    aboutKm: "0.7",
-    map: {},
-  },
-];
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
+import { DescriptionPromo } from "../../sections/promoSection/PromoInfo/style";
 
 const PopupPromo = ({ promo, onClose }) => {
+  const refShow = useRef();
+  const [openDescription, setOpenDescription] = useState(false);
+  const [showButtonHide, setShowButtonHide] = useState(false);
+  const [shouldShow, setShouldShow] = useState(false);
+  const [{ width }] = useIframeResize();
+
+  useEffect(() => {
+    if (refShow.current) {
+      if (refShow.current.scrollHeight > refShow.current.clientHeight) {
+        setShouldShow(true);
+      } else {
+        setShouldShow(false);
+      }
+    }
+  }, [width]);
+
   const onClosePopup = useCallback(() => {
     onClose(null);
   }, [onClose]);
@@ -86,13 +58,11 @@ const PopupPromo = ({ promo, onClose }) => {
             <h6>
               <FormattedMessage id="popupPromo.notification" />
             </h6>
-            <Link href="https://booking.ggg.com.vn" passHref>
-              <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
-                <Button>
-                  <FormattedMessage id="popupPromo.reservation_now" />
-                </Button>
-              </a>
-            </Link>
+            <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
+              <Button>
+                <FormattedMessage id="popupPromo.reservation_now" />
+              </Button>
+            </a>
           </ContentHeader>
         </HeaderDesktop>
         <HeaderMobile>
@@ -121,16 +91,34 @@ const PopupPromo = ({ promo, onClose }) => {
         </HeaderMobile>
 
         <hr />
-        {/* <ScrollShowContent>
-              
-            </ScrollShowContent> */}
-        <ScrollShowContent>
+        <ScrollShowContent key="popup-promo">
           <WrapperInfo>
             <TitleInfo>
               <FormattedMessage id="popupPromo.content_event" />
             </TitleInfo>
             <ContentInfo>
-              <div dangerouslySetInnerHTML={{ __html: promo?.promotionContent }} />
+              <DescriptionPromo
+                ref={refShow}
+                onClick={() => {
+                  setOpenDescription(true);
+                  setShowButtonHide(true);
+                }}
+                className={`${openDescription ? "open" : ""}`}
+              >
+                <div dangerouslySetInnerHTML={{ __html: promo?.promotionContent }} />
+
+                {showButtonHide && (
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowButtonHide(false);
+                      setOpenDescription(false);
+                    }}
+                  >
+                    Ẩn bớt
+                  </span>
+                )}
+              </DescriptionPromo>
             </ContentInfo>
 
             <TitleInfo>

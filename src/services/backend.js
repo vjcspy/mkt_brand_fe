@@ -1,6 +1,7 @@
 import path from "path";
 import Axios from "axios";
 import { each, get, sortBy } from "lodash";
+import { PROMO_FLASH_SALE , PROMO_NORMAL} from "../constants";
 
 export const getGlobalToken = async () => {
   global.jwtToken;
@@ -93,88 +94,24 @@ export const getListBlog = async () => {
   });
 };
 
-export const fetchMenuCategories = async ({ pageSize = 20, currentPage = 1, urlKey = "gogi" } = {}) => {
-  const categoryItem = function (level = 3) {
-    return `
-    id
-    name
-    position
-    description
-    image
-    url_path
-    url_key
-    children_count
-    canonical_url
-    level
-    path
-    ${
-      level > 0
-        ? `
-    children { 
-      ${categoryItem(level - 1)}
-    }`
-        : ""
-    }
-    products(pageSize: 20, currentPage: 1, sort: {}) {
-      items {
-        id
-        description {
-          html
-        }
-        image {
-          disabled
-          label
-          position
-          url
-        }
-        name
-        price_tiers {
-          quantity
-        }
-        product_links {
-          link_type
-          linked_product_sku
-          linked_product_type
-          position
-          sku
-        }
-        short_description {
-          html
-        }
-        sku
-        small_image {
-          disabled
-          label
-          position
-          url
-        }
-        tier_prices {
-          customer_group_id
-          percentage_value
-          qty
-          value
-          website_id
-        }
-        url_key
-      }
-    }
-  `;
-  };
-  const { data } = await Axios.post(process.env.GRAPHQL_HOST, {
-    query: `
-    query {
-      categories(filters: { url_key: { eq: "${urlKey}" } }, pageSize: ${pageSize}, currentPage: ${currentPage}) {
-        items {${categoryItem()}}
-        page_info {
-          total_pages
-          page_size
-        }
-        total_count
-      }
-    }
-    `,
-  });
-  const menu = get(data, ["data", "categories", "items", 0]);
+export const fetchMenuCategories = async ({
+  pageSize = 20,
+  currentPage = 1,
+  urlKey = "gogi",
+  storeCode = "gogi_royal",
+} = {}) => {
+  const productFragment = `fragment product on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url}only_x_left_in_stock options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html}sku stock_status thumbnail{url}url_key}`;
+  const bundleProductFragment = `fragment bundle on BundleProduct{items{__typename position required title option_id options{product{...product}}}}`;
+  const categoryTreeChild = `fragment categoryTreeChild on CategoryTree{id level name path position url_key}`;
+  const categoryTree = `fragment categoryTree on CategoryTree{id level name path position children{...categoryTreeChild}url_key}`;
+  const categoryResult = `fragment category on CategoryResult{items{id name position description url_key children_count canonical_url level path children{...categoryTree}}}`;
+  const query = `query{categories(filters:{url_key:{eq:"${urlKey}"}}pageSize:${pageSize} currentPage:${currentPage}){...category page_info{total_pages}total_count}}`;
+
+  const { data } = await Axios.post(
+    process.env.GRAPHQL_HOST,
+    { query: `${categoryTreeChild} ${categoryTree} ${categoryResult} ${query}` },
+    { headers: { Store: storeCode } }
+  );
   function sort(m) {
     if (get(m, ["children", "length"]) > 0) {
       m.children = sortBy(m.children, "position");
@@ -182,7 +119,35 @@ export const fetchMenuCategories = async ({ pageSize = 20, currentPage = 1, urlK
     }
     return m;
   }
-  return sort(menu);
+  const menu = sort(get(data, ["data", "categories", "items", 0]));
+
+  const categoriesIds = [];
+  menu.children.forEach(({ id, children }) => {
+    categoriesIds.push(id);
+    children?.forEach(({ id }) => {
+      categoriesIds.push(id);
+    });
+  });
+
+  const productList = await Promise.all(
+    categoriesIds.map((id) => fetchMenuCategoriesListingData({ categoryId: id, storeCode }))
+  );
+  const categories = categoriesIds.map((id, i) => ({ id, products: productList[i] }));
+
+  const menus = menu.children.map((category, i) => {
+    if (category.children?.length) {
+      category.children.map((category) =>
+        Object.assign(category, { products: categories.find((c) => c.id === category.id).products })
+      );
+    }
+    const products = categories.find((c) => c.id === category.id).products;
+    if (get(products, [0, "__typename"]) === "BundleProduct") {
+      category.isBundle = true;
+    }
+    return Object.assign(category, { products });
+  });
+
+  return menus;
   // return reduceRight(groupBy(get(data, ["data", "categories", "items"]), "level"), (arr, current) =>
   //   map(current, (item) =>
   //     assign(item, {
@@ -190,6 +155,20 @@ export const fetchMenuCategories = async ({ pageSize = 20, currentPage = 1, urlK
   //     })
   //   )
   // );
+};
+
+export const fetchMenuCategoriesListingData = async ({ categoryId, storeCode = "gogi_royal" }) => {
+  const productFragment = `fragment product on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url}only_x_left_in_stock options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html}sku stock_status thumbnail{url}url_key}`;
+  const bundleProductFragment = `fragment bundle on BundleProduct{items{__typename position required title option_id options{product{...product}}}}`;
+  const query = `query{catalogCategoryListingData(search:"" filters:{code:"category_id",data:{eq:"${categoryId}"}}pageSize:100 currentPage:1){items{...product ...bundle}page_info{total_pages}total_count}}`;
+
+  const { data } = await Axios.post(
+    process.env.GRAPHQL_HOST,
+    { query: `${productFragment} ${bundleProductFragment} ${query}` },
+    { headers: { Store: storeCode } }
+  );
+
+  return get(data, ["data", "catalogCategoryListingData", "items"], []);
 };
 
 // get promo
@@ -248,3 +227,22 @@ export const getProvinces = () => {
     },
   });
 };
+
+
+export const filterListPromoApi = (listPromo) =>{
+  let promoListResult = [];
+   listPromo.map((listPromoItem) => {
+    if (listPromoItem.type === PROMO_NORMAL) {
+      listPromoItem.data.map((promo) => {
+        promo.typeFilter = PROMO_NORMAL;
+        promoListResult.push(promo);
+      });
+    } else if (listPromoItem.type === PROMO_FLASH_SALE) {
+      listPromoItem.data.map((promo) => {
+        promo.typeFilter = PROMO_FLASH_SALE;
+        promoListResult.push(promo);
+      });
+    }
+  });
+  return promoListResult
+}

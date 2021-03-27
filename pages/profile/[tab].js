@@ -1,8 +1,7 @@
-import { List } from "immutable";
-import { map } from "lodash";
+import { get, map } from "lodash";
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { SET_GOOGLE_MAP_API, SET_MODIFIED_CONFIG, SET_PAGE_NAME, UPDATE_CONFIG } from "../../src/constants";
+import { SET_GOOGLE_MAP_API, SET_ICON_VIEW_MAP, UPDATE_CONFIG } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
@@ -39,9 +38,11 @@ export async function getServerSideProps({ params }) {
 const Profile = ({ config, site_code, tab, googleMapApi }) => {
   const dispatch = useDispatch();
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
+  const iconMap = get(config, ["pages", "map", "sections", 0, "components", "imageMarker", "value"]);
 
   useEffect(() => {
     dispatch({ type: UPDATE_CONFIG, path: ["profile-tab"], value: tab });
+    dispatch({ type: SET_ICON_VIEW_MAP, value: iconMap });
     dispatch({ type: SET_GOOGLE_MAP_API, path: ["profile-tab"], value: googleMapApi[0] });
     //   dispatch({
     //     type: UPDATE_CONFIG,

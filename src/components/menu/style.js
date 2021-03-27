@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const WrapperMenu = styled.div`
   position: fixed;
   width: 100%;
+  
   height: 100vh;
   z-index: 1003;
   opacity: 0;
@@ -36,6 +37,7 @@ export const MarkerLayout = styled.div`
 export const WrapperContentMenu = styled.div`
   width: 40%;
   height: 100%;
+  max-height: 100vh;
   min-width: 358px;
   display: flex;
   flex-direction: column;
@@ -327,16 +329,19 @@ export const FooterMenu = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
-
+  display:flex;
   button,
   a {
     border-radius: 0px !important;
     width: 50%;
     padding: 0;
+    a{
+      width: 100%;
+    }
   }
 
   button,
-  a:not(last-child) {
+  & > a:not(last-child) {
     border-right: 1px solid rgba(255, 255, 255, 0.6);
     &:not(:last-child) {
       border-right: 1px solid rgba(255, 255, 255, 0.6);

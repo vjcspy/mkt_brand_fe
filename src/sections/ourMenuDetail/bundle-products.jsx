@@ -1,25 +1,26 @@
+import { get } from "lodash";
 import React from "react";
 import Image from "../../components/image";
 import { toMoney } from "../../services/frontend";
 import { MenuChildImageWrapper, MenuChildItem, MenuChildItemWraper, MenuChildWraper } from "./styled";
 
-const MenuChildComponent = ({ config }) => {
+const BundleProducts = ({ config }) => {
   return (
     <MenuChildWraper>
-      {config.products?.items?.map((product) => (
+      {config.products?.map((product) => (
         <MenuChildItemWraper key={product.id}>
           <MenuChildItem isFirst>
             <MenuChildImageWrapper>
-              <Image width={283} height={273} src={product.image.url} alt="product" title="product" width="500" height="500" />
+              <Image src={product.image.url} alt={product.name} title={product.name} width="500" height="500" />
             </MenuChildImageWrapper>
           </MenuChildItem>
           <MenuChildItem>
             <h2>{product.name}</h2>
-            <h3>{toMoney(product.price_range.minimum_price)} VNĐ/người</h3>
+            <h3>{toMoney(get(product, ["price_range", "minimum_price", "final_price", "value"]))} VNĐ/người</h3>
             <hr />
-            <div dangerouslySetInnerHTML={{ __html: product.description }} />
+            <div dangerouslySetInnerHTML={{ __html: product.description.html }} />
             <h5>Thực đơn</h5>
-            <p>{product.short_description}</p>
+            <div dangerouslySetInnerHTML={{ __html: product.short_description.html }} />
           </MenuChildItem>
         </MenuChildItemWraper>
       ))}
@@ -27,4 +28,4 @@ const MenuChildComponent = ({ config }) => {
   );
 };
 
-export default MenuChildComponent;
+export default BundleProducts;

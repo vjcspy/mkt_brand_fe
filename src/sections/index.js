@@ -10,13 +10,14 @@ import Article from "./article";
 import PromoSection from "./promoSection";
 import Comment from "./comment";
 import PromoBanner from "./PromoBanner";
-import BookingBanner from "./BookingBanner";
-import MeuBanner from "./menuBanner";
+// import BookingBanner from "./BookingBanner";
+// import MenuBanner from "./menuBanner";
 import BlogSection from "./BlogSection";
 import DynamicContentHTML from "./dynamicContentHTML";
 import PolicyCookie from "./policyCookie";
 import TabBanner from "./tab-banner";
 import DynamicFooter from "./dynamic-footer";
+
 export const RenderHeader = ({ config, menus, pageName }) => {
   const H = Headers[config?.name];
   return H ? <H config={config} menus={menus} pageName={pageName} /> : null;
@@ -48,7 +49,9 @@ const pageHome = {
   name: "home",
   sections: [TabBanner.defaultConfig],
   breadcrumbs: [],
+  shouldHideFooter: true,
 };
+
 const pagePromo = {
   name: "promo",
   // titleTranslate: "breadcrumbs.promo",
@@ -59,23 +62,26 @@ const pagePromo = {
   // breadcrumbs: [pageHome],
 };
 
-const pageOurMenu = {
-  name: "our-menu",
-  title: "Our Menu",
-  titleTranslate: "breadcrumbs.our_menu",
-  path: "/our-menu",
-  icon: "utensils",
-  sections: [MeuBanner.defaultConfig],
-  breadcrumbs: [pageHome],
-};
+// const pageOurMenu = {
+//   name: "our-menu",
+//   title: "Our Menu",
+//   titleTranslate: "breadcrumbs.our_menu",
+//   path: "/our-menu",
+//   icon: "utensils",
+//   sections: [MenuBanner.defaultConfig],
+//   breadcrumbs: [pageHome],
+// };
+
 const pageOurMenuDetail = {
   name: "our-menu-detail",
   title: "Our Menu Detail",
   path: "/our-menu/[menu]",
   icon: "utensils",
   sections: [OurMenuDetail.defaultConfig],
+  shouldHideFooter: true,
   // breadcrumbs: [pageHome, pageOurMenu],
 };
+
 const pageMap = {
   name: "map",
   title: "Địa chỉ nhà hàng",
@@ -85,6 +91,7 @@ const pageMap = {
   sections: [MapAddress.defaultConfig],
   // breadcrumbs: [pageHome],
 };
+
 const pageProfile = {
   name: "profile",
   title: "Profile",
@@ -94,6 +101,7 @@ const pageProfile = {
   sections: [ProfileSection.defaultConfig],
   // breadcrumbs: [pageHome],
 };
+
 const pageLogin = {
   name: "login",
   title: "Login",
@@ -102,6 +110,7 @@ const pageLogin = {
   sections: [SectionSignIn.defaultConfig],
   // breadcrumbs: [],
 };
+
 const pageBlog = {
   name: "blog",
   title: "Blog",
@@ -111,6 +120,7 @@ const pageBlog = {
   sections: [BlogSection.defaultConfig],
   // breadcrumbs: [],
 };
+
 const pageBlogDetail = {
   name: "blog-detail",
   title: "Blog Detail",
@@ -121,13 +131,14 @@ const pageBlogDetail = {
   // breadcrumbs: [],
 };
 
-const pageBooking = {
-  name: "booking",
-  title: "Booking",
-  path: "/booking",
-  icon: "blog",
-  sections: [BookingBanner.defaultConfig],
-};
+// const pageBooking = {
+//   name: "booking",
+//   title: "Booking",
+//   path: "/booking",
+//   icon: "blog",
+//   sections: [BookingBanner.defaultConfig],
+// };
+
 const pagePolicyCookie = {
   name: "policy-cookie",
   title: "Policy Cookie",
@@ -135,22 +146,25 @@ const pagePolicyCookie = {
   icon: "blog",
   sections: [PolicyCookie.defaultConfig],
 };
+
 export const Pages = {
   home: pageHome,
   promo: pagePromo,
-  "our-menu": pageOurMenu,
+  // "our-menu": pageOurMenu,
   "our-menu-detail": pageOurMenuDetail,
   map: pageMap,
   profile: pageProfile,
   login: pageLogin,
   blog: pageBlog,
   "blog-detail": pageBlogDetail,
-  booking: pageBooking,
+  // booking: pageBooking,
   "policy-cookie": pagePolicyCookie,
 };
+
 export const Headers = { [Header.defaultConfig.name]: Header };
 export const Footers = { [Footer.defaultConfig.name]: Footer };
 export const DynamicFooters = { [DynamicFooter.defaultConfig.name]: DynamicFooter };
+
 export const Sections = {
   [ImageText.defaultConfig.name]: ImageText,
   // [Breadcrumbs.defaultConfig.name]: Breadcrumbs,
@@ -161,8 +175,8 @@ export const Sections = {
   [SectionSignIn.defaultConfig.name]: SectionSignIn,
   [Article.defaultConfig.name]: Article,
   [PromoBanner.defaultConfig.name]: PromoBanner,
-  [BookingBanner.defaultConfig.name]: BookingBanner,
-  [MeuBanner.defaultConfig.name]: MeuBanner,
+  // [BookingBanner.defaultConfig.name]: BookingBanner,
+  // [MenuBanner.defaultConfig.name]: MenuBanner,
   [BlogSection.defaultConfig.name]: BlogSection,
   [Comment.defaultConfig.name]: Comment,
   [DynamicContentHTML.defaultConfig.name]: DynamicContentHTML,

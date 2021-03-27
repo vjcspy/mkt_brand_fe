@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import React, { useMemo } from "react";
-import MenuChildComponent from "./menuChildComponent";
-import MenuGrandChildComponent from "./menuGrandChildComponent";
+import BundleProducts from "./bundle-products";
+import SingleProducts from "./single-products";
 import { MenuMainWrapper } from "./styled";
 
 const MenuMain = ({ menus, path, setPath }) => {
@@ -11,7 +11,7 @@ const MenuMain = ({ menus, path, setPath }) => {
   }
   return (
     <MenuMainWrapper>
-      {config.type == "category" ? <MenuChildComponent config={config} /> : <MenuGrandChildComponent config={config} />}
+      {config.isBundle ? <BundleProducts config={config} /> : <SingleProducts config={config} />}
     </MenuMainWrapper>
   );
 };

@@ -6,7 +6,6 @@ export const JWT_TOKEN = "jwtToken";
  * REDUCER
  */
 
-export const GGG_INTERNAL = "https://internal.ggg.systems";
 
 export const SELECTED_SECTION = "SELECTED_SECTION";
 export const SELECTED_COMPONENT = "SELECTED_COMPONENT";
@@ -63,7 +62,6 @@ export const SET_USER_INFO = "SET_USER_INFO";
 export const GET_INFO_USER = "GET_INFO_USER";
 export const SET_TOKEN_USER = "SET_TOKEN_USER";
 export const SHOW_LIST_BRAND = "SHOW_LIST_BRAND";
-export const SET_MY_VOUCHER = "SET_MY_VOUCHER";
 export const GET_MY_VOUCHER = "GET_MY_VOUCHER";
 /**
  * SAGA
@@ -92,3 +90,13 @@ export const SET_PROMO_OF_USER = "SET_PROMO_OF_USER";
 export const GET_PROMO_OF_USER = "GET_PROMO_OF_USER";
 
 export const SET_ICON_VIEW_MAP = "SET_ICON_VIEW_MAP";
+
+export const GET_TRANSACTION = "GET_TRANSACTION";
+export const SET_TRANSACTION = "SET_TRANSACTION";
+
+export const SET_LIST_PROVINCE = "SET_LIST_PROVINCE"
+export const SET_PROVINCE_SELECTED = "SET_PROVINCE_SELECTED"
+export const SET_NUM_PROMO = "SET_NUM_PROMO"
+
+export const PROMO_FLASH_SALE = "limited-gift-promotion";
+export const PROMO_NORMAL = "gift-promotion";

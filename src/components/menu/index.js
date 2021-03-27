@@ -30,9 +30,10 @@ import useAppHeight from "../../hooks/useAppHeight";
 const mapDispatchToProp = (dispatch) => ({
   setShowLanguageLocation: (value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }),
 });
-const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
+const Menu = ({ show, listMenu, setShowMenu, buttonRight, buttonLeft }) => {
   const [itemSubMenu, setItemSubMenu] = useState();
   const locale = useSelector((state) => state.getIn(["locale"]));
+  const numPromo = useSelector((state) => state.get("numPromo"));
   const menu = useGraphql("menu");
   const menus = useMemo(() => listMenu?.map((m) => (m.apiKey === "menu" ? { ...m, children: menu } : m)), [
     listMenu,
@@ -71,7 +72,7 @@ const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
                       >
                         <h4>
                           {item.label?.[locale]}
-                          {item.apiKey == "promo" && <span>{2}</span>}
+                          {item.apiKey == "promo" && numPromo > 0 && <span>{numPromo}</span>}
                         </h4>
                         <IconTriangleRight width={15} height={15} />
                       </ItemMenu>
@@ -81,7 +82,7 @@ const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
                           <LinkRouter href={item.url} passHref>
                             <a>{item.label?.[locale]}</a>
                           </LinkRouter>
-                          {item.apiKey == "promo" && <span>{2}</span>}
+                          {item.apiKey == "promo" && numPromo > 0 && <span>{numPromo}</span>}
                         </h4>
                       </ItemMenu>
                     )}
@@ -118,11 +119,11 @@ const Menu = ({ show, listMenu, setShowMenu, setShowLanguageLocation }) => {
             </ContentMenu>
 
             <FooterMenu>
-              <Button status="primary">
-                <FormattedMessage id="menu.download_app" />
+              <Button target="_blank" href={buttonLeft?.value?.url} varian="primary-router" status="primary">
+                <span>{buttonLeft?.value?.label?.[locale]}</span>
               </Button>
-              <Button status="primary">
-                <FormattedMessage id="menu.reservation" />
+              <Button  target="_blank" href={buttonRight?.value?.url} varian="primary-router" status="primary">
+              <span>{buttonRight?.value?.label?.[locale]}</span>
               </Button>
             </FooterMenu>
           </ContentRelative>

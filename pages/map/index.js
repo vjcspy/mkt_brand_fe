@@ -17,8 +17,7 @@ export async function getServerSideProps({ query }) {
       getSiteServer(site_code),
       getListRestaurant({ brandId: 7, provinceId: 5 }),
     ]);
-    let restaurantViewMap = idRestaurant ? dataForMap.result?.find((item) => item.code === idRestaurant) ?? {} : null;
-
+    let restaurantViewMap = idRestaurant ? dataForMap.result?.find((item) => item.code == idRestaurant) ?? {} : null;
     return {
       props: {
         config: site?.config ?? null,
@@ -57,7 +56,7 @@ const Map = ({ config, site_code, googleMapApi, restaurantViewMap, listRestauran
   return (
     <Layout>
       <PageContainer
-        promoViewMap={restaurantViewMap}
+        restaurantViewMap={restaurantViewMap}
         listRestaurant={listRestaurant}
         pageName={Pages.map.name}
         siteCode={site_code}

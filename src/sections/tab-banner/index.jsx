@@ -81,10 +81,10 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
 
   const [transition, setTransition] = useState(true);
   const [translateX, setTranslateX] = useState();
-  const [startPos, setStartPos] = useState(0);
-  const [movePos, setMovePos] = useState(0);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [movePos, setMovePos] = useState({ x: 0, y: 0 });
   const [delta, setDelta] = useState({
-    current: 0,
+    current: { x: 0, y: 0 },
     positive: false,
   });
 
@@ -137,7 +137,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
 
   useEffect(() => {
     const e = new Event("tabbanner");
-    e.percentage = ((startPos - movePos) / width) * 100;
+    e.percentage = ((startPos.x - movePos.x) / width) * 100;
     e.transition = transition;
     var index = Math.abs(translateX ?? 0);
     e.index = index;
@@ -147,12 +147,13 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
   const onTouchStart = useCallback(
     (event) => {
       const X = event.touches[0].pageX;
-      setStartPos(X);
-      setMovePos(X);
+      const Y = event.touches[0].pageY;
+      setStartPos({ x: X, y: Y });
+      setMovePos({ x: X, y: Y });
       setTransition(false);
       setDelta({
-        start: X,
-        current: X,
+        start: { x: X, y: Y },
+        current: { x: X, y: Y },
         positive: undefined,
       });
     },
@@ -162,15 +163,22 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
   const onTouchMove = useCallback(
     (event) => {
       const X = event.touches[0].pageX;
-      setMovePos(X);
+      const Y = event.touches[0].pageY;
+      if (Math.abs(startPos.y - Y) > Math.abs(startPos.x - X)) {
+        setMovePos(startPos);
+        setTransition(true);
+      } else {
+        setTransition(false);
+        setMovePos({ x: X, y: Y });
+      }
       setDelta(({ current, start }) => ({
         start: start,
-        current: X,
-        next: X < start,
-        positive: Math.abs(start - X) <= miniDelta ? undefined : current > X,
+        current: { x: X, y: Y },
+        next: X < start.x,
+        positive: Math.abs(start.x - X) <= miniDelta ? undefined : current.x > X,
       }));
     },
-    [config]
+    [config, startPos]
   );
 
   const onTouchEnd = useCallback(() => {
@@ -186,8 +194,8 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
         });
       }
     }
-    setMovePos(0);
-    setStartPos(0);
+    setMovePos({ x: 0, y: 0 });
+    setStartPos({ x: 0, y: 0 });
   }, [delta]);
 
   return (
@@ -197,7 +205,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
         style={{
           width: `${length * 100}%`,
           transition: transition ? "transform 0.3s ease-out" : "none",
-          transform: `translateX(${((translateX + (movePos - startPos) / width) * 100) / length}%)`,
+          transform: `translateX(${((translateX + (movePos.x - startPos.x) / width) * 100) / length}%)`,
         }}
       >
         {config.components.tabBanner.value.map((config, index) => (

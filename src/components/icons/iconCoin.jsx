@@ -3,7 +3,7 @@ import React from "react";
 const IconCoin = ({ width = 20, height = 20, color = "currentColor", fill = "#FFC700" }) => {
   return (
     <svg width={width} height={height} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0)">
+      <g clipPath="url(#clip0)">
         <path
           d="M10.0139 0C4.49093 0 0 4.49093 0 10.0139C0 15.537 4.49093 20.0279 10.0139 20.0279C15.537 20.0279 20.0279 15.537 20.0279 10.0139C20 4.49093 15.5091 0 10.0139 0ZM10.0139 18.94C5.07671 18.94 1.05997 14.9233 1.05997 9.98605C1.05997 5.04881 5.07671 1.03208 10.0139 1.03208C14.9512 1.03208 18.9679 5.04881 18.9679 9.98605C18.94 14.9233 14.9233 18.94 10.0139 18.94Z"
           fill={fill}

@@ -42,11 +42,7 @@ const BannerItem = ({ config, footer }) => {
             {item.showHead.value.active === "Show" && <h1>{item.headText.value[locale]}</h1>}
             {item.showContent.value.active === "Show" && <h3>{item.contentText.value[locale]}</h3>}
             <LinkRouter href={`${item.link?.value?.url ?? "/ "}`} passHref>
-              <a className="link-banner">
-                <Button className="button-banner">
-                  <span>{item.link?.value?.label[locale] ?? "Xem ưu đãi"}</span>
-                </Button>
-              </a>
+              <a className="link-banner">{item.link?.value?.label[locale] ?? "Xem ưu đãi"}</a>
             </LinkRouter>
           </GroupButton>
         </WrapperSection>

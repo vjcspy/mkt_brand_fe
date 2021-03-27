@@ -5,7 +5,7 @@ import { SET_GOOGLE_MAP_API, SET_ICON_VIEW_MAP } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getApiKeyGoogleMap, getListPromo, getSiteServer } from "../../src/services/backend";
+import { filterListPromoApi, getApiKeyGoogleMap, getListPromo, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 import { get } from "lodash";
 
@@ -17,20 +17,9 @@ export async function getServerSideProps({}) {
       getListPromo(),
       getSiteServer(site_code),
     ]);
-    let promoListResult = [];
-    promoListApi.result.map((listPromoItem) => {
-      if (listPromoItem.type === "gift-promotion") {
-        listPromoItem.data.map((promo) => {
-          promo.typeFilter = "gift-promotion";
-          promoListResult.push(promo);
-        });
-      } else if (listPromoItem.type === "limited-gift-promotion") {
-        listPromoItem.data.map((promo) => {
-          promo.typeFilter = "limited-gift-promotion";
-          promoListResult.push(promo);
-        });
-      }
-    });
+
+    let promoListResult = filterListPromoApi(promoListApi.result)
+
     return {
       props: {
         config: site?.config ?? null,

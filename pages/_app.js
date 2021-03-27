@@ -8,7 +8,8 @@ import { Provider, useDispatch } from "react-redux";
 import useFromJS from "../src/hooks/useFromJS";
 import defaultTranslation from "../src/translations";
 import { useEffect } from "react";
-import { SET_HOST } from "../src/constants";
+import { SET_HOST, SET_LIST_PROVINCE, SET_NUM_PROMO } from "../src/constants";
+import { filterListPromoApi, getListPromo, getProvinces } from "../src/services/backend";
 
 const ThemeWrapper = ({ children }) => {
   const theme = useFromJS(["modifiedConfig", "theme"]);
@@ -19,18 +20,20 @@ const LanguageWrapper = ({ children }) => {
   return <LanguageProvider messages={translation ?? defaultTranslation}>{children}</LanguageProvider>;
 };
 
-const HostWrapper = ({ children, host, graphqlHost }) => {
+const HostWrapper = ({ children, host, graphqlHost, provinces, numPromo }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch({ type: SET_HOST, host, graphqlHost });
+    dispatch({ type: SET_LIST_PROVINCE, value: provinces });
+    dispatch({ type: SET_NUM_PROMO, value: numPromo });
   }, [host, graphqlHost]);
   return children;
 };
 
-function App({ Component, pageProps, host, graphqlHost }) {
+function App({ Component, pageProps, host, graphqlHost, provinces, numPromo }) {
   return (
     <Provider store={store}>
-      <HostWrapper host={host} graphqlHost={graphqlHost}>
+      <HostWrapper numPromo={numPromo} provinces={provinces} host={host} graphqlHost={graphqlHost}>
         <LanguageWrapper>
           <ThemeWrapper>
             <GlobalStyle />
@@ -45,7 +48,15 @@ function App({ Component, pageProps, host, graphqlHost }) {
 App.getInitialProps = async ({ Component, ctx }) => {
   // const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
   // console.log("getInitialProps App");
-  return { host: process.env.API_HOST, graphqlHost: process.env.GRAPHQL_HOST };
+  try {
+    const [{ data: listProvince }, { data: listPromo }] = await Promise.all([getProvinces(), getListPromo()]);
+    let provinces = listProvince.result?.map((item) => ({ id: item?.id, name: item?.name }));
+    let numPromo = filterListPromoApi(listPromo.result).length;
+
+    return { host: process.env.API_HOST, graphqlHost: process.env.GRAPHQL_HOST, provinces: provinces, numPromo };
+  } catch (e) {
+    return { host: process.env.API_HOST, graphqlHost: process.env.GRAPHQL_HOST, provinces: null, numPromo: 0 };
+  }
 };
 
 export default App;

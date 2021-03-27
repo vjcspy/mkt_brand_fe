@@ -8,7 +8,7 @@ import { WrapperSignIn, Item, Info, GroupInput, ContentSignIn, WrapperItemSignIn
 import { useSelector, useDispatch } from "react-redux";
 
 import CreateInfo from "./createInfo";
-import { GET_PROMO_OF_USER, GGG_INTERNAL, SET_TOKEN_USER, SET_USER_INFO } from "../../constants";
+import { GET_PROMO_OF_USER,  SET_TOKEN_USER, SET_USER_INFO } from "../../constants";
 import { showNotification } from "../../components/notification";
 
 import PulseLoader from "../../components/loading";

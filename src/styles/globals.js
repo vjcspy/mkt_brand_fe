@@ -9,10 +9,13 @@ export const GlobalStyle = createGlobalStyle`
   button {
     color: ${({ theme }) => theme.color.text.body};
   }
-  html{
+
+  html {
     height: var(--app-height);
     overflow-y: hidden;
     max-height: 100vh;
+    overscroll-behavior-x: none;
+    overscroll-behavior-y: none;
   }
   
   body{
@@ -21,24 +24,25 @@ export const GlobalStyle = createGlobalStyle`
     overflow-y: auto;
     overscroll-behavior-x: none;
     overscroll-behavior-y: none;
+    overscroll-behavior-y: contain;
     ::-webkit-scrollbar {
      width: 0px;
     }
 
     /* Track */
     ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+      background: #f1f1f1;
     }
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-    background: #888;
+      background: #888;
     }
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
+      background: #555;
+    }
   }
   h1,
   h2,
@@ -291,5 +295,9 @@ export const GlobalStyle = createGlobalStyle`
         transition: all 400ms ease-in;
       }
     }
+  }
+
+  .hidden {
+    display: none !important;
   }
 `;

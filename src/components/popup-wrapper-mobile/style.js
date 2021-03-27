@@ -25,6 +25,7 @@ export const WrapperPopupMobile = styled.div`
   bottom: 0;
   transition: 0.3s;
   z-index: 1000;
+  overflow: hidden;
   &.bottom-top-started {
     height: calc(100% - 69px);
   }

@@ -3,11 +3,9 @@ import styled from "styled-components";
 export const Footer = styled.footer``;
 
 export const FooterWrapper = styled.div`
-  margin-top: 140px;
   // background: #e9e9e969;
   // padding-top: 40px;
   @media (max-width: 767px) {
-    margin-top: 50px;
   }
 `;
 

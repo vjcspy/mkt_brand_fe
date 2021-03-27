@@ -49,6 +49,8 @@ const DragMobile = ({ isShowDefault, children }) => {
     postionStart = undefined;
     if (height !== 230) {
       setStatusTop(true);
+    } else if (height <= 230) {
+      document.body.style.removeProperty("overflow-y");
     }
   };
   const onClose = () => {

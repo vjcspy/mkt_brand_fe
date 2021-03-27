@@ -38,7 +38,6 @@ import {
   SET_USER_INFO,
   SET_TOKEN_USER,
   SHOW_LIST_BRAND,
-  SET_MY_VOUCHER,
   SET_LIST_BLOG_IS_SHOW,
   SET_LIST_PROMO_ACTIVE,
   SET_LIST_BOOKING,
@@ -50,6 +49,10 @@ import {
   SET_LIST_BLOG_EDIT_PAGE,
   SET_PROMO_OF_USER,
   SET_ICON_VIEW_MAP,
+  SET_TRANSACTION,
+  SET_LIST_PROVINCE,
+  SET_PROVINCE_SELECTED,
+  SET_NUM_PROMO,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -58,7 +61,7 @@ export const initialState = fromJS({
   mode: PRODUCTION_MODE,
   selectedSection: null,
   locale: "vi",
-  location: "hn",
+  provinceSelected:fromJS({name:"Hà nội", id:5}),
   acceptCookie: false,
   notifications: List([]),
   tokenUser: fromJS({}),
@@ -66,6 +69,7 @@ export const initialState = fromJS({
   firstLoad: false,
   viewPreview: false,
   showMenuHeader: false,
+  numPromo: 0
 });
 
 export default function rootReducer(state = initialState, action) {
@@ -134,8 +138,6 @@ export default function rootReducer(state = initialState, action) {
       return state.set("mediaDialog", fromJS(action.value));
     case SET_LOCALE:
       return state.set("locale", action.value);
-    case SET_LOCATION:
-      return state.set("location", action.value);
     case SHOW_LANGUAGE_LOCATION:
       return state.set("showLanguageLocation", action.value);
     case SET_PAGE_NAME:
@@ -194,6 +196,15 @@ export default function rootReducer(state = initialState, action) {
       return state.set("promoOfUser", action.value);
     case SET_ICON_VIEW_MAP:
       return state.set("iconViewMap", action.value);
+    case SET_TRANSACTION:
+      return state.set("transaction", action.value);
+    case SET_LIST_PROVINCE:
+      return state.set("listProvince", action.value);
+    case SET_PROVINCE_SELECTED:
+      return state.update("provinceSelected", () =>  fromJS(action.value))
+    case SET_NUM_PROMO:
+      return state.update("numPromo", () =>  action.value)
+
     default:
       return state;
   }

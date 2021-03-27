@@ -66,7 +66,7 @@ const SuccessRegister = ({ itemPromoGetCode, resultGetCode }) => {
           </Button>
         </GroupButtonSuccess>
       </HeaderMobile>
-      <ScrollShowContent>
+      <ScrollShowContent key="success-mobile">
         <WrapperInfo>
           <TitleInfo>
             <FormattedMessage id="successRegister.content_event" />

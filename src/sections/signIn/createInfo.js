@@ -7,9 +7,8 @@ import DropDown from "../../components/input/drop-down";
 import { FormattedMessage } from "react-intl";
 
 import { Info, GroupInput, ContentSingUp } from "./style";
-import useSiteRouter from "../../hooks/useSiteRouter";
 import useApi from "../../hooks/useApi";
-import { GGG_INTERNAL, SET_USER_INFO } from "../../constants";
+import {  SET_USER_INFO } from "../../constants";
 import PulseLoader from "../../components/loading";
 import { showNotification } from "../../components/notification";
 

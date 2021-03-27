@@ -12,10 +12,8 @@ function runMiddleware(req, res, fn) {
   return new Promise((resolve, reject) => {
     fn(req, res, (result) => {
       if (result instanceof Error) {
-        console.log("error");
         return reject(result);
       }
-      console.log("resolve");
 
       return resolve(result);
     });
@@ -30,7 +28,11 @@ async function handler(req, res) {
     console.log(e);
     return;
   }
-  const response = await Axios.post(process.env.GRAPHQL_HOST, req.body);
+  const response = await Axios.post(process.env.GRAPHQL_HOST, req.body, {
+    headers: {
+      Store: req.headers.store,
+    },
+  });
   res.json({ ...response.data });
 }
 export default handler;

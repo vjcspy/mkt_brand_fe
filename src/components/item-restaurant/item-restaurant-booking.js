@@ -73,11 +73,9 @@ const ItemRestaurantBooking = ({ restaurant, onViewMap, promoId }) => {
           </Button>
         </Link>
         {sizeWidth.width > 768 ? (
-          <Link href={`/map?idRestaurant=${code}`} passHref>
-            <Button target="_blank" varian="primary" size="tiny">
-              <FormattedMessage id="promo.reservation" />
-            </Button>
-          </Link>
+          <Button href={`/map?idRestaurant=${code}`} target="_blank" varian="primary-router" size="tiny">
+            <FormattedMessage id="promo.reservation" />
+          </Button>
         ) : (
           <Button varian="primary" size="tiny" onClick={() => onViewMap(restaurant)}>
             <FormattedMessage id="promo.reservation" />

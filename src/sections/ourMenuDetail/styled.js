@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const OurMenusWrapper = styled.div`
   width: 100%;
-  margin-top: 40px;
 `;
 
 export const OurMenusContent = styled.div`
@@ -12,7 +11,7 @@ export const OurMenusContent = styled.div`
 `;
 
 export const MenusLeftContent = styled.div`
-  width: 200px;
+  min-width: 200px;
   @media (max-width: 768px) {
     position: fixed;
     bottom: 0px;
@@ -90,24 +89,26 @@ export const MenuItemButton = styled.button`
     }
   }
 
-  &:hover {
-    h3,
-    h4,
-    h5 {
-      color: ${({ theme }) => theme.color.status.primary};
-      // &:after {
-      //   width: 100%;
-      //   right: auto;
-      //   left: 0px;
-      // }
+  @media (min-width: 769px) {
+    &:hover {
+      h3,
+      h4,
+      h5 {
+        color: ${({ theme }) => theme.color.status.primary};
+        // &:after {
+        //   width: 100%;
+        //   right: auto;
+        //   left: 0px;
+        // }
+      }
     }
   }
 
-  ${({ isOpen }) =>
+  ${({ isOpen, theme }) =>
     isOpen
       ? `
   h5 {
-    color: ${({ theme }) => theme.color.status.primary};
+    color: ${theme.color.status.primary} ;
     &:after {
       width: 100%;
       right: auto;
@@ -140,6 +141,11 @@ export const MenuSubItemWrapper = styled.div`
 export const MenuSubItemButton = styled(MenuItemButton)`
   height: 24px;
   margin-top: 20px;
+
+  h5 {
+    margin-right: 10px;
+    white-space: nowrap;
+  }
 
   ${({ isOpen }) =>
     isOpen
@@ -255,7 +261,14 @@ export const MenuChildImageWrapper = styled.div`
   }
 `;
 
-export const MenuGrandChildWraper = styled.div`
+export const ProductSingleWraper = styled.div`
+  @media (max-width: 768px) {
+    width: 100vw;
+    overflow: scroll;
+  }
+`;
+
+export const ProductSingleContainer = styled.div`
   margin-top: 12px;
   display: grid;
   gap: 40px;
@@ -268,8 +281,12 @@ export const MenuGrandChildWraper = styled.div`
   }
 `;
 
-export const MenuGrandChildItem = styled.div`
+export const ProductSingleItem = styled.div`
   text-align: center;
+
+  img {
+    width: 100%;
+  }
 `;
 
 export const MenuMobileWrapper = styled.div`
@@ -278,13 +295,13 @@ export const MenuMobileWrapper = styled.div`
 
 export const MenuMainMobileWrapper = styled.div``;
 
-export const MenuGrandChildMobileInfoWrapper = styled.div`
+export const ProductSingleMobileInfoWrapper = styled.div`
   margin-top: 24px;
   padding-left: 20px;
   padding-right: 20px;
 `;
 
-export const MenuGrandChildMobileInfo = styled.div`
+export const ProductSingleMobileInfo = styled.div`
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
@@ -293,6 +310,7 @@ export const MenuGrandChildMobileInfo = styled.div`
 
 export const MenuChildMobileWrapper = styled.div`
   position: relative;
+  width: 100vw;
 `;
 
 export const MenuChildMobileScroller = styled.div`
@@ -320,6 +338,8 @@ export const MenuChildMobileInfo = styled.div`
   bottom: 0px;
   padding: 35px 20px 80px;
   text-align: center;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
 
   h3 {
     margin-bottom: 10px;
@@ -327,6 +347,12 @@ export const MenuChildMobileInfo = styled.div`
 
   h5 {
     margin-bottom: 20px;
+  }
+
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
   }
 `;
 
@@ -342,6 +368,14 @@ export const MenuTreeMobileWrapper = styled.div`
   justify-content: space-between;
   white-space: nowrap;
   overflow: auto;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+  }
 `;
 
 export const DotsWrapper = styled.div`

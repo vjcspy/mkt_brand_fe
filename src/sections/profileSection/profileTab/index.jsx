@@ -19,7 +19,7 @@ import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
 import { genders } from "../../signIn/createInfo";
 import useApi from "../../../hooks/useApi";
-import { GGG_INTERNAL, SET_USER_INFO } from "../../../constants";
+import { SET_USER_INFO } from "../../../constants";
 import PulseLoader from "../../../components/loading";
 import { showNotification } from "../../../components/notification";
 import InputDataPicker from "../../../components/input-date-picker";

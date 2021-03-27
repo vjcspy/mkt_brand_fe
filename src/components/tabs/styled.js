@@ -50,6 +50,7 @@ export const TabItem = styled.div`
 
   h4 {
     color: currentColor;
+    text-align: center;
   }
 
   &:after {

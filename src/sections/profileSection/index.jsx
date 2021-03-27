@@ -47,7 +47,7 @@ const ProfileSection = ({}) => {
           if (index === current) {
             return;
           }
-          router.push("/profile/" + items[index].code, undefined, { shallow: true });
+          router.pushQuery("/profile/" + items[index].code, undefined, { shallow: true });
           // const link = getBrowserLink(site, "/profile/" + items[index].code);
           // history.push({ tab: items[index].code }, items[index].label, link);
         }}

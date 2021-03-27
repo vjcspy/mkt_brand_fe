@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 const useAppHeight = () => {
-  const [appHeight, setAppHeight] = useState(0);
+  const [appHeight, setAppHeight] = useState(process.browser ? window.innerHeight : 0);
+
   useEffect(() => {
     const appHeight = () => {
       const doc = document.documentElement;
@@ -10,8 +11,12 @@ const useAppHeight = () => {
       setAppHeight(window.innerHeight);
     };
     window.addEventListener("resize", appHeight);
-    appHeight();
+
+    return () => {
+      window.removeEventListener("resize", appHeight);
+    };
   }, []);
+
   return appHeight;
 };
 

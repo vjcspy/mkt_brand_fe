@@ -40,8 +40,8 @@ const Slide = ({ slides, current = 0 }) => {
   return size > 0 ? (
     <WrapperSlide className={`${size === 1 ? "center" : ""}`}>
       {size > 1 && (
-        <WrapperIcon onClick={onPrev}>
-          <IconTriangleLineLeft color="#7B7979" width={15} height={15} />
+        <WrapperIcon className="icon-left" onClick={onPrev}>
+          <IconTriangleLineRight color="#7B7979" width={15} height={15} />
         </WrapperIcon>
       )}
       <ContentSlide>

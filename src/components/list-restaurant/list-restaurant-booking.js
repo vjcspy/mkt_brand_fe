@@ -9,7 +9,7 @@ const ListRestaurantBooking = ({ listRestaurant, onBook, onViewMap, promoId }) =
       <Title>
         <FormattedMessage id="promo.list_restaurant_have_promo" />
       </Title>
-      <ScrollShowContent>
+      <ScrollShowContent key="ListRestaurantBooking">
         <List>
           {listRestaurant?.map((item, index) => (
             <ItemRestaurantBooking

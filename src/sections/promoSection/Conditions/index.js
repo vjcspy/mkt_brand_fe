@@ -8,7 +8,7 @@ const ListCondition = ({ condition }) => {
       <Title>
         <FormattedMessage id="promo.condition_apply" />
       </Title>
-      <ScrollShowContent>
+      <ScrollShowContent key="ListCondition">
         <div dangerouslySetInnerHTML={{ __html: condition }} />
       </ScrollShowContent>
     </>

@@ -31,6 +31,9 @@ export const ListLocation = styled.div`
   border-radius: 4px;
   top: 100%;
   padding-top: 2px;
+  max-height: 150px;
+  overflow-y:auto;
+  z-index:10;
   div {
     display: flex;
     align-items: center;

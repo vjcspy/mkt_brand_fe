@@ -10,8 +10,10 @@ import ImageMedia from "../../development/components/imageMedia";
 import PointNavigation from "../../components/point-navigation";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import useAppHeight from "../../hooks/useAppHeight";
+import OnePageScroll from "../../components/one-page-scroll/one-page-scroll";
 const IconTriangleLineTop = loadable(() => import("../../components/icons/iconTriangleLineTop"));
 const IconTriangleLineDown = loadable(() => import("../../components/icons/iconTriangleLineDown"));
+
 const defaultConfig = {
   type: "section",
   code: "code-dawdaw",
@@ -82,14 +84,14 @@ const PromoBanner = ({ config = defaultConfig, listPromoActive }) => {
   }, [promoShouldShow, width]);
   return (
     <WrapperOnePageScroller ref={ref}>
-      <ReactPageScroller
+      <OnePageScroll
         customPageNumber={currentPage}
         containerHeight={appHeight - headerHeight}
         pageOnChange={setCurrentPage}
         totalElement={promoShouldShow.length}
       >
         {Images}
-      </ReactPageScroller>
+      </OnePageScroll>
       <WrapperListPoint>
         <IconTriangleLineTop className="top" color="#ffffff" />
         <PointNavigation display="block" currentIndex={currentPage} size={promoShouldShow.length} />

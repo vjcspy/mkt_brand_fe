@@ -37,12 +37,12 @@ const defaultConfig = {
 const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant }) => {
   const iconMarker = config.components.imageMarker.value;
   const mapRef = useRef();
+  const refList = useRef();
   const [isEnd, setEnd] = useState();
   const [top, setTop] = useState();
   const [size, ref] = useIframeResize();
   const [sItem, setSItem] = useState();
   const headerHeight = useSelector((s) => s.get("headerHeight") ?? 0);
-
   const measuredRef = useCallback((node) => {
     if (node !== null) {
       setTop(node.getBoundingClientRect().top);
@@ -63,8 +63,16 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
     onScroll(ref.current);
   }, [size]);
 
+  useEffect(() => {
+    if (restaurantViewMap) {
+      const index = listRestaurant.findIndex((item) => item.code === restaurantViewMap.code);
+      let position = index > 0 ? refList.current.children[index]?.offsetTop : 0;
+      ref.current.scrollTo({ top: position, left: 0 });
+    }
+  }, []);
+
   return (
-    <Container ref={measuredRef} onLoad={() => console.log("")}>
+    <Container ref={measuredRef}>
       <MapAddressWrapper headerHeight={headerHeight}>
         <LeftContent className={isEnd ? "end" : ""}>
           {size.width <= 768 && (
@@ -73,14 +81,14 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
             </TitleListMobile>
           )}
           <MapItemsWrapper ref={ref}>
-            <ul>
+            <ul ref={refList}>
               {map(listRestaurant, (item, index) => {
                 return (
-                  <li key={index}>
+                  <li key={index} className={`${item.code === restaurantViewMap?.code ? "active" : ""}`}>
                     <MapItem>
                       <MapItemTitle
                         onClick={() => {
-                          setSItem(item);
+                          size.width <= 768 ? setSItem(item) : null;
                         }}
                       >
                         <h4>{item.name}</h4>

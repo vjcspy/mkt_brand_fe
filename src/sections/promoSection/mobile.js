@@ -33,6 +33,7 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
   const { data: promoUser } = useSelector((state) => state.get("promoOfUser")) ?? {};
   const [restaurantViewMap, setRestaurantViewMap] = useState();
   const size = promoListApi.length;
+
   const onShowListRestaurant = () => {
     setStepFlowPopupMobile(stepFlowPopupMobile + 1);
     setShowConditionOrRestaurant(true);
@@ -139,7 +140,7 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
 
         <PopupMobile show={viewRestaurant} step={stepFlowPopupMobile} onBack={onBackPopup}>
           <WrapperContentPopup style={{ height: "100%" }}>
-            <ListRestaurant listRestaurant={viewRestaurant} onViewMap={onViewMapMobile} />
+            {viewRestaurant && <ListRestaurant listRestaurant={viewRestaurant} onViewMap={onViewMapMobile} />}
           </WrapperContentPopup>
           <WrapperContentPopup style={{ height: "100%" }}>
             <ViewMapRestaurant restaurant={restaurantViewMap} />
@@ -147,9 +148,11 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
         </PopupMobile>
 
         <PopupMobile show={condition} step={stepFlowPopupMobile} onBack={onBackPopup}>
-          <WrapperContentPopup style={{ height: "100%" }}>
-            <ListCondition listCondition={condition} />
-          </WrapperContentPopup>
+          {condition && (
+            <WrapperContentPopup style={{ height: "100%" }}>
+              <ListCondition listCondition={condition} />
+            </WrapperContentPopup>
+          )}
         </PopupMobile>
 
         {/* {viewRestaurant?.restaurants && (

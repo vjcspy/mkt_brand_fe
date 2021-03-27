@@ -52,14 +52,22 @@ export const GroupButton = styled.div`
   flex-direction: column;
   align-items: center;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
-  button {
-    margin-bottom: 99px;
-    width: 300px;
-  }
-  .button-banner {
+
+  .link-banner {
     border: 2px solid;
     background: transparent;
     backdrop-filter: blur(4px);
+    width: 300px;
+    display: flex;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    height: 44px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 18px;
+    margin-bottom: 99px;
   }
   svg {
     cursor: pointer;
@@ -89,15 +97,12 @@ export const GroupButton = styled.div`
     svg {
       display: none;
     }
-    button {
-      margin-bottom: 90px;
-    }
 
     .show-popup {
       display: none;
     }
     .link-banner {
-      display: block;
+      margin-bottom: 90px;
     }
   }
 

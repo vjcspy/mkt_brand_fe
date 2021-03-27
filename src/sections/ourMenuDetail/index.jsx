@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import useFromJS from "../../hooks/useFromJS";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import { Container } from "../../styles";
-import MenuMain from "./menuMain";
-import MenuMainMobile from "./menuMainMobile";
-import MenuTree from "./menuTree";
-import MenuTreeMobile from "./menuTreeMobile";
-import { MenuMobileWrapper, MenusLeftContent, MenusRightContent, OurMenusContent, OurMenusWrapper } from "./styled";
+import DynamicFooter from "../dynamic-footer";
+import MenuMobile from "./menu-mobile";
+import MenuMain from "./menu-main";
+import MenuTree from "./menu-tree";
+import { MenusLeftContent, MenusRightContent, OurMenusContent, OurMenusWrapper } from "./styled";
 
 const defaultConfig = {
   id: "our-menu-detail",
@@ -16,9 +16,9 @@ const defaultConfig = {
   components: [],
 };
 
-const OurMenus = () => {
+const OurMenus = ({ menus, footer }) => {
   const [path, setPath] = useState([]);
-  const menus = useFromJS(["ourMenus"]);
+  menus = useFromJS(["ourMenus"]) ?? menus;
   const [size, ref] = useIframeResize();
   const [indexParent, setIndexParent] = useState();
   const [indexChild, setIndexChild] = useState();
@@ -49,11 +49,9 @@ const OurMenus = () => {
           </OurMenusContent>
         </Container>
       ) : (
-        <MenuMobileWrapper>
-          <MenuMainMobile {...props} />
-          <MenuTreeMobile {...props} />
-        </MenuMobileWrapper>
+        <MenuMobile menus={menus} footer={footer} />
       )}
+      {size.width > 768 && <DynamicFooter config={footer} />}
     </OurMenusWrapper>
   );
 };

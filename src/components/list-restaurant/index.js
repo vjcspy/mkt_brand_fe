@@ -14,7 +14,7 @@ const ListRestaurant = ({ listRestaurant, onCallPhone, onViewMap, promoId }) => 
       <Title>
         <FormattedMessage id="promo.list_restaurant_have_promo" />
       </Title>
-      <ScrollShowContent>
+      <ScrollShowContent key={ListRestaurant}>
         <List>
           {listRestaurant &&
             listRestaurant.map((item, index) => (

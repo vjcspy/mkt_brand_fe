@@ -14,56 +14,6 @@ import ListRestaurantBooking from "../../../components/list-restaurant/list-rest
 import ListCondition from "../../promoSection/Conditions";
 import ViewMapRestaurant from "../../../components/view-map-restaurant";
 import Link from "next/link";
-const CSSTransition = loadable(() => import("../../../components/css-transition"));
-const listRestaurant = [
-  {
-    name: " Gogi House Trần Phú",
-    address: "Hà Đông - 146 Trần Phú, Mỗ Lao, Hà Đông, Hà Nội",
-    openClose: " Open - Close: 10:30 AM - 11:00 PM",
-    phone: "19006622",
-    map: {},
-    aboutKm: "0.7",
-  },
-  {
-    name: " Gogi House Trần Phú",
-    address: "Hà Đông - 146 Trần Phú, Mỗ Lao, Hà Đông, Hà Nội",
-    openClose: " Open - Close: 10:30 AM - 11:00 PM",
-    phone: "19006622",
-    map: {},
-    aboutKm: "0.7",
-  },
-  {
-    name: " Gogi House Trần Phú",
-    address: "Hà Đông - 146 Trần Phú, Mỗ Lao, Hà Đông, Hà Nội",
-    openClose: " Open - Close: 10:30 AM - 11:00 PM",
-    phone: "19006622",
-    map: {},
-    aboutKm: "0.7",
-  },
-  {
-    name: " Gogi House Trần Phú",
-    address: "Hà Đông - 146 Trần Phú, Mỗ Lao, Hà Đông, Hà Nội",
-    openClose: " Open - Close: 10:30 AM - 11:00 PM",
-    phone: "19006622",
-    map: {},
-    aboutKm: "0.7",
-  },
-  {
-    name: " Gogi House Trần Phú",
-    address: "Hà Đông - 146 Trần Phú, Mỗ Lao, Hà Đông, Hà Nội",
-    openClose: " Open - Close: 10:30 AM - 11:00 PM",
-    phone: "19006622",
-    map: {},
-    aboutKm: "0.7",
-  },
-];
-const conditions = [
-  " Mã code có hiệu lực sau 3 tiếng tính từ thời gian đăng ký",
-  " Không áp dụng song song với ưu đãi khác",
-  " Không có giá trị quy đổi thành tiền mặt hay ưu đãi khác",
-  " Được áp dụng lũy kế (hóa đơn 1.000.000đ giảm 200.00đ, hóa đơn   2.000.000đ giảm 400.000đ,…)",
-  " Khách hàng là thành viên The Golden Spoon được tích điểm nâng hạng   thẻ, không tích tiền vào ví, không sử dụng tiền và voucher trong ví",
-];
 
 const PromoTabMobile = ({ profilePromo }) => {
   const headerHeight = useSelector((s) => s.get("headerHeight"));
@@ -146,35 +96,33 @@ const PromoTabMobile = ({ profilePromo }) => {
           </Link>
         </GroupButton>
       </ContentMobile>
-      <CSSTransition show={currentPromoMobile} classTransition="bottom-top">
-        <PopupMobile step={stepFlowPopupMobile} onBack={onBackPopup}>
-          <WrapperContentPopup>
-            <DetailPromo
-              promo={currentPromoMobile}
-              onShowListRestaurant={onShowListRestaurant}
-              onShowListCondition={onShowListCondition}
+      <PopupMobile show={currentPromoMobile} step={stepFlowPopupMobile} onBack={onBackPopup}>
+        <WrapperContentPopup>
+          <DetailPromo
+            promo={currentPromoMobile}
+            onShowListRestaurant={onShowListRestaurant}
+            onShowListCondition={onShowListCondition}
+          />
+        </WrapperContentPopup>
+
+        <WrapperContentPopup style={{ height: "100%" }}>
+          {showConditionOrRestaurant ? (
+            <ListRestaurantBooking
+              onBook={onViewMap}
+              currentPage="profile-promo"
+              promoId={profilePromo?.[currentPage]?.promotionId}
+              listRestaurant={profilePromo?.[currentPage]?.restaurants}
+              onViewMap={onViewMap}
             />
-          </WrapperContentPopup>
+          ) : (
+            <ListCondition listCondition={profilePromo?.[currentPage]?.condition} />
+          )}
+        </WrapperContentPopup>
 
-          <WrapperContentPopup style={{ height: "100%" }}>
-            {showConditionOrRestaurant ? (
-              <ListRestaurantBooking
-                onBook={onViewMap}
-                currentPage="profile-promo"
-                promoId={profilePromo?.[currentPage]?.promotionId}
-                listRestaurant={profilePromo?.[currentPage]?.restaurants}
-                onViewMap={onViewMap}
-              />
-            ) : (
-              <ListCondition listCondition={profilePromo?.[currentPage]?.restaurants} />
-            )}
-          </WrapperContentPopup>
-
-          <WrapperContentPopup restaurant={profilePromo?.[currentPage]?.restaurants} style={{ height: "100%" }}>
-            <ViewMapRestaurant restaurant={viewRestaurant} />
-          </WrapperContentPopup>
-        </PopupMobile>
-      </CSSTransition>
+        <WrapperContentPopup restaurant={profilePromo?.[currentPage]?.restaurants} style={{ height: "100%" }}>
+          <ViewMapRestaurant restaurant={viewRestaurant} />
+        </WrapperContentPopup>
+      </PopupMobile>
     </PromoMobile>
   );
 };

@@ -68,6 +68,11 @@ export const MapItemsWrapper = styled.div`
   overflow: auto;
   padding-right: 15px;
   margin-right: -15px;
+  li.active {
+    h4 {
+      color: tomato;
+    }
+  }
 `;
 
 export const RightContent = styled.div`

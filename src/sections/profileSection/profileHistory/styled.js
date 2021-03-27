@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const ProfileHistoryWrapper = styled.div`
   width: 100%;
@@ -65,6 +65,7 @@ export const ProfileItemRight = styled.div`
 
   > h5 {
     margin-bottom: 7px;
+    font-weight: normal;
   }
 
   @media (max-width: 768px) {
@@ -81,6 +82,7 @@ export const Pricewrapper = styled.div`
   margin-bottom: 20px;
 
   h5 {
+    font-weight: normal;
     svg {
       vertical-align: sub;
       margin-left: 6px;
@@ -88,7 +90,13 @@ export const Pricewrapper = styled.div`
   }
 `;
 
-export const WrapperViewDetail = styled.div``;
+export const WrapperViewDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+`;
 
 export const Tittle = styled.h3`
   max-width: 92%;
@@ -144,6 +152,16 @@ export const DetailBill = styled.div`
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
   padding: 12px 0;
+  padding-right: 10px;
+  margin-right: -10px;
+  flex-grow: 1;
+  overflow: hidden;
+  position: relative;
+  & > div {
+    height: 100%;
+    max-height: 100%;
+    overflow: scroll;
+  }
   .show {
     bottom: 0;
     height: 35px;
@@ -163,3 +181,68 @@ export const ItemDetail = styled.div`
 `;
 
 export const FooterDetail = styled.div``;
+
+const animation = keyframes`
+  0%{
+    transform: translateY(-25%);
+  }
+  25%{
+    transform: translateY(0);
+  }
+  50%{
+    transform: translateY(25%);
+
+  }
+  75%{
+    transform: translateY(0);
+
+  }
+  100%{
+    transform: translateY(-25%);
+
+  }
+`;
+
+export const Content = styled.div`
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 15px;
+  margin-right: -15px;
+  @media (max-width: 768px) {
+    max-height: 100%;
+  }
+`;
+
+export const HiddenContent = styled.div`
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+
+  background: rgb(255, 255, 255);
+  background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5172443977591037) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: 0.1s;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 100;
+
+  & svg {
+    transform: rotate(90deg);
+    cursor: pointer;
+    animation: ${animation} 1s infinite;
+    cursor: pointer;
+  }
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 768px) {
+    bottom: -20px;
+  }
+`;

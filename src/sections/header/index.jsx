@@ -25,8 +25,9 @@ import ProfileDropdown from "./profileDropdown";
 import ImageMedia from "../../development/components/imageMedia";
 import Link from "next/link";
 import { stringifyUrl } from "query-string";
+import PopupLanguageLocation from "./popup-language-location";
+
 const MenuRight = loadable(() => import("../../components/menu"));
-const PopupLanguageLocation = loadable(() => import("./popup-language-location"));
 
 const defaultConfig = {
   id: "header",
@@ -51,6 +52,24 @@ const defaultConfig = {
       name: "hambergerMenu",
       title: "Hamberger Menu",
       value: "hambergerMenu",
+    },
+    buttonLeftFooterMenu: {
+      type: "link",
+      name: "link",
+      title: "Button Left Menu",
+      value: {
+        label: { vi: "Tải app", en: "Tải app" },
+        url: "/",
+      },
+    },
+    buttonRightFooterMenu: {
+      type: "link",
+      name: "link",
+      title: "Button Right Menu",
+      value: {
+        label: { vi: "Đặt bàn", en: "Đặt bàn" },
+        url: "/",
+      },
     },
     slides: {
       type: "group",
@@ -196,6 +215,8 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   const locale = useSelector((s) => s.get("locale"));
   const navMenu = menus?.find((m) => m.name == components.navMenu?.value);
   const hambergerMenu = menus?.find((m) => m.name == components.hambergerMenu?.value);
+  const buttonLeftFooterMenu = components.buttonLeftFooterMenu;
+  const buttonRightFooterMenu = components.buttonRightFooterMenu;
   const [showProfileDropdownMobile, setShowProfileDropdownMobile] = useState(false);
   const { fullName, avatar } = useSelector((state) => state.get("userInfo"))?.toJS() ?? "";
   const [percentage, setPercentage] = useState(0);
@@ -240,7 +261,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
 
   return (
     <>
-      <MenuRight show={isShowMenu} listMenu={hambergerMenu?.children} setShowMenu={setShowMenu} />
+      <MenuRight show={isShowMenu} buttonRight={buttonRightFooterMenu} buttonLeft={buttonLeftFooterMenu} listMenu={hambergerMenu?.children} setShowMenu={setShowMenu} />
       <PopupLanguageLocation />
 
       <HeaderWrapper ref={ref}>

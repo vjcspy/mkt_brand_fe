@@ -20,6 +20,8 @@ import PointNavigation from "../../components/point-navigation";
 import RatioImage from "../../components/ratioImage";
 import IconTriangleLineDown from "../../components/icons/iconTriangleLineDown";
 import Head from "next/head";
+import OnePageScroll from "../../components/one-page-scroll/one-page-scroll";
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 
 const Popup = loadable(() => import("../../components/popup-wrapper"));
 const ListCondition = loadable(() => import("./Conditions"));
@@ -29,11 +31,12 @@ const PromoDesktop = ({ promoListApi, onGetCode, resultGetCode, setResultGetCode
   const [listRestaurant, setListRestaurant] = useState();
   const [condition, setCondition] = useState();
   const headerHeight = useSelector((s) => s.get("headerHeight"));
+  const [{ height }, ref] = useIframeResize();
   const size = promoListApi?.length;
   const { data: promoUser } = useSelector((state) => state.get("promoOfUser")) ?? {};
   const PromoList = useMemo(
     () =>
-      promoListApi.map((item, index) => (
+      promoListApi?.map((item, index) => (
         <React.Fragment key={index}>
           <Head>
             <link rel="preload" as="image" href={item.thumbnail} />
@@ -67,17 +70,21 @@ const PromoDesktop = ({ promoListApi, onGetCode, resultGetCode, setResultGetCode
 
   return (
     <>
-      <WrapperContentPromo className="Wrapper-promo-desktop" style={{ height: `calc(100vh - (${headerHeight}px ` }}>
+      <WrapperContentPromo
+        ref={ref}
+        className="Wrapper-promo-desktop"
+        style={{ height: `calc(100vh - (${headerHeight}px ` }}
+      >
         <ContentScroller className="content-scroller">
-          <ReactPageScroller
+          <OnePageScroll
             renderAllPagesOnFirstRender={true}
             customPageNumber={+currentPage}
             // containerHeight={`calc(100vh - ${headerHeight + 104 ?? 0}px)`}
-            containerHeight={`calc(100vh - ${headerHeight}px)`}
+            containerHeight={height - headerHeight}
             pageOnChange={setCurrentPage}
           >
             {PromoList}
-          </ReactPageScroller>
+          </OnePageScroll>
         </ContentScroller>
 
         <WrapperEndpoint>
