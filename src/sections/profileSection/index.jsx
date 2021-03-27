@@ -26,7 +26,7 @@ const items = [
   { icon: "tab-gift", code: "register-promo", label: "profile.title_register_to_get_promo", Component: ProfileGift },
 ];
 
-const ProfileSection = ({}) => {
+const ProfileSection = ({ }) => {
   const router = useSiteRouter();
   const {
     query: { profileTab },
@@ -54,7 +54,7 @@ const ProfileSection = ({}) => {
         <OnePageScrollHorizontal pageIndex={current} pageOnChange={handlePageChange}>
           {items.map(({ Component }, index) => (
             <OnePageHorizontalWrapper key={index}>
-              <Component isActive={current == index} />
+              {current == index && <Component isActive={current == index} />}
             </OnePageHorizontalWrapper>
           ))}
         </OnePageScrollHorizontal>

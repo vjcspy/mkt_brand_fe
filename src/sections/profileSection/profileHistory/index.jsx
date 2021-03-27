@@ -24,8 +24,6 @@ const ProfileHistory = () => {
   useEffect(() => {
     if (!data && !loaded) {
       dispatch({ type: GET_TRANSACTION, value: { type: "all" } });
-    } else if (data.length === 0 && loaded) {
-      showNotification(dispatch, { content: "Chưa có lịch sử giao dịch", status: "warning" });
     }
   }, [data, loaded]);
 
@@ -36,7 +34,11 @@ const ProfileHistory = () => {
     if (warning && loaded) {
       showNotification(dispatch, { content: warning, status: "warning" });
     }
-  }, [error, warning]);
+    if (data?.length === 0) {
+      console.log("okok")
+      showNotification(dispatch, { content: "Chưa có lịch sử giao dịch", status: "warning" });
+    }
+  }, [error, warning, data]);
   return (
     <ProfileHistoryWrapper>
       {loading ? (

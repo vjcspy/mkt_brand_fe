@@ -16,6 +16,7 @@ export const GlobalStyle = createGlobalStyle`
     max-height: 100vh;
     overscroll-behavior-x: none;
     overscroll-behavior-y: none;
+    overscroll-behavior-y: contain;
   }
   
   body{

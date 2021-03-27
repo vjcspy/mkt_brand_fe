@@ -1,16 +1,22 @@
 import styled from "styled-components";
 
-export const TabsWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  position: relative;
-
+export const WrapperBlock = styled.div`
+  display: block;
   @media (max-width: 768px) {
     position: fixed;
     bottom: 0px;
     left: 0px;
     right: 0px;
     z-index: 100;
+  }
+`;
+
+export const TabsWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+
+  @media (max-width: 768px) {
     background: rgba(0, 0, 0, 0.7);
     height: 56px;
     align-items: center;
