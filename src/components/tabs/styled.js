@@ -65,12 +65,14 @@ export const TabItem = styled.div`
     transition: 0.3s width ease-in-out;
   }
 
-  &:hover {
-    color: ${({ theme }) => theme.color.status.primary};
-    &:after {
-      width: 100%;
-      left: 0px;
-      right: auto;
+  @media (min-width: 769px) {
+    &:hover {
+      color: ${({ theme }) => theme.color.status.primary};
+      &:after {
+        width: 100%;
+        left: 0px;
+        right: auto;
+      }
     }
   }
 

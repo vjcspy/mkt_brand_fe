@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
-import loadable from "@loadable/component";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Tabs from "../../components/tabs";
 import useSiteRouter from "../../hooks/useSiteRouter";
 import { ProfileSectionWrapper } from "./styled";
-import { Container } from "../../styles";
-const ProfileGift = loadable(() => import("./profileGift"));
-const ProfileHistory = loadable(() => import("./profileHistory"));
-const ProfileTab = loadable(() => import("./profileTab"));
-const PromoTab = loadable(() => import("./promoTab"));
+import { Container, OnePageHorizontalWrapper } from "../../styles";
+import OnePageScrollHorizontal from "../../components/one-page-scroll-horizontal";
+
+import ProfileGift from "./profileGift";
+import ProfileHistory from "./profileHistory";
+import ProfileTab from "./profileTab";
+import PromoTab from "./promoTab";
+import useRefCallback from "../../hooks/useRefCallback";
 
 const defaultConfig = {
   name: "profileSection",
@@ -27,33 +29,36 @@ const items = [
 const ProfileSection = ({}) => {
   const router = useSiteRouter();
   const {
-    query: { tab, subPage },
+    query: { profileTab },
   } = router;
+
   const [current, setCurrent] = useState(0);
-  const Component = items[current]?.Component;
 
   useEffect(() => {
-    let index = items.findIndex((i) => i.code == (tab || subPage));
-    if (index > -1) {
+    let index = items.findIndex((i) => i.code == profileTab);
+    if (index != current) {
       setCurrent(index);
     }
-  }, [tab, subPage]);
+  }, [profileTab]);
+
+  const handlePageChange = useRefCallback((index) => {
+    if (index != current) {
+      router.pushQuery("/profile?profileTab=" + items[index].code, undefined, { shallow: true });
+    }
+  }, []);
 
   return (
     <ProfileSectionWrapper>
-      <Tabs
-        items={items}
-        onChange={(index) => {
-          if (index === current) {
-            return;
-          }
-          router.pushQuery("/profile/" + items[index].code, undefined, { shallow: true });
-          // const link = getBrowserLink(site, "/profile/" + items[index].code);
-          // history.push({ tab: items[index].code }, items[index].label, link);
-        }}
-        current={current}
-      />
-      <Container>{Component ? <Component /> : null}</Container>
+      <Tabs items={items} onChange={handlePageChange} current={current} />
+      <Container>
+        <OnePageScrollHorizontal pageIndex={current} pageOnChange={handlePageChange}>
+          {items.map(({ Component }, index) => (
+            <OnePageHorizontalWrapper key={index}>
+              <Component isActive={current == index} />
+            </OnePageHorizontalWrapper>
+          ))}
+        </OnePageScrollHorizontal>
+      </Container>
     </ProfileSectionWrapper>
   );
 };

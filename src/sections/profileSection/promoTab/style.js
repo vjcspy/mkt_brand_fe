@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const WrapperProfilePromo = styled.div`
-  margin-top: 40px;
+  padding-top: 40px;
   overflow: hidden;
   position: relative;
   min-height: 300px;

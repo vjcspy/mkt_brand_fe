@@ -1,7 +1,6 @@
-import { isNil } from "lodash";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { get, isNil } from "lodash";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
-import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 
 const KEY_LEFT = 37;
 const KEY_RIGHT = 39;
@@ -15,19 +14,22 @@ const ScrollContainer = styled.div`
 const OnePageScrollHorizontal = ({
   children,
   pageOnChange,
-  containerHeight = "100vh",
+  containerHeight,
   minDeltaWheel = 5,
   minDeltaTouch = 50,
-  pageIndex,
+  pageIndex = 0,
 }) => {
-  const [{ width }, scrollRef] = useIframeResize();
+  const scrollRef = useRef();
   const containerRef = useRef();
   const length = children?.length ?? 0;
 
+  const [width, setWidth] = useState(1);
+  const [height, setHeight] = useState(1);
   const [transition, setTransition] = useState(true);
-  const [translateX, setTranslateX] = useState(0);
+  const [translateX, setTranslateX] = useState(-pageIndex);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [movePos, setMovePos] = useState({ x: 0, y: 0 });
+
   const [delta, setDelta] = useState({
     current: { x: 0, y: 0 },
     positive: false,
@@ -121,7 +123,29 @@ const OnePageScrollHorizontal = ({
   );
 
   useEffect(() => {
+    const listener = () => {
+      setWidth(scrollRef.current.offsetWidth);
+    };
+    listener();
+    window.addEventListener("resize", listener, { passive: true });
+    return () => {
+      window.removeEventListener("resize", listener);
+    };
+  }, []);
+
+  useEffect(() => {
     pageOnChange?.(Math.abs(translateX));
+    if (!containerHeight) {
+      let height = get(containerRef.current, ["children", Math.abs(translateX), "children", 0, "offsetHeight"]);
+      if (height) {
+        setHeight(height);
+      }
+    } else {
+      let height = get(scrollRef.current, ["offsetHeight"]);
+      if (height) {
+        setHeight(height);
+      }
+    }
   }, [pageOnChange, translateX]);
 
   useEffect(() => {
@@ -137,7 +161,7 @@ const OnePageScrollHorizontal = ({
   }, [isScrolling]);
 
   useEffect(() => {
-    if (isNil(pageIndex)) {
+    if (isNil(pageIndex) || Math.abs(translateX) == pageIndex) {
       return;
     }
     setTranslateX(-Math.abs(pageIndex));
@@ -152,9 +176,11 @@ const OnePageScrollHorizontal = ({
       onTouchMove={onTouchMove}
       onKeyDown={keyPress}
       style={{
-        height: containerHeight || 0,
+        height: containerHeight || height || "100vh",
         width: "100%",
         overflow: "hidden",
+        outline: "none",
+        transition: "height 300ms ease-in-out",
       }}
       tabIndex="0"
     >
@@ -162,7 +188,7 @@ const OnePageScrollHorizontal = ({
         ref={containerRef}
         style={{
           width: `${length * 100}%`,
-          height: "100%",
+          height: height,
           transition: transition ? `transform ${TIMESCROLL}ms ease-out` : "none",
           transform: `translate3d(${((translateX + (movePos.x - startPos.x) / width) * 100) / length}%, 0px, 0px)`,
         }}

@@ -30,7 +30,7 @@ const OnePageScroll = ({
   const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
-    if (!isNil(customPageNumber)) {
+    if (!isNil(customPageNumber) && customPageNumber != -translateY) {
       setTranslateY(-customPageNumber);
     }
   }, [customPageNumber]);

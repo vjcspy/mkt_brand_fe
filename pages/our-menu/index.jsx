@@ -1,11 +1,11 @@
-import { get } from "lodash";
+import { chain, get } from "lodash";
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { SET_SHOW_MENU_HEADER } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSiteServer, fetchMenuCategories } from "../../src/services/backend";
+import { getSiteServer, fetchMenuCategories, getSiteCode, getWebsitesData } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
 // export async function getStaticPaths() {
@@ -34,8 +34,16 @@ import PageContainer from "../../src/containers/pageContainer";
 // }
 
 export async function getServerSideProps({}) {
-  const siteCode = process.env.SITE_CODE;
-  const storeCode = process.env.STORE_CODE;
+  const webSites = await getWebsitesData();
+  const webData = chain(webSites)
+    .get(["data", "rows"])
+    .find((e) => e.name === 'gogi')
+    .value();
+  const store = chain(webData).get(["groups", 0, "stores", 0]).value();
+
+  const siteCode = webData?.code ?? process.env.SITE_CODE;
+  const storeCode = store?.code ?? process.env.STORE_CODE;
+  
   const [{ data: site }, menus] = await Promise.all([
     getSiteServer(siteCode),
     fetchMenuCategories({ urlKey: "gogi", storeCode }),

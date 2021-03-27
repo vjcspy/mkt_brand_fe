@@ -64,3 +64,13 @@ export const RadioButton = styled.button`
     `}
   }
 `;
+
+export const OnePageHorizontalWrapper = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+export const OnePageVerticalWrapper = styled.div`
+  height: 100%;
+  position: relative;
+`;

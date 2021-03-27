@@ -1,7 +1,26 @@
 import path from "path";
 import Axios from "axios";
-import { each, get, sortBy } from "lodash";
-import { PROMO_FLASH_SALE , PROMO_NORMAL} from "../constants";
+import { each, get, sortBy, chain } from "lodash";
+import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../constants";
+
+export const getWebsitesData = async () => {
+  const { data } = await Axios.post(process.env.GRAPHQL_HOST.replace("/graphql", "/rest/V1/izretail/dispatch"), {
+    action: {
+      type: "get-websites",
+      payload: {},
+    },
+  });
+
+  return data;
+};
+
+export const getSiteCode = async (name) => {
+  const webSite = await getWebsitesData();
+  return chain(webSite)
+    .get(["data", "rows"])
+    .find((e) => e.name === name)
+    .value();
+};
 
 export const getGlobalToken = async () => {
   global.jwtToken;
@@ -228,10 +247,9 @@ export const getProvinces = () => {
   });
 };
 
-
-export const filterListPromoApi = (listPromo) =>{
+export const filterListPromoApi = (listPromo) => {
   let promoListResult = [];
-   listPromo.map((listPromoItem) => {
+  listPromo.map((listPromoItem) => {
     if (listPromoItem.type === PROMO_NORMAL) {
       listPromoItem.data.map((promo) => {
         promo.typeFilter = PROMO_NORMAL;
@@ -244,5 +262,5 @@ export const filterListPromoApi = (listPromo) =>{
       });
     }
   });
-  return promoListResult
-}
+  return promoListResult;
+};

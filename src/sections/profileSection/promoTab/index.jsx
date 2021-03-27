@@ -10,7 +10,7 @@ const PromoTabDesktop = loadable(() => import("./desktop"));
 const PromoTabMobile = loadable(() => import("./mobile"));
 
 const PromoTab = () => {
-  const [sizeWidth] = useIframeResize();
+  const [size] = useIframeResize();
   const dispatch = useDispatch();
   const { data, error, warning, loading, loaded } = useSelector((state) => state.get("promoOfUser")) ?? {};
   useEffect(() => {
@@ -45,7 +45,11 @@ const PromoTab = () => {
           <PulseLoader loading fill color="#F89520" />
         </div>
       ) : data ? (
-        <>{sizeWidth.width > 768 ? <PromoTabDesktop profilePromo={data} /> : <PromoTabMobile profilePromo={data} />}</>
+        size.width > 768 ? (
+          <PromoTabDesktop profilePromo={data} />
+        ) : (
+          <PromoTabMobile profilePromo={data} />
+        )
       ) : null}
     </WrapperProfilePromo>
   );

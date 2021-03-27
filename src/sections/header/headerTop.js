@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import loadable from "@loadable/component";
 import IconMapMarker from "../../components/icons/iconMapMarker";
 import IconTriangleDown from "../../components/icons/iconTriangleDown";
 import Slide from "../../components/slide";
-import useFromJS from "../../hooks/useFromJS";
 import { useSelector } from "react-redux";
 import { Container } from "../../styles";
 import { FormattedMessage } from "react-intl";
@@ -18,17 +17,32 @@ import {
   WrapperMenuRight,
 } from "./header.styled";
 import { Marker } from "./profileDropdown/styled";
-import { dummyLocation } from "../../components/drop-down/SelectLocation";
 import Link from "next/link";
 const ProfileDropdown = loadable(() => import("./profileDropdown"));
 
 const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
   const locale = useSelector((state) => state.getIn(["locale"]));
-  const location = useSelector((state) => state.getIn(["location"]));
-  const provinceSelected = useSelector((state) => state.get("provinceSelected"))?.toJS()
-  const { fullName, avatar } = useSelector((state) => state.get("userInfo"))?.toJS() ?? "";
+  const provinceSelected = useSelector((state) => state.get("provinceSelected"));
+  const userInfo = useSelector((state) => state.get("userInfo"));
+
   const [showProfile, setShowProfile] = useState(false);
-  const itemLocation = dummyLocation.find((item) => item.id === location);
+  const [state, setState] = useState({
+    locale: null,
+    provinceSelected: null,
+    fullName: null,
+    avatar: null,
+  });
+
+  useEffect(() => {
+    let { fullName, avatar } = userInfo?.toJS() ?? {};
+    setState({
+      locale: locale,
+      provinceSelected: provinceSelected?.toJS(),
+      fullName: fullName,
+      avatar: avatar,
+    });
+  }, [locale, provinceSelected, userInfo]);
+
   return (
     <HeaderTopWrapper>
       <Container>
@@ -41,7 +55,7 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
           <WrapperMenuRight>
             <TopMenuRight>
               <ItemTopMenuRight onClick={() => setPopupLanguageLocation(true)}>
-                {locale === "vi" ? (
+                {state.locale === "vi" ? (
                   <img width={32} height={17} src="/images/flag_vnam.jpg" />
                 ) : (
                   <img width={32} height={17} src="/images/ic/ic_usa_flag.svg" />
@@ -57,7 +71,7 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
               </ItemTopMenuRight>
               <ItemTopMenuRight>
                 <HoverWrapper className={showProfile ? "active" : ""}>
-                  {fullName ? (
+                  {state.fullName ? (
                     <p
                       className="user-name"
                       onClick={() => {
@@ -69,7 +83,7 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
                         }, 100);
                       }}
                     >
-                      {fullName}
+                      {state.fullName}
                     </p>
                   ) : (
                     <Link href="/login">
@@ -84,14 +98,14 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
                 {showProfile && (
                   <>
                     <Marker onClick={() => setShowProfile(false)} />{" "}
-                    <ProfileDropdown setShowProfile={setShowProfile} avatar={avatar} userName={fullName} />
+                    <ProfileDropdown setShowProfile={setShowProfile} avatar={state.avatar} userName={state.fullName} />
                   </>
                 )}
               </ItemTopMenuRight>
               <ItemTopMenuRight onClick={() => setPopupLanguageLocation(true)}>
                 <HoverWrapper>
                   <IconMapMarker color="#7B7979" />
-                  <h6>{provinceSelected?.name}</h6>
+                  <h6>{state.provinceSelected?.name}</h6>
                 </HoverWrapper>
               </ItemTopMenuRight>
             </TopMenuRight>

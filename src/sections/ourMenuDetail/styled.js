@@ -264,7 +264,8 @@ export const MenuChildImageWrapper = styled.div`
 export const ProductSingleWraper = styled.div`
   @media (max-width: 768px) {
     width: 100vw;
-    overflow: scroll;
+    min-height: 100%;
+    overflow: auto;
   }
 `;
 

@@ -24,20 +24,16 @@ const DropDown = () => {
   const setPageRouter = (itemPage) => {
     setItem(itemPage);
     dispatch({ type: SET_PAGE_NAME, value: itemPage.name });
-    if (itemPage.name === "home") {
-      router.push(stringifyUrl({ url: "/edit", query: router.query }), undefined, { shallow: true });
-    } else {
-      const query = router.query;
-      query.page = itemPage.name;
-      router.push(
-        stringifyUrl({
-          url: "/edit",
-          query: query,
-        }),
-        undefined,
-        { shallow: true }
-      );
-    }
+    const query = router.query;
+    query.page = itemPage.name;
+    router.push(
+      stringifyUrl({
+        url: "/edit",
+        query: query,
+      }),
+      undefined,
+      { shallow: true }
+    );
   };
   useEffect(() => {
     if (pages) {

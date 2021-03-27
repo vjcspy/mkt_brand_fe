@@ -46,7 +46,7 @@ const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
         </ProfileWrapper>
         <hr />
         <TabsWrapper>
-          <LinkRouter href="/profile/my-profile" passHref>
+          <LinkRouter href="/profile?profileTab=my-profile" passHref>
             <TabItem>
               <Icon icon="tab-profile" />
               <h5>
@@ -54,7 +54,7 @@ const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
               </h5>
             </TabItem>
           </LinkRouter>
-          <LinkRouter href="/profile/my-promo" passHref>
+          <LinkRouter href="/profile?profileTab=my-promo" passHref>
             <TabItem>
               <Icon icon="tab-promo" />
               <h5>
@@ -62,7 +62,7 @@ const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
               </h5>
             </TabItem>
           </LinkRouter>
-          <LinkRouter href="/profile/my-history" passHref>
+          <LinkRouter href="/profile?profileTab=my-history" passHref>
             <TabItem>
               <Icon icon="tab-history" />
               <h5>
@@ -70,7 +70,7 @@ const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
               </h5>
             </TabItem>
           </LinkRouter>
-          <LinkRouter href="/profile/register-promo" passHref>
+          <LinkRouter href="/profile?profileTab=register-promo" passHref>
             <TabItem>
               <Icon icon="tab-gift" />
               <h5>

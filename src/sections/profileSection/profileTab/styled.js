@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const ProfileTabWrapper = styled.div`
   display: grid;
   gap: 30px;
-  margin-top: 70px;
+  padding-top: 70px;
+  padding-bottom: 50px;
   grid-template-columns: 1fr 1fr 1fr;
 
   @media (max-width: 768px) {

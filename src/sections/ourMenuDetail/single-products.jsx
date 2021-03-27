@@ -14,7 +14,7 @@ import { isNil, map } from "lodash";
 const SingleProducts = ({ config, isMobile, footer, onBack, setMenuDetail }) => {
   let products = config.products ?? config.options?.map((p) => p.product);
   return (
-    <ProductSingleWraper>
+    <ProductSingleWraper className="wadawd">
       {isMobile && (
         <ProductSingleMobileInfoWrapper>
           <Button

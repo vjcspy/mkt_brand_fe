@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 export const ProfileGiftWrapper = styled.div`
-  margin-top: 90px;
+  padding-top: 90px;
   display: flex;
   width: 100%;
   align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 90px;
+  padding-bottom: 90px;
   justify-content: center;
 `;
 

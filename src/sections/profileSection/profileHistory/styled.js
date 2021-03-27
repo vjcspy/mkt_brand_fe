@@ -2,8 +2,8 @@ import styled, { keyframes } from "styled-components";
 
 export const ProfileHistoryWrapper = styled.div`
   width: 100%;
-  margin-top: 40px;
-  margin-bottom: 90px;
+  padding-top: 40px;
+  padding-bottom: 90px;
 `;
 
 export const ProfileHistoryItem = styled.div`

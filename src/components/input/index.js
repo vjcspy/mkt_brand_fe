@@ -18,7 +18,6 @@ const InputComponent = ({
         name={name ? name : ""}
         textAlign={textAlign}
         isValid={isValid}
-        id="idInput"
         value={value}
         onChange={onChange}
         placeHolder={placeHolder}
