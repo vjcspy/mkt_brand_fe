@@ -10,6 +10,7 @@ import {
   LogoWrapper,
   MenuIconButton,
   HeaderLine,
+  ContentHeaderLink,
 } from "./header.styled";
 import { DEVELOPMENT_MODE, SET_HEADER_HEIGHT, SHOW_LANGUAGE_LOCATION } from "../../constants";
 import { Container } from "../../styles";
@@ -283,23 +284,25 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
                 </LogoWrapper>
               </LinkRouter>
             </FlexGrow>
-            <HeaderLinks ref={linkRef} showMobile={showMenuHeader}>
-              {navMenu?.children.map((e, i) => (
-                <LinkRouter key={i} href={e.url} passHref={true} shallow>
-                  <a className={`${index === i && isHomePage ? "active" : ""}`}>
-                    <h4>{e.label?.[locale]}</h4>
-                  </a>
-                </LinkRouter>
-              ))}
-              {isHomePage && (
-                <HeaderLine
-                  style={{
-                    left: percentage + "%",
-                    transition: transition ? "left 0.3s ease-out, width 0.3s ease-out" : "none",
-                    width: width,
-                  }}
-                />
-              )}
+            <HeaderLinks showMobile={showMenuHeader}>
+              <ContentHeaderLink ref={linkRef}>
+                {navMenu?.children.map((e, i) => (
+                  <LinkRouter key={i} href={e.url} passHref={true} shallow>
+                    <a className={`${index === i && isHomePage ? "active" : ""}`}>
+                      <h4>{e.label?.[locale]}</h4>
+                    </a>
+                  </LinkRouter>
+                ))}
+                {isHomePage && (
+                  <HeaderLine
+                    style={{
+                      left: percentage + "%",
+                      transition: transition ? "left 0.3s ease-out, width 0.3s ease-out" : "none",
+                      width: width,
+                    }}
+                  />
+                )}
+              </ContentHeaderLink>
             </HeaderLinks>
             <FlexGrow style={{ textAlign: "right" }}>
               <GroupFlexBox>

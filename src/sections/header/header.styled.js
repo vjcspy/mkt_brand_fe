@@ -28,11 +28,20 @@ export const LogoWrapper = styled.a`
   }
 `;
 
-export const HeaderLinks = styled.div`
-  position: relative;
+export const ContentHeaderLink = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+
+  @media (max-width: 768px) {
+    justify-content: space-between;
+    width: 100%;
+    padding: 18px 20px;
+  }
+`;
+
+export const HeaderLinks = styled.div`
+  position: relative;
 
   a {
     margin: 0 30px;
@@ -85,14 +94,18 @@ export const HeaderLinks = styled.div`
   }
 
   @media (max-width: 768px) {
-    display: ${({ showMobile }) => (showMobile ? "flex" : "none")};
+    display: ${({ showMobile }) => (showMobile ? "block" : "none")};
+
     position: fixed;
-    bottom: 0;
+    top: 100%;
     left: 0;
 
-    justify-content: space-between;
+    -webkit-transform: translate(0, -100%) translateZ(0);
+    -moz-transform: translate(0, -100%) translateZ(0);
+    -o-transform: translate(0, -100%) translateZ(0);
+    transform: translate(0, -100%) translateZ(0);
+
     width: 100%;
-    padding: 18px 20px;
     background: #242424cc;
     a {
       color: #ffffff;

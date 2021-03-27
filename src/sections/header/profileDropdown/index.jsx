@@ -7,7 +7,7 @@ import useSiteRouter from "../../../hooks/useSiteRouter";
 import { AvatarWrapper, DropDownWrapper, ProfileNameWrapper, ProfileWrapper, TabItem, TabsWrapper } from "./styled";
 import { FormattedMessage } from "react-intl";
 import { useDispatch } from "react-redux";
-import { SET_TOKEN_USER, SET_USER_INFO } from "../../../constants";
+import { SET_PROMO_OF_USER, SET_TOKEN_USER, SET_USER_INFO } from "../../../constants";
 
 const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
   const router = useSiteRouter();
@@ -19,7 +19,7 @@ const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
     setShowProfile(false);
     router.pushQuery("/");
   };
-  
+
   return (
     <>
       <DropDownWrapper>
