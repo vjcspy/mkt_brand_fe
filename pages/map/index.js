@@ -17,7 +17,7 @@ export async function getServerSideProps({ query }) {
       getSiteServer(site_code),
       getListRestaurant({ brandId: 7, provinceId: 5 }),
     ]);
-    let restaurantViewMap = idRestaurant ? dataForMap.result?.find((item) => item.code == idRestaurant) ?? {} : null;
+    let restaurantViewMap = idRestaurant ? dataForMap.result?.find((item) => item.code == idRestaurant) ?? null : null;
     return {
       props: {
         config: site?.config ?? null,
