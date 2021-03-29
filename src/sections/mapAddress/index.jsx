@@ -67,14 +67,20 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
   }, [size]);
 
   useEffect(() => {
-    if (listRestaurant && (restaurantViewMap || sItem)) {
-      console.log(restaurantViewMap)
-      console.log(listRestaurant[9])
-      const index = listRestaurant.findIndex((item) => item.code === restaurantViewMap?.code || item.code === sItem?.code);
+    if (restaurantViewMap) {
+      const index = listRestaurant.findIndex((item) => item.code === restaurantViewMap.code);
       let position = index > 0 ? refList.current.children[index]?.offsetTop : 0;
       ref.current.scrollTo({ top: position - 60, left: 0 });
     }
-  }, [sItem, listRestaurant]);
+  }, [restaurantViewMap]);
+
+  useEffect(() => {
+    if (sItem) {
+      const index = listRestaurant.findIndex((item) => item.code === sItem.code);
+      let position = index > 0 ? refList.current.children[index]?.offsetTop : 0;
+      ref.current.scrollTo({ top: position - 20, left: 0 });
+    }
+  }, [sItem])
 
   return (
     <Container ref={measuredRef}>
