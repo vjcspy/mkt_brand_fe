@@ -67,7 +67,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
   }, [size]);
 
   useEffect(() => {
-    if (listRestaurant && restaurantViewMap || sItem) {
+    if (listRestaurant && (restaurantViewMap || sItem)) {
       console.log(restaurantViewMap)
       console.log(listRestaurant[9])
       const index = listRestaurant.findIndex((item) => item.code === restaurantViewMap?.code || item.code === sItem?.code);
