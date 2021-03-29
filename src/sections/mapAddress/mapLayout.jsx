@@ -11,52 +11,12 @@ import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 
 const MapLayout = forwardRef(({ listRestaurant, restaurantViewMap, onBack, item, iconMarker, setSItem }, ref) => {
   const googleMapApi = useSelector((state) => state.get("googleMapApi"));
+  const latLng = useSelector((state) => state.get("latLng"));
   const [{ width }] = useIframeResize();
-  const [userPosition, setUserPosition] = useState()
-  const [center, setCenter] = useState()
   let zoom = item || restaurantViewMap ? 18 : 8
+  let center = item ? { lat: item?.latitude, lng: item?.longitude } : restaurantViewMap ? { lat: restaurantViewMap?.latitude, lng: restaurantViewMap?.longitude } : latLng ? latLng : { lat: 21.025140, lng: 105.844173 }
 
-  useEffect(() => {
-    if (!process.browser) {
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // call api
-        setUserPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
-      },
-      (error) => {
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            break;
-          case error.POSITION_UNAVAILABLE:
-            break;
-          case error.TIMEOUT:
-            break;
-          default:
-            break;
-        }
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 30000,
-        timeout: 27000,
-      }
-    );
-  }, [])
 
-  useEffect(() => {
-    console.log(userPosition)
-    if (item) {
-      setCenter({ lat: item.latitude, lng: item.longitude })
-    } else if (restaurantViewMap) {
-      setCenter({ lat: restaurantViewMap.latitude, lng: restaurantViewMap.longitude })
-    } else if (userPosition) {
-      setCenter(userPosition)
-    } else {
-      setCenter({ lat: 21.025140, lng: 105.844173 })
-    }
-  }, [userPosition, item, restaurantViewMap])
 
   return (
     <MapLayoutWrapper>

@@ -54,6 +54,7 @@ import {
   SET_PROVINCE_SELECTED,
   SET_NUM_PROMO,
   SET_LIST_PROMO_EDIT_PAGE,
+  SET_LAT_LNG,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -207,6 +208,8 @@ export default function rootReducer(state = initialState, action) {
       return state.update("numPromo", () => action.value);
     case SET_LIST_PROMO_EDIT_PAGE:
       return state.set("listPromoEditPage", action.value);
+    case SET_LAT_LNG:
+      return state.set("latLng", action.value);
     default:
       return state;
   }

@@ -12,7 +12,7 @@ import {
   HeaderLine,
   ContentHeaderLink,
 } from "./header.styled";
-import { DEVELOPMENT_MODE, SET_HEADER_HEIGHT, SHOW_LANGUAGE_LOCATION } from "../../constants";
+import { DEVELOPMENT_MODE, SET_HEADER_HEIGHT, SET_LAT_LNG, SHOW_LANGUAGE_LOCATION } from "../../constants";
 import { Container } from "../../styles";
 import IconMenu from "../../components/icons/iconMenu";
 import IconUserNoBorder from "../../components/icons/iconUserNoBorder";
@@ -177,9 +177,11 @@ function requestLocation() {
   if (!process.browser) {
     return;
   }
+  let latLng;
   navigator.geolocation.getCurrentPosition(
     (position) => {
       // call api
+      latLng = { lat: position.coords.latitude, lng: position.coords.longitude }
       // alert(`latitude: ${position.coords.latitude}\nlongitude: ${position.coords.longitude}`);
     },
     (error) => {
@@ -200,6 +202,7 @@ function requestLocation() {
       timeout: 27000,
     }
   );
+  return latLng
 }
 
 const Header = ({ config = defaultConfig, menus, pageName }) => {
@@ -226,8 +229,32 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    requestLocation();
-  }, []);
+    if (!process.browser) {
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        dispatch({ type: SET_LAT_LNG, value: { lat: position.coords.latitude, lng: position.coords.longitude } })
+      },
+      (error) => {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            break;
+          case error.POSITION_UNAVAILABLE:
+            break;
+          case error.TIMEOUT:
+            break;
+          default:
+            break;
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 30000,
+        timeout: 27000,
+      }
+    );
+  }, [])
 
   const isHomePage = useMemo(() => {
     if (mode === DEVELOPMENT_MODE) {
