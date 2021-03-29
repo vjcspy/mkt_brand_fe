@@ -30,6 +30,8 @@ const PromoSection = ({ promoListApi }) => {
   const { promoCode } = routerSite.query;
   const [loading, setLoading] = useState(false);
   const { token } = useSelector((s) => s.get("tokenUser"))?.toJS() ?? {};
+  const listPromoEditPage = useSelector((s) => s.get("listPromoEditPage"));
+  promoListApi = listPromoEditPage ? listPromoEditPage : promoListApi;
   const indexPromoParam = promoCode ? promoListApi.findIndex((item) => item.id == promoCode) : null;
   const fetchCodePromo = async (code, quantity) => {
     setLoading(true);

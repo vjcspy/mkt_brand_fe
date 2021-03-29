@@ -45,6 +45,7 @@ export const Info = styled.p`
   font-weight: normal;
   font-size: 16px;
   line-height: 24px;
+  height: 48px;
   color: ${({ theme }) => theme.color.text.description};
 
   @media (max-width: 769px) {

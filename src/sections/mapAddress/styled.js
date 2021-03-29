@@ -120,6 +120,7 @@ export const MapWrapper = styled.div`
 `;
 
 export const MapItem = styled.div`
+  cursor: pointer;
   p {
     margin-bottom: 0px;
     color: ${({ theme }) => theme.color.text.description};

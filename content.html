@@ -2,10 +2,6 @@
   .fvUIDF {
     overflow: scroll;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    -webkit-box-pack: flex-end;
-    justify-content: flex-end;
   }
   .fbKJgx {
     max-width: 1290px;
@@ -337,11 +333,21 @@
           <p class="sc-1j1sv69-6 dPZhUp">Orther</p>
         </div>
         <div class="sc-1j1sv69-7 ilLODq">
-          <div class="sc-1j1sv69-8 hrsVWR"><img src="/images/logobrands/hotpot_ashima.png" /></div>
-          <div class="sc-1j1sv69-8 hrsVWR"><img src="/images/logobrands/hotpot_kichi.png" /></div>
-          <div class="sc-1j1sv69-8 hrsVWR"><img src="/images/logobrands/hotpot_hutong.png" /></div>
-          <div class="sc-1j1sv69-8 hrsVWR"><img src="/images/logobrands/hotpot_manwah.png" /></div>
-          <div class="sc-1j1sv69-8 hrsVWR"><img src="/images/logobrands/hotpot_ktop.png" /></div>
+          <div class="sc-1j1sv69-8 hrsVWR">
+            <img width="100%" height="100%" src="/images/logobrands/hotpot_ashima.png" />
+          </div>
+          <div class="sc-1j1sv69-8 hrsVWR">
+            <img width="100%" height="100%" src="/images/logobrands/hotpot_kichi.png" />
+          </div>
+          <div class="sc-1j1sv69-8 hrsVWR">
+            <img width="100%" height="100%" src="/images/logobrands/hotpot_hutong.png" />
+          </div>
+          <div class="sc-1j1sv69-8 hrsVWR">
+            <img width="100%" height="100%" src="/images/logobrands/hotpot_manwah.png" />
+          </div>
+          <div class="sc-1j1sv69-8 hrsVWR">
+            <img width="100%" height="100%" src="/images/logobrands/hotpot_ktop.png" />
+          </div>
         </div>
       </div>
     </div>
@@ -350,25 +356,34 @@
     <div class="sc-37ach-2 fbKJgx">
       <div class="xufi8v-3 hDUsHn">
         <div class="xufi8v-7 roxrb">
-          <img class="logo-golden" src="/images/logo_goldengate.svg" />
+          <img class="logo-golden" width="160px" height="44px" src="/images/logo_goldengate.svg" />
           <h6 class="main-layout">
             Công ty Cổ phần Thương mại Dịch vụ Cổng Vàng<br />
             Số 60 Giang Văn Minh, Quận Ba Đình, Hà Nội
           </h6>
           <div class="xufi8v-5 jyKwMp">
-            <h6><img src="/images/ic/ic_phone_footer.svg" /> 043 222 3000</h6>
-            <h6><img src="/images/ic/ic_mail_footer.svg" /> Email: support.hn@ggg.com.vn</h6>
+            <h6><img width="19px" height="19px" src="/images/ic/ic_phone_footer.svg" /> 043 222 3000</h6>
+            <h6><img width="19px" height="19px" src="/images/ic/ic_mail_footer.svg" /> Email: support.hn@ggg.com.vn</h6>
           </div>
         </div>
         <div class="xufi8v-10 cejTHV">
           <h6>Kết nối với chúng tôi</h6>
           <div class="xufi8v-9 GYlXh">
             <a target="_blank" href="https://www.facebook.com/GoGiHouse.QuanThitNuongHanQuoc"
-              ><img src="https://ggg-api.s3.ap-southeast-1.amazonaws.com//assets/Frame_9a79287bcf.svg" /></a
+              ><img
+                width="36px"
+                height="36px"
+                src="https://ggg-api.s3.ap-southeast-1.amazonaws.com//assets/Frame_9a79287bcf.svg" /></a
             ><a target="_blank" href="https://www.youtube.com/channel/UCd3-QS4vCFnPvAEEpKwgNIw"
-              ><img src="https://ggg-api.s3.ap-southeast-1.amazonaws.com//assets/Group_1105_828f617b43.svg" /></a
+              ><img
+                width="36px"
+                height="36px"
+                src="https://ggg-api.s3.ap-southeast-1.amazonaws.com//assets/Group_1105_828f617b43.svg" /></a
             ><a target="_blank" href="https://www.instagram.com/gogihouse.official"
-              ><img src="https://ggg-api.s3.ap-southeast-1.amazonaws.com//assets/Group_1104_aff41ca3f3.svg"
+              ><img
+                width="36px"
+                height="36px"
+                src="https://ggg-api.s3.ap-southeast-1.amazonaws.com//assets/Group_1104_aff41ca3f3.svg"
             /></a>
           </div>
         </div>
@@ -432,7 +447,7 @@
           let result = "";
           let data = dataBrands.find((item) => item.name === name);
           data.logos.map((item) => {
-            result += `<div class="sc-1j1sv69-8 hrsVWR"> <img src="/images/logobrands/${item}"/> </div>`;
+            result += `<div class="sc-1j1sv69-8 hrsVWR"> <img width="100%" height="100%" src="/images/logobrands/${item}"/> </div>`;
           });
           listLogo.forEach((e) => (e.innerHTML = result));
         }

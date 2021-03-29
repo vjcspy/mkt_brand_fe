@@ -6,9 +6,7 @@ import { FormattedMessage } from "react-intl";
 import useIframeResize from "../../../hooks/useWindowResize/useIframeResize";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { PROMO_FLASH_SALE , PROMO_NORMAL} from "../../../constants";
-
-
+import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../../../constants";
 
 const PromoInfo = ({ promo, onGetCode, hadGetCode, getRestaurant, getCondition }) => {
   const locale = useSelector((s) => s.get("locale"));
@@ -51,7 +49,7 @@ const PromoInfo = ({ promo, onGetCode, hadGetCode, getRestaurant, getCondition }
         setShouldShow(false);
       }
     }
-  }, [width]);
+  }, [width, promo?.content]);
   return (
     <>
       <NamePromo>{promo?.title}</NamePromo>

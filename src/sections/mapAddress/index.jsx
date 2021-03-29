@@ -43,6 +43,9 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
   const [size, ref] = useIframeResize();
   const [sItem, setSItem] = useState();
   const headerHeight = useSelector((s) => s.get("headerHeight") ?? 0);
+
+
+
   const measuredRef = useCallback((node) => {
     if (node !== null) {
       setTop(node.getBoundingClientRect().top);
@@ -71,6 +74,14 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
     }
   }, []);
 
+  useEffect(() => {
+    if (sItem) {
+      const index = listRestaurant.findIndex((item) => item.code === sItem.code);
+      let position = index > 0 ? refList.current.children[index]?.offsetTop : 0;
+      ref.current.scrollTo({ top: position, left: 0 });
+    }
+  }, [sItem])
+
   return (
     <Container ref={measuredRef}>
       <MapAddressWrapper headerHeight={headerHeight}>
@@ -84,15 +95,11 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
             <ul ref={refList}>
               {map(listRestaurant, (item, index) => {
                 return (
-                  <li key={index} className={`${item.code === restaurantViewMap?.code ? "active" : ""}`}>
-                    <MapItem>
-                      <MapItemTitle
-                        onClick={() => {
-                          size.width <= 768 ? setSItem(item) : null;
-                        }}
-                      >
+                  <li key={index} className={`${item.code === sItem?.code || item.code === restaurantViewMap?.code ? "active" : ""}`}>
+                    <MapItem onClick={() => setSItem(item)}>
+                      <MapItemTitle>
                         <h4>{item.name}</h4>
-                        <p>{"km"}</p>
+                        {/* <p>{"km"}</p> */}
                         <IconMap className="text-description" />
                       </MapItemTitle>
 
@@ -147,6 +154,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
             listRestaurant={listRestaurant}
             restaurantViewMap={restaurantViewMap}
             item={sItem}
+            setSItem={setSItem}
             onBack={() => setSItem(false)}
             ref={mapRef}
           />

@@ -89,22 +89,6 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
   });
 
   useEffect(() => {
-    if (!process.browser) {
-      return;
-    }
-    let active = config.components.tabBanner.value.find((t) => t.firstLoad?.value.active === "YES");
-    if (sessionStorage.getItem("redirect") != "true" && width <= 768 && active) {
-      router.push(
-        stringifyUrl({
-          url: router.pathname,
-          query: Object.assign({ tabBanner: active.tabCode.value }, router.query),
-        })
-      );
-    }
-    sessionStorage.setItem("redirect", "true");
-  }, []);
-
-  useEffect(() => {
     if (tabBanner) {
       let index = config.components.tabBanner.value.findIndex((t) => t.tabCode.value === tabBanner);
       if (index > -1) {
@@ -120,7 +104,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
       query.tabBanner = tab.tabCode.value;
       router.push(stringifyUrl({ url: router.pathname, query: query }), undefined, { shallow: true });
     } else {
-      let active = config.components.tabBanner.value.find((t) => t.firstLoad?.value.active === "YES");
+      let active = config.components.tabBanner.value.find((t) => t.firstLoad?.value.active === "Yes");
       if (sessionStorage.getItem("redirect") != "true" && width <= 768 && active) {
         router.push(
           stringifyUrl({

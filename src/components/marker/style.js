@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
 export const WrapperMarker = styled.div`
-  position: relative;
+  position: absolute;
   width: 60px;
+  height: 60px;
+  transform: translate(-50%, -100%);
   label {
     position: absolute;
     width: 100%;

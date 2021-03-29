@@ -16,6 +16,10 @@ export const CookieWrapper = styled.div`
     padding: 20px;
     border-radius: 10px 10px 0 0;
   }
+
+  &.hide {
+    display: none;
+  }
 `;
 
 export const Title = styled.div`

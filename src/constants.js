@@ -6,7 +6,6 @@ export const JWT_TOKEN = "jwtToken";
  * REDUCER
  */
 
-
 export const SELECTED_SECTION = "SELECTED_SECTION";
 export const SELECTED_COMPONENT = "SELECTED_COMPONENT";
 export const CONFIG = "CONFIG";
@@ -85,6 +84,7 @@ export const GET_BLOGS_BY_IS_SHOW = "GET_BLOGS_BY_IS_SHOW";
 export const SET_LIST_BLOG_IS_SHOW = "SET_LIST_BLOG_IS_SHOW";
 export const SET_PREVIEW_MODE = "SET_PREVIEW_MODE";
 export const SET_LIST_BLOG_EDIT_PAGE = "SET_LIST_BLOG_EDIT_PAGE";
+export const SET_LIST_PROMO_EDIT_PAGE = "SET_LIST_PROMO_EDIT_PAGE";
 
 export const SET_PROMO_OF_USER = "SET_PROMO_OF_USER";
 export const GET_PROMO_OF_USER = "GET_PROMO_OF_USER";
@@ -94,9 +94,9 @@ export const SET_ICON_VIEW_MAP = "SET_ICON_VIEW_MAP";
 export const GET_TRANSACTION = "GET_TRANSACTION";
 export const SET_TRANSACTION = "SET_TRANSACTION";
 
-export const SET_LIST_PROVINCE = "SET_LIST_PROVINCE"
-export const SET_PROVINCE_SELECTED = "SET_PROVINCE_SELECTED"
-export const SET_NUM_PROMO = "SET_NUM_PROMO"
+export const SET_LIST_PROVINCE = "SET_LIST_PROVINCE";
+export const SET_PROVINCE_SELECTED = "SET_PROVINCE_SELECTED";
+export const SET_NUM_PROMO = "SET_NUM_PROMO";
 
 export const PROMO_FLASH_SALE = "limited-gift-promotion";
 export const PROMO_NORMAL = "gift-promotion";

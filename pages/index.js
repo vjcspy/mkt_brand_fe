@@ -1,8 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import {
-  SET_SHOW_MENU_HEADER,
-} from "../src/constants";
+import { SET_SHOW_MENU_HEADER } from "../src/constants";
 import Layout from "../src/containers/layout";
 import PageContainer from "../src/containers/pageContainer";
 import { Pages } from "../src/sections";

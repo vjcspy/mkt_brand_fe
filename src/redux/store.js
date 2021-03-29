@@ -11,8 +11,9 @@ const loadState = () => {
     const serializedState = JSON.parse(localStorage.getItem("state") ?? "{}");
     const jwtToken = JWT_TOKEN;
     const firstLoad = JSON.parse(sessionStorage.getItem("firstLoad")) ?? true;
+    const acceptCookie = JSON.parse(sessionStorage.getItem("acceptCookie")) ?? false;
     serializedState.token = getStorage(jwtToken);
-    return fromJS({ ...initialState.toJS(), ...serializedState, firstLoad });
+    return fromJS({ ...initialState.toJS(), ...serializedState, firstLoad, acceptCookie });
   } catch (err) {
     return undefined;
   }
@@ -37,7 +38,9 @@ store.subscribe(() => {
   if (process.browser) {
     let state = store.getState();
     const firstLoad = state.get("firstLoad");
+    const acceptCookie = state.get("acceptCookie");
     sessionStorage?.setItem("firstLoad", firstLoad);
+    sessionStorage?.setItem("acceptCookie", acceptCookie);
     saveState({
       // mode: state.get("mode"),
       tokenUser: state.get("tokenUser"),

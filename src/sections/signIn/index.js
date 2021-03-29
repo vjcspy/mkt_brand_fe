@@ -8,7 +8,7 @@ import { WrapperSignIn, Item, Info, GroupInput, ContentSignIn, WrapperItemSignIn
 import { useSelector, useDispatch } from "react-redux";
 
 import CreateInfo from "./createInfo";
-import { GET_PROMO_OF_USER,  SET_TOKEN_USER, SET_USER_INFO } from "../../constants";
+import { GET_PROMO_OF_USER, SET_TOKEN_USER, SET_USER_INFO } from "../../constants";
 import { showNotification } from "../../components/notification";
 
 import PulseLoader from "../../components/loading";
@@ -36,6 +36,14 @@ const SectionSignIn = () => {
   const refOTP = useRef();
   const [showLogin, setShowLogin] = useState(true);
   const [showGetOTP, setShowGetOTP] = useState(true);
+
+  const [{}, actionResend] = useApi(
+    `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/request-otp`,
+    { cellphone: phoneNumber },
+    { "tgs-version": "2.6.10", "Content-Type": "application/json" },
+    "POST"
+  );
+
   const [apiRequestOTP, actionRequestOTP] = useApi(
     `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/request-otp`,
     { cellphone: phoneNumber },
@@ -154,7 +162,7 @@ const SectionSignIn = () => {
                   <Button disabled={otp.length < 4} onClick={() => actionGetToken()}>
                     {apiGetToken?.loading ? <PulseLoader loading fill /> : <FormattedMessage id="login.sign_in" />}
                   </Button>
-                  <h5 onClick={() => actionGetToken()}>
+                  <h5 onClick={() => actionResend()}>
                     <FormattedMessage id="login.fail_otp" /> <span className="underline">Resend</span>
                   </h5>
                 </Item>

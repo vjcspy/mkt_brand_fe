@@ -7,6 +7,7 @@ import { WrapperDrag, ContentDrag, IconDrag, IconCloseDrag, Content } from "./st
 let postionStart;
 const DragMobile = ({ isShowDefault, children }) => {
   const refDrag = useRef();
+  const refContent = useRef();
   const [statusTop, setStatusTop] = useState(false);
   const [height, setHeight] = useState(230);
   const appHeight = useAppHeight();
@@ -32,6 +33,9 @@ const DragMobile = ({ isShowDefault, children }) => {
   };
 
   const onTouchStart = (e) => {
+    if (refContent.current.clientHeight < refContent.current.scrollHeight && height === "100%") {
+      return;
+    }
     postionStart = e.touches[0].clientY;
     document.body.style.setProperty("overflow-y", `hidden`);
   };
@@ -70,27 +74,34 @@ const DragMobile = ({ isShowDefault, children }) => {
       onOpen();
     }
   }, [isShowDefault]);
+
+  const onScroll = (e) => {
+    e.stopPropagation();
+  };
+
   return (
     <WrapperDrag style={{ height }} ref={refDrag}>
-      <ContentDrag>
+      <ContentDrag
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        onTouchMove={onTouchMove}
+      >
         {/* {statusTop ? (
           <IconDrag>
             <IconClose className="close" onClick={onClose} />
           </IconDrag>
         ) : ( */}
-        <IconDrag
-          onMouseDown={onMouseDown}
-          onMouseMove={onMouseMove}
-          onMouseUp={onMouseUp}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-          onTouchMove={onTouchMove}
-        >
+        <IconDrag>
           <IconRectangle />
         </IconDrag>
         {/* )} */}
 
-        <Content className={`${statusTop ? "content show" : "content"}`}>{children}</Content>
+        <Content onScroll={onScroll} ref={refContent} className={`${statusTop ? "content show" : "content"}`}>
+          {children}
+        </Content>
       </ContentDrag>
     </WrapperDrag>
   );

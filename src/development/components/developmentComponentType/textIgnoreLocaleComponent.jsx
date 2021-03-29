@@ -23,8 +23,6 @@ const TextIgnoreLocaleComponent = ({ config, path, ignoreLocale, onChangeTextBlo
         return;
       }
       const p = ignoreLocale ? path : [...path];
-      // debugger;
-      // console.log(p);
       dispatch({ type: UPDATE_CONFIG, path: p, value: e.target.value });
     },
     [dispatch, path, ignoreLocale]

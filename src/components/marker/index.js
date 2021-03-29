@@ -1,8 +1,8 @@
 import React from "react";
 import { WrapperMarker } from "./style";
-const Marker = ({ title, image }) => {
+const Marker = ({ title, image, ...rest }) => {
   return (
-    <WrapperMarker>
+    <WrapperMarker {...rest}>
       <img src={image} />
       <label>{title}</label>
     </WrapperMarker>

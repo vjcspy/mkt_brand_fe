@@ -22,6 +22,7 @@ const DropDown = () => {
   const [show, setShow] = useState();
 
   const setPageRouter = (itemPage) => {
+    console.log(itemPage);
     setItem(itemPage);
     dispatch({ type: SET_PAGE_NAME, value: itemPage.name });
     const query = router.query;
@@ -46,9 +47,23 @@ const DropDown = () => {
     dispatch({ type: SET_PAGE_NAME, value: page });
   }, []);
 
+  useEffect(() => {
+    var listener = (e) => {
+      if (e.target.classList.contains(DropDownItem.styledComponentId)) {
+        return;
+      }
+      setShow(false);
+    };
+    if (show) {
+      document.addEventListener("click", listener, { passive: true });
+    }
+
+    return () => document.removeEventListener("click", listener);
+  }, [show]);
+
   return (
     <DropDownWrapper>
-      <DropDownButton onClick={() => setShow(true)} onBlur={() => setTimeout(() => setShow(), 100)}>
+      <DropDownButton onClick={() => setShow(true)}>
         {item?.icon && <FontAwesomeIcon icon={item.icon} />}
         {item?.title}
         <FontAwesomeIcon className="caret" icon={"caret-down"} />

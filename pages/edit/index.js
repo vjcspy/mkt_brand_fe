@@ -3,13 +3,20 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { showNotification } from "../../src/components/notification";
-import { DEVELOPMENT_MODE, GET_SITE, SET_LIST_BLOG_EDIT_PAGE, SET_MODE, SET_OUR_MENUS } from "../../src/constants";
+import {
+  DEVELOPMENT_MODE,
+  GET_SITE,
+  SET_LIST_BLOG_EDIT_PAGE,
+  SET_LIST_PROMO_EDIT_PAGE,
+  SET_MODE,
+  SET_OUR_MENUS,
+} from "../../src/constants";
 import PageContainer from "../../src/containers/pageContainer";
 import DevelopmentLayout from "../../src/development/containers/developmentLayout";
 import useFromJS from "../../src/hooks/useFromJS";
 import useSiteRouter from "../../src/hooks/useSiteRouter";
 import { Pages } from "../../src/sections";
-import { fetchMenuCategories, getListBlog } from "../../src/services/backend";
+import { fetchMenuCategories, filterListPromoApi, getListBlog, getListPromo } from "../../src/services/backend";
 
 export async function getStaticProps() {
   const site_code = process.env.SITE_CODE;
@@ -54,6 +61,15 @@ const Home = ({ site_code, menus }) => {
         try {
           const { data } = await getListBlog();
           dispatch({ type: SET_LIST_BLOG_EDIT_PAGE, value: data?.data?.blogs });
+        } catch (e) {
+          showNotification(dispatch, "Fail load data");
+        }
+        break;
+      case Pages.promo.name:
+        try {
+          const { data } = await getListPromo();
+          let promoListResult = filterListPromoApi(data.result);
+          dispatch({ type: SET_LIST_PROMO_EDIT_PAGE, value: promoListResult });
         } catch (e) {
           showNotification(dispatch, "Fail load data");
         }

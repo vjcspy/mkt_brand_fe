@@ -96,21 +96,21 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
           </WrapperEndpoint>
         </WrapperScroller>
 
-        <DragMobile>
-          <WrapperDragMobile>
-            <PromoInfo
-              promo={promoListApi?.[currentPage]}
-              hadGetCode={
-                promoUser ? promoUser.find((item) => item?.promotionId === promoListApi?.[currentPage].id) : false
-              }
-              onGetCode={() =>
-                onGetCode(promoListApi?.[currentPage]?.id, promoListApi?.[currentPage]?.clmIsCashVoucher)
-              }
-              getRestaurant={() => setViewRestaurant(promoListApi?.[currentPage]?.restaurants)}
-              getCondition={() => setCondition(promoListApi?.[currentPage]?.condition)}
-            />
-          </WrapperDragMobile>
-        </DragMobile>
+        {promoListApi && (
+          <DragMobile>
+            <WrapperDragMobile>
+              <PromoInfo
+                promo={promoListApi[currentPage]}
+                hadGetCode={
+                  promoUser ? promoUser.find((item) => item?.promotionId === promoListApi[currentPage].id) : false
+                }
+                onGetCode={() => onGetCode(promoListApi[currentPage]?.id, promoListApi[currentPage]?.clmIsCashVoucher)}
+                getRestaurant={() => setViewRestaurant(promoListApi[currentPage]?.restaurants)}
+                getCondition={() => setCondition(promoListApi[currentPage]?.condition)}
+              />
+            </WrapperDragMobile>
+          </DragMobile>
+        )}
 
         <PopupMobile show={resultGetCode} step={stepFlowPopupMobile} onBack={onBackPopup}>
           <WrapperContentPopup style={{ height: "100%" }}>

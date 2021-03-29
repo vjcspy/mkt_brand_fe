@@ -19,10 +19,19 @@ const useSiteRouter = () => {
       },
       pushQuery: (url, as, option) => {
         let edit = mode == DEVELOPMENT_MODE ? "edit" : null;
-        let [, , search] = url.match(/\/([a-z_][\w-]*|)(\?.*|)/);
-        let query = process.browser ? parse(location.search) : {};
+        let [, page, search] = url.match(/\/([a-z_][\w-]*|)(\?.*|)/);
+        let query = process.browser ? parse(location.search) : router.query;
         query = Object.assign(query, parse(search));
-        let newUrl = stringifyUrl({ url: getBrowserLink(edit, url), query: query });
+        let newUrl = (() => {
+          if (edit) {
+            if (page) {
+              query = Object.assign(query, { page });
+            }
+            return stringifyUrl({ url: "/edit", query: query });
+          } else {
+            return stringifyUrl({ url: `/${page ?? ""}`, query: query });
+          }
+        })();
         return router.push(newUrl, as, option);
       },
     };

@@ -53,6 +53,7 @@ import {
   SET_LIST_PROVINCE,
   SET_PROVINCE_SELECTED,
   SET_NUM_PROMO,
+  SET_LIST_PROMO_EDIT_PAGE,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -61,7 +62,7 @@ export const initialState = fromJS({
   mode: PRODUCTION_MODE,
   selectedSection: null,
   locale: "vi",
-  provinceSelected:fromJS({name:"Hà nội", id:5}),
+  provinceSelected: fromJS({ name: "Hà nội", id: 5 }),
   acceptCookie: false,
   notifications: List([]),
   tokenUser: fromJS({}),
@@ -69,7 +70,7 @@ export const initialState = fromJS({
   firstLoad: false,
   viewPreview: false,
   showMenuHeader: false,
-  numPromo: 0
+  numPromo: 0,
 });
 
 export default function rootReducer(state = initialState, action) {
@@ -201,10 +202,11 @@ export default function rootReducer(state = initialState, action) {
     case SET_LIST_PROVINCE:
       return state.set("listProvince", action.value);
     case SET_PROVINCE_SELECTED:
-      return state.update("provinceSelected", () =>  fromJS(action.value))
+      return state.update("provinceSelected", () => fromJS(action.value));
     case SET_NUM_PROMO:
-      return state.update("numPromo", () =>  action.value)
-
+      return state.update("numPromo", () => action.value);
+    case SET_LIST_PROMO_EDIT_PAGE:
+      return state.set("listPromoEditPage", action.value);
     default:
       return state;
   }

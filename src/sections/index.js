@@ -72,10 +72,10 @@ const pagePromo = {
 //   breadcrumbs: [pageHome],
 // };
 
-const pageOurMenuDetail = {
-  name: "our-menu-detail",
-  title: "Our Menu Detail",
-  path: "/our-menu/[menu]",
+const pageOurMenu = {
+  name: "our-menu",
+  title: "Our Menu",
+  path: "/our-menu",
   icon: "utensils",
   sections: [OurMenuDetail.defaultConfig],
   shouldHideFooter: true,
@@ -150,8 +150,8 @@ const pagePolicyCookie = {
 export const Pages = {
   home: pageHome,
   promo: pagePromo,
-  // "our-menu": pageOurMenu,
-  "our-menu-detail": pageOurMenuDetail,
+  "our-menu": pageOurMenu,
+  // "our-menu-detail": pageOurMenuDetail,
   map: pageMap,
   profile: pageProfile,
   login: pageLogin,
