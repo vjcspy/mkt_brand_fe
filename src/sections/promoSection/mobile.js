@@ -32,7 +32,7 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
 
   const { data: promoUser } = useSelector((state) => state.get("promoOfUser")) ?? {};
   const [restaurantViewMap, setRestaurantViewMap] = useState();
-  const size = promoListApi.length;
+  const size = promoListApi?.length ?? 0;
 
   const onShowListRestaurant = () => {
     setStepFlowPopupMobile(stepFlowPopupMobile + 1);
@@ -73,7 +73,7 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
         containerHeight={appHeight - headerHeight - 230 + 30}
         pageOnChange={setCurrentPage}
       >
-        {promoListApi.map((item, index) => (
+        {promoListApi?.map((item, index) => (
           <React.Fragment key={index}>
             <Head>
               <link rel="preload" as="image" href={item?.thumbnail} />
@@ -99,13 +99,15 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
         <DragMobile>
           <WrapperDragMobile>
             <PromoInfo
-              promo={promoListApi[currentPage]}
+              promo={promoListApi?.[currentPage]}
               hadGetCode={
-                promoUser ? promoUser.find((item) => item?.promotionId === promoListApi[currentPage].id) : false
+                promoUser ? promoUser.find((item) => item?.promotionId === promoListApi?.[currentPage].id) : false
               }
-              onGetCode={() => onGetCode(promoListApi[currentPage]?.id, promoListApi[currentPage]?.clmIsCashVoucher)}
-              getRestaurant={() => setViewRestaurant(promoListApi[currentPage]?.restaurants)}
-              getCondition={() => setCondition(promoListApi[currentPage]?.condition)}
+              onGetCode={() =>
+                onGetCode(promoListApi?.[currentPage]?.id, promoListApi?.[currentPage]?.clmIsCashVoucher)
+              }
+              getRestaurant={() => setViewRestaurant(promoListApi?.[currentPage]?.restaurants)}
+              getCondition={() => setCondition(promoListApi?.[currentPage]?.condition)}
             />
           </WrapperDragMobile>
         </DragMobile>
@@ -113,7 +115,7 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
         <PopupMobile show={resultGetCode} step={stepFlowPopupMobile} onBack={onBackPopup}>
           <WrapperContentPopup style={{ height: "100%" }}>
             <SuccessRegisterMobile
-              itemPromoGetCode={promoListApi.find((item) => item.id === resultGetCode?.promotionId)}
+              itemPromoGetCode={promoListApi?.find((item) => item.id === resultGetCode?.promotionId)}
               resultGetCode={resultGetCode}
               onShowListRestaurant={onShowListRestaurant}
               onShowCondition={onShowConditionRegister}
@@ -124,11 +126,11 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
               <>
                 {showConditionOrRestaurant ? (
                   <ListRestaurantBooking
-                    listRestaurant={promoListApi[currentPage]?.restaurants}
+                    listRestaurant={promoListApi?.[currentPage]?.restaurants}
                     onViewMap={viewMapPromo}
                   />
                 ) : (
-                  <ListCondition condition={promoListApi[currentPage]?.condition} />
+                  <ListCondition condition={promoListApi?.[currentPage]?.condition} />
                 )}
               </>
             )}

@@ -105,7 +105,7 @@ const PromoDesktop = ({ promoListApi, onGetCode, resultGetCode, setResultGetCode
       <Popup show={resultGetCode} onClose={() => setResultGetCode(false)}>
         <SuccessRegister
           resultGetCode={resultGetCode}
-          itemPromoGetCode={promoListApi.find((item) => item.id === resultGetCode?.promotionId)}
+          itemPromoGetCode={promoListApi?.find((item) => item.id === resultGetCode?.promotionId)}
         />
       </Popup>
 
