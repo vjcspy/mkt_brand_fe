@@ -5,9 +5,8 @@ import IconTick from "../icons/iconTick";
 import { FormattedMessage } from "react-intl";
 
 const DropDown = ({ title, onChangeGender, value, listData, ...rest }) => {
-  value = value > 2 ? 2 : value;
   const [openDropdown, setOpenDropdown] = useState(false);
-  const [itemSelected, setItemSelected] = useState(value ?? 0);
+  const [itemSelected, setItemSelected] = useState(value >= 1 ? 1 : value);
   const onSelectItem = (item) => {
     setItemSelected(item);
     onChangeGender && onChangeGender(item);
@@ -29,7 +28,11 @@ const DropDown = ({ title, onChangeGender, value, listData, ...rest }) => {
       {openDropdown && (
         <ListData>
           {listData?.map((item, key) => (
-            <ItemSelect className={`${item.value === itemSelected ? "active" : ""}`} key={key} onClick={() => onSelectItem(item.value)}>
+            <ItemSelect
+              className={`${item.value === itemSelected ? "active" : ""}`}
+              key={key}
+              onClick={() => onSelectItem(item.value)}
+            >
               <FormattedMessage id={`login.${item.title}`} />
               <IconTick />
             </ItemSelect>
