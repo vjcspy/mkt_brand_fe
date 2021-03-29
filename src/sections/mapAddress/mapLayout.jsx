@@ -12,12 +12,17 @@ import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 const MapLayout = forwardRef(({ listRestaurant, restaurantViewMap, onBack, item, iconMarker, setSItem }, ref) => {
   const googleMapApi = useSelector((state) => state.get("googleMapApi"));
   const latLng = useSelector((state) => state.get("latLng"));
+  const [zoom, setZoom] = useState(8)
   const [{ width }] = useIframeResize();
-  let zoom = item || restaurantViewMap ? 18 : 8
   let center = item ? { lat: item?.latitude, lng: item?.longitude } : restaurantViewMap ? { lat: restaurantViewMap?.latitude, lng: restaurantViewMap?.longitude } : latLng ? latLng : { lat: 21.025140, lng: 105.844173 }
 
-
-
+  useEffect(() => {
+    if (item || restaurantViewMap) {
+      setZoom(18)
+    } else {
+      setZoom(8)
+    }
+  }, [item, restaurantViewMap])
   return (
     <MapLayoutWrapper>
       {item && (
@@ -59,6 +64,7 @@ const MapLayout = forwardRef(({ listRestaurant, restaurantViewMap, onBack, item,
                   lng={restaurant?.longitude ?? null}
                   title={restaurant.name}
                   image={iconMarker.url}
+                  zoom={zoom}
                 />
               ))}
             {item && width <= 768 && (
