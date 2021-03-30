@@ -8,21 +8,19 @@ import { DevSecondaryButton } from "../../../styles/developmentStyle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SectionTitle from "../../components/sectionsConfig/sectionTitle";
 import { REMOVE_CONFIG, UPDATE_CONFIG } from "../../../constants";
-import { fromJS } from "immutable";
+import { fromJS, List } from "immutable";
 import GroupConfig from "../groupConfig";
 let indexChange;
 const GroupBlogComponent = ({ config, path, putStage }) => {
   const dispatch = useDispatch();
   const updateConfig = useCallback((path, value) => dispatch({ type: UPDATE_CONFIG, value, path }), [dispatch]);
   const removeConfig = useCallback((path, value) => dispatch({ type: REMOVE_CONFIG, value, path }), [dispatch]);
-
   const onOrderList = (indexChange, indexByChange) => {
     const tamp = config.value[indexChange];
     config.value[indexChange] = config.value[indexByChange];
     config.value[indexByChange] = tamp;
     return config.value.map((item) => fromJS(item));
   };
-
   const onDragStart = (e, index) => {
     indexChange = index;
   };

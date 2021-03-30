@@ -39,14 +39,13 @@ const SectionConfig = ({ path, putStage, popStage }) => {
     };
     setConfirmDialog(dialog);
   };
-
   const components = useMemo(() => {
-    return map(config?.components)
+    return map(config?.components, (e, k) => ({ ...e, name: k }))
       .sort((a, b) => a.order - b.order)
       .map((config, index) => {
         return (
           <DevelopmentComponentType
-            key={config.name}
+            key={index}
             config={config}
             popStage={popStage}
             putStage={putStage}

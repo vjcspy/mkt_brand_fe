@@ -4,18 +4,17 @@ import Router, { useRouter } from "next/router";
 import { getBrowserLink } from "../../services/frontend";
 import { useSelector } from "react-redux";
 import { DEVELOPMENT_MODE } from "../../constants";
-import { first } from "lodash";
+import { cloneDeep, first } from "lodash";
 import { parse, stringifyUrl } from "query-string";
 
 const LinkRouter = forwardRef(({ href, children, passHref, ...props }, ref) => {
   const mode = useSelector((s) => s.get("mode"));
   const router = useRouter();
 
-  const provinceSelected = useSelector((s) => s.get("provinceSelected"));
   if (first(href) === "/") {
     let edit = mode == DEVELOPMENT_MODE ? "edit" : null;
     let newHref = href;
-    let query = process.browser ? parse(location.search) : router.query;
+    let query = process.browser ? parse(location.search) : cloneDeep(router.query);
     let [, page, search] = href.match(/\/([a-z_][\w-]*|)(\?.*|)/);
     query = Object.assign(query, parse(search));
     if (edit) {
@@ -26,10 +25,7 @@ const LinkRouter = forwardRef(({ href, children, passHref, ...props }, ref) => {
     } else {
       newHref = stringifyUrl({ url: `/${page ?? ""}`, query: query });
     }
-
-    return <NextLink {...props} passHref={passHref} children={children} href={newHref} ref={ref} shallow />;
-  }
-  if (first(href) === "/promo") {
+    return <NextLink {...props} passHref={passHref} children={children} href={newHref} ref={ref} />;
   }
   let child = React.Children.only(children);
   if (child.type === "a") {

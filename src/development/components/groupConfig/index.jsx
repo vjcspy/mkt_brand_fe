@@ -9,7 +9,6 @@ import { SectionHeader, SectionWrapper } from "../sectionConfig/styled";
 const GroupConfig = ({ path, popStage, putStage, blog }) => {
   const config = useSelector((s) => s.getIn(path.slice(0, path.length - 2)))?.toJS();
   const c = useSelector((s) => s.getIn(path));
-
   const components = useMemo(() => {
     return map(c?.toJS(), (e, k) => ({ ...e, name: k }))
       .sort((a, b) => a.order - b.order)

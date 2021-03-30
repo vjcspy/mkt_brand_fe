@@ -9,7 +9,6 @@ const DevelopmentLeftContent = ({ viewPreview }) => {
       Component: SectionsConfig,
     },
   ]);
-
   const putStage = useCallback(
     (newStage) => {
       setStage(stage.concat(newStage));

@@ -314,8 +314,8 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
             <HeaderLinks showMobile={showMenuHeader}>
               <ContentHeaderLink ref={linkRef}>
                 {navMenu?.children.map((e, i) => (
-                  <LinkRouter key={i} href={e.url} passHref={true} shallow>
-                    <a className={`${index === i && isHomePage ? "active" : ""}`}>
+                  <LinkRouter key={i} passHref={true} href={e.url} shallow>
+                    <a href={e.url} className={`${index === i && isHomePage ? "active" : ""}`}>
                       <h4>{e.label?.[locale]}</h4>
                     </a>
                   </LinkRouter>

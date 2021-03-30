@@ -16,16 +16,31 @@ import useRefCallback from "../../hooks/useRefCallback";
 const IconTriangleLineTop = loadable(() => import("../../components/icons/iconTriangleLineTop"));
 const IconTriangleLineDown = loadable(() => import("../../components/icons/iconTriangleLineDown"));
 
-const BannerItem = ({ config, footer, tabCode }) => {
+const Link = ({ url, item, ...props }) => {
+  const href = useMemo(() => {
+    const query = {};
+    if (item.promoCode.value) {
+      query.promoCode = item.promoCode.value;
+    }
+    if (item.restaurantCode.value) {
+      query.idRestaurant = item.restaurantCode.value;
+    }
+    if (item.menuCode.value) {
+      query.menuCode = item.menuCode.value;
+    }
+    return stringifyUrl({ url, query })
+  }, [url, item])
+  return <LinkRouter {...props} href={href} />
+}
+
+const BannerItem = ({ config, footer, tabCode, onChangeBanner }) => {
   const locale = useSelector((s) => s.get("locale"));
   const [currentPage, setCurrentPage] = useState(0);
   const tabShouldShow = config.value.filter((item) => item.statusTab.value.active === "Show");
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width, height }, ref] = useIframeResize();
   const router = useSiteRouter();
-
   const bannerItem = router.query.bannerItem;
-
   useEffect(() => {
     if (bannerItem?.includes(tabCode)) {
       let bannerIndex = bannerItem.replace(`${tabCode}-`, "") - 1;
@@ -36,6 +51,7 @@ const BannerItem = ({ config, footer, tabCode }) => {
   }, [bannerItem]);
 
   const handlePageChange = useRefCallback((index) => {
+    onChangeBanner(tabCode, index)
     if (index != currentPage) {
       router.pushQuery(
         stringifyUrl({ url: router.pathname, query: { bannerItem: `${tabCode}-${index + 1}` } }),
@@ -67,9 +83,9 @@ const BannerItem = ({ config, footer, tabCode }) => {
           <GroupButton>
             {item.showHead.value.active === "Show" && <h1>{item.headText.value[locale]}</h1>}
             {item.showContent.value.active === "Show" && <h3>{item.contentText.value[locale]}</h3>}
-            <LinkRouter href={`${item.link?.value?.url ?? "/ "}`} passHref>
+            <Link url={item.link?.value.url} item={item} passHref >
               <a className="link-banner">{item.link?.value?.label[locale] ?? "Xem ưu đãi"}</a>
-            </LinkRouter>
+            </Link>
           </GroupButton>
         </WrapperSection>
       )

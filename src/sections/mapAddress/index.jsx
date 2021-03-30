@@ -43,8 +43,17 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
   const [size, ref] = useIframeResize();
   const [sItem, setSItem] = useState();
   const headerHeight = useSelector((s) => s.get("headerHeight") ?? 0);
+  const [listRestaurantShow, setListRestaurantShow] = useState(listRestaurant)
+  // const latLng = useSelector((state) => state.get("latLng"));
+  // const provinceSelected = useSelector((state) => state.get("provinceSelected"))?.toJS();
 
+  // useEffect(() => {
+  //   console.log(latLng)
+  // }, [latLng, provinceSelected])
 
+  // useEffect(() => {
+
+  // },[])
 
   const measuredRef = useCallback((node) => {
     if (node !== null) {
@@ -68,7 +77,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
 
   useEffect(() => {
     if (restaurantViewMap) {
-      const index = listRestaurant.findIndex((item) => item.code === restaurantViewMap.code);
+      const index = listRestaurantShow.findIndex((item) => item.code === restaurantViewMap.code);
       let position = index > 0 ? refList.current.children[index]?.offsetTop : 0;
       ref.current.scrollTo({ top: position - 60, left: 0 });
     }
@@ -76,7 +85,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
 
   useEffect(() => {
     if (sItem) {
-      const index = listRestaurant.findIndex((item) => item.code === sItem.code);
+      const index = listRestaurantShow.findIndex((item) => item.code === sItem.code);
       let position = index > 0 ? refList.current.children[index]?.offsetTop : 0;
       ref.current.scrollTo({ top: position - 20, left: 0 });
     }
@@ -93,7 +102,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
           )}
           <MapItemsWrapper ref={ref}>
             <ul ref={refList}>
-              {map(listRestaurant, (item, index) => {
+              {map(listRestaurantShow, (item, index) => {
                 return (
                   <li key={index} className={`${item.code === sItem?.code || item.code === restaurantViewMap?.code ? "active" : ""}`}>
                     <MapItem onClick={() => setSItem(item)}>
@@ -137,7 +146,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
                         )}
                       </MapButtons>
                     </MapItem>
-                    {index < listRestaurant.length - 1 && <hr />}
+                    {index < listRestaurantShow.length - 1 && <hr />}
                   </li>
                 );
               })}
@@ -151,7 +160,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
         <RightContent className={`${sItem ? "open" : ""}`} headerHeight={headerHeight}>
           <MapLayout
             iconMarker={iconMarker}
-            listRestaurant={listRestaurant}
+            listRestaurant={listRestaurantShow}
             restaurantViewMap={restaurantViewMap}
             item={sItem}
             setSItem={setSItem}

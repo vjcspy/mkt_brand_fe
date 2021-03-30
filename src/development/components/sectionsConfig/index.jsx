@@ -48,7 +48,6 @@ const SectionsConfig = ({ putStage }) => {
   const onDragStart = (e, index) => {
     indexSelect = index;
   };
-
   const onOrderSection = (indexChange, indexByChange) => {
     let tamp = sections[indexChange];
     sections[indexChange] = sections[indexByChange];
@@ -94,6 +93,7 @@ const SectionsConfig = ({ putStage }) => {
       >
         {map(sections, (section, index) => (
           <SectionItem
+            className="okokokokk"
             draggable="true"
             onDragStart={(e) => onDragStart(e, index)}
             key={section.code}

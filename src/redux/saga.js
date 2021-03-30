@@ -358,11 +358,11 @@ function* getTransaction() {
     const { data } = yield Axios.post(
       `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/transactions`,
       {
-        memberId: customerNumber,
+        memberId: "04031608",
       },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMTguNzEuMjUxLjE4ODo1OTAwNFwvYXBpXC92MVwvYXV0aGVudGljYXRpb25cL2xvZ2luIiwiaWF0IjoxNjE0MzM5MTg1LCJleHAiOjE2NDU4NzUxODUsIm5iZiI6MTYxNDMzOTE4NSwianRpIjoidWwzd3FSWWF3MFBwa21hdSIsInN1YiI6MjQ1NDg3NCwicHJ2IjoiNzA4NTNmN2FiZDJmZDI0MTI0ZTY3OTdjZDBkMjg1YzFkZTAzMTM4YSIsImN1c3RvbWVyTnVtYmVyIjoiMDI0NTQ4NzQiLCJjZWxscGhvbmUiOiIwOTg3ODAyMTc1In0.dLFITZOAma-pSWxkn81IYvEew99I4mhTgbeXBqjNb90"}`,
           "tgs-version": "2.6.10",
         },
       }

@@ -1,4 +1,5 @@
 import { get } from "lodash";
+import { useRouter } from "next/dist/client/router";
 import { stringifyUrl } from "query-string";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import useSiteRouter from "../../hooks/useSiteRouter";
@@ -98,20 +99,40 @@ const defaultConfig = {
 
 const TabBanner = ({ config = defaultConfig, footer }) => {
   const router = useSiteRouter();
-  const tabBanner = router.query.tabBanner;
+  const { tabBanner, bannerItem } = router.query;
   const length = config.components.tabBanner.value.length;
   const miniDelta = 20;
   const [{ width }, ref] = useIframeResize();
   const containerRef = useRef();
-
   const [transition, setTransition] = useState(true);
   const [translateX, setTranslateX] = useState();
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [movePos, setMovePos] = useState({ x: 0, y: 0 });
+  const [disableTouchInFooter, setDisableTouchFooter] = useState(false)
   const [delta, setDelta] = useState({
     current: { x: 0, y: 0 },
     positive: false,
   });
+
+  const [indexBannerCurrentTab, setIndexBannerCurrentTab] = useState({});
+
+  const handleChangeCurrentTab = useCallback((tab, index) => {
+    setIndexBannerCurrentTab(pre => ({
+      ...pre,
+      [tab]: index + 1
+    }))
+  }, [])
+
+
+  useEffect(() => {
+    const currentTab = config.components.tabBanner.value.find(item => item.tabCode.value === tabBanner) ?? config.components.tabBanner.value[0]
+    const sizeofTab = currentTab.tab.value.length
+    if (sizeofTab === indexBannerCurrentTab[tabBanner] - 1) {
+      setDisableTouchFooter(true)
+    } else {
+      setDisableTouchFooter(false)
+    }
+  }, [indexBannerCurrentTab, tabBanner])
 
   useEffect(() => {
     if (tabBanner) {
@@ -130,6 +151,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
           url: router.pathname,
           query: {
             tabBanner: tab.tabCode.value,
+            bannerItem: tab.tabCode.value + '-' + (indexBannerCurrentTab[tab.tabCode.value] ?? 1)
           },
         }),
         undefined,
@@ -178,6 +200,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
 
   const onTouchMove = useCallback(
     (event) => {
+      if (disableTouchInFooter) return;
       const X = event.touches[0].pageX;
       const Y = event.touches[0].pageY;
       if (Math.abs(startPos.y - Y) > Math.abs(startPos.x - X)) {
@@ -213,7 +236,6 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
     setMovePos({ x: 0, y: 0 });
     setStartPos({ x: 0, y: 0 });
   }, [delta]);
-
   return (
     <TabScrollWrapper onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchStart={onTouchStart} ref={ref}>
       <TabContainerWrapper
@@ -225,7 +247,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
         }}
       >
         {config.components.tabBanner.value.map((config, index) => (
-          <BannerItem key={index} tabCode={config.tabCode.value} config={config.tab} footer={footer} />
+          <BannerItem key={index} tabCode={config.tabCode.value} config={config.tab} footer={footer} onChangeBanner={handleChangeCurrentTab} />
         ))}
       </TabContainerWrapper>
     </TabScrollWrapper>
