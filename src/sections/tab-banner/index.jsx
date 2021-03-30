@@ -1,7 +1,7 @@
 import { get } from "lodash";
-import { useRouter } from "next/dist/client/router";
 import { stringifyUrl } from "query-string";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import useSiteRouter from "../../hooks/useSiteRouter";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import BannerItem from "./banner-item";
 import { TabContainerWrapper, TabScrollWrapper } from "./style";
@@ -9,12 +9,12 @@ const defaultConfig = {
   type: "section",
   code: "tab-banner-dawdaw",
   name: "tabBanner",
-  title: "Tab Banner",
+  title: "Tab Group",
   components: {
     tabBanner: {
       type: "group",
-      title: "Banner",
-      name: "tabGroup",
+      title: "Tab Banners",
+      name: "tabBanner",
       defaultConfig: {
         tabCode: {
           type: "textIgnoreLocale",
@@ -32,29 +32,54 @@ const defaultConfig = {
         },
         tab: {
           type: "group",
-          title: "Tab Banner",
-          name: "tabBanner",
+          title: "Tab Banner detail",
+          name: "tab",
           value: [],
           defaultConfig: {
-            title: {
-              type: "text",
-              title: "Tab Name",
-              value: { vi: "Ăn gogi Trúng 1 tỷ", en: "Ăn gogi Trúng 1 tỷ" },
-              name: "TabName",
+            imageDesktop: { order: 1, type: "image", title: "Banner Desktop", value: null },
+            imageMobile: { order: 2, type: "image", title: "Banner Mobile", value: null },
+            statusTab: {
+              order: 3,
+              type: "radio",
+              title: "Status",
+              value: { active: "Show", titles: ["Show", "Hidden"] },
             },
-            imageDesktop: { type: "image", title: "Banner Desktop", value: null },
-            imageMobile: { type: "image", title: "Banner Mobile", value: null },
-            statusTab: { type: "radio", title: "Status", value: { active: "Show", titles: ["Show", "Hidden"] } },
-            typeTab: { type: "radio", title: "Type", value: { active: "Normal", titles: ["Normal", "Flash"] } },
-            headText: { type: "text", title: "Head", value: { vi: "Head", en: "Head" } },
-            showHead: { type: "radio", title: "Show Head", value: { active: "Show", titles: ["Show", "Hidden"] } },
-            contentText: { type: "text", title: "Content", value: { vi: "Content Text", en: "Content Text" } },
+            typeTab: {
+              order: 4,
+              type: "radio",
+              title: "Type",
+              value: { active: "Normal", titles: ["Normal", "Flash"] },
+            },
+            headText: { order: 5, type: "text", title: "Head", value: { vi: "Head", en: "Head" } },
+            showHead: {
+              order: 6,
+              type: "radio",
+              title: "Show Head",
+              value: { active: "Show", titles: ["Show", "Hidden"] },
+            },
+            contentText: {
+              order: 7,
+              type: "text",
+              title: "Content",
+              value: { vi: "Content Text", en: "Content Text" },
+            },
             showContent: {
+              order: 8,
               type: "radio",
               title: "Show Content",
               value: { active: "Show", titles: ["Show", "Hidden"] },
             },
+            promoCode: { order: 9, type: "textIgnoreLocale", title: "Promo Code", name: "promoCode", value: "" },
+            menuCode: { order: 10, type: "textIgnoreLocale", title: "Menu Code", name: "menuCode", value: "" },
+            restaurantCode: {
+              order: 11,
+              type: "textIgnoreLocale",
+              title: "Restaurant Code",
+              name: "restaurantCode",
+              value: "",
+            },
             link: {
+              order: 12,
               type: "link",
               name: "link",
               title: "Link",
@@ -72,7 +97,7 @@ const defaultConfig = {
 };
 
 const TabBanner = ({ config = defaultConfig, footer }) => {
-  const router = useRouter();
+  const router = useSiteRouter();
   const tabBanner = router.query.tabBanner;
   const length = config.components.tabBanner.value.length;
   const miniDelta = 20;
@@ -100,16 +125,23 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
   useEffect(() => {
     let tab = get(config, ["components", "tabBanner", "value", Math.abs(translateX)]);
     if (tab) {
-      let query = router.query;
-      query.tabBanner = tab.tabCode.value;
-      router.push(stringifyUrl({ url: router.pathname, query: query }), undefined, { shallow: true });
+      router.pushQuery(
+        stringifyUrl({
+          url: router.pathname,
+          query: {
+            tabBanner: tab.tabCode.value,
+          },
+        }),
+        undefined,
+        { shallow: true }
+      );
     } else {
       let active = config.components.tabBanner.value.find((t) => t.firstLoad?.value.active === "Yes");
       if (sessionStorage.getItem("redirect") != "true" && width <= 768 && active) {
-        router.push(
+        router.pushQuery(
           stringifyUrl({
             url: router.pathname,
-            query: Object.assign({ tabBanner: active.tabCode.value }, router.query),
+            query: { tabBanner: active.tabCode.value },
           }),
           undefined,
           { shallow: true }
@@ -193,7 +225,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
         }}
       >
         {config.components.tabBanner.value.map((config, index) => (
-          <BannerItem key={index} config={config.tab} footer={footer} />
+          <BannerItem key={index} tabCode={config.tabCode.value} config={config.tab} footer={footer} />
         ))}
       </TabContainerWrapper>
     </TabScrollWrapper>

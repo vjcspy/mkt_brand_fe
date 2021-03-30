@@ -24,7 +24,7 @@ const useSiteRouter = () => {
         query = Object.assign(query, parse(search));
         let newUrl = (() => {
           if (edit) {
-            if (page) {
+            if (page && page != "edit") {
               query = Object.assign(query, { page });
             }
             return stringifyUrl({ url: "/edit", query: query });

@@ -19,7 +19,7 @@ const LinkRouter = forwardRef(({ href, children, passHref, ...props }, ref) => {
     let [, page, search] = href.match(/\/([a-z_][\w-]*|)(\?.*|)/);
     query = Object.assign(query, parse(search));
     if (edit) {
-      if (page) {
+      if (page && page != "edit") {
         query = Object.assign(query, { page });
       }
       newHref = stringifyUrl({ url: "/edit", query: query });

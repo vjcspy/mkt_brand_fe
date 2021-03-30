@@ -1,26 +1,52 @@
-import React, { useMemo, useState } from "react";
-import Button from "../../components/button";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import LinkRouter from "../../components/link-router";
 import { WrapperOnePageScroller, GroupButton, WrapperListPoint, WrapperSection } from "./style";
 import loadable from "@loadable/component";
 
-import ReactPageScroller from "../../../plugins/react-page-scroller";
 import ImageMedia from "../../development/components/imageMedia";
 import PointNavigation from "../../components/point-navigation";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import OnePageScroll from "../../components/one-page-scroll/one-page-scroll";
 import DynamicFooter from "../dynamic-footer";
+import useSiteRouter from "../../hooks/useSiteRouter";
+import { stringifyUrl } from "query-string";
+import useRefCallback from "../../hooks/useRefCallback";
 
 const IconTriangleLineTop = loadable(() => import("../../components/icons/iconTriangleLineTop"));
 const IconTriangleLineDown = loadable(() => import("../../components/icons/iconTriangleLineDown"));
 
-const BannerItem = ({ config, footer }) => {
+const BannerItem = ({ config, footer, tabCode }) => {
   const locale = useSelector((s) => s.get("locale"));
   const [currentPage, setCurrentPage] = useState(0);
   const tabShouldShow = config.value.filter((item) => item.statusTab.value.active === "Show");
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width, height }, ref] = useIframeResize();
+  const router = useSiteRouter();
+
+  const bannerItem = router.query.bannerItem;
+
+  useEffect(() => {
+    if (bannerItem?.includes(tabCode)) {
+      let bannerIndex = bannerItem.replace(`${tabCode}-`, "") - 1;
+      if (bannerIndex > -1 && tabShouldShow.length > bannerIndex && bannerIndex != currentPage) {
+        setCurrentPage(bannerIndex);
+      }
+    }
+  }, [bannerItem]);
+
+  const handlePageChange = useRefCallback((index) => {
+    if (index != currentPage) {
+      router.pushQuery(
+        stringifyUrl({ url: router.pathname, query: { bannerItem: `${tabCode}-${index + 1}` } }),
+        undefined,
+        {
+          shallow: true,
+        }
+      );
+    }
+  }, []);
+
   const Images = useMemo(() => {
     var items = tabShouldShow.concat(null);
     return items.map((item, index) =>
@@ -54,7 +80,7 @@ const BannerItem = ({ config, footer }) => {
       <OnePageScroll
         customPageNumber={currentPage}
         containerHeight={height - headerHeight}
-        pageOnChange={setCurrentPage}
+        pageOnChange={handlePageChange}
       >
         {Images}
       </OnePageScroll>

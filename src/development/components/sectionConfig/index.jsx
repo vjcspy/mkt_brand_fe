@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { last, map } from "lodash";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { REMOVE_SECTION } from "../../../constants";
 import { DevPrimaryButton, DevSecondaryButton } from "../../../styles/developmentStyle";
@@ -40,6 +40,22 @@ const SectionConfig = ({ path, putStage, popStage }) => {
     setConfirmDialog(dialog);
   };
 
+  const components = useMemo(() => {
+    return map(config?.components)
+      .sort((a, b) => a.order - b.order)
+      .map((config, index) => {
+        return (
+          <DevelopmentComponentType
+            key={config.name}
+            config={config}
+            popStage={popStage}
+            putStage={putStage}
+            path={[...path, "components", config.name, "value"]}
+          />
+        );
+      });
+  }, [path, popStage, putStage, config?.components]);
+
   return (
     <SectionWrapper>
       <SectionHeader>
@@ -63,15 +79,7 @@ const SectionConfig = ({ path, putStage, popStage }) => {
           ]}
         />
       </SectionHeader>
-      {map(config?.components, (config, index) => (
-        <DevelopmentComponentType
-          key={index}
-          config={config}
-          popStage={popStage}
-          putStage={putStage}
-          path={[...path, "components", index, "value"]}
-        />
-      ))}
+      {components}
       <ConfirmDialog dialog={confirmDialog} onClose={() => setConfirmDialog({})} />
     </SectionWrapper>
   );

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { map } from "lodash";
-import React from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { DevPrimaryButton, DevSecondaryButton } from "../../../styles/developmentStyle";
 import DevelopmentComponentType from "../developmentComponentType";
@@ -8,7 +8,22 @@ import { SectionHeader, SectionWrapper } from "../sectionConfig/styled";
 
 const GroupConfig = ({ path, popStage, putStage, blog }) => {
   const config = useSelector((s) => s.getIn(path.slice(0, path.length - 2)))?.toJS();
-  const components = useSelector((s) => s.getIn(path))?.toJS();
+  const c = useSelector((s) => s.getIn(path));
+
+  const components = useMemo(() => {
+    return map(c?.toJS(), (e, k) => ({ ...e, name: k }))
+      .sort((a, b) => a.order - b.order)
+      .map((config, index) => (
+        <DevelopmentComponentType
+          key={config.name}
+          config={config}
+          putStage={putStage}
+          path={[...path, config.name, "value"]}
+          blog={blog}
+        />
+      ));
+  }, [path, popStage, putStage, c]);
+
   return (
     <SectionWrapper>
       <SectionHeader>
@@ -20,11 +35,7 @@ const GroupConfig = ({ path, popStage, putStage, blog }) => {
           <FontAwesomeIcon icon="ellipsis-v" />
         </DevPrimaryButton>
       </SectionHeader>
-      {map(components, (config, index) => (
-        <React.Fragment key={config?.name + index}>
-          <DevelopmentComponentType config={config} putStage={putStage} path={[...path, index, "value"]} blog={blog} />
-        </React.Fragment>
-      ))}
+      {components}
     </SectionWrapper>
   );
 };
