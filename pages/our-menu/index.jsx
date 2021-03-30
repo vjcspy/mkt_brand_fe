@@ -33,7 +33,7 @@ import PageContainer from "../../src/containers/pageContainer";
 //   };
 // }
 
-export async function getServerSideProps({}) {
+export async function getServerSideProps({ }) {
   const webSites = await getWebsitesData();
   const webData = chain(webSites)
     .get(["data", "rows"])
@@ -43,7 +43,7 @@ export async function getServerSideProps({}) {
 
   const siteCode = webData?.code ?? process.env.SITE_CODE;
   const storeCode = store?.code ?? process.env.STORE_CODE;
-  
+
   const [{ data: site }, menus] = await Promise.all([
     getSiteServer(siteCode),
     fetchMenuCategories({ urlKey: "gogi", storeCode }),
@@ -70,10 +70,10 @@ const Site = ({ site_code, config, menus }) => {
     <Layout>
       <PageContainer
         menus={menus}
-        pageName={Pages["our-menu-detail"].name}
+        pageName={Pages["our-menu"].name}
         siteCode={site_code}
         modifiedConfig={modifiedConfig}
-        shouldHideFooter={Pages["our-menu-detail"].shouldHideFooter}
+        shouldHideFooter={Pages["our-menu"].shouldHideFooter}
       />
     </Layout>
   );

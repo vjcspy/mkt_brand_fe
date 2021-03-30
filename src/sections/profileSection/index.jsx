@@ -31,13 +31,14 @@ const ProfileSection = ({ }) => {
   const {
     query: { profileTab },
   } = router;
-
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    let index = items.findIndex((i) => i.code == profileTab);
-    if (index != current) {
-      setCurrent(index);
+    if (profileTab) {
+      let index = items.findIndex((i) => i.code == profileTab);
+      if (index != current) {
+        setCurrent(index);
+      }
     }
   }, [profileTab]);
 

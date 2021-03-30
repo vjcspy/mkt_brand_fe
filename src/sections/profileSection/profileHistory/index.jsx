@@ -31,13 +31,10 @@ const ProfileHistory = () => {
     if (error && loaded) {
       showNotification(dispatch, { content: error, status: "error" });
     }
-    if (warning && loaded) {
-      showNotification(dispatch, { content: warning, status: "warning" });
+    if (warning && loaded || data?.length === 0) {
+      showNotification(dispatch, { content: warning ?? "Chưa có lịch sử giao dịch", status: "warning" });
     }
-    if (data?.length === 0) {
-      console.log("okok")
-      showNotification(dispatch, { content: "Chưa có lịch sử giao dịch", status: "warning" });
-    }
+
   }, [error, warning, data]);
   return (
     <ProfileHistoryWrapper>
