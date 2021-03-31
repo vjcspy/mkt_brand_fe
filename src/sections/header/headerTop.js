@@ -18,11 +18,14 @@ import {
 } from "./header.styled";
 import { Marker } from "./profileDropdown/styled";
 import Link from "next/link";
+import { filterProvinceById } from "../../services/backend";
 const ProfileDropdown = loadable(() => import("./profileDropdown"));
 
 const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
   const locale = useSelector((state) => state.getIn(["locale"]));
-  const provinceSelected = useSelector((state) => state.get("provinceSelected"));
+  const provinceSelected = useSelector((state) => state.get("provinceSelected"))?.toJS();
+  const listProvince = useSelector((state) => state.get("listProvince")) ?? [];
+  const provinceFilter = filterProvinceById(listProvince, provinceSelected.id);
   const userInfo = useSelector((state) => state.get("userInfo"));
 
   const [showProfile, setShowProfile] = useState(false);
@@ -37,11 +40,11 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
     let { fullName, avatar } = userInfo?.toJS() ?? {};
     setState({
       locale: locale,
-      provinceSelected: provinceSelected?.toJS(),
+      provinceSelected: provinceFilter,
       fullName: fullName,
       avatar: avatar,
     });
-  }, [locale, provinceSelected, userInfo]);
+  }, [locale, provinceFilter, userInfo]);
 
   return (
     <HeaderTopWrapper>

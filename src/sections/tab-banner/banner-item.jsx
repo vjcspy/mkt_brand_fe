@@ -33,14 +33,22 @@ const Link = ({ url, item, ...props }) => {
   return <LinkRouter {...props} href={href} />
 }
 
-const BannerItem = ({ config, footer, tabCode, onChangeBanner }) => {
+const BannerItem = ({ config, footer, tabCode, onChangeBanner, indexBannerCurrentTab }) => {
   const locale = useSelector((s) => s.get("locale"));
-  const [currentPage, setCurrentPage] = useState(0);
   const tabShouldShow = config.value.filter((item) => item.statusTab.value.active === "Show");
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width, height }, ref] = useIframeResize();
   const router = useSiteRouter();
   const bannerItem = router.query.bannerItem;
+  const initPage = (() => {
+    if (bannerItem?.includes(tabCode)) {
+      return (bannerItem?.replace(tabCode + '-', '') ?? 1) - 1
+    }
+    return 0;
+  })()
+  const [currentPage, setCurrentPage] = useState(initPage);
+
+
   useEffect(() => {
     if (bannerItem?.includes(tabCode)) {
       let bannerIndex = bannerItem.replace(`${tabCode}-`, "") - 1;

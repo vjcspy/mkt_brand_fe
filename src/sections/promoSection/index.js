@@ -10,9 +10,9 @@ const PromoDesktop = loadable(() => import("./desktop"));
 import PromoMobile from "./mobile";
 
 import useSiteRouter from "../../hooks/useSiteRouter";
-import { pickUpVoucher } from "../../services/backend";
+import { filterListPromoApi, getListPromo, pickUpVoucher } from "../../services/backend";
 import { showNotification } from "../../components/notification";
-import { GET_PROMO_OF_USER } from "../../constants";
+import { GET_PROMO_OF_USER, SET_NUM_PROMO } from "../../constants";
 
 const defaultConfig = {
   type: "section",
@@ -26,13 +26,53 @@ const PromoSection = ({ promoListApi }) => {
   const [{ width, height }, ref] = useIframeResize();
   const dispatch = useDispatch();
   const routerSite = useSiteRouter();
-  const [resultGetCode, setResultGetCode] = useState();
   const { promoCode } = routerSite.query;
-  const [loading, setLoading] = useState(false);
+
   const { token } = useSelector((s) => s.get("tokenUser"))?.toJS() ?? {};
   const listPromoEditPage = useSelector((s) => s.get("listPromoEditPage"));
+
   promoListApi = listPromoEditPage ? listPromoEditPage : promoListApi;
+
   const indexPromoParam = promoCode ? promoListApi.findIndex((item) => item.id == promoCode) : null;
+  const [resultGetCode, setResultGetCode] = useState();
+  const [promosShow, setPromosShow] = useState(promoListApi);
+  const [loading, setLoading] = useState(false);
+  const provinceSelected = useSelector((state) => state.getIn(["provinceSelected"])).toJS();
+
+  // get list promo when user change location on Header
+  useEffect(async () => {
+    if (!provinceSelected.default) {
+      try {
+        setLoading(true);
+        const {
+          data: { result, messageCode },
+          error,
+        } = await getListPromo(provinceSelected.id);
+
+        if (error || messageCode === 0) {
+          showNotification(dispatch, { content: error.message ?? "Có lỗi khi load ưu đãi", status: "error" });
+          setLoading(false);
+          return;
+        }
+
+        const promoFilter = filterListPromoApi(result);
+
+        if (promoFilter.length <= 0) {
+          showNotification(dispatch, { content: "Không có ưu đãi ở location này", status: "warning" });
+          setLoading(false);
+          return;
+        }
+
+        dispatch({ type: SET_NUM_PROMO, value: promoFilter.length });
+        setLoading(false);
+        setPromosShow(promoFilter);
+      } catch (e) {
+        setLoading(false);
+        showNotification(dispatch, { content: "Không thể tải dữ liệu", status: "error" });
+      }
+    }
+  }, [provinceSelected.id]);
+
   const fetchCodePromo = async (code, quantity) => {
     setLoading(true);
     try {
@@ -94,7 +134,7 @@ const PromoSection = ({ promoListApi }) => {
         {width > 768 ? (
           <PromoDesktop
             onGetCode={onGetCode}
-            promoListApi={promoListApi}
+            promoListApi={promosShow}
             resultGetCode={resultGetCode}
             setResultGetCode={setResultGetCode}
             indexPromoParam={indexPromoParam}
@@ -102,7 +142,7 @@ const PromoSection = ({ promoListApi }) => {
         ) : (
           <PromoMobile
             onGetCode={onGetCode}
-            promoListApi={promoListApi}
+            promoListApi={promosShow}
             resultGetCode={resultGetCode}
             setResultGetCode={setResultGetCode}
             indexPromoParam={indexPromoParam}

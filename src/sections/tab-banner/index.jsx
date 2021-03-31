@@ -114,7 +114,10 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
     positive: false,
   });
 
-  const [indexBannerCurrentTab, setIndexBannerCurrentTab] = useState({});
+
+  const [indexBannerCurrentTab, setIndexBannerCurrentTab] = useState({
+    [tabBanner]: (bannerItem?.replace(tabBanner + '-') ?? 1) - 1
+  });
 
   const handleChangeCurrentTab = useCallback((tab, index) => {
     setIndexBannerCurrentTab(pre => ({
@@ -125,12 +128,14 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
 
 
   useEffect(() => {
-    const currentTab = config.components.tabBanner.value.find(item => item.tabCode.value === tabBanner) ?? config.components.tabBanner.value[0]
-    const sizeofTab = currentTab.tab.value.length
-    if (sizeofTab === indexBannerCurrentTab[tabBanner] - 1) {
-      setDisableTouchFooter(true)
-    } else {
-      setDisableTouchFooter(false)
+    const currentTab = config.components.tabBanner.value.find(item => item.tabCode.value === tabBanner)
+    if (currentTab) {
+      const sizeofTab = currentTab.tab.value.length
+      if (sizeofTab === indexBannerCurrentTab[tabBanner] - 1) {
+        setDisableTouchFooter(true)
+      } else {
+        setDisableTouchFooter(false)
+      }
     }
   }, [indexBannerCurrentTab, tabBanner])
 

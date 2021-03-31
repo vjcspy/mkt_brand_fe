@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   HeaderPopup,
   ContentPopup,
@@ -15,24 +15,31 @@ import Button from "../../../components/button";
 import { useSelector, useDispatch } from "react-redux";
 import { RadioButton } from "../../../styles";
 import { FormattedMessage } from "react-intl";
-import { SET_LOCALE, SHOW_LANGUAGE_LOCATION } from "../../../constants";
+import { SET_LOCALE, SET_PROVINCE_SELECTED, SHOW_LANGUAGE_LOCATION } from "../../../constants";
 import SelectLocation from "../../../components/drop-down/SelectLocation";
+import { filterProvinceById } from "../../../services/backend";
 const PopupLanguageLocation = () => {
   const locale = useSelector((state) => state.getIn(["locale"]));
-  const [language, setCheck] = useState(locale);
-
+  const provinceSelected = useSelector((state) => state.get("provinceSelected"))?.toJS();
   const showLanguageLocation = useSelector((state) => state.getIn(["showLanguageLocation"]));
+  const listProvince = useSelector((state) => state.get("listProvince")) ?? [];
+  const provinceFilter = filterProvinceById(listProvince, provinceSelected.id);
+  const [location, setLocation] = useState(provinceFilter);
+  const [language, setCheck] = useState(locale);
   const dispatch = useDispatch();
-  const setPopupLanguageLocation = useCallback((value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }), []);
-  const updateLanguage = useCallback((value) => dispatch({ type: SET_LOCALE, value }), []);
 
   const onDone = () => {
-    setPopupLanguageLocation(false);
-    updateLanguage(language);
+    dispatch({ type: SHOW_LANGUAGE_LOCATION, value: false });
+    dispatch({ type: SET_LOCALE, value: language });
+    dispatch({ type: SET_PROVINCE_SELECTED, value: location });
   };
 
+  useEffect(() => {
+    setLocation(provinceFilter);
+  }, [provinceFilter]);
+
   const onClosePopup = () => {
-    setPopupLanguageLocation(false);
+    dispatch({ type: SHOW_LANGUAGE_LOCATION, value: false });
   };
 
   return showLanguageLocation ? (
@@ -50,7 +57,11 @@ const PopupLanguageLocation = () => {
             <FormattedMessage id="header.select_location" />:
           </TitleGroup>
           <GroupLocation>
-            <SelectLocation className="popup-language-location-in-home" />
+            <SelectLocation
+              location={location}
+              onChangeLocation={setLocation}
+              className="popup-language-location-in-home"
+            />
           </GroupLocation>
           <TitleGroup>
             <FormattedMessage id="header.select_language" />:

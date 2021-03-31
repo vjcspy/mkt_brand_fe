@@ -4,21 +4,35 @@ import { SET_GOOGLE_MAP_API } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getApiKeyGoogleMap, getListPromo, getListRestaurant, getSiteServer } from "../../src/services/backend";
+import {
+  getApiKeyGoogleMap,
+  getListRestaurant,
+  getSiteCode,
+  getSiteServer,
+  getWebsitesConfig,
+} from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps(ctx) {
   try {
-    const { idRestaurant } = query;
+    const { idRestaurant } = ctx.query;
     const site_code = process.env.SITE_CODE;
+
+    const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
+    const {
+      data: { website_code },
+    } = await getWebsitesConfig(pathname);
+    const { id: brandId } = await getSiteCode(website_code);
     const [{ data: googleMapApi }, { data: site }, { data: dataForMap }] = await Promise.all([
       getApiKeyGoogleMap(),
       getSiteServer(site_code),
-      getListRestaurant({ brandId: 7, provinceId: 5 }),
+      getListRestaurant({ brandId }),
     ]);
+
     let restaurantViewMap = idRestaurant ? dataForMap.result?.find((item) => item.code == idRestaurant) ?? null : null;
     return {
       props: {
+        brandId: brandId ?? null,
         config: site?.config ?? null,
         site_code: site?.site_code ?? null,
         googleMapApi: googleMapApi[0],
@@ -29,6 +43,7 @@ export async function getServerSideProps({ query }) {
   } catch (e) {
     return {
       props: {
+        brandId: null,
         config: null,
         site_code: null,
         googleMapApi: null,
@@ -39,10 +54,9 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-const Map = ({ config, site_code, googleMapApi, restaurantViewMap, listRestaurant }) => {
+const Map = ({ config, site_code, googleMapApi, restaurantViewMap, listRestaurant, brandId }) => {
   const dispatch = useDispatch();
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
-
   useEffect(() => {
     dispatch({ type: SET_GOOGLE_MAP_API, value: googleMapApi });
     // dispatch({
@@ -60,6 +74,7 @@ const Map = ({ config, site_code, googleMapApi, restaurantViewMap, listRestauran
         pageName={Pages.map.name}
         siteCode={site_code}
         modifiedConfig={modifiedConfig}
+        brandId={brandId}
       />
     </Layout>
   );

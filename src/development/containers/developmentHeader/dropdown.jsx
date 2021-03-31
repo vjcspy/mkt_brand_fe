@@ -22,7 +22,6 @@ const DropDown = () => {
   const [show, setShow] = useState();
 
   const setPageRouter = (itemPage) => {
-    console.log(itemPage);
     setItem(itemPage);
     dispatch({ type: SET_PAGE_NAME, value: itemPage.name });
     const query = router.query;

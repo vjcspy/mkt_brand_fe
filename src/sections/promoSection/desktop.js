@@ -83,7 +83,35 @@ const PromoDesktop = ({ promoListApi, onGetCode, resultGetCode, setResultGetCode
             containerHeight={height - headerHeight}
             pageOnChange={setCurrentPage}
           >
-            {PromoList}
+            {promoListApi?.map((item, index) => (
+              <React.Fragment key={index}>
+                <Head>
+                  <link rel="preload" as="image" href={item.thumbnail} />
+                </Head>
+                <Container key={index} style={{ height: "100%" }}>
+                  <WrapperPromo>
+                    <Promo className="Promo">
+                      <LeftPromo className="LeftPromo">
+                        <RatioImage ratio="1:1">
+                          <img width={500} height={500} src={item.thumbnail} alt={item.thumbnail} />
+                        </RatioImage>
+                      </LeftPromo>
+                      <RightPromo className="RightPromo">
+                        <PromoInfo
+                          promo={item}
+                          hadGetCode={promoUser ? promoUser.find((promo) => promo.promotionId === item.id) : false}
+                          onGetCode={() => {
+                            onGetCode(item.id, item.clmIsCashVoucher);
+                          }}
+                          getRestaurant={() => setListRestaurant({ restaurants: item.restaurants, promoId: item.id })}
+                          getCondition={() => setCondition(item.condition)}
+                        />
+                      </RightPromo>
+                    </Promo>
+                  </WrapperPromo>
+                </Container>
+              </React.Fragment>
+            ))}
           </OnePageScroll>
         </ContentScroller>
 

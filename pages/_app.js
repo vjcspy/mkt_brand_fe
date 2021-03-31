@@ -50,7 +50,9 @@ App.getInitialProps = async ({ Component, ctx }) => {
   // console.log("getInitialProps App");
   try {
     const [{ data: listProvince }, { data: listPromo }] = await Promise.all([getProvinces(), getListPromo()]);
-    let provinces = listProvince.result?.map((item) => ({ id: item?.id, name: item?.name }));
+    let provinces = listProvince.result?.map((item) => ({ id: item?.id, name: item?.name })) ?? [
+      { id: 5, name: "Hà Nội" },
+    ];
     let numPromo = filterListPromoApi(listPromo.result).length;
 
     return { host: process.env.API_HOST, graphqlHost: process.env.GRAPHQL_HOST, provinces: provinces, numPromo };

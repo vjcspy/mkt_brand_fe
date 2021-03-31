@@ -17,12 +17,15 @@ import {
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import IconMap from "../../components/icons/iconMap";
 import MapLayout from "./mapLayout";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import IconPhone from "../../components/icons/iconPhone";
 import IconTriangleLineDown from "../../components/icons/iconTriangleLineDown";
 import { FormattedMessage } from "react-intl";
 import { Content, ItemContent, Title, WrapperAddress } from "../../components/item-restaurant/style";
 import Link from "next/link";
+import { getListRestaurant, getWebsitesConfig } from "../../services/backend";
+import { showNotification } from "../../components/notification";
+import PulseLoader from "../../components/loading";
 
 const defaultConfig = {
   name: "Địa chỉ nhà hàng",
@@ -34,26 +37,48 @@ const defaultConfig = {
   },
 };
 
-const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant }) => {
+const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant, brandId }) => {
+  const dispatch = useDispatch()
   const iconMarker = config.components.imageMarker.value;
-  const mapRef = useRef();
-  const refList = useRef();
+  const [size, ref] = useIframeResize();
+
+  const headerHeight = useSelector((s) => s.get("headerHeight") ?? 0);
+  const provinceId = useSelector((state) => state.getIn(["provinceSelected", "id"]));
+  const latLng = useSelector((state) => state.get("latLng"));
+
+  const [listRestaurantShow, setListRestaurantShow] = useState(listRestaurant)
   const [isEnd, setEnd] = useState();
   const [top, setTop] = useState();
-  const [size, ref] = useIframeResize();
   const [sItem, setSItem] = useState();
-  const headerHeight = useSelector((s) => s.get("headerHeight") ?? 0);
-  const [listRestaurantShow, setListRestaurantShow] = useState(listRestaurant)
-  // const latLng = useSelector((state) => state.get("latLng"));
-  // const provinceSelected = useSelector((state) => state.get("provinceSelected"))?.toJS();
+  const [loading, setLoading] = useState(false)
 
-  // useEffect(() => {
-  //   console.log(latLng)
-  // }, [latLng, provinceSelected])
+  const mapRef = useRef();
+  const refList = useRef();
 
-  // useEffect(() => {
-
-  // },[])
+  // get list restaurant when user alow location
+  useEffect(async () => {
+    if (latLng) {
+      setLoading(true)
+      try {
+        const { data: { result, messageCode }, error } = await getListRestaurant({
+          brandId,
+          provinceId: provinceId,
+          longitude: latLng.lng,
+          latitude: latLng.lat,
+        })
+        if (error || messageCode !== 1) {
+          showNotification(dispatch, { content: error.message ?? message ?? "Lỗi khi tải nhà hàng" })
+          setLoading(false)
+          return
+        }
+        setListRestaurantShow(result)
+        setLoading(false)
+      } catch (e) {
+        setLoading(false)
+        showNotification(dispatch, { content: "Đã có lỗi xảy ra" })
+      }
+    }
+  }, [provinceId, latLng])
 
   const measuredRef = useCallback((node) => {
     if (node !== null) {
@@ -93,6 +118,21 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
 
   return (
     <Container ref={measuredRef}>
+      {loading && (
+        <div
+          style={{
+            background: "rgba(0, 0, 0, 0.6)",
+            height: "100vh",
+            width: "100vw",
+            zIndex: "3000",
+            position: "fixed",
+            top: 0,
+            left: 0
+          }}
+        >
+          <PulseLoader color="#DA841E" loading fill />
+        </div>
+      )}
       <MapAddressWrapper headerHeight={headerHeight}>
         <LeftContent className={isEnd ? "end" : ""}>
           {size.width <= 768 && (
@@ -108,7 +148,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant 
                     <MapItem onClick={() => setSItem(item)}>
                       <MapItemTitle>
                         <h4>{item.name}</h4>
-                        {/* <p>{"km"}</p> */}
+                        {`${item.distance ? Math.round(item.distance) / 1000 + "km" : ""}`}
                         <IconMap className="text-description" />
                       </MapItemTitle>
 

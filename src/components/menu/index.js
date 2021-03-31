@@ -18,8 +18,8 @@ import IconClose from "../icons/iconsClose";
 import IconTriangleRight from "../icons/iconTriangleLineRight";
 import ChildMenu from "./childMenu";
 import Button from "../button";
-import { connect, useSelector } from "react-redux";
-import { SHOW_LANGUAGE_LOCATION } from "../../constants";
+import { connect, useSelector, useDispatch } from "react-redux";
+import { SET_PROVINCE_SELECTED, SHOW_LANGUAGE_LOCATION } from "../../constants";
 import { FormattedMessage } from "react-intl";
 import LinkRouter from "../link-router";
 import SelectLocation from "../drop-down/SelectLocation";
@@ -27,13 +27,18 @@ import SelectLanguage from "../drop-down/SelectLanguage";
 import useGraphql from "../../hooks/useApi/useGraphql";
 import useSiteRouter from "../../hooks/useSiteRouter";
 import useAppHeight from "../../hooks/useAppHeight";
+import { filterProvinceById } from "../../services/backend";
 const mapDispatchToProp = (dispatch) => ({
   setShowLanguageLocation: (value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }),
 });
 const Menu = ({ show, listMenu, setShowMenu, buttonRight, buttonLeft }) => {
+  const dispatch = useDispatch();
   const [itemSubMenu, setItemSubMenu] = useState();
   const locale = useSelector((state) => state.getIn(["locale"]));
   const numPromo = useSelector((state) => state.get("numPromo"));
+  const provinceSelected = useSelector((state) => state.get("provinceSelected"))?.toJS();
+  const listProvince = useSelector((state) => state.get("listProvince")) ?? [];
+  const provinceFilter = filterProvinceById(listProvince, provinceSelected.id);
   const menu = useGraphql("menu");
   const menus = useMemo(() => listMenu?.map((m) => (m.apiKey === "menu" ? { ...m, children: menu } : m)), [
     listMenu,
@@ -47,6 +52,10 @@ const Menu = ({ show, listMenu, setShowMenu, buttonRight, buttonLeft }) => {
     // setTimeout(() => {
     // }, 400);
     setShowMenu(false);
+  };
+
+  const setLocation = (location) => {
+    dispatch({ type: SET_PROVINCE_SELECTED, value: location });
   };
 
   return (
@@ -104,7 +113,7 @@ const Menu = ({ show, listMenu, setShowMenu, buttonRight, buttonLeft }) => {
                   </ListFeature>
                   <LanguageLocation>
                     <SelectLanguage />
-                    <SelectLocation />
+                    <SelectLocation location={provinceFilter} onChangeLocation={setLocation} />
                   </LanguageLocation>
                 </FeatureMobile>
               </MainMenu>
@@ -122,8 +131,8 @@ const Menu = ({ show, listMenu, setShowMenu, buttonRight, buttonLeft }) => {
               <Button target="_blank" href={buttonLeft?.value?.url} varian="primary-router" status="primary">
                 <span>{buttonLeft?.value?.label?.[locale]}</span>
               </Button>
-              <Button  target="_blank" href={buttonRight?.value?.url} varian="primary-router" status="primary">
-              <span>{buttonRight?.value?.label?.[locale]}</span>
+              <Button target="_blank" href={buttonRight?.value?.url} varian="primary-router" status="primary">
+                <span>{buttonRight?.value?.label?.[locale]}</span>
               </Button>
             </FooterMenu>
           </ContentRelative>

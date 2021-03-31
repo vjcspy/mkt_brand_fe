@@ -12,7 +12,7 @@ import {
   HeaderLine,
   ContentHeaderLink,
 } from "./header.styled";
-import { DEVELOPMENT_MODE, SET_HEADER_HEIGHT, SET_LAT_LNG, SHOW_LANGUAGE_LOCATION } from "../../constants";
+import { DEVELOPMENT_MODE, SET_HEADER_HEIGHT, SET_LAT_LNG, SET_PROVINCE_SELECTED, SHOW_LANGUAGE_LOCATION } from "../../constants";
 import { Container } from "../../styles";
 import IconMenu from "../../components/icons/iconMenu";
 import IconUserNoBorder from "../../components/icons/iconUserNoBorder";
@@ -27,6 +27,7 @@ import ImageMedia from "../../development/components/imageMedia";
 import Link from "next/link";
 import { stringifyUrl } from "query-string";
 import PopupLanguageLocation from "./popup-language-location";
+import { getProvinceIdByLocation } from "../../services/backend";
 
 const MenuRight = loadable(() => import("../../components/menu"));
 
@@ -207,6 +208,7 @@ function requestLocation() {
 
 const Header = ({ config = defaultConfig, menus, pageName }) => {
   const showMenuHeader = useSelector((state) => state.getIn(["showMenuHeader"]));
+  const listProvince = useSelector((state) => state.get("listProvince")) ?? [];
   const mode = useSelector((state) => state.get("mode"));
   const router = useSiteRouter();
   const dispatch = useDispatch();
@@ -233,7 +235,12 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
       return;
     }
     navigator.geolocation.getCurrentPosition(
-      (position) => {
+      async (position) => {
+        try {
+          const { data } = await getProvinceIdByLocation({ lat: position.coords.latitude, lng: position.coords.longitude })
+          dispatch({ type: SET_PROVINCE_SELECTED, value: { id: data.provinceId, default: true } })
+        } catch (e) {
+        }
         dispatch({ type: SET_LAT_LNG, value: { lat: position.coords.latitude, lng: position.coords.longitude } })
       },
       (error) => {

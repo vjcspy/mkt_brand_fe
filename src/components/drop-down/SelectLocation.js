@@ -4,36 +4,28 @@ import IconTriangleDown from "../icons/iconTriangleDown";
 import { WrapperSelectLocation, TitleLocation, ListLocation, Marker } from "./style";
 import { useSelector, useDispatch } from "react-redux";
 import IconTicker from "../icons/iconTicker";
-import { SET_LOCATION, SET_PROVINCE_SELECTED } from "../../constants";
 
-export const dummyLocation = [
-  { id: "hn", title: "Ha Noi", titleVN: "Hà Nội" },
-  { id: "hcm", title: "Ho Chi Minh", titleVN: "Hồ Chí Minh" },
-];
-
-const SelectLocation = ({ ...rest }) => {
-  const dispatch = useDispatch()
-  const listProvince = useSelector((state) => state.get("listProvince")) ?? []
-  const provinceSelected = useSelector((state) => state.get("provinceSelected"))?.toJS()
+const SelectLocation = ({ location, onChangeLocation, ...rest }) => {
+  const listProvince = useSelector((state) => state.get("listProvince")) ?? [];
   const [showList, setShowList] = useState(false);
   const onSelect = (item) => {
-    setShowList(false)
-    dispatch({ type: SET_PROVINCE_SELECTED , value:item})
-  }
+    setShowList(false);
+    onChangeLocation({ ...item, default: false });
+  };
   return (
     <WrapperSelectLocation {...rest}>
       {showList && <Marker onClick={() => setShowList(false)} />}
       <TitleLocation onClick={() => setShowList(true)}>
         <IconMapMarker />
-        <p>{provinceSelected?.name}</p>
+        <p>{location?.name}</p>
         <IconTriangleDown className="icon-down" />
       </TitleLocation>
       {showList && (
         <ListLocation>
           {listProvince?.map((item, index) => (
-            <div key={index} onClick={() =>onSelect(item) }>
+            <div key={index} onClick={() => onSelect(item)}>
               <p>{item.name}</p>
-              {item.id === provinceSelected?.id && <IconTicker />}
+              {item.id === location?.id && <IconTicker />}
             </div>
           ))}
         </ListLocation>

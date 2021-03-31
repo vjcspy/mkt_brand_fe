@@ -20,7 +20,7 @@ const OnePageScroll = ({
   const length = children?.length ?? 0;
 
   const [transition, setTransition] = useState(true);
-  const [translateY, setTranslateY] = useState(0);
+  const [translateY, setTranslateY] = useState(customPageNumber ? -customPageNumber : 0);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [movePos, setMovePos] = useState({ x: 0, y: 0 });
   const [delta, setDelta] = useState({

@@ -33,7 +33,7 @@ const MapLayout = forwardRef(({ listRestaurant, restaurantViewMap, onBack, item,
           <MapItem>
             <MapItemTitle onClick={() => { }}>
               <h4>{item.name}</h4>
-              {/* <p>{item.distance + "km"}</p> */}
+              <p>{`${item.distance ? Math.round(item.distance) / 1000 + "km" : ""}`}</p>
             </MapItemTitle>
             <p>{item?.address}</p>
 

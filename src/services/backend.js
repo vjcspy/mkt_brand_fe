@@ -3,6 +3,15 @@ import Axios from "axios";
 import { each, get, sortBy, chain } from "lodash";
 import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../constants";
 
+export const getWebsitesConfig = async (domain) => {
+  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
+  return await Axios.get(`${host}/get-website`, {
+    params: {
+      domain,
+    },
+  });
+};
+
 export const getWebsitesData = async () => {
   const { data } = await Axios.post(process.env.GRAPHQL_HOST.replace("/graphql", "/rest/V1/izretail/dispatch"), {
     action: {
@@ -18,7 +27,7 @@ export const getSiteCode = async (name) => {
   const webSite = await getWebsitesData();
   return chain(webSite)
     .get(["data", "rows"])
-    .find((e) => e.name === name)
+    .find((e) => e.code === name)
     .value();
 };
 
@@ -225,19 +234,20 @@ export const pickUpVoucher = ({ code, quantity = 1, token }) => {
 
 // get list restaurant by Id
 
-export const getListRestaurant = ({ brandId = 7, provinceId = 5 }) => {
+export const getListRestaurant = ({ brandId = 7, provinceId = 5, longitude, latitude }) => {
   const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
   return Axios.get(`${host}/restaurant`, {
     params: {
       brandId,
       provinceId,
+      longitude,
+      latitude,
     },
     headers: {
       "tgs-version": "2.6.10",
     },
   });
 };
-
 export const getProvinces = () => {
   const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
   return Axios.get(`${host}/province`, {
@@ -249,18 +259,35 @@ export const getProvinces = () => {
 
 export const filterListPromoApi = (listPromo) => {
   let promoListResult = [];
-  listPromo.map((listPromoItem) => {
+  listPromo?.map((listPromoItem) => {
     if (listPromoItem.type === PROMO_NORMAL) {
-      listPromoItem.data.map((promo) => {
+      listPromoItem.data?.map((promo) => {
         promo.typeFilter = PROMO_NORMAL;
         promoListResult.push(promo);
       });
     } else if (listPromoItem.type === PROMO_FLASH_SALE) {
-      listPromoItem.data.map((promo) => {
+      listPromoItem.data?.map((promo) => {
         promo.typeFilter = PROMO_FLASH_SALE;
         promoListResult.push(promo);
       });
     }
   });
   return promoListResult;
+};
+
+export const getProvinceIdByLocation = ({ lat, lng }) => {
+  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
+  return Axios.get(`${host}/get-province-id-by-location`, {
+    params: {
+      longitude: lng,
+      latitude: lat,
+    },
+    headers: {
+      "tgs-version": "2.6.10",
+    },
+  });
+};
+
+export const filterProvinceById = (listProvince, id) => {
+  return listProvince?.find((item) => item.id === id) ?? null;
 };

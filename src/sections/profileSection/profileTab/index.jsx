@@ -59,7 +59,6 @@ const ProfileTab = ({ }) => {
   );
 
   const onChange = (e) => {
-    console.log(e)
     const { name, value } = e.target ?? e;
     setProfile((state) => ({
       ...state,

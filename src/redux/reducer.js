@@ -63,7 +63,7 @@ export const initialState = fromJS({
   mode: PRODUCTION_MODE,
   selectedSection: null,
   locale: "vi",
-  provinceSelected: fromJS({ name: "Hà nội", id: 5 }),
+  provinceSelected: fromJS({ id: 5, default: true }),
   acceptCookie: false,
   notifications: List([]),
   tokenUser: fromJS({}),
