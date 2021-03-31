@@ -5,7 +5,12 @@ import { SET_SHOW_MENU_HEADER } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSiteServer, fetchMenuCategories, getWebsitesData, getWebsitesConfig } from "../../src/services/backend";
+import {
+  getSiteServer,
+  fetchMenuCategories,
+  getWebsitesData,
+  getWebsitesConfig,
+} from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
 // export async function getStaticPaths() {

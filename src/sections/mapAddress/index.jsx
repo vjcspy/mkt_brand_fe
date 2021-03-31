@@ -1,7 +1,6 @@
 import { map } from "lodash";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Button from "../../components/button";
-import maps from "../../dummyData/maps";
 import { Container } from "../../styles";
 import {
   LeftContent,
@@ -43,7 +42,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant,
   const [size, ref] = useIframeResize();
 
   const headerHeight = useSelector((s) => s.get("headerHeight") ?? 0);
-  const provinceId = useSelector((state) => state.getIn(["provinceSelected", "id"]));
+  const province = useSelector((state) => state.getIn(["provinceSelected"]))?.toJS();
   const latLng = useSelector((state) => state.get("latLng"));
 
   const [listRestaurantShow, setListRestaurantShow] = useState(listRestaurant)
@@ -52,19 +51,19 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant,
   const [sItem, setSItem] = useState();
   const [loading, setLoading] = useState(false)
 
-  const mapRef = useRef();
   const refList = useRef();
 
   // get list restaurant when user alow location
   useEffect(async () => {
-    if (latLng) {
+    setSItem(null)
+    if (latLng || !province.default) {
       setLoading(true)
       try {
         const { data: { result, messageCode }, error } = await getListRestaurant({
           brandId,
-          provinceId: provinceId,
-          longitude: latLng.lng,
-          latitude: latLng.lat,
+          provinceId: province.id,
+          longitude: latLng?.lng,
+          latitude: latLng?.lat,
         })
         if (error || messageCode !== 1) {
           showNotification(dispatch, { content: error.message ?? message ?? "Lỗi khi tải nhà hàng" })
@@ -78,7 +77,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant,
         showNotification(dispatch, { content: "Đã có lỗi xảy ra" })
       }
     }
-  }, [provinceId, latLng])
+  }, [province.id, latLng])
 
   const measuredRef = useCallback((node) => {
     if (node !== null) {
@@ -205,7 +204,6 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant,
             item={sItem}
             setSItem={setSItem}
             onBack={() => setSItem(false)}
-            ref={mapRef}
           />
         </RightContent>
       </MapAddressWrapper>
