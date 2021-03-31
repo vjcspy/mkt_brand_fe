@@ -17,7 +17,7 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
   const [{ width }] = useIframeResize();
   let center = item ? { lat: item?.latitude, lng: item?.longitude }
     : restaurantViewMap ? { lat: restaurantViewMap?.latitude, lng: restaurantViewMap?.longitude } :
-      provinceDefault ? latLng ? latLng : { lat: listRestaurant?.[0]?.latitude, lng: listRestaurant?.[0]?.longitude } : { lat: listRestaurant[0]?.latitude, lng: listRestaurant[0]?.longitude }
+      provinceDefault ? latLng ? latLng : { lat: listRestaurant?.[0]?.latitude, lng: listRestaurant?.[0]?.longitude } : { lat: listRestaurant?.[0]?.latitude, lng: listRestaurant?.[0]?.longitude }
 
   useEffect(() => {
     if (item || restaurantViewMap) {
