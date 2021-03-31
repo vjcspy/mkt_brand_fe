@@ -238,7 +238,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
       async (position) => {
         try {
           const { data } = await getProvinceIdByLocation({ lat: position.coords.latitude, lng: position.coords.longitude })
-          dispatch({ type: SET_PROVINCE_SELECTED, value: { id: data.provinceId, default: false } })
+          dispatch({ type: SET_PROVINCE_SELECTED, value: { id: data.provinceId, default: true } })
         } catch (e) {
         }
         dispatch({ type: SET_LAT_LNG, value: { lat: position.coords.latitude, lng: position.coords.longitude } })

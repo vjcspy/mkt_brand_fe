@@ -95,6 +95,7 @@ const MenuTree = ({
             <MenuSubItemWrapper isOpen={true}>
               {map(item.products, (bundleProduct, subIndex) => {
                 const hasChild = get(bundleProduct, ["items", "length"]) > 0;
+                const type = get(bundleProduct, ["items", 0, "type"]);
                 return (
                   <Fragment key={subIndex}>
                     <MenuSubItemButton
@@ -114,9 +115,9 @@ const MenuTree = ({
                       <h5 className={`${hasChild ? "sup-item-1 have-sup-menu " : " sup-item-1"}`}>
                         {bundleProduct.name}
                       </h5>
-                      {hasChild && <MenuSubItemIcon isOpen={indexChild == subIndex} />}
+                      {hasChild && type != "checkbox" && <MenuSubItemIcon isOpen={indexChild == subIndex} />}
                     </MenuSubItemButton>
-                    {indexChild == subIndex && hasChild && (
+                    {indexChild == subIndex && hasChild && type != "checkbox" && (
                       <MenuSub2ItemWrapper>
                         {bundleProduct.items.map((option, optionIndex) => (
                           <MenuSubItemButton

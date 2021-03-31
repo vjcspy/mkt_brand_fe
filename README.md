@@ -34,6 +34,7 @@ server {
     
     location / {
         proxy_pass http://localhost:3041$uri;
+        proxy_set_header Host            $host;
     }
 }
 ```

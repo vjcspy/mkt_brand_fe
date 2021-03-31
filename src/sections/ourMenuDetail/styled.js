@@ -8,6 +8,10 @@ export const OurMenusContent = styled.div`
   display: flex;
   background: white;
   min-height: 100%;
+
+  @media (min-width: 769px) {
+    margin-bottom: 280px;
+  }
 `;
 
 export const MenusLeftContent = styled.div`
@@ -285,8 +289,17 @@ export const ProductSingleContainer = styled.div`
 export const ProductSingleItem = styled.div`
   text-align: center;
 
+  h4 {
+    margin-top: 12px;
+    margin-bottom: 6px;
+  }
+
   img {
     width: 100%;
+  }
+
+  > div {
+    color: ${({ theme }) => theme.color.text.description};
   }
 `;
 

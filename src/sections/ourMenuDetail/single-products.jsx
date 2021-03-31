@@ -9,10 +9,12 @@ import {
 import Image from "../../components/image";
 import Button from "../../components/button";
 import DynamicFooter from "../dynamic-footer";
-import { isNil, map } from "lodash";
+import { get, isNil, map } from "lodash";
+import { toMoney } from "../../services/frontend";
 
 const SingleProducts = ({ config, isMobile, footer, onBack, setMenuDetail }) => {
   let products = config.products ?? config.options?.map((p) => p.product);
+  const isSimple = config.products?.length != undefined;
   return (
     <ProductSingleWraper className="wadawd">
       {isMobile && (
@@ -43,6 +45,9 @@ const SingleProducts = ({ config, isMobile, footer, onBack, setMenuDetail }) => 
           <ProductSingleItem key={product.id}>
             <Image width="300" height="300" src={product.image.url} alt="product" title="product" />
             <h4>{product.name}</h4>
+            {isSimple && (
+              <div>{toMoney(get(product, ["price_range", "minimum_price", "final_price", "value"]))}đ</div>
+            )}
           </ProductSingleItem>
         ))}
       </ProductSingleContainer>

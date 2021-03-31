@@ -9,15 +9,12 @@ import { FormattedMessage } from "react-intl";
 import GoogleMapReact from "google-map-react";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 
-const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker, setSItem }) => {
+const MapLayout = forwardRef(({ listRestaurant, restaurantViewMap, onBack, item, iconMarker, setSItem }, ref) => {
   const googleMapApi = useSelector((state) => state.get("googleMapApi"));
-  const provinceDefault = useSelector((state) => state.getIn(["provinceSelected", "default"]));
   const latLng = useSelector((state) => state.get("latLng"));
   const [zoom, setZoom] = useState(8)
   const [{ width }] = useIframeResize();
-  let center = item ? { lat: item?.latitude, lng: item?.longitude }
-    : restaurantViewMap ? { lat: restaurantViewMap?.latitude, lng: restaurantViewMap?.longitude } :
-      provinceDefault ? latLng ? latLng : { lat: listRestaurant?.[0]?.latitude, lng: listRestaurant?.[0]?.longitude } : { lat: listRestaurant?.[0]?.latitude, lng: listRestaurant?.[0]?.longitude }
+  let center = item ? { lat: item?.latitude, lng: item?.longitude } : restaurantViewMap ? { lat: restaurantViewMap?.latitude, lng: restaurantViewMap?.longitude } : latLng ? latLng : { lat: 21.025140, lng: 105.844173 }
 
   useEffect(() => {
     if (item || restaurantViewMap) {
@@ -26,7 +23,6 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
       setZoom(8)
     }
   }, [item, restaurantViewMap])
-
   return (
     <MapLayoutWrapper>
       {item && (
@@ -58,7 +54,7 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
         </MapMobileInfo>
       )}
       <MapWrapper>
-        {googleMapApi && (
+        {googleMapApi?.value && (
           <GoogleMapReact bootstrapURLKeys={{ key: googleMapApi.value }} center={center} zoom={zoom}>
             {
               width > 768 && listRestaurant?.map((restaurant, index) => (
@@ -90,10 +86,9 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
             )} */}
           </GoogleMapReact>
         )}
-
       </MapWrapper>
     </MapLayoutWrapper>
   );
-};
+});
 
 export default MapLayout;

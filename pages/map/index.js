@@ -17,13 +17,8 @@ export async function getServerSideProps(ctx) {
   try {
     const { idRestaurant } = ctx.query;
     const site_code = process.env.SITE_CODE;
-    console.log(ctx.req.headers.authority);
-    console.log(ctx.req.headers.host);
-    const pathname = ctx.req.headers.host
-      ? ctx.req.headers.host === "localhost:3041"
-        ? "gogi.ggg.systems"
-        : ctx.req.headers.host
-      : ctx.req.headers.authority;
+
+    const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
     const { website_code } = await getWebsitesConfig(pathname);
     const { id: brandId } = await getSiteCode(website_code);
     const [{ data: googleMapApi }, { data: site }, { data: dataForMap }] = await Promise.all([
