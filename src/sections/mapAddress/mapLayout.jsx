@@ -66,7 +66,6 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
                   onClick={() => setSItem(restaurant)}
                   lat={restaurant?.latitude ?? null}
                   lng={restaurant?.longitude ?? null}
-                  title={restaurant.name}
                   image={iconMarker.url}
                   zoom={zoom}
                 />

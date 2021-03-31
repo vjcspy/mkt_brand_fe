@@ -48,7 +48,7 @@ const ViewMapRestaurant = ({ restaurant }) => {
               image={iconViewMap?.url}
               lat={restaurant.latitude ?? null}
               lng={restaurant.longitude ?? null}
-              title={restaurant.name}
+              // title={restaurant.name}
             />
           )}
         </GoogleMapReact>

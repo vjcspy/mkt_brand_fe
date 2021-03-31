@@ -36,6 +36,7 @@ const Link = ({ url, item, ...props }) => {
 const BannerItem = ({ config, footer, tabCode, onChangeBanner, indexBannerCurrentTab }) => {
   const locale = useSelector((s) => s.get("locale"));
   const tabShouldShow = config.value.filter((item) => item.statusTab.value.active === "Show");
+  let size = tabShouldShow?.length ?? 0
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width, height }, ref] = useIframeResize();
   const router = useSiteRouter();
@@ -52,7 +53,7 @@ const BannerItem = ({ config, footer, tabCode, onChangeBanner, indexBannerCurren
   useEffect(() => {
     if (bannerItem?.includes(tabCode)) {
       let bannerIndex = bannerItem.replace(`${tabCode}-`, "") - 1;
-      if (bannerIndex > -1 && tabShouldShow.length > bannerIndex && bannerIndex != currentPage) {
+      if (bannerIndex > -1 && tabShouldShow.length >= bannerIndex && bannerIndex != currentPage) {
         setCurrentPage(bannerIndex);
       }
     }
@@ -73,6 +74,7 @@ const BannerItem = ({ config, footer, tabCode, onChangeBanner, indexBannerCurren
 
   const Images = useMemo(() => {
     var items = tabShouldShow.concat(null);
+    size = items.length
     return items.map((item, index) =>
       item === null ? (
         <WrapperSection key={index}>
@@ -110,7 +112,7 @@ const BannerItem = ({ config, footer, tabCode, onChangeBanner, indexBannerCurren
       </OnePageScroll>
       <WrapperListPoint>
         <IconTriangleLineTop className="top" color="#ffffff" />
-        <PointNavigation display="block" currentIndex={currentPage} size={tabShouldShow.length + 1} />
+        <PointNavigation display="block" currentIndex={currentPage} size={size} />
         <IconTriangleLineDown className="bottom" color="#ffffff" />
       </WrapperListPoint>
     </WrapperOnePageScroller>
