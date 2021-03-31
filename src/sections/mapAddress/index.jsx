@@ -1,6 +1,7 @@
 import { map } from "lodash";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Button from "../../components/button";
+import maps from "../../dummyData/maps";
 import { Container } from "../../styles";
 import {
   LeftContent,
@@ -51,11 +52,11 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant,
   const [sItem, setSItem] = useState();
   const [loading, setLoading] = useState(false)
 
+  const mapRef = useRef();
   const refList = useRef();
 
   // get list restaurant when user alow location
   useEffect(async () => {
-    setSItem(null)
     if (latLng) {
       setLoading(true)
       try {
@@ -204,6 +205,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant,
             item={sItem}
             setSItem={setSItem}
             onBack={() => setSItem(false)}
+            ref={mapRef}
           />
         </RightContent>
       </MapAddressWrapper>
