@@ -1,11 +1,16 @@
-import { chain, get } from "lodash";
+import { chain, find, get } from "lodash";
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { SET_SHOW_MENU_HEADER } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSiteServer, fetchMenuCategories, getSiteCode, getWebsitesData } from "../../src/services/backend";
+import {
+  getSiteServer,
+  fetchMenuCategories,
+  getWebsitesData,
+  getWebsitesConfig,
+} from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
 // export async function getStaticPaths() {
@@ -33,20 +38,26 @@ import PageContainer from "../../src/containers/pageContainer";
 //   };
 // }
 
-export async function getServerSideProps({ }) {
+export async function getServerSideProps(ctx) {
+  const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
+  const webSiteConfig = await getWebsitesConfig(pathname);
   const webSites = await getWebsitesData();
   const webData = chain(webSites)
     .get(["data", "rows"])
-    .find((e) => e.name === 'gogi')
+    .find((e) => e.code === webSiteConfig.website_code)
     .value();
-  const store = chain(webData).get(["groups", 0, "stores", 0]).value();
-
+  const group = webData?.groups?.find((g, index) =>
+    webData?.default_group_id ? g.id === webData?.default_group_id : index == 0
+  );
+  const store = group?.stores?.find((s, index) =>
+    group?.default_store_id ? s.id === group.default_store_id : index === 0
+  );
   const siteCode = webData?.code ?? process.env.SITE_CODE;
   const storeCode = store?.code ?? process.env.STORE_CODE;
 
   const [{ data: site }, menus] = await Promise.all([
     getSiteServer(siteCode),
-    fetchMenuCategories({ urlKey: "gogi", storeCode }),
+    fetchMenuCategories({ urlKey: siteCode, storeCode: storeCode }),
   ]);
   return {
     props: {

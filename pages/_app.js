@@ -55,9 +55,19 @@ App.getInitialProps = async ({ Component, ctx }) => {
     ];
     let numPromo = filterListPromoApi(listPromo.result).length;
 
-    return { host: process.env.API_HOST, graphqlHost: process.env.GRAPHQL_HOST, provinces: provinces, numPromo };
+    return {
+      host: process.env.API_HOST,
+      graphqlHost: process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
+      provinces: provinces,
+      numPromo,
+    };
   } catch (e) {
-    return { host: process.env.API_HOST, graphqlHost: process.env.GRAPHQL_HOST, provinces: null, numPromo: 0 };
+    return {
+      host: process.env.API_HOST,
+      graphqlHost: process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
+      provinces: null,
+      numPromo: 0,
+    };
   }
 };
 

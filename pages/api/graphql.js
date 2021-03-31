@@ -28,7 +28,7 @@ async function handler(req, res) {
     console.log(e);
     return;
   }
-  const response = await Axios.post(process.env.GRAPHQL_HOST, req.body, {
+  const response = await Axios.post(process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql", req.body, {
     headers: {
       Store: req.headers.store,
     },

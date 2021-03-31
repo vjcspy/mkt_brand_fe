@@ -73,7 +73,7 @@ const fetchMenuCategories = async ({ pageSize = 20, currentPage = 1, urlKey = "g
     }
   `;
   };
-  const { data } = await Axios.post(process.env.GRAPHQL_HOST, {
+  const { data } = await Axios.post(process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql", {
     query: `
     query {
       categories(filters: { url_key: { eq: "${urlKey}" } }, pageSize: ${pageSize}, currentPage: ${currentPage}) {
@@ -162,7 +162,9 @@ async function exportSite(site_code) {
     console.log(buildResult.error);
   }
 
-  const exportResult = cp.spawnSync("yarn", ["export", "-o", `./build/${brand}`], { env: { ...process.env, SITE_CODE: brand } });
+  const exportResult = cp.spawnSync("yarn", ["export", "-o", `./build/${brand}`], {
+    env: { ...process.env, SITE_CODE: brand },
+  });
   if (exportResult.stdout) {
     console.log("Export Succeed");
   }

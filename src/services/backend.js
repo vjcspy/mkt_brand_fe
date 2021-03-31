@@ -4,16 +4,12 @@ import { each, get, sortBy, chain } from "lodash";
 import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../constants";
 
 export const getWebsitesConfig = async (domain) => {
-  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
-  return await Axios.get(`${host}/get-website`, {
-    params: {
-      domain,
-    },
-  });
+  const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
+  return data;
 };
 
 export const getWebsitesData = async () => {
-  const { data } = await Axios.post(process.env.GRAPHQL_HOST.replace("/graphql", "/rest/V1/izretail/dispatch"), {
+  const { data } = await Axios.post(process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/rest/V1/izretail/dispatch", {
     action: {
       type: "get-websites",
       payload: {},
@@ -136,7 +132,7 @@ export const fetchMenuCategories = async ({
   const query = `query{categories(filters:{url_key:{eq:"${urlKey}"}}pageSize:${pageSize} currentPage:${currentPage}){...category page_info{total_pages}total_count}}`;
 
   const { data } = await Axios.post(
-    process.env.GRAPHQL_HOST,
+    process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
     { query: `${categoryTreeChild} ${categoryTree} ${categoryResult} ${query}` },
     { headers: { Store: storeCode } }
   );
@@ -187,11 +183,11 @@ export const fetchMenuCategories = async ({
 
 export const fetchMenuCategoriesListingData = async ({ categoryId, storeCode = "gogi_royal" }) => {
   const productFragment = `fragment product on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url}only_x_left_in_stock options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html}sku stock_status thumbnail{url}url_key}`;
-  const bundleProductFragment = `fragment bundle on BundleProduct{items{__typename position required title option_id options{product{...product}}}}`;
+  const bundleProductFragment = `fragment bundle on BundleProduct{items{__typename type position required title option_id options{product{...product}}}}`;
   const query = `query{catalogCategoryListingData(search:"" filters:{code:"category_id",data:{eq:"${categoryId}"}}pageSize:100 currentPage:1){items{...product ...bundle}page_info{total_pages}total_count}}`;
 
   const { data } = await Axios.post(
-    process.env.GRAPHQL_HOST,
+    process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
     { query: `${productFragment} ${bundleProductFragment} ${query}` },
     { headers: { Store: storeCode } }
   );

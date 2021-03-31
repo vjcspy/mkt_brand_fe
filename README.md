@@ -59,7 +59,7 @@ $ sudo service nginx reload
     1. **API_HOST**: api backend host dùng cho next server, nếu host cả next server và backend cùng 1 server thì có thể  dùng http://localhost:1341.
     1. **NEXTJS_USERNAME**: username dùng để truy cập data base của backend *(user này phải có quyền admin,  có thể get được tất cả các site)*.
     1. **NEXTJS_PASSWORD**: password cho nextjs user.
-    1. **GRAPHQL_HOST**: Graphql api host.
+    1. **NEXT_PUBLIC_GGG_BRAND_PCMS**: Brand pcms api host.
     1. **NEXT_PUBLIC_GGG_INTERNAL**: GGG internal api host.
     
 1. Cấp quyền đọc + ghi cho folder frontend.
