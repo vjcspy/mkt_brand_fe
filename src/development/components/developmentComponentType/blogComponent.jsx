@@ -142,21 +142,18 @@ const BlogComponent = ({ path, blog, ...rest }) => {
           <ContentEditer>
             <Editor
               initialValue={`<p>${blogApi.content}</p>`}
+              tagName='div'
               init={{
-                selector: "textarea",
+                outputFormat: 'html',
                 height: 500,
                 menubar: false,
                 content_style: "body {font-size: 14pt;}",
                 fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
                 image_uploadtab: true,
-                plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table paste code help wordcount",
-                ],
+                plugins: 'link image code',
                 toolbar:
                   "undo redo | formatselect |sizes  elect|forecolor|  bold italic underline backcolor |fontselect |fontsizeselect| link image|\
-                  alignleft aligncenter alignright alignjustify |",
+                  alignleft aligncenter alignright alignjustify | code",
               }}
               onEditorChange={value => onChangeData(value, "content")}
             />
