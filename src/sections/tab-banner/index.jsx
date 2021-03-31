@@ -164,7 +164,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
       );
     } else {
       let active = config.components.tabBanner.value.find((t) => t.firstLoad?.value.active === "Yes");
-      if (sessionStorage.getItem("redirect") != "true" && width <= 768 && active) {
+      if (sessionStorage.getItem("redirect") != "true" && window.innerWidth <= 768 && active) {
         router.pushQuery(
           stringifyUrl({
             url: router.pathname,
