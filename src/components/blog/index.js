@@ -14,22 +14,22 @@ const Blog = ({ blog }) => {
           <img src={blog?.avatar?.url} width={500} height={500} alt="" />
         </RatioImage>
       </WrapperImage>
-      <Title>{blog.title}</Title>
+      <Title>{blog?.title}</Title>
       <DetailInfo>
         <LeftInfo>
           {/* <DatePost>{blog.datePost}</DatePost> */}
           <ItemSocial>
             <IconView />
-            <span>100</span>
+            <span>{blog?.view}</span>
           </ItemSocial>
           <ItemSocial>
             <IconLike />
-            <span>100</span>
+            <span>{blog?.like}</span>
           </ItemSocial>
 
           <ItemSocial>
             <IconShare />
-            <span>100</span>
+            <span>{blog?.share}</span>
           </ItemSocial>
         </LeftInfo>
         {/* {blog.rating && (

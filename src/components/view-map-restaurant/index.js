@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import { WrapperMapRestaurant, InfoRestaurant, MapWrapper, GroupButton } from "./style";
 import GoogleMapReact from "google-map-react";
 import Marker from "../../components/marker";
-
 const ViewMapRestaurant = ({ restaurant }) => {
   const googleMapApi = useSelector((state) => state.get("googleMapApi"));
   const iconViewMap = useSelector((state) => state.get("iconViewMap"));

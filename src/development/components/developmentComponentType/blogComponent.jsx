@@ -23,7 +23,6 @@ const BlogComponent = ({ path, blog, ...rest }) => {
   const host = process.env.NEXT_PUBLIC_API_HOST;
   const [openEdit, setOpenEdit] = useState(false);
   const [blogApi, setBlogApi] = useState(blog);
-
   // update data blog
   const [{ data: dataPutBlog, loading: loadingPutBlog, error: errorPutBlog }, actionPutBlog] = useApi(
     `${host}/blogs/${id}`,
@@ -68,21 +67,17 @@ const BlogComponent = ({ path, blog, ...rest }) => {
     setBlogApi((preState) => ({ ...preState, isShow: value === "Show" ? true : false }));
   }, []);
 
-  const onChangeAuthor = useCallback((value) => {
-    setBlogApi((preState) => ({ ...preState, author: value }));
-  }, []);
-
   const onChangeImageBlog = useCallback((value) => {
     setBlogApi((preState) => ({ ...preState, avatar: value }));
   }, []);
 
-  const onChangeTitle = useCallback((value) => {
-    setBlogApi((preState) => ({ ...preState, title: value, slug: slug(value) }));
-  });
-
-  const onChangeContent = (value) => {
-    setBlogApi((preState) => ({ ...preState, content: value }));
-  };
+  const onChangeData = (value, name) => {
+    if (name === "slug") {
+      setBlogApi((preState) => ({ ...preState, [name]: slug(value) }));
+    } else {
+      setBlogApi((preState) => ({ ...preState, [name]: value }));
+    }
+  }
 
   return (
     <>
@@ -95,7 +90,27 @@ const BlogComponent = ({ path, blog, ...rest }) => {
       <TextIgnoreLocaleComponent
         ignoreLocale={true}
         config={{ title: "Title Blog", value: blogApi.title }}
-        onChangeTextBlog={onChangeTitle}
+        onChangeTextBlog={value => onChangeData(value, "title")}
+      />
+      <TextIgnoreLocaleComponent
+        ignoreLocale={true}
+        config={{ title: "Slug Blog", value: blogApi.slug }}
+        onChangeTextBlog={(value) => onChangeData(value, "slug")}
+      />
+      <TextIgnoreLocaleComponent
+        type="number"
+        config={{ title: "Total view", value: blogApi.view }}
+        onChangeTextBlog={value => onChangeData(value, "view")}
+      />
+      <TextIgnoreLocaleComponent
+        type="number"
+        config={{ title: "Total like", value: blogApi.like }}
+        onChangeTextBlog={value => onChangeData(value, "like")}
+      />
+      <TextIgnoreLocaleComponent
+        type="number"
+        config={{ title: "Total Share", value: blogApi.share }}
+        onChangeTextBlog={value => onChangeData(value, "share")}
       />
       <ImageComponent
         notRemove={true}
@@ -106,7 +121,7 @@ const BlogComponent = ({ path, blog, ...rest }) => {
       <TextIgnoreLocaleComponent
         ignoreLocale={true}
         config={{ title: "Author", value: blogApi.author }}
-        onChangeTextBlog={onChangeAuthor}
+        onChangeTextBlog={value => onChangeData(value, "author")}
       />
       <RadioComponent
         onChangeShowBlog={onChangeShowBlog}
@@ -143,7 +158,7 @@ const BlogComponent = ({ path, blog, ...rest }) => {
                   "undo redo | formatselect |sizes  elect|forecolor|  bold italic underline backcolor |fontselect |fontsizeselect| link image|\
                   alignleft aligncenter alignright alignjustify |",
               }}
-              onEditorChange={onChangeContent}
+              onEditorChange={value => onChangeData(value, "content")}
             />
             <WrapperButtonSave>
               <Button className="btn-save-content" onClick={onClosePopup}>

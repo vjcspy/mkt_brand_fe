@@ -9,6 +9,7 @@ import { REMOVE_CONFIG, SET_LIST_BLOG_EDIT_PAGE, UPDATE_CONFIG } from "../../../
 import useApi from "../../../hooks/useApi";
 import PulseLoader from "../../../components/loading";
 import BlogComponent from "./blogComponent";
+import slug from "slug";
 
 const GroupBlogComponent = ({ config, path, putStage }) => {
   const token = useSelector((s) => s.get("token"));
@@ -66,6 +67,9 @@ const GroupBlogComponent = ({ config, path, putStage }) => {
           siteCode,
           slug: slug("Title Blog"),
           date: Date(),
+          like: 0,
+          share: 0,
+          view: 0,
         },
       },
       Component: BlogComponent,

@@ -14,7 +14,16 @@ const TextArea = styled.textarea`
   border-radius: 4px;
 `;
 
-const TextIgnoreLocaleComponent = ({ config, path, ignoreLocale, onChangeTextBlog }) => {
+export const NumberInput = styled.input`
+width: 100% !important;
+height: 50px;
+padding: 5px 10px;
+font-weight: 400;
+border: 1px solid ${themeColor("page", "border")};
+border-radius: 4px;
+`
+
+const TextIgnoreLocaleComponent = ({ config, type = "text", path, ignoreLocale, onChangeTextBlog }) => {
   const dispatch = useDispatch();
   const onChange = useCallback(
     (e) => {
@@ -30,14 +39,21 @@ const TextIgnoreLocaleComponent = ({ config, path, ignoreLocale, onChangeTextBlo
   return (
     <ComponentWrapper>
       <label>{config.title}</label>
-      <TextArea
-        type="text"
-        value={ignoreLocale ? config.value : config.value}
-        style={{
-          height: 75,
-        }}
-        onChange={(e) => onChange(e)}
-      />
+      {type === "text" && (
+        <TextArea
+          type={type}
+          value={ignoreLocale ? config.value : config.value}
+          style={{
+            height: 75,
+          }}
+          onChange={(e) => onChange(e)}
+        />
+      )}
+
+      {type === "number" && (
+        <NumberInput type="number" onChange={(e) => onChange(e)} value={config.value} min={0} />
+      )}
+
     </ComponentWrapper>
   );
 };
