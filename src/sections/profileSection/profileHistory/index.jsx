@@ -70,7 +70,7 @@ const ProfileHistory = () => {
             </h5>
             <Pricewrapper>
               <h5>
-                <FormattedMessage id="profile.history_total" />: {toMoney(item.totalBill)}đ
+                <FormattedMessage id="profile.history_total" />: {toMoney(item.totalBillValue)}đ
               </h5>
               <h5>
                 {toMoney(item?.amount)}

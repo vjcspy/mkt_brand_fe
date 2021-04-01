@@ -18,6 +18,8 @@ import Rate from "./rate";
 import useIframeResize from "../../../hooks/useWindowResize/useIframeResize";
 import { FormattedMessage } from "react-intl";
 import IconTriangleLineDown from "../../../components/icons/iconTriangleLineDown";
+import moment from "moment";
+import { toMoney } from "../../../services/frontend";
 
 const ViewDetail = ({ transition }) => {
   const [{ width }] = useIframeResize();
@@ -66,53 +68,53 @@ const ViewDetail = ({ transition }) => {
             <h5>
               <FormattedMessage id="profile.history_detail_bill" />
             </h5>
-            <span>24/10/2020 13:53:06</span>
+            <span>{moment(transition?.date).format("L")} - {moment(transition?.date).format("LTS")}</span>
+          </ItemDetail>
+          <ItemDetail>
+            <h5>
+              <FormattedMessage id="profile.history_total_bill" />
+            </h5>
+            <span>{toMoney(transition?.totalPrice)} đ</span>
           </ItemDetail>
           <ItemDetail>
             <span>
               <FormattedMessage id="profile.history_money_discount" />
             </span>
-            <span>-297.000đ</span>
+            <span>{toMoney(transition?.totalDiscount)} đ</span>
           </ItemDetail>
           <ItemDetail>
             <span>
               <FormattedMessage id="profile.history_service_charge" />
             </span>
-            <span>0đ</span>
+            <span>{toMoney(transition?.totalServiceCharge)} đ</span>
           </ItemDetail>
           <ItemDetail>
             <FormattedMessage id="profile.history_VAT" />
-            <span>101.200đ</span>
+            <span>{toMoney(transition?.totalVat)} đ</span>
           </ItemDetail>
           <ItemDetail>
             <span>
               <FormattedMessage id="profile.history_use_voucher" />
             </span>
-            <span>0đ</span>
+            <span> {toMoney(transition?.totalEVoucher)} đ</span>
           </ItemDetail>
           <ItemDetail>
             <span>
               <FormattedMessage id="profile.history_money_payment" />
             </span>
-            <span>1.113.200đ</span>
-          </ItemDetail>
-          <ItemDetail>
-            <span>
-              <FormattedMessage id="profile.history_total_money" />
-            </span>
-            <span>1.291.000đ</span>
+            <span>{toMoney(transition?.paidAmount)} đ</span>
           </ItemDetail>
           <ItemDetail>
             <span>
               <FormattedMessage id="profile.history_accumulated_coin" />
             </span>
-            <span>55.660 G - Coin (5%)</span>
+            <span>{transition?.totalEWalletGain}</span>
           </ItemDetail>
           <ItemDetail>
             <span>
               <FormattedMessage id="profile.history_accumulated_points" />
             </span>
-            <span>1.113.200đ</span>
+            <span>{transition?.totalSpending}</span>
           </ItemDetail>
           <HiddenContent className={`${show ? "show option" : "option"}`}>
             <IconTriangleLineDown />
@@ -125,7 +127,7 @@ const ViewDetail = ({ transition }) => {
           <h5>
             <FormattedMessage id="profile.history_total_need_pay" />
           </h5>
-          <h5>1.113.200đ</h5>
+          <h5>{toMoney(transition?.totalBillValue)}đ</h5>
         </ItemDetail>
       </FooterDetail>
     </WrapperViewDetail>
