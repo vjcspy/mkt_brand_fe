@@ -67,21 +67,21 @@ const PromoTabDesktop = ({ profilePromo }) => {
             <PromoProfile key={index} ref={refItem}>
               <ImageWrapper>
                 <RatioImage>
-                  <img width={364} height={364} src={item.promotionThumbnail} />
+                  <img width={364} height={364} src={item?.promotionThumbnail} />
                 </RatioImage>
               </ImageWrapper>
-              <Title>{item.promotionTitle}</Title>
+              <Title>{item?.promotionTitle}</Title>
               <WrapperFlex>
                 <h5>
                   <FormattedMessage id="profile.promo_location" />
                 </h5>
-                <p>{item.location}</p>
+                <p>{item?.location}</p>
               </WrapperFlex>
               <WrapperFlex>
                 <h5>
                   <FormattedMessage id="profile.promo_date_of_promo" />
                 </h5>
-                <p>{item.startDate}</p>
+                <p>{item?.startDate}</p>
               </WrapperFlex>
               <GroupButton>
                 <Button varian="outline" onClick={() => setCurrentPromo(item)}>
