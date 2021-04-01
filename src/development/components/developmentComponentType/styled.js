@@ -71,6 +71,9 @@ export const WrapperButtonSave = styled.div`
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+  button:first-child {
+    margin-right: 10px;
+  }
 `;
 
 export const SectionTitleWrapper = styled.div`
@@ -434,4 +437,12 @@ export const Checkbox = styled.button`
     left: 1px;
     background-repeat: no-repeat;
   }
+`;
+
+export const WrapperUploadImageBlog = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
 `;

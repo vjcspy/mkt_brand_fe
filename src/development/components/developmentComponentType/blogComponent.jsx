@@ -1,8 +1,8 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import slug from "slug";
-import { UPDATE_CONFIG } from "../../../constants";
-import { PopupWrapperEditer, ContentEditer, GroupButton, WrapperButtonSave } from "./styled";
+import { SET_MEDIA_DIALOG, UPDATE_CONFIG } from "../../../constants";
+import { PopupWrapperEditer, ContentEditer, GroupButton, WrapperButtonSave, WrapperUploadImageBlog } from "./styled";
 import { Editor } from "@tinymce/tinymce-react";
 import Button from "../../../components/button";
 import ImageComponent from "./imageComponent";
@@ -14,6 +14,7 @@ import PulseLoader from "../../../components/loading";
 import { SectionHeader } from "../sectionConfig/styled";
 import { DevSecondaryButton } from "../../../styles/developmentStyle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { dispatch } from "react-redux";
 const BlogComponent = ({ path, blog, ...rest }) => {
   const { popStage } = rest;
   const { id } = blog;
@@ -23,6 +24,8 @@ const BlogComponent = ({ path, blog, ...rest }) => {
   const host = process.env.NEXT_PUBLIC_API_HOST;
   const [openEdit, setOpenEdit] = useState(false);
   const [blogApi, setBlogApi] = useState(blog);
+  const [openPopupUploadImage, setOpenPopupUploadImage] = useState(false);
+  const showMedia = useCallback((dialog) => dispatch({ type: SET_MEDIA_DIALOG, value: dialog }), [dispatch]);
   // update data blog
   const [{ data: dataPutBlog, loading: loadingPutBlog, error: errorPutBlog }, actionPutBlog] = useApi(
     `${host}/blogs/${id}`,
@@ -157,7 +160,18 @@ const BlogComponent = ({ path, blog, ...rest }) => {
               }}
               onEditorChange={value => onChangeData(value, "content")}
             />
+            {/* {openPopupUploadImage && (
+              <WrapperUploadImageBlog>
+                <MediaDialog />
+              </WrapperUploadImageBlog>
+            )} */}
             <WrapperButtonSave>
+              <Button className="btn-save-content" onClick={() => showMedia({
+                show: true,
+
+              })}>
+                Upload image
+              </Button>
               <Button className="btn-save-content" onClick={onClosePopup}>
                 Save
               </Button>
