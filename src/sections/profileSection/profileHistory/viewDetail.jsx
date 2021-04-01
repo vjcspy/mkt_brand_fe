@@ -49,7 +49,7 @@ const ViewDetail = ({ transition }) => {
           <FormattedMessage id="profile.history_review" />
         </h5>
         <ListRating>
-          <Rate rate={4} />
+          <Rate rate={transition?.ratingPoints / 2} />
         </ListRating>
       </WrapperRatting>
       <Restaurant>

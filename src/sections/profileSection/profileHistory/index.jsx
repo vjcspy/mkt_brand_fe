@@ -61,7 +61,7 @@ const ProfileHistory = () => {
             <h4>
               <FormattedMessage id="profile.history_review" />
             </h4>
-            <Rate rate={item.rate} />
+            <Rate rate={item?.ratingPoints / 2} />
           </ProfileItemLeft>
           <ProfileItemRight>
             <h3>{item?.location}</h3>
