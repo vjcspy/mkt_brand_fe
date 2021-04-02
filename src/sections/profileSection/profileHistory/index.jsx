@@ -26,7 +26,6 @@ const ProfileHistory = () => {
       dispatch({ type: GET_TRANSACTION, value: { type: "all" } });
     }
   }, [data, loaded]);
-
   useEffect(() => {
     if (error && loaded) {
       showNotification(dispatch, { content: error, status: "error" });

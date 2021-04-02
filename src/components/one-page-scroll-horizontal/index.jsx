@@ -124,7 +124,7 @@ const OnePageScrollHorizontal = ({
 
   useEffect(() => {
     const listener = () => {
-      setWidth(scrollRef.current.offsetWidth);
+      setWidth(scrollRef.current?.offsetWidth);
     };
     listener();
     window.addEventListener("resize", listener, { passive: true });

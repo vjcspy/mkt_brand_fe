@@ -358,7 +358,7 @@ function* getTransaction() {
     const { data } = yield Axios.post(
       `${process.env.NEXT_PUBLIC_GGG_INTERNAL}/transactions`,
       {
-        memberId: customerNumber,
+        memId: customerNumber,
       },
       {
         headers: {
@@ -368,7 +368,10 @@ function* getTransaction() {
       }
     );
     if (data.result) {
-      yield put({ type: SET_TRANSACTION, value: { data: data.result, loading: false, loaded: true } });
+      yield put({
+        type: SET_TRANSACTION,
+        value: { data: data.result?.purchaseTransactions ?? [], loading: false, loaded: true },
+      });
     } else if (data.messageCode === 0) {
       yield put({ type: SET_TRANSACTION, value: { warning: data.message, loading: false, loaded: true } });
     } else if (data.error) {

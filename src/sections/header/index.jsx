@@ -236,12 +236,15 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
     }
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        try {
-          const { data } = await getProvinceIdByLocation({ lat: position.coords.latitude, lng: position.coords.longitude })
-          dispatch({ type: SET_PROVINCE_SELECTED, value: { id: data.provinceId, default: false } })
-        } catch (e) {
+        const { latitude, longitude } = position.coords
+        if (latitude && longitude) {
+          try {
+            const { data } = await getProvinceIdByLocation({ lat: latitude, lng: longitude })
+            dispatch({ type: SET_PROVINCE_SELECTED, value: { id: data.provinceId, default: false } })
+          } catch (e) {
+          }
+          dispatch({ type: SET_LAT_LNG, value: { lat: latitude, lng: longitude } })
         }
-        dispatch({ type: SET_LAT_LNG, value: { lat: position.coords.latitude, lng: position.coords.longitude } })
       },
       (error) => {
         switch (error.code) {

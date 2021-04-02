@@ -42,7 +42,7 @@ const ViewDetail = ({ transition }) => {
         <FormattedMessage id="profile.history_success_review" />!
       </Tittle>
       <CodeBill>
-        <FormattedMessage id="profile.history_bill_code" />: {transition?.receiptNumber}
+        <FormattedMessage id="profile.history_bill_code" />: {transition?.TransID}
       </CodeBill>
       <WrapperRatting>
         <h5>
@@ -57,8 +57,8 @@ const ViewDetail = ({ transition }) => {
           <img src={transition?.restaurant?.logo} />
         </LogoRestaurant>
         <InfoRestaurant>
-          <h5>{transition?.restaurant?.name}</h5>
-          <p>{transition?.restaurant?.address}</p>
+          <h5>{transition?.restaurantName}</h5>
+          <p>{transition?.restaurantAddress}</p>
         </InfoRestaurant>
       </Restaurant>
 

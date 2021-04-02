@@ -10,6 +10,7 @@ import ProfileHistory from "./profileHistory";
 import ProfileTab from "./profileTab";
 import PromoTab from "./promoTab";
 import useRefCallback from "../../hooks/useRefCallback";
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 
 const defaultConfig = {
   name: "profileSection",
@@ -28,6 +29,8 @@ const items = [
 
 const ProfileSection = ({ }) => {
   const router = useSiteRouter();
+  const [size] = useIframeResize();
+
   const {
     query: { profileTab },
   } = router;
@@ -47,18 +50,27 @@ const ProfileSection = ({ }) => {
       router.pushQuery("/profile?profileTab=" + items[index].code, undefined, { shallow: true });
     }
   }, []);
-
   return (
     <ProfileSectionWrapper>
       <Tabs items={items} onChange={handlePageChange} current={current} />
       <Container>
-        <OnePageScrollHorizontal pageIndex={current} pageOnChange={handlePageChange}>
-          {items.map(({ Component }, index) => (
-            <OnePageHorizontalWrapper key={index}>
-              {current == index && <Component isActive={current == index} />}
-            </OnePageHorizontalWrapper>
-          ))}
-        </OnePageScrollHorizontal>
+        {size?.width > 768 ? (
+          <>
+            {items.map(({ Component }, index) => (
+              current == index && <Component isActive={current == index} />
+            ))}
+          </>
+        ) : (
+          <OnePageScrollHorizontal pageIndex={current} pageOnChange={handlePageChange}>
+            {items.map(({ Component }, index) => (
+              <OnePageHorizontalWrapper key={index}>
+                {current == index && <Component isActive={current == index} />}
+              </OnePageHorizontalWrapper>
+            ))}
+          </OnePageScrollHorizontal>
+        )}
+
+
       </Container>
     </ProfileSectionWrapper>
   );
