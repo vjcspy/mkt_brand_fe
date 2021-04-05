@@ -22,11 +22,11 @@ export async function getServerSideProps(ctx) {
     const site_code = process.env.SITE_CODE;
     const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
     const { website_code } = await getWebsitesConfig(pathname);
-    const { id: brandId } = await getSiteCode(website_code);
+    const { brand_id } = await getSiteCode(website_code);
 
     const [{ data: googleMapApi }, { data: promoListApi }, { data: site }] = await Promise.all([
       getApiKeyGoogleMap(),
-      getPromotionByBrandProvince({ brandId }),
+      getPromotionByBrandProvince({ brand_id }),
       getSiteServer(site_code),
     ]);
 
@@ -38,7 +38,7 @@ export async function getServerSideProps(ctx) {
         site_code: site?.site_code ?? null,
         promoListApi: promoListResult ?? [],
         googleMapApi: googleMapApi[0],
-        brandId: brandId ?? null,
+        brandId: brand_id ?? null,
       },
     };
   } catch (e) {

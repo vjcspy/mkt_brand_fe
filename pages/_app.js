@@ -57,11 +57,11 @@ App.getInitialProps = async ({ Component, ctx }) => {
   try {
     const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
     const { website_code } = await getWebsitesConfig(pathname);
-    const { id: brandId } = await getSiteCode(website_code);
+    const { brand_id } = await getSiteCode(website_code);
 
     const [{ data: listProvince }, { data: listPromo }] = await Promise.all([
       getProvinces(),
-      getPromotionByBrandProvince({ brandId }),
+      getPromotionByBrandProvince({ brand_id }),
     ]);
     let provinces = listProvince.result?.map((item) => ({ id: item?.id, name: item?.name })) ?? [
       { id: 5, name: "Hà Nội" },
