@@ -10,7 +10,7 @@ const PromoDesktop = loadable(() => import("./desktop"));
 import PromoMobile from "./mobile";
 
 import useSiteRouter from "../../hooks/useSiteRouter";
-import { filterListPromoApi, getListPromo, pickUpVoucher } from "../../services/backend";
+import { filterListPromoApi, getListPromo, getPromotionByBrandProvince, pickUpVoucher } from "../../services/backend";
 import { showNotification } from "../../components/notification";
 import { GET_PROMO_OF_USER, SET_NUM_PROMO } from "../../constants";
 
@@ -22,7 +22,7 @@ const defaultConfig = {
   components: {},
 };
 
-const PromoSection = ({ promoListApi }) => {
+const PromoSection = ({ promoListApi, brandId }) => {
   const [{ width, height }, ref] = useIframeResize();
   const dispatch = useDispatch();
   const routerSite = useSiteRouter();
@@ -47,7 +47,7 @@ const PromoSection = ({ promoListApi }) => {
         const {
           data: { result, messageCode },
           error,
-        } = await getListPromo(provinceSelected.id);
+        } = await getPromotionByBrandProvince({ provinceId: provinceSelected.id, brandId });
 
         if (error || messageCode === 0) {
           showNotification(dispatch, { content: error.message ?? "Có lỗi khi load ưu đãi", status: "error" });
@@ -55,7 +55,7 @@ const PromoSection = ({ promoListApi }) => {
           return;
         }
 
-        const promoFilter = filterListPromoApi(result);
+        const promoFilter = filterListPromoApi(result.content);
 
         if (promoFilter.length <= 0) {
           showNotification(dispatch, { content: "Không có ưu đãi ở location này", status: "warning" });

@@ -9,7 +9,13 @@ import useFromJS from "../src/hooks/useFromJS";
 import defaultTranslation from "../src/translations";
 import { useEffect } from "react";
 import { SET_HOST, SET_LIST_PROVINCE, SET_NUM_PROMO } from "../src/constants";
-import { filterListPromoApi, getListPromo, getProvinces } from "../src/services/backend";
+import {
+  filterListPromoApi,
+  getWebsitesConfig,
+  getProvinces,
+  getSiteCode,
+  getPromotionByBrandProvince,
+} from "../src/services/backend";
 
 const ThemeWrapper = ({ children }) => {
   const theme = useFromJS(["modifiedConfig", "theme"]);
@@ -49,11 +55,18 @@ App.getInitialProps = async ({ Component, ctx }) => {
   // const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
   // console.log("getInitialProps App");
   try {
-    const [{ data: listProvince }, { data: listPromo }] = await Promise.all([getProvinces(), getListPromo()]);
+    const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
+    const { website_code } = await getWebsitesConfig(pathname);
+    const { id: brandId } = await getSiteCode(website_code);
+
+    const [{ data: listProvince }, { data: listPromo }] = await Promise.all([
+      getProvinces(),
+      getPromotionByBrandProvince({ brandId }),
+    ]);
     let provinces = listProvince.result?.map((item) => ({ id: item?.id, name: item?.name })) ?? [
       { id: 5, name: "Hà Nội" },
     ];
-    let numPromo = filterListPromoApi(listPromo.result).length;
+    let numPromo = filterListPromoApi(listPromo.result.content).length;
 
     return {
       host: process.env.API_HOST,

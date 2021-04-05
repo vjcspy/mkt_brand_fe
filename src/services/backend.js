@@ -287,3 +287,16 @@ export const getProvinceIdByLocation = ({ lat, lng }) => {
 export const filterProvinceById = (listProvince, id) => {
   return listProvince?.find((item) => item.id === id) ?? null;
 };
+
+export const getPromotionByBrandProvince = ({ brandId = 7, provinceId = 5 }) => {
+  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
+  return Axios.get(`${host}/get-promotion-by-brand-province`, {
+    params: {
+      brandId,
+      provinceId,
+    },
+    headers: {
+      "tgs-version": "2.6.10",
+    },
+  });
+};

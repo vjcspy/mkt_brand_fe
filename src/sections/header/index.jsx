@@ -28,6 +28,7 @@ import Link from "next/link";
 import { stringifyUrl } from "query-string";
 import PopupLanguageLocation from "./popup-language-location";
 import { getProvinceIdByLocation } from "../../services/backend";
+import { showNotification } from "../../components/notification";
 
 const MenuRight = loadable(() => import("../../components/menu"));
 
@@ -253,6 +254,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
           case error.POSITION_UNAVAILABLE:
             break;
           case error.TIMEOUT:
+            showNotification(dispatch, { content: "Không thể truy cập location", status: "warning" })
             break;
           default:
             break;
