@@ -120,7 +120,7 @@ const PromoSection = ({ promoListApi, brandId }) => {
         {loading && (
           <div
             style={{
-              background: "rgba(0, 0, 0, 0.6)",
+              background: "rgba(0, 0, 0, 0)",
               height: "100vh",
               width: "100vw",
               zIndex: "3000",
