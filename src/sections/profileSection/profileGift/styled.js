@@ -8,6 +8,10 @@ export const ProfileGiftWrapper = styled.div`
   flex-wrap: wrap;
   padding-bottom: 90px;
   justify-content: center;
+  @media (max-width: 768px) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 `;
 
 export const LeftWrapper = styled.div`
@@ -19,6 +23,8 @@ export const LeftWrapper = styled.div`
   @media (max-width: 768px) {
     width: 100%;
     padding-bottom: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 `;
 

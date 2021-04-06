@@ -86,7 +86,7 @@ const ProfileTab = ({ }) => {
   };
 
   return (
-    <ProfileTabWrapper ref={ref}>
+    <ProfileTabWrapper className="profile" ref={ref}>
       {size.width > 768 ? (
         <>
           <ProfileTabGrid>

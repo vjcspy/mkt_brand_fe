@@ -211,13 +211,12 @@ export const getListPromo = (provinceId = 5) => {
 
 // pickUpVoucher
 
-export const pickUpVoucher = ({ code, quantity = 1, token }) => {
+export const pickUpVoucher = ({ code, token }) => {
   const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
   return Axios.post(
     `${host}/pick-up-voucher`,
     {
       promotionId: code,
-      quantity: quantity,
     },
     {
       headers: {

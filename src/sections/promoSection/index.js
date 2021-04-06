@@ -73,12 +73,11 @@ const PromoSection = ({ promoListApi, brandId }) => {
     }
   }, [provinceSelected.id]);
 
-  const fetchCodePromo = async (code, quantity) => {
+  const fetchCodePromo = async (code) => {
     setLoading(true);
     try {
       const { data } = await pickUpVoucher({
         code,
-        quantity,
         token,
       });
 
@@ -106,9 +105,9 @@ const PromoSection = ({ promoListApi, brandId }) => {
     }
   }, []);
 
-  const onGetCode = useCallback((code, quantity) => {
+  const onGetCode = useCallback((code) => {
     if (token) {
-      fetchCodePromo(code, quantity);
+      fetchCodePromo(code);
     } else {
       routerSite.push(`/login?${stringify({ promoCode: code, redirect_url: encodeURIComponent("/promo") })}`);
     }

@@ -6,9 +6,6 @@ export const WrapperProfilePromo = styled.div`
   padding-bottom: 90px;
 
   @media (max-width: 768px) {
-    margin-left: -20px;
-    margin-right: -20px;
-    min-height: unset;
   }
 `;
 
@@ -102,6 +99,7 @@ export const WrapperIcon = styled.div`
 
   &.left {
     left: 0;
+    transform: translateY(-50%) rotate(180deg);
   }
   &.right {
     right: 0;

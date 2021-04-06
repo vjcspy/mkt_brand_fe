@@ -46,7 +46,7 @@ const PromoTabMobile = ({ profilePromo }) => {
   };
 
   return (
-    <PromoMobile style={{ height: `calc(100vh - (${headerHeight + 96 ?? 0}px ` }}>
+    <PromoMobile className="moileeee" style={{ height: `calc(100vh - (${headerHeight + 96 ?? 0}px ` }}>
       <h3>
         <FormattedMessage id="profile.title_my_promo" />
       </h3>

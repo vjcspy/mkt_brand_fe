@@ -42,10 +42,14 @@ const ItemRestaurantBooking = ({ restaurant, onViewMap, promoId }) => {
       <HeadRestaurant>
         <h5>{name}</h5>
         <ViewMap className="view-map">
-          <span>{aboutKm}km</span>
-          <span>
-            <IConViewMap color="#7B7979" />
-          </span>
+          {aboutKm && (
+            <>
+              <span>{aboutKm}km</span>
+              <span>
+                <IConViewMap color="#7B7979" />
+              </span>
+            </>
+          )}
         </ViewMap>
       </HeadRestaurant>
 

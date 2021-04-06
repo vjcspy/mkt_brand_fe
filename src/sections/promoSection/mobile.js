@@ -104,7 +104,7 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
                 hadGetCode={
                   promoUser ? promoUser.find((item) => item?.promotionId === promoListApi[currentPage].id) : false
                 }
-                onGetCode={() => onGetCode(promoListApi[currentPage]?.id, promoListApi[currentPage]?.clmIsCashVoucher)}
+                onGetCode={() => onGetCode(promoListApi[currentPage]?.id)}
                 getRestaurant={() => setViewRestaurant(promoListApi[currentPage]?.restaurants)}
                 getCondition={() => setCondition(promoListApi[currentPage]?.condition)}
               />

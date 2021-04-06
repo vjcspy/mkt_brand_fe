@@ -10,6 +10,8 @@ export const ProfileTabWrapper = styled.div`
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     padding-bottom: 90px;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 `;
 

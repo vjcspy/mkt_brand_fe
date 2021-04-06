@@ -4,6 +4,10 @@ export const ProfileHistoryWrapper = styled.div`
   width: 100%;
   padding-top: 40px;
   padding-bottom: 90px;
+  @media (max-width: 768px) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 `;
 
 export const ProfileHistoryItem = styled.div`

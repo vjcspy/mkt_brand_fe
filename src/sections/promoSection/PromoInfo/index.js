@@ -79,8 +79,8 @@ const PromoInfo = ({ promo, onGetCode, hadGetCode, getRestaurant, getCondition }
 
       <WrapperButton>
         {hadGetCode ? (
-          <Link href="/profile/my-promo">
-            <Button varian="primary" href="/profile/my-promo">
+          <Link href="/profile?profileTab=my-promo">
+            <Button varian="primary" href="profile?profileTab=my-promo">
               <FormattedMessage id="successRegister.view_my_promo" />
             </Button>
           </Link>

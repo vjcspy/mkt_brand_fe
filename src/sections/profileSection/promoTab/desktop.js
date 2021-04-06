@@ -14,7 +14,7 @@ import {
 import RatioImage from "../../../components/ratioImage";
 import Button from "../../../components/button";
 import IconRightCicle from "../../../components/icons/iconRightCicle";
-import IconLeftCircle from "../../../components/icons/iconLeftCircle";
+import IconTriangleLineRight from "../../../components/icons/iconTriangleLineRight";
 import useIframeResize from "../../../hooks/useWindowResize/useIframeResize";
 import { FormattedMessage } from "react-intl";
 import PopupPromo from "../../../components/popup-promo";
@@ -58,9 +58,11 @@ const PromoTabDesktop = ({ profilePromo }) => {
 
   return (
     <MarkerList ref={ref}>
-      <WrapperIcon className="left" onClick={onPre}>
-        <IconLeftCircle />
-      </WrapperIcon>
+      {length > 2 && (
+        <WrapperIcon className="left" onClick={onPre}>
+          <IconTriangleLineRight color="#7B7979" width={15} height={15} />
+        </WrapperIcon>
+      )}
       <WrapperSlideList>
         <List numItem={length} ref={refScroll} style={{ transform: `translateX(-${translate}px)` }}>
           {profilePromo?.map((item, index) => (
@@ -99,10 +101,12 @@ const PromoTabDesktop = ({ profilePromo }) => {
           ))}
         </List>
       </WrapperSlideList>
+      {length > 2 && (
+        <WrapperIcon className="right" onClick={onNext}>
+          <IconTriangleLineRight color="#7B7979" width={15} height={15} />
+        </WrapperIcon>
+      )}
 
-      <WrapperIcon className="right" onClick={onNext}>
-        <IconRightCicle />
-      </WrapperIcon>
       {currentPromo && (
         // <Popup show={currentPromo} onClose={() => setCurrentPromo(null)}>
         //   <DetailPromo promo={currentPromo} />

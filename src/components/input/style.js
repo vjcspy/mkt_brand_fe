@@ -144,6 +144,10 @@ export const ContentDropDown = styled.div`
   p {
     margin: 0;
   }
+  svg {
+    position: absolute;
+    right: 10px;
+  }
 `;
 
 export const ListData = styled.div`

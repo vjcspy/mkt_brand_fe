@@ -1,7 +1,7 @@
 import { List } from "immutable";
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { SET_GOOGLE_MAP_API, SET_ICON_VIEW_MAP } from "../../src/constants";
+import { GET_PROMO_OF_USER, SET_GOOGLE_MAP_API, SET_ICON_VIEW_MAP } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
@@ -60,6 +60,7 @@ const Promo = ({ config, site_code, promoListApi, googleMapApi, brandId }) => {
   useEffect(() => {
     dispatch({ type: SET_GOOGLE_MAP_API, value: googleMapApi });
     dispatch({ type: SET_ICON_VIEW_MAP, value: iconMap });
+    dispatch({ type: GET_PROMO_OF_USER, value: { type: "all" } });
   }, [config]);
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
   return (

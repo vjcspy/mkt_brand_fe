@@ -67,7 +67,6 @@ const PromoDesktop = ({ promoListApi, onGetCode, resultGetCode, setResultGetCode
       )),
     [promoListApi, promoUser]
   );
-
   return (
     <>
       <WrapperContentPromo
@@ -101,7 +100,7 @@ const PromoDesktop = ({ promoListApi, onGetCode, resultGetCode, setResultGetCode
                           promo={item}
                           hadGetCode={promoUser ? promoUser.find((promo) => promo.promotionId === item.id) : false}
                           onGetCode={() => {
-                            onGetCode(item.id, item.clmIsCashVoucher);
+                            onGetCode(item.id);
                           }}
                           getRestaurant={() => setListRestaurant({ restaurants: item.restaurants, promoId: item.id })}
                           getCondition={() => setCondition(item.condition)}
