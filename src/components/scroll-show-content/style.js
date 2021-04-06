@@ -36,10 +36,12 @@ const animation = keyframes`
 export const Content = styled.div`
   max-height: 300px;
   overflow-y: auto;
-  padding-right: 15px;
-  margin-right: -15px;
   @media (max-width: 768px) {
     max-height: 100%;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0px;
   }
 `;
 

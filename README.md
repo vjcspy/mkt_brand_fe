@@ -33,7 +33,7 @@ server {
     server_name [sub.domain.com];
     
     location / {
-        proxy_pass http://localhost:3041$uri;
+        proxy_pass http://localhost:3041;
         proxy_set_header Host            $host;
     }
 }

@@ -34,39 +34,42 @@ const PromoDesktop = ({ promoListApi, onGetCode, resultGetCode, setResultGetCode
   const [{ height }, ref] = useIframeResize();
   const size = promoListApi?.length;
   const { data: promoUser } = useSelector((state) => state.get("promoOfUser")) ?? {};
-  const PromoList = useMemo(
-    () =>
-      promoListApi?.map((item, index) => (
-        <React.Fragment key={index}>
-          <Head>
-            <link rel="preload" as="image" href={item.thumbnail} />
-          </Head>
-          <Container key={index} style={{ height: "100%" }}>
-            <WrapperPromo>
-              <Promo className="Promo">
-                <LeftPromo className="LeftPromo">
-                  <RatioImage ratio="1:1">
-                    <img width={500} height={500} src={item.thumbnail} alt={item.thumbnail} />
-                  </RatioImage>
-                </LeftPromo>
-                <RightPromo className="RightPromo">
-                  <PromoInfo
-                    promo={item}
-                    hadGetCode={promoUser ? promoUser.find((promo) => promo.promotionId === item.id) : false}
-                    onGetCode={() => {
-                      onGetCode(item.id, item.clmIsCashVoucher);
-                    }}
-                    getRestaurant={() => setListRestaurant({ restaurants: item.restaurants, promoId: item.id })}
-                    getCondition={() => setCondition(item.condition)}
-                  />
-                </RightPromo>
-              </Promo>
-            </WrapperPromo>
-          </Container>
-        </React.Fragment>
-      )),
-    [promoListApi, promoUser]
-  );
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [promoListApi]);
+
+  const PromoList = useMemo(() => {
+    return promoListApi?.map((item, index) => (
+      <React.Fragment key={index}>
+        <Head>
+          <link rel="preload" as="image" href={item.thumbnail} />
+        </Head>
+        <Container key={index} style={{ height: "100%" }}>
+          <WrapperPromo>
+            <Promo className="Promo">
+              <LeftPromo className="LeftPromo">
+                <RatioImage ratio="1:1">
+                  <img width={500} height={500} src={item.thumbnail} alt={item.thumbnail} />
+                </RatioImage>
+              </LeftPromo>
+              <RightPromo className="RightPromo">
+                <PromoInfo
+                  promo={item}
+                  hadGetCode={promoUser ? promoUser.find((promo) => promo.promotionId === item.id) : false}
+                  onGetCode={() => {
+                    onGetCode(item.id);
+                  }}
+                  getRestaurant={() => setListRestaurant({ restaurants: item.restaurants, promoId: item.id })}
+                  getCondition={() => setCondition(item.condition)}
+                />
+              </RightPromo>
+            </Promo>
+          </WrapperPromo>
+        </Container>
+      </React.Fragment>
+    ));
+  }, [promoListApi, promoUser]);
   return (
     <>
       <WrapperContentPromo
@@ -82,35 +85,7 @@ const PromoDesktop = ({ promoListApi, onGetCode, resultGetCode, setResultGetCode
             containerHeight={height - headerHeight}
             pageOnChange={setCurrentPage}
           >
-            {promoListApi?.map((item, index) => (
-              <React.Fragment key={index}>
-                <Head>
-                  <link rel="preload" as="image" href={item.thumbnail} />
-                </Head>
-                <Container key={index} style={{ height: "100%" }}>
-                  <WrapperPromo>
-                    <Promo className="Promo">
-                      <LeftPromo className="LeftPromo">
-                        <RatioImage ratio="1:1">
-                          <img width={500} height={500} src={item.thumbnail} alt={item.thumbnail} />
-                        </RatioImage>
-                      </LeftPromo>
-                      <RightPromo className="RightPromo">
-                        <PromoInfo
-                          promo={item}
-                          hadGetCode={promoUser ? promoUser.find((promo) => promo.promotionId === item.id) : false}
-                          onGetCode={() => {
-                            onGetCode(item.id);
-                          }}
-                          getRestaurant={() => setListRestaurant({ restaurants: item.restaurants, promoId: item.id })}
-                          getCondition={() => setCondition(item.condition)}
-                        />
-                      </RightPromo>
-                    </Promo>
-                  </WrapperPromo>
-                </Container>
-              </React.Fragment>
-            ))}
+            {PromoList}
           </OnePageScroll>
         </ContentScroller>
 

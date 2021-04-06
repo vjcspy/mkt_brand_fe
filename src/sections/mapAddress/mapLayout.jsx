@@ -78,7 +78,7 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
                 image={iconMarker.url}
               />
             )}
-            {/* {restaurantViewMap && (
+            {restaurantViewMap && (
               <Marker
 
                 lat={restaurantViewMap.latitude ?? null}
@@ -86,7 +86,7 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
                 title={restaurantViewMap.name}
                 image={iconMarker.url}
               />
-            )} */}
+            )}
           </GoogleMapReact>
         )}
 

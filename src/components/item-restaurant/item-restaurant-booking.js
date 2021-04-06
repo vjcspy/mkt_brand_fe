@@ -4,7 +4,6 @@ import { FormattedMessage } from "react-intl";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import Button from "../button";
 import IconPhone from "../icons/iconPhone";
-import IconPoint from "../icons/IconPoint";
 import IConViewMap from "../icons/iconViewMap";
 import {
   WrapperItemRestaurant,

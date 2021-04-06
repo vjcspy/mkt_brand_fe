@@ -4,12 +4,9 @@ import {
   HeaderDesktop,
   WrapperQcCode,
   ContentHeader,
-  ItemRestaurant,
   ListRestaurant,
-  GroupButton,
   TitleInfo,
   ContentInfo,
-  HeaderItemRestaurant,
   WrapperInfo,
   HeaderMobile,
 } from "./style";

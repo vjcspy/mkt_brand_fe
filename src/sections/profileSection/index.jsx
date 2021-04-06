@@ -57,7 +57,7 @@ const ProfileSection = ({ }) => {
         {size?.width > 768 ? (
           <>
             {items.map(({ Component }, index) => (
-              current == index && <Component isActive={current == index} />
+              current == index && <Component key={index} isActive={current == index} />
             ))}
           </>
         ) : (

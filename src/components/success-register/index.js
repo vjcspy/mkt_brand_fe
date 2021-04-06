@@ -30,7 +30,7 @@ const SuccessRegister = ({ itemPromoGetCode, resultGetCode }) => {
             <FormattedMessage id="successRegister.send_voucher_email" />
           </p>
           <GroupButtonSuccess>
-            <Link href="/profile/my-promo">
+            <Link href="/profile?profileTab=my-promo">
               <Button varian="outline-a" className="view-my-promo">
                 <FormattedMessage id="successRegister.view_my_promo" />
               </Button>

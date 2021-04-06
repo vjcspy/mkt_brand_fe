@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import useWindowResize from "../../hooks/useWindowResize";
 import IconTriangleLineDown from "../icons/iconTriangleLineDown";
 import { WrapperScroll, HiddenContent, Content, WrapperContent } from "./style";
 const ScrollShowContent = ({ children, ...rest }) => {
@@ -30,10 +29,10 @@ const ScrollShowContent = ({ children, ...rest }) => {
   //   };
   // }, []);
 
-  useEffect(() => {
-    parentScroll.current?.addEventListener("scroll", onScroll, { passive: true });
-    return () => refScroll.current?.removeEventListener("scroll", onScroll, { passive: true });
-  }, [onScroll]);
+  // useEffect(() => {
+  //   parentScroll.current?.addEventListener("scroll", onScroll, { passive: true });
+  //   return () => refScroll.current?.removeEventListener("scroll", onScroll, { passive: true });
+  // }, []);
 
   const onMoveBottom = useCallback(() => {
     refScroll.current.scrollTo({

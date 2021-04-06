@@ -25,7 +25,6 @@ export async function getServerSideProps(ctx) {
       getSiteServer(site_code),
       getListRestaurant({ brand_id }),
     ]);
-
     let restaurantViewMap = idRestaurant ? dataForMap.result?.find((item) => item.code == idRestaurant) ?? null : null;
     return {
       props: {
