@@ -21,7 +21,7 @@ export async function getServerSideProps() {
 }
 
 const Profile = ({ config, site_code, googleMapApi }) => {
-  const tokenUser = useSelector((state) => state.get("tokenUser"))?.toJS();
+  const tokenUser = useSelector((state) => state.get("tokenUser"))?.toJS() ?? {};
   const dispatch = useDispatch();
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
   const router = useRouter();

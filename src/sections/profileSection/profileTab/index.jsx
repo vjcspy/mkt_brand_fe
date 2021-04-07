@@ -39,7 +39,7 @@ const ProfileTab = ({ }) => {
     customerNumber,
     currentMembershipName,
   } = useSelector((state) => state.get("userInfo"))?.toJS() ?? {};
-  const { token } = useSelector((state) => state.get("tokenUser")).toJS();
+  const { token } = useSelector((state) => state.get("tokenUser"))?.toJS() ?? {};
   const [size, ref] = useIframeResize();
 
   const [profile, setProfile] = useState({
