@@ -1,7 +1,6 @@
 import styled, { keyframes } from "styled-components";
 
 export const HeaderDesktop = styled.div`
-  padding-bottom: 29px;
   display: flex;
   width: calc(100% - 60px);
   @media (max-width: 768px) {

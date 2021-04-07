@@ -10,7 +10,7 @@ import Portal from "../../../development/containers/developmentDialog/portal";
 const PromoTabDesktop = loadable(() => import("./desktop"));
 const PromoTabMobile = loadable(() => import("./mobile"));
 
-const PromoTab = () => {
+const PromoTab = ({ setDetailPromoMobile }) => {
   const [size] = useIframeResize();
   const dispatch = useDispatch();
   const { data, error, warning, loading, loaded } = useSelector((state) => state.get("promoOfUser")) ?? {};
@@ -52,7 +52,7 @@ const PromoTab = () => {
         size.width > 768 ? (
           <PromoTabDesktop profilePromo={data} />
         ) : (
-          <PromoTabMobile profilePromo={data} />
+          <PromoTabMobile setDetailPromoMobile={setDetailPromoMobile} profilePromo={data} />
         )
       ) : null}
     </WrapperProfilePromo>

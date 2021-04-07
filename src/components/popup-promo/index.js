@@ -55,7 +55,7 @@ const PopupPromo = ({ promo, onClose }) => {
             <h6>
               <FormattedMessage id="popupPromo.notification" />
             </h6>
-            <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
+            <a className="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
               <Button>
                 <FormattedMessage id="popupPromo.reservation_now" />
               </Button>
@@ -77,7 +77,7 @@ const PopupPromo = ({ promo, onClose }) => {
             </h6>
             <Button>
               <Link href="https://booking.ggg.com.vn" passHref>
-                <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
+                <a className="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
                   <Button>
                     <FormattedMessage id="popupPromo.reservation_now" />
                   </Button>

@@ -18,6 +18,7 @@ const OnePageScrollHorizontal = ({
   minDeltaWheel = 5,
   minDeltaTouch = 50,
   pageIndex = 0,
+  heightChildren
 }) => {
   const scrollRef = useRef();
   const containerRef = useRef();
@@ -176,7 +177,7 @@ const OnePageScrollHorizontal = ({
       onTouchMove={onTouchMove}
       onKeyDown={keyPress}
       style={{
-        height: containerHeight || height || "100vh",
+        height: heightChildren ? "fit-content" : containerHeight || height || "100vh",
         width: "100%",
         overflow: "hidden",
         outline: "none",
@@ -188,7 +189,7 @@ const OnePageScrollHorizontal = ({
         ref={containerRef}
         style={{
           width: `${length * 100}%`,
-          height: height,
+          height: heightChildren ? "fit-content" : height,
           transition: transition ? `transform ${TIMESCROLL}ms ease-out` : "none",
           transform: `translate3d(${((translateX + (movePos.x - startPos.x) / width) * 100) / length}%, 0px, 0px)`,
         }}

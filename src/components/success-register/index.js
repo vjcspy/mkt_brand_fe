@@ -20,7 +20,7 @@ const SuccessRegister = ({ itemPromoGetCode, resultGetCode }) => {
           <h6 className="promo-code">
             <FormattedMessage id="successRegister.promo_code" />
           </h6>
-          <h6 className="code">{resultGetCode?.code}</h6>
+          <h6 className="code">{resultGetCode?.serialNo}</h6>
         </WrapperQcCode>
         <ContentHeader>
           <h3>
@@ -55,7 +55,7 @@ const SuccessRegister = ({ itemPromoGetCode, resultGetCode }) => {
         <p>
           <FormattedMessage id="successRegister.promo_code" />
         </p>
-        <h4>{resultGetCode?.code}</h4>
+        <h4>{resultGetCode?.serialNo}</h4>
         <p>
           <FormattedMessage id="successRegister.send_voucher_email" />
         </p>

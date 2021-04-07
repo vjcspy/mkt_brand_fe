@@ -23,7 +23,7 @@ const SuccessRegisterMobile = ({ itemPromoGetCode, resultGetCode, onShowListRest
         <h6>
           <FormattedMessage id="successRegister.promo_code" />
         </h6>
-        <h4>{resultGetCode?.code}</h4>
+        <h4>{resultGetCode?.serialNo}</h4>
         <p>
           <FormattedMessage id="successRegister.send_voucher_email" />
         </p>

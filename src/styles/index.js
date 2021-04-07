@@ -29,8 +29,8 @@ export const Container = styled.div`
   width: 100%;
 
   @media (max-width: 767px) {
-    padding-left 0px;
-    padding-right: 0px;
+    padding-left 20px;
+    padding-right: 20px;
   }
 `;
 
@@ -68,6 +68,7 @@ export const RadioButton = styled.button`
 export const OnePageHorizontalWrapper = styled.div`
   width: 100%;
   position: relative;
+  height: fit-content;
 `;
 
 export const OnePageVerticalWrapper = styled.div`

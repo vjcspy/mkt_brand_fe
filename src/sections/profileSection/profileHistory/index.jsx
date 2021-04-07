@@ -16,7 +16,8 @@ import PulseLoader from "../../../components/loading";
 import { showNotification } from "../../../components/notification";
 import moment from "moment";
 import Portal from "../../../development/containers/developmentDialog/portal";
-const ProfileHistory = () => {
+const ProfileHistory = ({ setTransaction }) => {
+  console.log(setTransaction)
   const [showDetail, setShowDetail] = useState(false);
   const [size] = useIframeResize();
   const dispatch = useDispatch();
@@ -35,6 +36,14 @@ const ProfileHistory = () => {
     }
 
   }, [error, warning, data]);
+
+  const onViewDetail = (value) => {
+    if (size.width > 768) {
+      setShowDetail(value)
+    } else {
+      setTransaction(value)
+    }
+  }
   return (
     <ProfileHistoryWrapper>
       {loading ? (
@@ -76,22 +85,16 @@ const ProfileHistory = () => {
                 <Icon icon="coin" />
               </h5>
             </Pricewrapper>
-            <Button width="100%" varian="primary" onClick={() => setShowDetail(item)}>
+            <Button width="100%" varian="primary" onClick={() => onViewDetail(item)}>
               <FormattedMessage id="profile.history_view_detail" />
             </Button>
           </ProfileItemRight>
         </ProfileHistoryItem>
       ))}
-      {size.width > 768 ? (
+      {size.width > 768 && (
         <Popup style={{ maxHeight: "98vh", height: "90vh" }} show={showDetail} onClose={() => setShowDetail(false)}>
           <ViewDetail transition={showDetail} />
         </Popup>
-      ) : (
-        <PopupMobile show={showDetail} step={0} onBack={() => setShowDetail(false)}>
-          <WrapperContentPopup>
-            <ViewDetail transition={showDetail} />
-          </WrapperContentPopup>
-        </PopupMobile>
       )}
     </ProfileHistoryWrapper>
   );

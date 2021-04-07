@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import * as Events from "./Events";
 import { isNil, isNull, isPositiveNumber } from "./utils";
 import usePrevious from "./usePrevValue";
+import { get } from "lodash";
 
 if (!global._babelPolyfill) {
   require("babel-polyfill");
@@ -51,6 +52,7 @@ const ReactPageScroller = ({
   const scrollContainer = useRef(null);
   const pageContainer = useRef(null);
   const lastScrolledElement = useRef(null);
+  const scrollRef = useRef();
   totalElement -= 1;
   const scrollPage = useCallback(
     (nextComponentIndex) => {
@@ -93,7 +95,8 @@ const ReactPageScroller = ({
   const disableScroll = useCallback(() => {
     if (isBodyScrollEnabled) {
       isBodyScrollEnabled = false;
-      let win = window.frames[0]?.window ?? window;
+      const win = get(scrollContainer, ["current", "ownerDocument", "defaultView", "window"], window);
+
       win.scrollTo({
         left: 0,
         top: 0,
@@ -107,7 +110,7 @@ const ReactPageScroller = ({
   const enableDocumentScroll = useCallback(() => {
     if (!isBodyScrollEnabled) {
       isBodyScrollEnabled = true;
-      let win = window.frames[0]?.window ?? window;
+      const win = get(scrollContainer, ["current", "ownerDocument", "defaultView", "window"], window);
       win.document.body.classList.remove(DISABLED_CLASS_NAME);
       win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
     }
@@ -259,7 +262,7 @@ const ReactPageScroller = ({
   useEffect(() => {
     return () => {
       isBodyScrollEnabled = true;
-      let win = window.frames[0]?.window ?? window;
+      const win = get(scrollContainer, ["current", "ownerDocument", "defaultView", "window"], window);
       win.document.body.classList.remove(DISABLED_CLASS_NAME);
       win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
     };

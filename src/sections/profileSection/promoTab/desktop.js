@@ -90,7 +90,7 @@ const PromoTabDesktop = ({ profilePromo }) => {
                   <FormattedMessage id="profile.promo_view_detail" />
                 </Button>
                 <Link href="https://booking.ggg.com.vn" passHref>
-                  <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
+                  <a className="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
                     <Button>
                       <FormattedMessage id="profile.promo_reservation" />
                     </Button>

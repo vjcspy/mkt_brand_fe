@@ -15,38 +15,11 @@ import ListCondition from "../../promoSection/Conditions";
 import ViewMapRestaurant from "../../../components/view-map-restaurant";
 import Link from "next/link";
 
-const PromoTabMobile = ({ profilePromo }) => {
+const PromoTabMobile = ({ profilePromo, setDetailPromoMobile }) => {
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [currentPage, setCurrentPage] = useState(0);
-  const [currentPromoMobile, setPromoMobile] = useState();
-  const [stepFlowPopupMobile, setStepFlowPopupMobile] = useState(0);
-  const [showConditionOrRestaurant, setShowConditionOrRestaurant] = useState(true);
-  const [viewRestaurant, setViewRestaurant] = useState();
-  const onBackPopup = () => {
-    if (stepFlowPopupMobile === 0) {
-      setStepFlowPopupMobile(0);
-      setPromoMobile(null);
-    } else {
-      setStepFlowPopupMobile(stepFlowPopupMobile - 1);
-    }
-  };
-
-  const onViewMap = (restaurant) => {
-    setStepFlowPopupMobile(2);
-    setViewRestaurant(restaurant);
-  };
-
-  const onShowListRestaurant = () => {
-    setShowConditionOrRestaurant(true);
-    setStepFlowPopupMobile(1);
-  };
-  const onShowListCondition = () => {
-    setShowConditionOrRestaurant(false);
-    setStepFlowPopupMobile(1);
-  };
-
   return (
-    <PromoMobile className="moileeee" style={{ height: `calc(100vh - (${headerHeight + 96 ?? 0}px ` }}>
+    <PromoMobile className="moileeee" style={{ height: `calc(100vh - (${headerHeight + 96 + 56 ?? 0}px ` }}>
       <h3>
         <FormattedMessage id="profile.title_my_promo" />
       </h3>
@@ -84,11 +57,11 @@ const PromoTabMobile = ({ profilePromo }) => {
           <span>{profilePromo?.[currentPage]?.startDate}</span>
         </WrapperFlex>
         <GroupButton>
-          <Button varian="outline" onClick={() => setPromoMobile(profilePromo?.[currentPage])}>
+          <Button varian="outline" onClick={() => setDetailPromoMobile(profilePromo?.[currentPage])}>
             <FormattedMessage id="profile.promo_view_detail" />
           </Button>
           <Link href="https://booking.ggg.com.vn" passHref>
-            <a class="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
+            <a className="booking-profile" target="_blank" href="https://booking.ggg.com.vn">
               <Button>
                 <FormattedMessage id="profile.promo_reservation" />
               </Button>
@@ -96,33 +69,6 @@ const PromoTabMobile = ({ profilePromo }) => {
           </Link>
         </GroupButton>
       </ContentMobile>
-      <PopupMobile show={currentPromoMobile} step={stepFlowPopupMobile} onBack={onBackPopup}>
-        <WrapperContentPopup>
-          <DetailPromo
-            promo={currentPromoMobile}
-            onShowListRestaurant={onShowListRestaurant}
-            onShowListCondition={onShowListCondition}
-          />
-        </WrapperContentPopup>
-
-        <WrapperContentPopup style={{ height: "100%" }}>
-          {showConditionOrRestaurant ? (
-            <ListRestaurantBooking
-              onBook={onViewMap}
-              currentPage="profile-promo"
-              promoId={profilePromo?.[currentPage]?.promotionId}
-              listRestaurant={profilePromo?.[currentPage]?.restaurants}
-              onViewMap={onViewMap}
-            />
-          ) : (
-            <ListCondition listCondition={profilePromo?.[currentPage]?.condition} />
-          )}
-        </WrapperContentPopup>
-
-        <WrapperContentPopup restaurant={profilePromo?.[currentPage]?.restaurants} style={{ height: "100%" }}>
-          <ViewMapRestaurant restaurant={viewRestaurant} />
-        </WrapperContentPopup>
-      </PopupMobile>
     </PromoMobile>
   );
 };

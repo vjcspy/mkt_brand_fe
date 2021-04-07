@@ -9,20 +9,21 @@ export const ProfileGiftWrapper = styled.div`
   padding-bottom: 90px;
   justify-content: center;
   @media (max-width: 768px) {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 40px 15px;
   }
 `;
 
 export const LeftWrapper = styled.div`
   width: 30%;
-  padding-bottom: 30%;
   border-radius: 10px;
-  background: ${({ theme }) => theme.color.page.border};
-
+  img {
+    max-width: 346px;
+    max-height: 346px;
+    width: 100%;
+    height: 100%;
+  }
   @media (max-width: 768px) {
     width: 100%;
-    padding-bottom: 100%;
     padding-left: 15px;
     padding-right: 15px;
   }

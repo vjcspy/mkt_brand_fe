@@ -2,10 +2,15 @@ import React from "react";
 import { LeftWrapper, ProfileGiftWrapper, RightWrapper, StoresWrapper } from "./styled";
 import { FormattedMessage } from "react-intl";
 
-const ProfileGift = () => {
+const ProfileGift = ({ imageRegister }) => {
+  console.log("tab re:", imageRegister)
   return (
     <ProfileGiftWrapper>
-      <LeftWrapper></LeftWrapper>
+      <LeftWrapper>
+        {
+          imageRegister && <img src={imageRegister.value?.url} />
+        }
+      </LeftWrapper>
       <RightWrapper>
         <h2>
           <FormattedMessage id="profile.register_download_app" />
