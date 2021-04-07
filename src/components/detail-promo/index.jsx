@@ -7,6 +7,7 @@ import IconTriangleDown from "../icons/iconTriangleDown";
 import Link from "next/link";
 import { DescriptionPromo } from "../../sections/promoSection/PromoInfo/style";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
+import QRCode from "qrcode.react";
 
 const DetailPromo = ({ promo, onShowListRestaurant, onShowListCondition }) => {
   const refShow = useRef();
@@ -28,7 +29,7 @@ const DetailPromo = ({ promo, onShowListRestaurant, onShowListCondition }) => {
     <>
       <HeaderDesktop>
         <WrapperQcCode>
-          <img width={82} height={82} src="/images/demo_qc.png" />
+          {promo?.serialNo && <QRCode value={promo?.serialNo} size={82} />}
         </WrapperQcCode>
         <ContentHeader>
           <h3>{promo?.promotionTitle}</h3>
@@ -44,12 +45,12 @@ const DetailPromo = ({ promo, onShowListRestaurant, onShowListCondition }) => {
       <HeaderMobile>
         <h3>{promo?.promotionTitle}</h3>
         <WrapperQcCode>
-          <img width={82} height={82} src="/images/demo_qc.png" />
+          {promo?.serialNo && <QRCode value={promo.serialNo} size={82} />}
         </WrapperQcCode>
         <p>
           <FormattedMessage id="profile.promo_popup_promo_code" />
         </p>
-        <h4>{promo?.clmGiftCode}</h4>
+        <h4>{promo?.serialNo}</h4>
         <p className="notify">
           <FormattedMessage id="profile.promo_popup_send_email" />
         </p>

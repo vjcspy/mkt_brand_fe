@@ -16,6 +16,7 @@ import Popup from "../popup-wrapper";
 import ItemRestaurantBooking from "../item-restaurant/item-restaurant-booking";
 import Link from "next/link";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
+import QRCode from "qrcode.react";
 import { DescriptionPromo } from "../../sections/promoSection/PromoInfo/style";
 
 const PopupPromo = ({ promo, onClose }) => {
@@ -38,17 +39,16 @@ const PopupPromo = ({ promo, onClose }) => {
   const onClosePopup = useCallback(() => {
     onClose(null);
   }, [onClose]);
-
   return (
     <>
       <Popup show={true} onClose={onClosePopup}>
         <HeaderDesktop>
           <WrapperQcCode>
-            <img width={82} height={82} src="/images/demo_qc.png" />
+            {promo?.serialNo && <QRCode value={promo?.serialNo} size={82} />}
             <h6 className="promo-code">
               <FormattedMessage id="popupPromo.promoCode" />
             </h6>
-            <h6 className="code">{promo?.clmGiftCode}</h6>
+            <h6 className="code">{promo?.serialNo}</h6>
           </WrapperQcCode>
           <ContentHeader>
             <h3>{promo?.promotionTitle}</h3>

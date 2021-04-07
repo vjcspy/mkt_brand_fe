@@ -7,7 +7,7 @@ import ScrollShowContent from "../scroll-show-content";
 import ItemRestaurantBooking from "../item-restaurant/item-restaurant-booking";
 import Link from "next/link";
 import { DescriptionPromo } from "../../sections/promoSection/PromoInfo/style";
-
+import QRCode from "qrcode.react";
 const SuccessRegister = ({ itemPromoGetCode, resultGetCode }) => {
   const refShow = useRef();
   const [openDescription, setOpenDescription] = useState(false);
@@ -16,7 +16,7 @@ const SuccessRegister = ({ itemPromoGetCode, resultGetCode }) => {
     <>
       <HeaderDesktop>
         <WrapperQcCode>
-          <img width={82} height={82} src="/images/demo_qc.png" />
+          <QRCode value={resultGetCode?.serialNo} size={82} />
           <h6 className="promo-code">
             <FormattedMessage id="successRegister.promo_code" />
           </h6>
@@ -50,7 +50,8 @@ const SuccessRegister = ({ itemPromoGetCode, resultGetCode }) => {
           }}
         />
         <WrapperQcCode>
-          <img width={82} height={82} src="/images/demo_qc.png" />
+          <QRCode value={resultGetCode?.serialNo} size={82} />
+          {/* <img width={82} height={82} src="/images/demo_qc.png" /> */}
         </WrapperQcCode>
         <p>
           <FormattedMessage id="successRegister.promo_code" />

@@ -2,7 +2,7 @@ import React from "react";
 import Button from "../button";
 import IconTriangleDown from "../icons/iconTriangleDown";
 import { FormattedMessage } from "react-intl";
-
+import QRCode from "qrcode.react";
 import { HeaderMobile, WrapperImageCode, WrapperScroll, Item, GroupButtonMobile } from "./style";
 import Link from "next/link";
 const SuccessRegisterMobile = ({ itemPromoGetCode, resultGetCode, onShowListRestaurant, onShowCondition }) => {
@@ -18,7 +18,7 @@ const SuccessRegisterMobile = ({ itemPromoGetCode, resultGetCode, onShowListRest
           />
         </h3>
         <WrapperImageCode>
-          <img width={82} height={82} src="/images/demo_qc.png" />
+          {resultGetCode?.serialNo && <QRCode value={resultGetCode?.serialNo} size={82} />}
         </WrapperImageCode>
         <h6>
           <FormattedMessage id="successRegister.promo_code" />
