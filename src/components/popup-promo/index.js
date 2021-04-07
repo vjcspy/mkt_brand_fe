@@ -25,7 +25,7 @@ const PopupPromo = ({ promo, onClose }) => {
   const [showButtonHide, setShowButtonHide] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
   const [{ width }] = useIframeResize();
-
+  const newGift = promo?.gifts?.sort((a, b) => b.timestampExpiryDate - a.timestampExpiryDate)[0];
   useEffect(() => {
     if (refShow.current) {
       if (refShow.current.scrollHeight > refShow.current.clientHeight) {
@@ -44,11 +44,11 @@ const PopupPromo = ({ promo, onClose }) => {
       <Popup show={true} onClose={onClosePopup}>
         <HeaderDesktop>
           <WrapperQcCode>
-            {promo?.serialNo && <QRCode value={promo?.serialNo} size={82} />}
+            {newGift?.seriNo && <QRCode value={newGift?.seriNo} size={82} />}
             <h6 className="promo-code">
               <FormattedMessage id="popupPromo.promoCode" />
             </h6>
-            <h6 className="code">{promo?.serialNo}</h6>
+            <h6 className="code">{newGift?.seriNo}</h6>
           </WrapperQcCode>
           <ContentHeader>
             <h3>{promo?.promotionTitle}</h3>
@@ -64,11 +64,11 @@ const PopupPromo = ({ promo, onClose }) => {
         </HeaderDesktop>
         <HeaderMobile>
           <WrapperQcCode>
-            <img width={82} height={82} src="/images/demo_qc.png" />
+            {newGift?.seriNo && <QRCode value={newGift?.seriNo} size={82} />}
             <h6 className="promo-code">
               <FormattedMessage id="popupPromo.promoCode" />
             </h6>
-            <h6 className="code">{promo?.clmGiftCode}</h6>
+            <h6 className="code">{newGift?.seriNo}</h6>
           </WrapperQcCode>
           <ContentHeader>
             <h3>Ă{promo?.promotionTitle}</h3>

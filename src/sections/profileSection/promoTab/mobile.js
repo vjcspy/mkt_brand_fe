@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 import { GroupButton, WrapperFlex, PromoMobile, WrapperEndpoint, WrapperScroller, ContentMobile } from "./style";
 import { useSelector } from "react-redux";
-import loadable from "@loadable/component";
 import RatioImage from "../../../components/ratioImage";
 import Button from "../../../components/button";
-import DetailPromo from "../../../components/detail-promo";
 import ReactPageScroller from "../../../../plugins/react-page-scroller";
 import PointNavigation from "../../../components/point-navigation";
-import PopupMobile from "../../../components/popup-wrapper-mobile";
 import { FormattedMessage } from "react-intl";
-import { WrapperContentPopup } from "../../../components/popup-wrapper-mobile/style";
-import ListRestaurantBooking from "../../../components/list-restaurant/list-restaurant-booking";
-import ListCondition from "../../promoSection/Conditions";
-import ViewMapRestaurant from "../../../components/view-map-restaurant";
 import Link from "next/link";
 
 const PromoTabMobile = ({ profilePromo, setDetailPromoMobile }) => {

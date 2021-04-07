@@ -15,7 +15,8 @@ const DetailPromo = ({ promo, onShowListRestaurant, onShowListCondition }) => {
   const [showButtonHide, setShowButtonHide] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
   const [{ width }] = useIframeResize();
-
+  const newGift = promo?.gifts?.sort((a, b) => b.timestampExpiryDate - a.timestampExpiryDate)[0];
+  console.log(newGift)
   useEffect(() => {
     if (refShow.current) {
       if (refShow.current.scrollHeight > refShow.current.clientHeight) {
@@ -29,7 +30,7 @@ const DetailPromo = ({ promo, onShowListRestaurant, onShowListCondition }) => {
     <>
       <HeaderDesktop>
         <WrapperQcCode>
-          {promo?.serialNo && <QRCode value={promo?.serialNo} size={82} />}
+          {newGift?.seriNo && <QRCode value={newGift.seriNo} size={82} />}
         </WrapperQcCode>
         <ContentHeader>
           <h3>{promo?.promotionTitle}</h3>
@@ -45,12 +46,12 @@ const DetailPromo = ({ promo, onShowListRestaurant, onShowListCondition }) => {
       <HeaderMobile>
         <h3>{promo?.promotionTitle}</h3>
         <WrapperQcCode>
-          {promo?.serialNo && <QRCode value={promo.serialNo} size={82} />}
+          {newGift?.seriNo && <QRCode value={newGift.seriNo} size={82} />}
         </WrapperQcCode>
         <p>
           <FormattedMessage id="profile.promo_popup_promo_code" />
         </p>
-        <h4>{promo?.serialNo}</h4>
+        <h4>{newGift?.seriNo}</h4>
         <p className="notify">
           <FormattedMessage id="profile.promo_popup_send_email" />
         </p>

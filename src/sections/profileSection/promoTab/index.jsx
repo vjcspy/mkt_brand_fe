@@ -14,6 +14,7 @@ const PromoTab = ({ setDetailPromoMobile }) => {
   const [size] = useIframeResize();
   const dispatch = useDispatch();
   const { data, error, warning, loading, loaded } = useSelector((state) => state.get("promoOfUser")) ?? {};
+
   useEffect(() => {
     if (!data && !loaded) {
       dispatch({ type: GET_PROMO_OF_USER, value: { type: "all" } });

@@ -61,7 +61,6 @@ const SectionSignIn = () => {
       const { messageCode, message, error } = apiRequestOTP.data;
       if (messageCode === 1) {
         setShowGetOTP(false);
-        dispatch({ type: GET_PROMO_OF_USER, value: { type: "all" } });
       } else {
         showNotification(dispatch, { content: message ?? error.message, status: "error" });
       }
@@ -90,6 +89,7 @@ const SectionSignIn = () => {
       if (messageCode === 1) {
         const { profile, authentication } = result;
         dispatch({ type: SET_TOKEN_USER, value: authentication });
+        dispatch({ type: GET_PROMO_OF_USER, value: { type: "all" } });
         dispatch({ type: SET_USER_INFO, value: profile });
         if (!profile.firstName || !profile.email || profile.email.includes("@tgsfake.ggg.com.vn")) {
           setShowLogin(false); // show form register
