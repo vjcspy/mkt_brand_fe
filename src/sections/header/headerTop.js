@@ -108,7 +108,7 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
               <ItemTopMenuRight onClick={() => setPopupLanguageLocation(true)}>
                 <HoverWrapper>
                   <IconMapMarker color="#7B7979" />
-                  <h6>{state.provinceSelected?.name}</h6>
+                  <h6>{state.provinceSelected?.name ?? "Hà Nội"}</h6>
                 </HoverWrapper>
               </ItemTopMenuRight>
             </TopMenuRight>

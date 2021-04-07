@@ -28,6 +28,7 @@ const LanguageWrapper = ({ children }) => {
 
 const HostWrapper = ({ children, host, graphqlHost, provinces, numPromo }) => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch({ type: SET_HOST, host, graphqlHost });
     dispatch({ type: SET_LIST_PROVINCE, value: provinces });
@@ -67,7 +68,6 @@ App.getInitialProps = async ({ Component, ctx }) => {
       { id: 5, name: "Hà Nội" },
     ];
     let numPromo = filterListPromoApi(listPromo.result.content).length;
-
     return {
       host: process.env.API_HOST,
       graphqlHost: process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",

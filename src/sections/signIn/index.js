@@ -25,8 +25,6 @@ const defaultConfig = {
 };
 
 const SectionSignIn = () => {
-  const tokenUser = useSelector((state) => state.get("tokenUser")).toJS();
-
   const dispatch = useDispatch();
   const router = useSiteRouter();
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -57,12 +55,6 @@ const SectionSignIn = () => {
     { "tgs-version": "2.6.10" },
     "POST"
   );
-
-  useEffect(() => {
-    // if (tokenUser.token) {
-    //   router.push("/");
-    // }
-  }, []);
 
   useEffect(() => {
     if (apiRequestOTP.data) {

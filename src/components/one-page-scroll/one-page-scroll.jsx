@@ -1,4 +1,4 @@
-import { isNil } from "lodash";
+import { get, isNil } from "lodash";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const KEY_UP = 38;
@@ -126,7 +126,7 @@ const OnePageScroll = ({
   useEffect(() => {
     pageOnChange?.(Math.abs(translateY));
     if (Math.abs(translateY) < length - 1) {
-      let win = window.frames[0]?.window ?? window;
+      const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
       win.scrollTo({
         left: 0,
         top: 0,
@@ -135,7 +135,7 @@ const OnePageScroll = ({
       win.document.body.classList.add(DISABLED_CLASS_NAME);
       win.document.documentElement.classList.add(DISABLED_CLASS_NAME);
     } else {
-      let win = window.frames[0]?.window ?? window;
+      const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
       win.document.body.classList.remove(DISABLED_CLASS_NAME);
       win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
     }
