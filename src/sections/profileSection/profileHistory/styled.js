@@ -165,6 +165,9 @@ export const DetailBill = styled.div`
     height: 100%;
     max-height: 100%;
     overflow: scroll;
+    ::-webkit-scrollbar {
+      width: 0px;
+    }
   }
   .show {
     bottom: 0;
