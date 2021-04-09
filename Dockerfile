@@ -11,4 +11,4 @@ COPY . /app
 
 WORKDIR /app
 
-CMD [ "pm2-runtime", "start", "deploy.json" ]
+CMD pm2 start yarn --name "nextjs" --interpreter bash -- start
