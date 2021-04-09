@@ -5,17 +5,35 @@ import Layout from "../src/containers/layout";
 import PageContainer from "../src/containers/pageContainer";
 import { Pages } from "../src/sections";
 import { formatConfig } from "../src/services/frontend";
-import { getSiteServer } from "../src/services/backend";
+import { getSiteServer, getWebsitesConfig, getWebsitesData } from "../src/services/backend";
+import { chain } from "lodash";
 
-export async function getServerSideProps() {
-  const site_code = process.env.SITE_CODE;
-  const { data: site } = await getSiteServer(site_code);
-  return {
-    props: {
-      config: site?.config ?? null,
-      site_code: site_code ?? null,
-    },
-  };
+export async function getServerSideProps(ctx) {
+  try {
+    const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
+    const webSiteConfig = await getWebsitesConfig(pathname);
+    const webSites = await getWebsitesData();
+    const webData = chain(webSites)
+      .get(["data", "rows"])
+      .find((e) => e.code === webSiteConfig.website_code)
+      .value();
+    const siteCode = webData?.code ?? process.env.SITE_CODE;
+    const { data: site } = await getSiteServer(siteCode);
+
+    return {
+      props: {
+        config: site?.config ?? null,
+        site_code: siteCode ?? null,
+      },
+    };
+  } catch (e) {
+    return {
+      props: {
+        config: null,
+        site_code: null,
+      },
+    };
+  }
 }
 
 const Site = ({ config, site_code }) => {

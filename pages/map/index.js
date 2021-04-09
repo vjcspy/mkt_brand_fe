@@ -10,19 +10,27 @@ import {
   getSiteCode,
   getSiteServer,
   getWebsitesConfig,
+  getWebsitesData,
 } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
+import { chain } from "lodash";
 
 export async function getServerSideProps(ctx) {
   try {
     const { idRestaurant } = ctx.query;
     const site_code = process.env.SITE_CODE;
     const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
-    const { website_code } = await getWebsitesConfig(pathname);
-    const { brand_id } = await getSiteCode(website_code);
+    const webSiteConfig = await getWebsitesConfig(pathname);
+    const webSites = await getWebsitesData();
+    const webData = chain(webSites)
+      .get(["data", "rows"])
+      .find((e) => e.code === webSiteConfig.website_code)
+      .value();
+    const siteCode = webData?.code ?? process.env.SITE_CODE;
+    const { brand_id } = webData;
     const [{ data: googleMapApi }, { data: site }, { data: dataForMap }] = await Promise.all([
       getApiKeyGoogleMap(),
-      getSiteServer(site_code),
+      getSiteServer(siteCode),
       getListRestaurant({ brand_id }),
     ]);
     let restaurantViewMap = idRestaurant ? dataForMap.result?.find((item) => item.code == idRestaurant) ?? null : null;
