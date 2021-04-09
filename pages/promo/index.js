@@ -30,7 +30,7 @@ export async function getServerSideProps(ctx) {
     const siteCode = webData?.code ?? process.env.SITE_CODE;
     const { brand_id } = webData;
 
-    const [{ data: googleMapApi }, { data: promoListApi }, { data: site }] = await Promise.all([
+    const [googleMapApi, { data: promoListApi }, { data: site }] = await Promise.all([
       getApiKeyGoogleMap(),
       getPromotionByBrandProvince({ brand_id }),
       getSiteServer(siteCode),
