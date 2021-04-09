@@ -27,7 +27,6 @@ const MenuTree = ({
 }) => {
   const router = useSiteRouter();
   const menu = router.query.category;
-
   useEffect(() => {
     if (menu && menus) {
       let index = menus.findIndex((m) => m.url_key === menu);
@@ -46,7 +45,6 @@ const MenuTree = ({
       }
     }
   }, [menu, menus]);
-
   return (
     <MenusComponentWrapper className="sticky">
       {map(menus, (item, index) => (
@@ -91,6 +89,7 @@ const MenuTree = ({
               </CaretDownIcon>
             )}
           </MenuItemButton>
+
           {indexParent == index && item.isBundle && (
             <MenuSubItemWrapper isOpen={true}>
               {map(item.products, (bundleProduct, subIndex) => {
@@ -138,6 +137,9 @@ const MenuTree = ({
               })}
             </MenuSubItemWrapper>
           )}
+
+
+
           {indexParent == index && get(item, ["children", "length"]) > 0 && (
             <MenuSubItemWrapper isOpen={true}>
               {map(item.children, (subItem, subIndex) => (
@@ -162,14 +164,14 @@ const MenuTree = ({
                     }}
                   >
                     <h5
-                      className={`${
-                        get(subItem, ["children", "length"]) > 0 ? "sup-item-1 have-sup-menu " : " sup-item-1"
-                      }`}
+                      className={`${get(subItem, ["children", "length"]) > 0 ? "sup-item-1 have-sup-menu " : " sup-item-1"
+                        }`}
                     >
                       {subItem.name}
                     </h5>
                     {get(subItem, ["children", "length"]) > 0 && <MenuSubItemIcon isOpen={indexChild == subIndex} />}
                   </MenuSubItemButton>
+
                   {indexChild == subIndex && get(subItem, ["children", "length"]) > 0 && (
                     <MenuSub2ItemWrapper>
                       {subItem.children.map((sub2Item, sub2Index) => (
@@ -186,10 +188,12 @@ const MenuTree = ({
                       ))}
                     </MenuSub2ItemWrapper>
                   )}
+
                 </Fragment>
               ))}
             </MenuSubItemWrapper>
           )}
+
         </MenuItemWrapper>
       ))}
     </MenusComponentWrapper>

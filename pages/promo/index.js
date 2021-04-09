@@ -13,21 +13,27 @@ import {
   getSiteServer,
   getWebsitesConfig,
   getPromotionByBrandProvince,
+  getWebsitesData,
 } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
-import { get } from "lodash";
+import { chain, get } from "lodash";
 
 export async function getServerSideProps(ctx) {
   try {
-    const site_code = process.env.SITE_CODE;
     const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
-    const { website_code } = await getWebsitesConfig(pathname);
-    const { brand_id } = await getSiteCode(website_code);
+    const webSiteConfig = await getWebsitesConfig(pathname);
+    const webSites = await getWebsitesData();
+    const webData = chain(webSites)
+      .get(["data", "rows"])
+      .find((e) => e.code === webSiteConfig.website_code)
+      .value();
+    const siteCode = webData?.code ?? process.env.SITE_CODE;
+    const { brand_id } = webData;
 
     const [{ data: googleMapApi }, { data: promoListApi }, { data: site }] = await Promise.all([
       getApiKeyGoogleMap(),
       getPromotionByBrandProvince({ brand_id }),
-      getSiteServer(site_code),
+      getSiteServer(siteCode),
     ]);
 
     let promoListResult = filterListPromoApi(promoListApi.result.content);

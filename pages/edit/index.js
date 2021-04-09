@@ -1,3 +1,4 @@
+import { chain } from "lodash";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
@@ -16,10 +17,24 @@ import DevelopmentLayout from "../../src/development/containers/developmentLayou
 import useFromJS from "../../src/hooks/useFromJS";
 import useSiteRouter from "../../src/hooks/useSiteRouter";
 import { Pages } from "../../src/sections";
-import { fetchMenuCategories, filterListPromoApi, getListBlog, getListPromo } from "../../src/services/backend";
+import {
+  fetchMenuCategories,
+  filterListPromoApi,
+  getListBlog,
+  getListPromo,
+  getWebsitesConfig,
+  getWebsitesData,
+} from "../../src/services/backend";
 
-export async function getStaticProps() {
-  const site_code = process.env.SITE_CODE;
+export async function getServerSideProps(ctx) {
+  const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
+  const webSiteConfig = await getWebsitesConfig(pathname);
+  const webSites = await getWebsitesData();
+  const webData = chain(webSites)
+    .get(["data", "rows"])
+    .find((e) => e.code === webSiteConfig.website_code)
+    .value();
+  const siteCode = webData?.code ?? process.env.SITE_CODE;
   var menus = [];
   try {
     menus = await fetchMenuCategories();
@@ -28,7 +43,7 @@ export async function getStaticProps() {
   }
   return {
     props: {
-      site_code: site_code ?? null,
+      site_code: siteCode ?? null,
       menus: menus,
     },
   };

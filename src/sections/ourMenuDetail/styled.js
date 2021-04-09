@@ -39,11 +39,18 @@ export const MenusRightContent = styled.div`
 export const MenusComponentWrapper = styled.div`
   position: sticky;
   left: 0;
+  max-height: 100vh;
+  overflow: auto;
   top: 130px;
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
   @media (max-width: 768px) {
     position: relative;
     display: flex;
     justify-content: space-between;
+    max-height: unset;
+    overflow: unset;
   }
 `;
 
