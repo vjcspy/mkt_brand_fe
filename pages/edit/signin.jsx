@@ -6,8 +6,9 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { DevPrimaryButton } from "../../src/styles/developmentStyle";
 import { useDispatch, useSelector } from "react-redux";
 import { LOGIN } from "../../src/constants";
-import { getSite, getSiteServer } from "../../src/services/backend";
+import { getSite, getSiteServer, getWebsitesConfig, getWebsitesData } from "../../src/services/backend";
 import { useRouter } from "next/dist/client/router";
+import { chain } from "lodash";
 
 const SigninWrapper = styled.div`
   width: 100%;
@@ -113,7 +114,7 @@ const ErrorMessage = styled.p`
   text-align: center;
 `;
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx) {
   const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
   const webSiteConfig = await getWebsitesConfig(pathname);
   const webSites = await getWebsitesData();
@@ -122,6 +123,7 @@ export async function getServerSideProps() {
     .find((e) => e.code === webSiteConfig.website_code)
     .value();
   const siteCode = webData?.code ?? process.env.SITE_CODE;
+  console.log("siteCode:", siteCode)
   const { data: site } = await getSiteServer(siteCode);
   return {
     props: {
