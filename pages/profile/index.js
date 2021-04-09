@@ -19,7 +19,7 @@ export async function getServerSideProps(ctx) {
       .find((e) => e.code === webSiteConfig.website_code)
       .value();
     const siteCode = webData?.code ?? process.env.SITE_CODE;
-    const [{ data: googleMapApi }, { data: site }] = await Promise.all([getApiKeyGoogleMap(), getSiteServer(siteCode)]);
+    const [googleMapApi, { data: site }] = await Promise.all([getApiKeyGoogleMap(), getSiteServer(siteCode)]);
     return {
       props: {
         config: site?.config ?? null,

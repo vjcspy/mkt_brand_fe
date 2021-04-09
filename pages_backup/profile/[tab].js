@@ -21,7 +21,7 @@ import PageContainer from "../../src/containers/pageContainer";
 
 export async function getServerSideProps({ params }) {
   const { tab } = params;
-  const [{ data: googleMapApi }, { data: site }] = await Promise.all([
+  const [googleMapApi, { data: site }] = await Promise.all([
     getApiKeyGoogleMap(),
     getSiteServer(process.env.SITE_CODE),
   ]);

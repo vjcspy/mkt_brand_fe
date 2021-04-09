@@ -2,21 +2,41 @@ import path from "path";
 import Axios from "axios";
 import { each, get, sortBy, chain } from "lodash";
 import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../constants";
+import fs from "fs";
 
 export const getWebsitesConfig = async (domain) => {
-  const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
-  return data;
+  try {
+    const { getWebsitesConfig } = getData();
+    if (getWebsitesConfig) {
+      return getWebsitesConfig;
+    } else {
+      const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
+      const fileData = getData();
+      fileData["getWebsitesConfig"] = data;
+      saveData(fileData);
+      return data;
+    }
+  } catch (e) {
+    console.log("e:", e);
+  }
 };
 
 export const getWebsitesData = async () => {
-  const { data } = await Axios.post(process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/rest/V1/izretail/dispatch", {
-    action: {
-      type: "get-websites",
-      payload: {},
-    },
-  });
-
-  return data;
+  const { getWebsitesData } = getData();
+  if (getWebsitesData) {
+    return getWebsitesData;
+  } else {
+    const { data } = await Axios.post(process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/rest/V1/izretail/dispatch", {
+      action: {
+        type: "get-websites",
+        payload: {},
+      },
+    });
+    const fileData = getData();
+    fileData["getWebsitesData"] = data;
+    saveData(fileData);
+    return data;
+  }
 };
 
 export const getSiteCode = async (name) => {
@@ -68,8 +88,17 @@ export const getSiteServer = async (site_code) => {
 };
 
 export const getApiKeyGoogleMap = async () => {
-  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
-  return Axios.get(`${host}/get-configs`);
+  const { getApiKeyGoogleMap } = getData();
+  if (getApiKeyGoogleMap) {
+    return getApiKeyGoogleMap;
+  } else {
+    const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
+    const { data } = await Axios.get(`${host}/get-configs`);
+    const fileData = getData();
+    fileData["getApiKeyGoogleMap"] = data;
+    saveData(fileData);
+    return data;
+  }
 };
 
 export const getSection = (site, page, sectionName) => {
@@ -228,7 +257,6 @@ export const pickUpVoucher = ({ code, token }) => {
 };
 
 // get list restaurant by Id
-
 export const getListRestaurant = ({ brandId = 7, provinceId = 5, longitude, latitude }) => {
   const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
   return Axios.get(`${host}/restaurant`, {
@@ -243,13 +271,23 @@ export const getListRestaurant = ({ brandId = 7, provinceId = 5, longitude, lati
     },
   });
 };
-export const getProvinces = () => {
-  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
-  return Axios.get(`${host}/province`, {
-    headers: {
-      "tgs-version": "2.6.10",
-    },
-  });
+export const getProvinces = async () => {
+  const { getProvinces } = getData();
+  if (getProvinces) {
+    return getProvinces;
+  } else {
+    const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
+    const { data: listProvince } = await Axios.get(`${host}/province`, {
+      headers: {
+        "tgs-version": "2.6.10",
+      },
+    });
+    const provinces = listProvince.result?.map((item) => ({ id: item?.id, name: item?.name }));
+    const fileData = getData();
+    fileData["getProvinces"] = provinces;
+    saveData(fileData);
+    return provinces;
+  }
 };
 
 export const filterListPromoApi = (listPromo) => {
@@ -298,4 +336,24 @@ export const getPromotionByBrandProvince = ({ brandId = 7, provinceId = 5 }) => 
       "tgs-version": "2.6.10",
     },
   });
+};
+
+export const getData = () => {
+  let data = {};
+  try {
+    const dataFilePath = path.join(process.cwd(), "data.json");
+    data = JSON.parse(fs.readFileSync(dataFilePath, "utf-8"));
+  } catch (e) {
+    console.log(e);
+  }
+  return data;
+};
+
+export const saveData = (data) => {
+  try {
+    const dataFilePath = path.join(process.cwd(), "data.json");
+    fs.writeFileSync(dataFilePath, JSON.stringify(data));
+  } catch (e) {
+    console.log(e);
+  }
 };

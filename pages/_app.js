@@ -60,13 +60,11 @@ App.getInitialProps = async ({ Component, ctx }) => {
     const { website_code } = await getWebsitesConfig(pathname);
     const { brand_id } = await getSiteCode(website_code);
 
-    const [{ data: listProvince }, { data: listPromo }] = await Promise.all([
+    const [listProvince, { data: listPromo }] = await Promise.all([
       getProvinces(),
       getPromotionByBrandProvince({ brand_id }),
     ]);
-    let provinces = listProvince.result?.map((item) => ({ id: item?.id, name: item?.name })) ?? [
-      { id: 5, name: "Hà Nội" },
-    ];
+    let provinces = listProvince ?? [{ id: 5, name: "Hà Nội" }];
     let numPromo = filterListPromoApi(listPromo.result.content).length;
     return {
       host: process.env.API_HOST,

@@ -7,7 +7,6 @@ import { formatConfig } from "../../src/services/frontend";
 import {
   getApiKeyGoogleMap,
   getListRestaurant,
-  getSiteCode,
   getSiteServer,
   getWebsitesConfig,
   getWebsitesData,
@@ -18,7 +17,6 @@ import { chain } from "lodash";
 export async function getServerSideProps(ctx) {
   try {
     const { idRestaurant } = ctx.query;
-    const site_code = process.env.SITE_CODE;
     const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
     const webSiteConfig = await getWebsitesConfig(pathname);
     const webSites = await getWebsitesData();
@@ -28,7 +26,7 @@ export async function getServerSideProps(ctx) {
       .value();
     const siteCode = webData?.code ?? process.env.SITE_CODE;
     const { brand_id } = webData;
-    const [{ data: googleMapApi }, { data: site }, { data: dataForMap }] = await Promise.all([
+    const [googleMapApi, { data: site }, { data: dataForMap }] = await Promise.all([
       getApiKeyGoogleMap(),
       getSiteServer(siteCode),
       getListRestaurant({ brand_id }),
