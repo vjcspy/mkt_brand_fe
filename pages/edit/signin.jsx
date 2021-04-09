@@ -114,8 +114,15 @@ const ErrorMessage = styled.p`
 `;
 
 export async function getServerSideProps() {
-  const site_code = process.env.SITE_CODE;
-  const { data: site } = await getSiteServer(site_code);
+  const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
+  const webSiteConfig = await getWebsitesConfig(pathname);
+  const webSites = await getWebsitesData();
+  const webData = chain(webSites)
+    .get(["data", "rows"])
+    .find((e) => e.code === webSiteConfig.website_code)
+    .value();
+  const siteCode = webData?.code ?? process.env.SITE_CODE;
+  const { data: site } = await getSiteServer(siteCode);
   return {
     props: {
       logo: site?.logo ?? null,
