@@ -123,13 +123,14 @@ export const fetchMenuCategories = async ({
   currentPage = 1,
   urlKey = "gogi",
   storeCode = "gogi_royal",
+  rootCategory,
 } = {}) => {
   const productFragment = `fragment product on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url}only_x_left_in_stock options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html}sku stock_status thumbnail{url}url_key}`;
   const bundleProductFragment = `fragment bundle on BundleProduct{items{__typename position required title option_id options{product{...product}}}}`;
   const categoryTreeChild = `fragment categoryTreeChild on CategoryTree{id level name path position url_key}`;
   const categoryTree = `fragment categoryTree on CategoryTree{id level name path position children{...categoryTreeChild}url_key}`;
   const categoryResult = `fragment category on CategoryResult{items{id name position description url_key children_count canonical_url level path children{...categoryTree}}}`;
-  const query = `query{categories(filters:{url_key:{eq:"${urlKey}"}}pageSize:${pageSize} currentPage:${currentPage}){...category page_info{total_pages}total_count}}`;
+  const query = `query{categories(filters:{ids:{in:["${rootCategory}"]}}pageSize:${pageSize} currentPage:${currentPage}){...category page_info{total_pages}total_count}}`;
 
   const { data } = await Axios.post(
     process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
@@ -144,7 +145,6 @@ export const fetchMenuCategories = async ({
     return m;
   }
   const menu = sort(get(data, ["data", "categories", "items", 0]));
-
   const categoriesIds = [];
   menu.children.forEach(({ id, children }) => {
     categoriesIds.push(id);

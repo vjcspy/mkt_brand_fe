@@ -49,6 +49,8 @@ export async function getServerSideProps(ctx) {
   const group = webData?.groups?.find((g, index) =>
     webData?.default_group_id ? g.id === webData?.default_group_id : index == 0
   );
+  const { root_category_id } = group
+
   const store = group?.stores?.find((s, index) =>
     group?.default_store_id ? s.id === group.default_store_id : index === 0
   );
@@ -57,7 +59,7 @@ export async function getServerSideProps(ctx) {
 
   const [{ data: site }, menus] = await Promise.all([
     getSiteServer(siteCode),
-    fetchMenuCategories({ urlKey: siteCode, storeCode: storeCode }),
+    fetchMenuCategories({ urlKey: siteCode, storeCode: storeCode, rootCategory: root_category_id }),
   ]);
   return {
     props: {
