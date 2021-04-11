@@ -20,7 +20,7 @@ import { chain, get } from "lodash";
 
 export async function getServerSideProps(ctx) {
   try {
-    const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
+    const pathname = ctx.req.headers.host;
     const webSiteConfig = await getWebsitesConfig(pathname);
     const webSites = await getWebsitesData();
     const webData = chain(webSites)

@@ -6,6 +6,7 @@ import fs from "fs";
 
 export const getWebsitesConfig = async (domain) => {
   try {
+    console.log("host: ", process.env.NEXT_PUBLIC_GGG_INTERNAL);
     const { getWebsitesConfig } = getData();
     if (getWebsitesConfig) {
       return getWebsitesConfig;
@@ -338,6 +339,7 @@ export const getPromotionByBrandProvince = ({ brandId = 7, provinceId = 5 }) => 
   });
 };
 
+// read file cache
 export const getData = () => {
   let data = {};
   try {
@@ -348,7 +350,7 @@ export const getData = () => {
   }
   return data;
 };
-
+// write file cache
 export const saveData = (data) => {
   try {
     const dataFilePath = path.join(process.cwd(), "data.json");
@@ -356,4 +358,38 @@ export const saveData = (data) => {
   } catch (e) {
     console.log(e);
   }
+};
+
+export const createOrUpdateBrandStory = async (brandStory, token) => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+
+  if (brandStory.id) {
+    return Axios.put(`${host}/brand-stories/${site.id}`, brandStory, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } else {
+    return Axios.post(`${host}/brand-stories`, brandStory, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+};
+
+export const getListBrandStory = () => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+  return Axios.get(`${host}/brand-stories`);
+};
+
+export const getBrandStoryBySlug = async (slug) => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+  return Axios.post(`${host}/graphql`, {
+    query: `query {
+      brandStories (where: {slug:"${slug}"}){
+          content
+        }
+      }`,
+  });
 };

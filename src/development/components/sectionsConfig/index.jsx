@@ -18,6 +18,7 @@ import useApi from "../../../hooks/useApi";
 import DynamicBlock from "../developmentComponentType/dynamicBlock";
 import { Sections } from "../../../sections";
 import { List, fromJS } from "immutable";
+import BrandStory from "../brandStory";
 const defaultBlock = {
   title: "Dynamic Block",
   id: "",
@@ -93,7 +94,6 @@ const SectionsConfig = ({ putStage }) => {
       >
         {map(sections, (section, index) => (
           <SectionItem
-            className="okokokokk"
             draggable="true"
             onDragStart={(e) => onDragStart(e, index)}
             key={section.code}
@@ -183,8 +183,9 @@ const SectionsConfig = ({ putStage }) => {
         </SettingItem>
       </SettingItemWrapper>
 
-      {/* Cookie Config*/}
-      {/* <SettingItemWrapper>
+      <>
+        {/* Cookie Config*/}
+        {/* <SettingItemWrapper>
         <SettingItem
           onClick={() => {
             putStage({
@@ -199,14 +200,31 @@ const SectionsConfig = ({ putStage }) => {
         </SettingItem>
       </SettingItemWrapper> */}
 
-      {/* Popup Add Section*/}
-      <>
-        {/* <AddSectionDialog
+        {/* Popup Add Section*/}
+        <>
+          {/* <AddSectionDialog
         dialog={addSectionDialog}
         onClose={() => setAddSection({})}
         addSection={({ defaultConfig }) => addSection({ ...defaultConfig, code: generate() })}
       /> */}
+        </>
       </>
+
+      {/* Brand Story */}
+      <SettingItemWrapper>
+        <SettingItem
+          onClick={() => {
+            putStage({
+              Component: BrandStory,
+            });
+          }}
+        >
+          <FontAwesomeIcon icon="project-diagram" />
+          <ThemeItemTitle>Brand Story</ThemeItemTitle>
+          <FontAwesomeIcon icon="chevron-right" />
+        </SettingItem>
+      </SettingItemWrapper>
+
 
       {/* Add dynamicBlock */}
       <SectionsBlock>

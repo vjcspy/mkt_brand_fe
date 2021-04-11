@@ -11,6 +11,7 @@ import {
   SET_LIST_PROMO_EDIT_PAGE,
   SET_MODE,
   SET_OUR_MENUS,
+  SET_SITE_CODE,
 } from "../../src/constants";
 import PageContainer from "../../src/containers/pageContainer";
 import DevelopmentLayout from "../../src/development/containers/developmentLayout";
@@ -27,9 +28,11 @@ import {
 } from "../../src/services/backend";
 
 export async function getServerSideProps(ctx) {
-  const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
+  const pathname = ctx.req.headers.host;
+  console.log("pathname:", pathname);
   const webSiteConfig = await getWebsitesConfig(pathname);
   const webSites = await getWebsitesData();
+  console.log("webSites: ", webSites);
   const webData = chain(webSites)
     .get(["data", "rows"])
     .find((e) => e.code === webSiteConfig.website_code)
@@ -60,13 +63,13 @@ const Home = ({ site_code, menus }) => {
   useEffect(() => {
     dispatch({ type: SET_MODE, value: DEVELOPMENT_MODE });
   }, []);
-
   useEffect(() => {
     if (!token) {
       routerAA.push("/edit/signin");
     } else {
       dispatch({ type: SET_OUR_MENUS, value: menus });
       dispatch({ type: GET_SITE, site_code });
+      dispatch({ type: SET_SITE_CODE, value: site_code });
     }
   }, [token, site_code]);
 

@@ -56,7 +56,7 @@ App.getInitialProps = async ({ Component, ctx }) => {
   // const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
   // console.log("getInitialProps App");
   try {
-    const pathname = ctx.req.headers.host === "localhost:3041" ? "gogi.ggg.systems" : ctx.req.headers.host;
+    const pathname = ctx.req.headers.host;
     const { website_code } = await getWebsitesConfig(pathname);
     const { brand_id } = await getSiteCode(website_code);
 
