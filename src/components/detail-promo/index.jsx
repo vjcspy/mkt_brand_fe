@@ -16,7 +16,6 @@ const DetailPromo = ({ promo, onShowListRestaurant, onShowListCondition }) => {
   const [shouldShow, setShouldShow] = useState(false);
   const [{ width }] = useIframeResize();
   const newGift = promo?.gifts?.sort((a, b) => b.timestampExpiryDate - a.timestampExpiryDate)[0];
-  console.log(newGift)
   useEffect(() => {
     if (refShow.current) {
       if (refShow.current.scrollHeight > refShow.current.clientHeight) {

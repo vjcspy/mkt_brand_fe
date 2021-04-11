@@ -29,10 +29,8 @@ import {
 
 export async function getServerSideProps(ctx) {
   const pathname = ctx.req.headers.host;
-  console.log("pathname:", pathname);
   const webSiteConfig = await getWebsitesConfig(pathname);
   const webSites = await getWebsitesData();
-  console.log("webSites: ", webSites);
   const webData = chain(webSites)
     .get(["data", "rows"])
     .find((e) => e.code === webSiteConfig.website_code)

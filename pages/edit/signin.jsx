@@ -123,7 +123,6 @@ export async function getServerSideProps(ctx) {
     .find((e) => e.code === webSiteConfig.website_code)
     .value();
   const siteCode = webData?.code ?? process.env.SITE_CODE;
-  console.log("siteCode:", siteCode)
   const { data: site } = await getSiteServer(siteCode);
   return {
     props: {

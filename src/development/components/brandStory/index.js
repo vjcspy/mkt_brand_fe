@@ -11,12 +11,19 @@ import Button from "../../../components/button";
 import SectionThumbnail from "../sectionsConfig/sectionThumbnail";
 import { ButtonIcon } from "./style";
 import SectionTitle from "../sectionsConfig/sectionTitle";
-import { createOrUpdateBrandStory, getListBrandStory } from "../../../services/backend";
+import { createOrUpdateBrandStory, deleteStory, getListBrandStory } from "../../../services/backend";
 import { useSelector } from "react-redux";
+import PulseLoader from "../../../components/loading";
+import { set } from "immutable";
 const defaultStory = {
   title: "Title story",
   brandId: "",
   content: "",
+  slug: slug("Title story"),
+};
+
+const findIndexItem = (arr, itemCheck) => {
+  return arr.findIndex((item) => item.id === itemCheck.id);
 };
 
 const BrandStory = ({ path, popStage, putStage }) => {
@@ -25,9 +32,12 @@ const BrandStory = ({ path, popStage, putStage }) => {
   const [storySelected, setStorySelected] = useState();
   const siteCode = useSelector((s) => s.get("siteCode"));
   const token = useSelector((s) => s.get("token"));
+  const [loading, setLoading] = useState();
   useEffect(async () => {
-    const { data } = await getListBrandStory();
-    console.log(data);
+    try {
+      const { data } = await getListBrandStory();
+      setListStory(data);
+    } catch (e) {}
   }, []);
 
   const onAddStory = () => {
@@ -36,20 +46,48 @@ const BrandStory = ({ path, popStage, putStage }) => {
   };
 
   const onSaveBrandStory = async () => {
-    const story = { ...storySelected };
-    story.slug = slug(story.title);
-    story.brandId = siteCode;
-    console.log(story);
-    const { data } = await createOrUpdateBrandStory(story, token);
+    try {
+      setLoading("upload");
+      const story = { ...storySelected };
+      story.brandId = siteCode;
+      const { data } = await createOrUpdateBrandStory(story, token);
+      const index = findIndexItem(listStory, data);
+      console.log(index);
+      if (index >= 0) {
+        listStory[index] = data;
+      } else {
+        listStory.push(data);
+      }
+      setListStory([...listStory]);
+      setLoading();
+      setOpenPopup();
+    } catch (e) {
+      setOpenPopup();
+      setLoading();
+    }
   };
 
   const onChangTextField = (value, name) => {
+    console.log(value, name);
     setStorySelected((pre) => ({
       ...pre,
       [name]: value,
+      slug: name === "title" ? slug(value) : pre.slug,
     }));
   };
 
+  const onDeleteStory = async (id, index) => {
+    try {
+      setLoading("delete");
+      const { data } = await deleteStory(id);
+      listStory.splice(index, 1);
+      setListStory([...listStory]);
+      setLoading();
+    } catch {
+      deleteStory;
+      setLoading();
+    }
+  };
   return (
     <SectionWrapper className="section-language">
       <SectionHeader>
@@ -69,8 +107,16 @@ const BrandStory = ({ path, popStage, putStage }) => {
             }}
           >
             <SectionThumbnail components={item} />
-            <SectionTitleWrapper>{item?.title}</SectionTitleWrapper>
-            <DevSecondaryButton icon>
+            <SectionTitleWrapper>
+              {loading === "delete" ? <PulseLoader loading fill /> : item.title}{" "}
+            </SectionTitleWrapper>
+            <DevSecondaryButton
+              icon
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteStory(item?.id, index);
+              }}
+            >
               <FontAwesomeIcon icon="trash-alt" />
             </DevSecondaryButton>
           </SectionItem>
@@ -90,18 +136,24 @@ const BrandStory = ({ path, popStage, putStage }) => {
               onChangeTextBlog={(value) => onChangTextField(value, "title")}
             />
             <TextIgnoreLocaleComponent
+              className="read-only"
+              readOnly
+              config={{ title: "Slug", value: storySelected?.slug }}
+              onChangeTextBlog={(value) => console.log(value)}
+            />
+            <TextIgnoreLocaleComponent
               config={{ title: "Content", value: storySelected?.content }}
               onChangeTextBlog={(value) => onChangTextField(value, "content")}
             />
 
             <GroupButton>
               {storySelected.id ? (
-                <Button className="btn-edit-content" onClick={() => setOpenPopup(false)}>
-                  Update
+                <Button className="btn-edit-content" onClick={onSaveBrandStory}>
+                  {loading === "upload" ? <PulseLoader loading fill /> : "Update"}
                 </Button>
               ) : (
                 <Button className="btn-edit-content" onClick={onSaveBrandStory}>
-                  Save
+                  {loading === "upload" ? <PulseLoader loading fill /> : "Save"}
                 </Button>
               )}
 

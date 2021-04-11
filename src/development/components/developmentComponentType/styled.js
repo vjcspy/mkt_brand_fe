@@ -65,6 +65,9 @@ export const ContentEditer = styled.div`
   h3 {
     margin-bottom: 10px;
   }
+  .read-only {
+    background-color: #cccccc36;
+  }
 `;
 
 export const WrapperButtonSave = styled.div`

@@ -11,9 +11,7 @@ import { chain } from "lodash";
 export async function getServerSideProps(ctx) {
   try {
     const pathname = ctx.req.headers.host;
-    console.log(("pathname:", pathname));
     const webSiteConfig = await getWebsitesConfig(pathname);
-    console.log("webSiteConfig:", webSiteConfig);
     const webSites = await getWebsitesData();
     const webData = chain(webSites)
       .get(["data", "rows"])
@@ -21,7 +19,6 @@ export async function getServerSideProps(ctx) {
       .value();
     const siteCode = webData?.code ?? process.env.SITE_CODE;
     const { data: site } = await getSiteServer(siteCode);
-
     return {
       props: {
         config: site?.config ?? null,
