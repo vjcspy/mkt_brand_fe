@@ -145,6 +145,16 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
       if (index > -1) {
         setTranslateX(-index);
       }
+    } else {
+      let active = config.components.tabBanner.value[0];
+      router.pushQuery(
+        stringifyUrl({
+          url: router.pathname,
+          query: { tabBanner: active?.tabCode.value },
+        }),
+        undefined,
+        { shallow: true }
+      );
     }
   }, [config, tabBanner]);
 
@@ -178,19 +188,6 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
     }
   }, [config, translateX]);
 
-  useEffect(() => {
-    if (!tabBanner) {
-      let active = config.components.tabBanner.value[0];
-      router.pushQuery(
-        stringifyUrl({
-          url: router.pathname,
-          query: { tabBanner: active?.tabCode.value },
-        }),
-        undefined,
-        { shallow: true }
-      );
-    }
-  }, [])
 
   useEffect(() => {
     const e = new Event("tabbanner");
