@@ -6,7 +6,7 @@ export async function getServerSideProps(ctx) {
     const slug = ctx.params["brand-story"];
     const { siteCode } = await getInitialData(ctx);
     const { data } = await getBrandStoryBySlug(slug, siteCode);
-    const BrandStory = data.data.brandStories[0] ?? null;
+    const BrandStory = data.data?.brandStories?.[0] ?? null;
     return {
       props: {
         contentHTML: BrandStory,
