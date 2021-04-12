@@ -3,6 +3,7 @@ import { getBrandStoryBySlug, getInitialData } from "../../src/services/backend"
 
 export async function getServerSideProps(ctx) {
   try {
+    const slug = ctx.params["brand-story"];
     const { siteCode } = await getInitialData(ctx);
     const { data } = await getBrandStoryBySlug(slug, siteCode);
     const BrandStory = data.data.brandStories[0] ?? null;

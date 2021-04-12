@@ -75,7 +75,7 @@ const Menu = ({ show, listMenu, setShowMenu, buttonRight, buttonLeft }) => {
               <MainMenu className={`${itemSubMenu ? "hide" : ""}`}>
                 {menus?.map((item, index) => (
                   <React.Fragment key={index}>
-                    {item.children?.length > 0 ? (
+                    {item?.children?.length > 0 ? (
                       <ItemMenu
                         className={`${router.pathname === "/our-menu/[menu]" ? "active" : ""}`}
                         onClick={() => setItemSubMenu(item)}

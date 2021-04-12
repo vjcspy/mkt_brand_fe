@@ -156,7 +156,7 @@ const MenuTree = ({
 
             {indexParent == index && get(item, ["children", "length"]) > 0 && (
               <MenuSubItemWrapper isOpen={true}>
-                {map(item.children, (subItem, subIndex) => (
+                {map(item?.children, (subItem, subIndex) => (
                   <Fragment key={subIndex}>
                     <MenuSubItemButton
                       isOpen={indexChild === subIndex}
@@ -188,7 +188,7 @@ const MenuTree = ({
 
                     {indexChild == subIndex && get(subItem, ["children", "length"]) > 0 && (
                       <MenuSub2ItemWrapper>
-                        {subItem.children.map((sub2Item, sub2Index) => (
+                        {subItem?.children.map((sub2Item, sub2Index) => (
                           <MenuSubItemButton
                             key={sub2Index}
                             isOpen={indexGrandChild === sub2Index}

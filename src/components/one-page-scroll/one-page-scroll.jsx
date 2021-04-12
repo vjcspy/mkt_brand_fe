@@ -163,7 +163,7 @@ const OnePageScroll = ({
 
   const top = useMemo(() => {
     if (children?.[Math.abs(translateY)] && containerRef.current) {
-      return -containerRef.current.children[Math.abs(translateY)]?.offsetTop;
+      return -containerRef.current?.children[Math.abs(translateY)]?.offsetTop;
     }
     return 0;
   }, [translateY]);

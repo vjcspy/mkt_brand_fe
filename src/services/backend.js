@@ -205,7 +205,7 @@ export const fetchMenuCategories = async ({
   }
   const menu = sort(get(data, ["data", "categories", "items", 0]));
   const categoriesIds = [];
-  menu.children.forEach(({ id, children }) => {
+  menu?.children.forEach(({ id, children }) => {
     categoriesIds.push(id);
     children?.forEach(({ id }) => {
       categoriesIds.push(id);
@@ -217,9 +217,9 @@ export const fetchMenuCategories = async ({
   );
   const categories = categoriesIds.map((id, i) => ({ id, products: productList[i] }));
 
-  const menus = menu.children.map((category, i) => {
-    if (category.children?.length) {
-      category.children.map((category) =>
+  const menus = menu?.children.map((category, i) => {
+    if (category?.children?.length) {
+      category?.children.map((category) =>
         Object.assign(category, { products: categories.find((c) => c.id === category.id).products })
       );
     }

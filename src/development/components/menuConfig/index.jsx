@@ -62,7 +62,7 @@ const RenderMenuItem = ({ item, index, path, deleteMenu, setDialog, locale, show
           <MenuItem
             add
             onClick={() => {
-              setDialog({ show: true, path: [...path, "children", index], index: item.children.length });
+              setDialog({ show: true, path: [...path, "children", index], index: item?.children.length });
             }}
           >
             <SectionThumbnailWrapper>
@@ -156,7 +156,7 @@ const MenuConfig = ({ path, popStage }) => {
           addMenuItem(
             {
               ...item,
-              children: item.children ?? [],
+              children: item?.children ?? [],
               code: item.code ?? generate(),
             },
             [...path, "children", index]

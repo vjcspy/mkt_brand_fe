@@ -34,7 +34,7 @@ function ChildMenu({ parent, setItemSubMenu, onCloseMenu, locale }) {
             parent.apiKey === "menu" ? (
               <>
                 {parent?.children?.map((item, index) =>
-                  item.children?.length > 0 ? (
+                  item?.children?.length > 0 ? (
                     <ItemSubMenu key={index} onClick={() => setItemChildMenu(item)}>
                       <h5>{item.label}</h5>
                       <div>
@@ -55,7 +55,7 @@ function ChildMenu({ parent, setItemSubMenu, onCloseMenu, locale }) {
             ) : (
               <>
                 {parent?.children?.map((item, index) =>
-                  item.children?.length > 0 ? (
+                  item?.children?.length > 0 ? (
                     <ItemSubMenu key={index} onClick={() => setItemChildMenu(item)}>
                       <h5>{item.label?.[locale]}</h5>
                       <div>
