@@ -7,8 +7,6 @@ import MenuMobile from "./menu-mobile";
 import MenuMain from "./menu-main";
 import MenuTree from "./menu-tree";
 import { MenusLeftContent, MenusRightContent, OurMenusContent, OurMenusWrapper } from "./styled";
-import { useSelector } from "react-redux";
-import useAppHeight from "../../hooks/useAppHeight";
 
 const defaultConfig = {
   id: "our-menu-detail",
@@ -54,7 +52,7 @@ const OurMenus = ({ menus, footer }) => {
       ) : (
         <MenuMobile menus={menus} footer={footer} />
       )}
-      {size.width > 768 && <DynamicFooter config={footer} />}
+      <DynamicFooter config={footer} />
     </OurMenusWrapper>
   );
 };

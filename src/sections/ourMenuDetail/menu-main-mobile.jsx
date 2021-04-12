@@ -18,7 +18,7 @@ const MenuMainMobile = ({ menus, pageOnChange, onBack, pageIndex, footer, setMen
   const headerHeight = useSelector((s) => s.get("headerHeight"));
 
   return (
-    <MenuMainMobileWrapper>
+    <MenuMainMobileWrapper >
       <OnePageScrollHorizontal
         pageIndex={pageIndex}
         containerHeight={`calc(100vh - ${headerHeight}px)`}

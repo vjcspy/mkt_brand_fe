@@ -400,7 +400,6 @@ export const MenuTreeMobileWrapper = styled.div`
 
 export const DotsWrapper = styled.div`
   position: absolute;
-  top: 50%;
   right: 20px;
-  transform: translateY(-50%);
+  transform: translateY(34%);
 `;
