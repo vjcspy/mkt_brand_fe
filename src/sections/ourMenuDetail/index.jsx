@@ -35,7 +35,6 @@ const OurMenus = ({ menus, footer }) => {
     menus,
     setPath,
   };
-
   return (
     <OurMenusWrapper ref={ref}>
       {size.width > 768 ? (

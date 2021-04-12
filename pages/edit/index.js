@@ -21,21 +21,13 @@ import { Pages } from "../../src/sections";
 import {
   fetchMenuCategories,
   filterListPromoApi,
+  getInitialData,
   getListBlog,
   getListPromo,
-  getWebsitesConfig,
-  getWebsitesData,
 } from "../../src/services/backend";
 
 export async function getServerSideProps(ctx) {
-  const pathname = ctx.req.headers.host;
-  const webSiteConfig = await getWebsitesConfig(pathname);
-  const webSites = await getWebsitesData();
-  const webData = chain(webSites)
-    .get(["data", "rows"])
-    .find((e) => e.code === webSiteConfig.website_code)
-    .value();
-  const siteCode = webData?.code ?? process.env.SITE_CODE;
+  const { siteCode } = await getInitialData(ctx);
   var menus = [];
   try {
     menus = await fetchMenuCategories();

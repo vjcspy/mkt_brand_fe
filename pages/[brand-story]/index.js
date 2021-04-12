@@ -1,19 +1,9 @@
-import { chain } from "lodash";
 import React from "react";
-import { getWebsitesConfig, getWebsitesData, getBrandStoryBySlug } from "../../src/services/backend";
+import { getBrandStoryBySlug, getInitialData } from "../../src/services/backend";
 
 export async function getServerSideProps(ctx) {
   try {
-    const pathname = ctx.req.headers.host;
-    const webSiteConfig = await getWebsitesConfig(pathname);
-    const slug = ctx.query["brand-story"];
-    console.log("slug", slug);
-    const webSites = await getWebsitesData();
-    const webData = chain(webSites)
-      .get(["data", "rows"])
-      .find((e) => e.code === webSiteConfig.website_code)
-      .value();
-    const siteCode = webData?.code ?? process.env.SITE_CODE;
+    const { siteCode } = await getInitialData(ctx);
     const { data } = await getBrandStoryBySlug(slug, siteCode);
     const BrandStory = data.data.brandStories[0] ?? null;
     return {

@@ -13,14 +13,7 @@ import Layout from "../../src/containers/layout";
 import { blogs } from "../../src/dummyData/blogs";
 import { Pages, RenderFooter, RenderHeader } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import {
-  getListBlog,
-  getSite,
-  getSiteServer,
-  getSlug,
-  getWebsitesConfig,
-  getWebsitesData,
-} from "../../src/services/backend";
+import { getInitialData, getSiteServer, getSlug } from "../../src/services/backend";
 import { MainContainer, MainWrapper } from "../../src/styles";
 import PageContainer from "../../src/containers/pageContainer";
 
@@ -52,14 +45,7 @@ import PageContainer from "../../src/containers/pageContainer";
 // }
 
 export const getServerSideProps = async (ctx) => {
-  const pathname = ctx.req.headers.host;
-  const webSiteConfig = await getWebsitesConfig(pathname);
-  const webSites = await getWebsitesData();
-  const webData = chain(webSites)
-    .get(["data", "rows"])
-    .find((e) => e.code === webSiteConfig.website_code)
-    .value();
-  const siteCode = webData?.code ?? process.env.SITE_CODE;
+  const { siteCode } = await getInitialData(ctx);
 
   const { slug } = ctx.params;
   const [{ data: site }, { data }] = await Promise.all([getSiteServer(siteCode), getSlug(slug)]);

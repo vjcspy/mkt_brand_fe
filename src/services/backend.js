@@ -4,15 +4,45 @@ import { each, get, sortBy, chain } from "lodash";
 import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../constants";
 import fs from "fs";
 
+export const getInitialData = async (ctx) => {
+  const pathname = ctx.req.headers.host;
+  const [webSiteConfig, webSites] = await Promise.all([getWebsitesConfig(pathname), getWebsitesData()]);
+
+  const webData = chain(webSites)
+    .get(["data", "rows"])
+    .find((e) => e.code === webSiteConfig.website_code)
+    .value();
+  const { brand_id } = webData;
+  const group = webData?.groups?.find((g, index) =>
+    webData?.default_group_id ? g.id === webData?.default_group_id : index == 0
+  );
+  const { root_category_id } = group;
+
+  const store = group?.stores?.find((s, index) =>
+    group?.default_store_id ? s.id === group.default_store_id : index === 0
+  );
+  const siteCode = webData?.code ?? process.env.SITE_CODE;
+  const storeCode = store?.code ?? process.env.STORE_CODE;
+  return {
+    siteCode,
+    storeCode,
+    root_category_id,
+    brand_id,
+  };
+};
+
 export const getWebsitesConfig = async (domain) => {
   try {
     const { getWebsitesConfig } = getData();
-    if (getWebsitesConfig) {
-      return getWebsitesConfig;
+    const checkDomain = getWebsitesConfig?.find((item) => item.domain === domain);
+    if (checkDomain) {
+      return checkDomain;
     } else {
       const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
       const fileData = getData();
-      fileData["getWebsitesConfig"] = data;
+      const { getWebsitesConfig = [] } = fileData;
+      getWebsitesConfig.push(data);
+      fileData.getWebsitesConfig = getWebsitesConfig;
       saveData(fileData);
       return data;
     }
@@ -344,9 +374,7 @@ export const getData = () => {
   try {
     const dataFilePath = path.join(process.cwd(), "data.json");
     data = JSON.parse(fs.readFileSync(dataFilePath, "utf-8"));
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
   return data;
 };
 // write file cache
@@ -354,9 +382,7 @@ export const saveData = (data) => {
   try {
     const dataFilePath = path.join(process.cwd(), "data.json");
     fs.writeFileSync(dataFilePath, JSON.stringify(data));
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
 };
 
 export const createOrUpdateBrandStory = async (brandStory, token) => {

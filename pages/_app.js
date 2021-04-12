@@ -11,12 +11,9 @@ import { useEffect } from "react";
 import { SET_HOST, SET_LIST_PROVINCE, SET_NUM_PROMO, UPDATE_API_STATUS } from "../src/constants";
 import {
   filterListPromoApi,
-  getWebsitesConfig,
-  getProvinces,
-  getSiteCode,
   getPromotionByBrandProvince,
-  getWebsitesData,
   fetchMenuCategories,
+  getInitialData,
 } from "../src/services/backend";
 import { chain } from "lodash";
 
@@ -60,23 +57,7 @@ App.getInitialProps = async ({ Component, ctx }) => {
   // const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
   // console.log("getInitialProps App");
   try {
-    const pathname = ctx.req.headers.host;
-    const webSiteConfig = await getWebsitesConfig(pathname);
-    const webSites = await getWebsitesData();
-    const webData = chain(webSites)
-      .get(["data", "rows"])
-      .find((e) => e.code === webSiteConfig.website_code)
-      .value();
-    const group = webData?.groups?.find((g, index) =>
-      webData?.default_group_id ? g.id === webData?.default_group_id : index == 0
-    );
-    const { root_category_id } = group;
-    const { brand_id } = webData;
-    const store = group?.stores?.find((s, index) =>
-      group?.default_store_id ? s.id === group.default_store_id : index === 0
-    );
-    const siteCode = webData?.code ?? process.env.SITE_CODE;
-    const storeCode = store?.code ?? process.env.STORE_CODE;
+    const { siteCode, storeCode, root_category_id } = await getInitialData(ctx);
 
     const [listProvince, { data: listPromo }, menus] = await Promise.all([
       getProvinces(),

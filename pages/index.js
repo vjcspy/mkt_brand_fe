@@ -5,19 +5,12 @@ import Layout from "../src/containers/layout";
 import PageContainer from "../src/containers/pageContainer";
 import { Pages } from "../src/sections";
 import { formatConfig } from "../src/services/frontend";
-import { getSiteServer, getWebsitesConfig, getWebsitesData } from "../src/services/backend";
-import { chain } from "lodash";
+import { getInitialData, getSiteServer } from "../src/services/backend";
 
 export async function getServerSideProps(ctx) {
   try {
-    const pathname = ctx.req.headers.host;
-    const webSiteConfig = await getWebsitesConfig(pathname);
-    const webSites = await getWebsitesData();
-    const webData = chain(webSites)
-      .get(["data", "rows"])
-      .find((e) => e.code === webSiteConfig.website_code)
-      .value();
-    const siteCode = webData?.code ?? process.env.SITE_CODE;
+    const { siteCode } = await getInitialData(ctx);
+
     const { data: site } = await getSiteServer(siteCode);
     return {
       props: {
