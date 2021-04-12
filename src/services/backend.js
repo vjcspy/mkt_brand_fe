@@ -33,16 +33,16 @@ export const getInitialData = async (ctx) => {
 
 export const getWebsitesConfig = async (domain) => {
   try {
-    const { getWebsitesConfig } = getData();
+    let { getWebsitesConfig } = getData();
+    getWebsitesConfig = getWebsitesConfig ? getWebsitesConfig : [];
     const checkDomain = getWebsitesConfig?.find((item) => item.domain === domain);
     if (checkDomain) {
       return checkDomain;
     } else {
       const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
       const fileData = getData();
-      const { getWebsitesConfig = [] } = fileData;
       getWebsitesConfig.push(data);
-      fileData.getWebsitesConfig = getWebsitesConfig;
+      fileData["getWebsitesConfig"] = getWebsitesConfig;
       saveData(fileData);
       return data;
     }
