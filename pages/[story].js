@@ -3,9 +3,9 @@ import { getBrandStoryBySlug, getInitialData } from "../src/services/backend";
 
 export async function getServerSideProps(ctx) {
   try {
-    const slug = ctx.query["brand-story"];
+    const { story } = ctx.query;
     const { siteCode } = await getInitialData(ctx);
-    const { data } = await getBrandStoryBySlug(slug, siteCode);
+    const { data } = await getBrandStoryBySlug(story, siteCode);
     const BrandStory = data.data?.brandStories?.[0] ?? null;
     return {
       props: {
