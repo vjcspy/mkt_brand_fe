@@ -37,7 +37,7 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       site_code: siteCode ?? null,
-      menus: menus,
+      menus: menus ?? null,
     },
   };
 }

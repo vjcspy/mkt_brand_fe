@@ -40,7 +40,7 @@ const PromoSection = ({ promoListApi, brandId }) => {
   const provinceSelected = useSelector((state) => state.getIn(["provinceSelected"])).toJS();
 
   useEffect(() => {
-    if (promosShow.length === 0) {
+    if (promosShow?.length === 0) {
       showNotification(dispatch, { content: "Không có ưu đãi", status: "error" });
     }
   }, [promosShow]);
