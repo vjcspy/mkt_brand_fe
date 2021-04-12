@@ -41,7 +41,7 @@ const EditerComponent = ({ config, path }) => {
                 ],
                 toolbar:
                   "undo redo | formatselect |sizes  elect|forecolor|  bold italic underline backcolor |fontselect |fontsizeselect| link image|\
-                  alignleft aligncenter alignright alignjustify |",
+                  alignleft aligncenter alignright alignjustify  | code",
               }}
               onEditorChange={onChangeText}
             />
