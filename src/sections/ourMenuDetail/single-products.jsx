@@ -51,7 +51,6 @@ const SingleProducts = ({ config, isMobile, footer, onBack, setMenuDetail }) => 
           </ProductSingleItem>
         ))}
       </ProductSingleContainer>
-      {isMobile && <DynamicFooter config={footer} />}
     </ProductSingleWraper>
   );
 };

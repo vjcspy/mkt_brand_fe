@@ -128,7 +128,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
 
 
   useEffect(() => {
-    const currentTab = config.components.tabBanner.value.find(item => item.tabCode.value === tabBanner)
+    const currentTab = config.components.tabBanner.value.find(item => item.tabCode?.value === tabBanner)
     if (currentTab) {
       const sizeofTab = currentTab.tab.value.length
       if (sizeofTab === indexBannerCurrentTab[tabBanner] - 1) {
@@ -141,10 +141,20 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
 
   useEffect(() => {
     if (tabBanner) {
-      let index = config.components.tabBanner.value.findIndex((t) => t.tabCode.value === tabBanner);
+      let index = config.components.tabBanner.value.findIndex((t) => t.tabCode?.value === tabBanner);
       if (index > -1) {
         setTranslateX(-index);
       }
+    } else {
+      let active = config.components.tabBanner.value[0];
+      router.pushQuery(
+        stringifyUrl({
+          url: router.pathname,
+          query: { tabBanner: active?.tabCode.value },
+        }),
+        undefined,
+        { shallow: true }
+      );
     }
   }, [config, tabBanner]);
 
@@ -155,8 +165,8 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
         stringifyUrl({
           url: router.pathname,
           query: {
-            tabBanner: tab.tabCode.value,
-            bannerItem: tab.tabCode.value + '-' + (indexBannerCurrentTab[tab.tabCode.value] ?? 1)
+            tabBanner: tab?.tabCode.value,
+            bannerItem: tab?.tabCode.value + '-' + (indexBannerCurrentTab[tab?.tabCode.value] ?? 1)
           },
         }),
         undefined,
@@ -168,7 +178,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
         router.pushQuery(
           stringifyUrl({
             url: router.pathname,
-            query: { tabBanner: active.tabCode.value },
+            query: { tabBanner: active?.tabCode.value },
           }),
           undefined,
           { shallow: true }
@@ -177,6 +187,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
       sessionStorage.setItem("redirect", "true");
     }
   }, [config, translateX]);
+
 
   useEffect(() => {
     const e = new Event("tabbanner");

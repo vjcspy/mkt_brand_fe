@@ -109,6 +109,9 @@ export const GroupButton = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 40px;
+  button {
+    margin-left: 10px;
+  }
 `;
 
 export const WrapperSelectLocation = styled.div``;

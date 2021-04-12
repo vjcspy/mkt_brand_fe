@@ -155,7 +155,7 @@ const OnePageScroll = ({
 
   useEffect(() => {
     return () => {
-      let win = window.frames[0]?.window ?? window;
+      const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
       win.document.body.classList.remove(DISABLED_CLASS_NAME);
       win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
     };

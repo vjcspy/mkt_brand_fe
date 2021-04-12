@@ -1,5 +1,7 @@
 import { get } from "lodash";
-import React, { useCallback, useMemo, useState } from "react";
+import { stringifyUrl } from "query-string";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import useSiteRouter from "../../hooks/useSiteRouter";
 import { toMoney } from "../../services/frontend";
 import MenuMainMobile from "./menu-main-mobile";
 import MenuTreeMobile from "./menu-tree-mobile";
@@ -10,6 +12,7 @@ const MenuMobile = ({ footer, menus: propsMenus }) => {
   const [childrenIndex, setChildrenIndex] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [menuDetail, setMenuDetail] = useState();
+  const router = useSiteRouter();
 
   const { menus, tree } = useMemo(() => {
     let menus = [];
@@ -53,38 +56,58 @@ const MenuMobile = ({ footer, menus: propsMenus }) => {
     return { menus, tree };
   }, [propsMenus, menuDetail]);
 
+  const ref = useRef();
+  ref.current = (index) => {
+
+    if (isNaN(index)) {
+      return;
+    }
+    if (index >= menus.length) {
+      return;
+    }
+    setPageIndex(index);
+    if (menuDetail) {
+      setCurrentIndex(menus[index].index);
+    } else {
+      setCurrentIndex(menus[index].index);
+      setChildrenIndex(menus[index].childIndex);
+    }
+  }
+
   const pageOnChange = useCallback(
     (index) => {
-      if (isNaN(index)) {
-        return;
-      }
-      if (index >= menus.length) {
-        return;
-      }
-      setPageIndex(index);
-      if (menuDetail) {
-        setCurrentIndex(menus[index].index);
-      } else {
-        setCurrentIndex(menus[index].index);
-        setChildrenIndex(menus[index].childIndex);
-      }
+      ref.current(index);
     },
-    [menuDetail, menus]
+    []
   );
 
   const handleClick = useCallback(
     (index) => {
+      updateParam(index)
       setPageIndex(index);
       pageOnChange(index);
     },
     [pageOnChange]
   );
 
+  const updateParam = (index) => {
+    const menuSelect = menus[index]
+    router.pushQuery(
+      stringifyUrl({
+        url: `/our-menu`,
+        query: { category: menuSelect.url_key },
+      }),
+      undefined,
+      {
+        shallow: true,
+      }
+    );
+  }
+
   return (
     <MenuMobileWrapper>
       <MenuMainMobile
         menus={menus}
-        footer={footer}
         pageIndex={pageIndex}
         pageOnChange={pageOnChange}
         onBack={handleClick}

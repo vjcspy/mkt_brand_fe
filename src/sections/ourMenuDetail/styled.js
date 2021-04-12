@@ -39,7 +39,6 @@ export const MenusRightContent = styled.div`
 export const MenusComponentWrapper = styled.div`
   position: sticky;
   left: 0;
-  max-height: 100vh;
   overflow: auto;
   top: 130px;
   ::-webkit-scrollbar {
@@ -401,7 +400,6 @@ export const MenuTreeMobileWrapper = styled.div`
 
 export const DotsWrapper = styled.div`
   position: absolute;
-  top: 50%;
   right: 20px;
-  transform: translateY(-50%);
+  transform: translateY(34%);
 `;

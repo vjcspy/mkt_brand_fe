@@ -23,7 +23,7 @@ border: 1px solid ${themeColor("page", "border")};
 border-radius: 4px;
 `
 
-const TextIgnoreLocaleComponent = ({ config, type = "text", path, ignoreLocale, onChangeTextBlog }) => {
+const TextIgnoreLocaleComponent = ({ config, type = "text", path, ignoreLocale, onChangeTextBlog, ...rest }) => {
   const dispatch = useDispatch();
   const onChange = useCallback(
     (e) => {
@@ -41,6 +41,7 @@ const TextIgnoreLocaleComponent = ({ config, type = "text", path, ignoreLocale, 
       <label>{config.title}</label>
       {type === "text" && (
         <TextArea
+          {...rest}
           type={type}
           value={ignoreLocale ? config.value : config.value}
           style={{

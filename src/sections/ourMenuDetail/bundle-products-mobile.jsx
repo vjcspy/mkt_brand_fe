@@ -41,27 +41,25 @@ const BundleProductMobile = ({ config, footer, setMenuDetail }) => {
     setShouldHide(!product);
   }, [current, config.products]);
 
-  const items = useMemo(() => (config.products ?? []).concat([null]), [config]);
+  const items = useMemo(() => (config.products ?? []), [config]);
 
   return (
     <MenuChildMobileWrapper style={{ height: containerHeight }}>
       <MenuChildMobileScroller>
         <OnePageScroll containerHeight={containerHeight} pageOnChange={setCurrent}>
           {items.map((product, index) =>
-            product == null ? (
-              <DynamicFooter key={index} config={footer} />
-            ) : (
-              <MenuChildItemMobile key={index} style={{ height: itemHeight }}>
-                <Image width="300" height="300" src={product.image.url} alt={product.name} title={product.name} />
-              </MenuChildItemMobile>
-            )
+          (
+            <MenuChildItemMobile key={index} style={{ height: itemHeight }}>
+              <Image width="300" height="300" src={product.image.url} alt={product.name} title={product.name} />
+            </MenuChildItemMobile>
+          )
           )}
         </OnePageScroll>
-        <DotsWrapper>
+        <DotsWrapper style={{ top: `calc(50% - ${infoOffsetHeight}px)` }}>
           <PointNavigation size={config.products?.length ?? 0} currentIndex={current} display="block" />
         </DotsWrapper>
       </MenuChildMobileScroller>
-      <MenuChildMobileInfo ref={ref} className={shouldHide ? "hide" : ""}>
+      <MenuChildMobileInfo ref={ref} className={shouldHide ? "hide okokok" : "okok"}>
         <h3>{product?.name}</h3>
         <h5>{toMoney(get(product, ["price_range", "minimum_price", "final_price", "value"]))} VNĐ/người</h5>
         <Button

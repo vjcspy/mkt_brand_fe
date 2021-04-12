@@ -23,6 +23,7 @@ const OurMenus = ({ menus, footer }) => {
   const [indexParent, setIndexParent] = useState();
   const [indexChild, setIndexChild] = useState();
   const [indexGrandChild, setIndexGrandChild] = useState();
+
   const props = {
     indexParent,
     indexChild,
@@ -40,10 +41,10 @@ const OurMenus = ({ menus, footer }) => {
       {size.width > 768 ? (
         <Container>
           <OurMenusContent>
-            <MenusLeftContent>
+            <MenusLeftContent >
               <MenuTree {...props} />
             </MenusLeftContent>
-            <MenusRightContent>
+            <MenusRightContent className="right">
               <MenuMain {...props} />
             </MenusRightContent>
           </OurMenusContent>
@@ -51,7 +52,7 @@ const OurMenus = ({ menus, footer }) => {
       ) : (
         <MenuMobile menus={menus} footer={footer} />
       )}
-      {size.width > 768 && <DynamicFooter config={footer} />}
+      <DynamicFooter config={footer} />
     </OurMenusWrapper>
   );
 };
