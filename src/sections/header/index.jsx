@@ -281,7 +281,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   useEffect(() => {
     const listener = (e) => {
       if (linkRef.current) {
-        let width = linkRef.current?.[e.index]?.offsetWidth;
+        let width = linkRef.current?.children?.[e.index]?.offsetWidth;
         let left = linkRef.current?.children[e.index]?.offsetLeft;
         let w = width + 60; // px
         let p = e.percentage / 100; // %
