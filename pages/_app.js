@@ -14,6 +14,7 @@ import {
   getPromotionByBrandProvince,
   fetchMenuCategories,
   getInitialData,
+  getProvinces,
 } from "../src/services/backend";
 import { chain } from "lodash";
 
@@ -57,7 +58,7 @@ App.getInitialProps = async ({ Component, ctx }) => {
   // const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
   // console.log("getInitialProps App");
   try {
-    const { siteCode, storeCode, root_category_id } = await getInitialData(ctx);
+    const { siteCode, storeCode, root_category_id, brand_id } = await getInitialData(ctx);
 
     const [listProvince, { data: listPromo }, menus] = await Promise.all([
       getProvinces(),

@@ -22,7 +22,7 @@ import IconTriangleLineDown from "../../components/icons/iconTriangleLineDown";
 import { FormattedMessage } from "react-intl";
 import { Content, ItemContent, Title, WrapperAddress } from "../../components/item-restaurant/style";
 import Link from "next/link";
-import { getListRestaurant, getWebsitesConfig } from "../../services/backend";
+import { getListRestaurant } from "../../services/backend";
 import { showNotification } from "../../components/notification";
 import PulseLoader from "../../components/loading";
 
