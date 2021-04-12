@@ -179,6 +179,20 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
   }, [config, translateX]);
 
   useEffect(() => {
+    if (!tabBanner) {
+      let active = config.components.tabBanner.value[0];
+      router.pushQuery(
+        stringifyUrl({
+          url: router.pathname,
+          query: { tabBanner: active.tabCode.value },
+        }),
+        undefined,
+        { shallow: true }
+      );
+    }
+  }, [])
+
+  useEffect(() => {
     const e = new Event("tabbanner");
     e.percentage = ((startPos.x - movePos.x) / width) * 100;
     e.transition = transition;

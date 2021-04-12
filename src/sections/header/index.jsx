@@ -209,7 +209,6 @@ function requestLocation() {
 
 const Header = ({ config = defaultConfig, menus, pageName }) => {
   const showMenuHeader = useSelector((state) => state.getIn(["showMenuHeader"]));
-  const listProvince = useSelector((state) => state.get("listProvince")) ?? [];
   const mode = useSelector((state) => state.get("mode"));
   const router = useSiteRouter();
   const dispatch = useDispatch();
@@ -230,7 +229,6 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   const [transition, setTransition] = useState(true);
   const [width, setWidth] = useState(0);
   const [index, setIndex] = useState(0);
-
   useEffect(() => {
     if (!process.browser) {
       return;

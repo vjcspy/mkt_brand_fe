@@ -28,6 +28,7 @@ import useGraphql from "../../hooks/useApi/useGraphql";
 import useSiteRouter from "../../hooks/useSiteRouter";
 import useAppHeight from "../../hooks/useAppHeight";
 import { filterProvinceById } from "../../services/backend";
+import useFromJS from "../../hooks/useFromJS";
 const mapDispatchToProp = (dispatch) => ({
   setShowLanguageLocation: (value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }),
 });
@@ -39,7 +40,7 @@ const Menu = ({ show, listMenu, setShowMenu, buttonRight, buttonLeft }) => {
   const provinceSelected = useSelector((state) => state.get("provinceSelected"))?.toJS();
   const listProvince = useSelector((state) => state.get("listProvince")) ?? [];
   const provinceFilter = filterProvinceById(listProvince, provinceSelected.id);
-  const menu = useGraphql("menu");
+  const menu = useFromJS(["apiStatus", "menu"]);
   const menus = useMemo(() => listMenu?.map((m) => (m.apiKey === "menu" ? { ...m, children: menu } : m)), [
     listMenu,
     menu,

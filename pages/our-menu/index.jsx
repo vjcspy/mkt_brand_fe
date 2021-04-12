@@ -61,6 +61,7 @@ export async function getServerSideProps(ctx) {
     getSiteServer(siteCode),
     fetchMenuCategories({ urlKey: siteCode, storeCode: storeCode, rootCategory: root_category_id }),
   ]);
+
   return {
     props: {
       site_code: site?.site_code ?? null,
