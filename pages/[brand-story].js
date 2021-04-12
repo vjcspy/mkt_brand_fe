@@ -1,5 +1,5 @@
 import React from "react";
-import { getBrandStoryBySlug, getInitialData } from "../../src/services/backend";
+import { getBrandStoryBySlug, getInitialData } from "../src/services/backend";
 
 export async function getServerSideProps(ctx) {
   try {
