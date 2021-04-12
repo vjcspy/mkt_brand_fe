@@ -145,16 +145,6 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
       if (index > -1) {
         setTranslateX(-index);
       }
-    } else {
-      let active = config.components.tabBanner.value[0];
-      router.pushQuery(
-        stringifyUrl({
-          url: router.pathname,
-          query: { tabBanner: active?.tabCode.value },
-        }),
-        undefined,
-        { shallow: true }
-      );
     }
   }, [config, tabBanner]);
 
@@ -174,7 +164,7 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
       );
     } else {
       let active = config.components.tabBanner.value.find((t) => t.firstLoad?.value.active === "Yes");
-      if (sessionStorage.getItem("redirect") != "true" && window.innerWidth <= 768 && active) {
+      if (sessionStorage.getItem("redirect") != "true" <= 768 && active) {
         router.pushQuery(
           stringifyUrl({
             url: router.pathname,
