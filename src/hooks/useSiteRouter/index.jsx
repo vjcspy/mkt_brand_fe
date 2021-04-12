@@ -14,7 +14,6 @@ const useSiteRouter = () => {
       push: (url, as, option) => {
         let edit = mode == DEVELOPMENT_MODE ? "edit" : null;
         var a = getBrowserLink(edit, url);
-        console.log(a);
         return router.push(a, as, option);
       },
       pushQuery: (url, as, option) => {

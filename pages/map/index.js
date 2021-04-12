@@ -10,7 +10,7 @@ import PageContainer from "../../src/containers/pageContainer";
 export async function getServerSideProps(ctx) {
   try {
     const { siteCode, brand_id } = await getInitialData(ctx);
-
+    const { idRestaurant } = ctx.query;
     const [googleMapApi, { data: site }, { data: dataForMap }] = await Promise.all([
       getApiKeyGoogleMap(),
       getSiteServer(siteCode),
@@ -22,7 +22,7 @@ export async function getServerSideProps(ctx) {
         brandId: brand_id ?? null,
         config: site?.config ?? null,
         site_code: site?.site_code ?? null,
-        googleMapApi: googleMapApi[0],
+        googleMapApi: googleMapApi[0] ?? null,
         restaurantViewMap,
         listRestaurant: dataForMap.result,
       },

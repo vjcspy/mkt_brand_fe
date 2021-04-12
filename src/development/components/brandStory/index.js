@@ -52,7 +52,6 @@ const BrandStory = ({ path, popStage, putStage }) => {
       story.brandId = siteCode;
       const { data } = await createOrUpdateBrandStory(story, token);
       const index = findIndexItem(listStory, data);
-      console.log(index);
       if (index >= 0) {
         listStory[index] = data;
       } else {
@@ -68,7 +67,6 @@ const BrandStory = ({ path, popStage, putStage }) => {
   };
 
   const onChangTextField = (value, name) => {
-    console.log(value, name);
     setStorySelected((pre) => ({
       ...pre,
       [name]: value,

@@ -102,7 +102,7 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
               <PromoInfo
                 promo={promoListApi[currentPage]}
                 hadGetCode={
-                  promoUser ? promoUser.find((item) => item?.promotionId === promoListApi[currentPage].id) : false
+                  promoUser ? promoUser.find((item) => item?.promotionId === promoListApi[currentPage]?.id) : false
                 }
                 onGetCode={() => onGetCode(promoListApi[currentPage]?.id)}
                 getRestaurant={() => setViewRestaurant(promoListApi[currentPage]?.restaurants)}
