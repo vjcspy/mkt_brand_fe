@@ -403,9 +403,13 @@ export const createOrUpdateBrandStory = async (brandStory, token) => {
   }
 };
 
-export const deleteStory = (id) => {
+export const deleteStory = (id, token) => {
   const host = process.env.NEXT_PUBLIC_API_HOST;
-  return Axios.delete(`${host}/brand-stories/${id}`);
+  return Axios.delete(`${host}/brand-stories/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const getListBrandStory = () => {
