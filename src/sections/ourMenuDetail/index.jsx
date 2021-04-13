@@ -7,6 +7,8 @@ import MenuMobile from "./menu-mobile";
 import MenuMain from "./menu-main";
 import MenuTree from "./menu-tree";
 import { MenusLeftContent, MenusRightContent, OurMenusContent, OurMenusWrapper } from "./styled";
+import useAppHeight from "../../hooks/useAppHeight";
+import { useSelector } from "react-redux";
 
 const defaultConfig = {
   id: "our-menu-detail",
@@ -23,6 +25,7 @@ const OurMenus = ({ menus, footer }) => {
   const [indexParent, setIndexParent] = useState();
   const [indexChild, setIndexChild] = useState();
   const [indexGrandChild, setIndexGrandChild] = useState();
+
   const props = {
     indexParent,
     indexChild,

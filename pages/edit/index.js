@@ -13,6 +13,7 @@ import {
   SET_OUR_MENUS,
   SET_SITE_CODE,
 } from "../../src/constants";
+import HomePageContainer from "../../src/containers/homePageContainer";
 import PageContainer from "../../src/containers/pageContainer";
 import DevelopmentLayout from "../../src/development/containers/developmentLayout";
 import useFromJS from "../../src/hooks/useFromJS";
@@ -52,6 +53,7 @@ const Home = ({ site_code, menus }) => {
 
   useEffect(() => {
     dispatch({ type: SET_MODE, value: DEVELOPMENT_MODE });
+    dispatch({ type: SET_SITE_CODE, value: site_code });
   }, []);
   useEffect(() => {
     if (!token) {
@@ -88,7 +90,6 @@ const Home = ({ site_code, menus }) => {
   }, [router.query.page]);
 
   const Page = useMemo(() => Pages[router.query.page ?? "home"], [router.query.page]);
-
   return (
     <DevelopmentLayout>
       <Head>
@@ -97,11 +98,15 @@ const Home = ({ site_code, menus }) => {
           referrerpolicy="origin"
         ></script>
       </Head>
-      <PageContainer
-        modifiedConfig={modifiedConfig}
-        pageNameQueryRouter={Page.name}
-        shouldHideFooter={Page.shouldHideFooter}
-      />
+      {Page.name === "home" ? (
+        <HomePageContainer modifiedConfig={modifiedConfig} pageName={Page.name} pageNameQueryRouter={Page.name} />
+      ) : (
+        <PageContainer
+          modifiedConfig={modifiedConfig}
+          pageNameQueryRouter={Page.name}
+          shouldHideFooter={Page.shouldHideFooter}
+        />
+      )}
     </DevelopmentLayout>
   );
 };

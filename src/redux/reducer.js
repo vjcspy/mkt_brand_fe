@@ -55,6 +55,7 @@ import {
   SET_NUM_PROMO,
   SET_LIST_PROMO_EDIT_PAGE,
   SET_LAT_LNG,
+  SET_DISABLE_SCROLL_TAB_BANNER,
   SET_SITE_CODE,
   SET_DATA_INITIAL,
 } from "../constants";
@@ -100,6 +101,8 @@ export default function rootReducer(state = initialState, action) {
     case SET_TOKEN:
       setStorage(action.value, JWT_TOKEN, action.remember);
       return state.set("token", action.value);
+    case SET_SITE_CODE:
+      return state.set("siteCode", action.value);
     case SET_SITE:
       return state.set("site", fromJS(action.value));
     case SET_INITIAL_SITE:
@@ -113,6 +116,7 @@ export default function rootReducer(state = initialState, action) {
         .set("pageName", action.pageName ?? Pages.home.name)
         .set("site_code", site?.site_code);
     case ADD_SECTION:
+      console.log(state.get("pageName"));
       return state.updateIn(["modifiedConfig", "pages", state.get("pageName"), "sections"], (sections) => {
         return sections.concat?.([fromJS(action.value)]);
       });
@@ -212,6 +216,8 @@ export default function rootReducer(state = initialState, action) {
       return state.set("listPromoEditPage", action.value);
     case SET_LAT_LNG:
       return state.set("latLng", action.value);
+    case SET_DISABLE_SCROLL_TAB_BANNER:
+      return state.set("disableTabBanner", action.value);
     case SET_SITE_CODE:
       return state.set("siteCode", action.value);
     case SET_DATA_INITIAL:

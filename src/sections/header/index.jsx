@@ -306,7 +306,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
         ]);
 
         const provinces = listProvince ?? [{ id: 5, name: "Hà Nội" }];
-
+        console.log(provinces)
         let numPromo = filterListPromoApi(listPromo.result.content).length;
         dispatch({ type: SET_NUM_PROMO, value: numPromo });
         dispatch({ type: SET_LIST_PROVINCE, value: provinces });

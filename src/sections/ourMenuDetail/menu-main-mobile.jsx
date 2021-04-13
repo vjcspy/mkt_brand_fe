@@ -16,7 +16,6 @@ const Product = ({ config, footer, onBack, setMenuDetail }) => {
 
 const MenuMainMobile = ({ menus, pageOnChange, onBack, pageIndex, footer, setMenuDetail }) => {
   const headerHeight = useSelector((s) => s.get("headerHeight"));
-
   return (
     <MenuMainMobileWrapper >
       <OnePageScrollHorizontal
@@ -25,7 +24,7 @@ const MenuMainMobile = ({ menus, pageOnChange, onBack, pageIndex, footer, setMen
         pageOnChange={pageOnChange}
       >
         {menus?.map((config, i) => {
-          return <Product key={i} config={config} footer={footer} onBack={onBack} setMenuDetail={setMenuDetail} />;
+          return <Product key={i + "100vh"} config={config} footer={footer} onBack={onBack} setMenuDetail={setMenuDetail} />;
         })}
       </OnePageScrollHorizontal>
     </MenuMainMobileWrapper>

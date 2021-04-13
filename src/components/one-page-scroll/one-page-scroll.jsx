@@ -14,11 +14,12 @@ const OnePageScroll = ({
   minDeltaWheel = 5,
   minDeltaTouch = 50,
   customPageNumber,
+  isDisableTop,
+  from
 }) => {
   const scrollRef = useRef();
   const containerRef = useRef();
   const length = children?.length ?? 0;
-
   const [transition, setTransition] = useState(true);
   const [translateY, setTranslateY] = useState(customPageNumber ? -customPageNumber : 0);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
@@ -92,10 +93,12 @@ const OnePageScroll = ({
     (e) => {
       if (Math.abs(e.deltaY) > minDeltaWheel && !isScrolling) {
         if (e.deltaY > 0) {
-          setIsScrolling(true);
-          setTranslateY((pre) => {
-            return Math.max(pre - 1, -(length - 1));
-          });
+          if (!isDisableTop) {
+            setIsScrolling(true);
+            setTranslateY((pre) => {
+              return Math.max(pre - 1, -(length - 1));
+            });
+          }
         } else {
           setIsScrolling(true);
           setTranslateY((pre) => {
@@ -104,7 +107,7 @@ const OnePageScroll = ({
         }
       }
     },
-    [length, isScrolling]
+    [length, isScrolling, isDisableTop]
   );
 
   const keyPress = useCallback(

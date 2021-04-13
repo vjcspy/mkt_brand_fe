@@ -16,6 +16,9 @@ export const OurMenusContent = styled.div`
 
 export const MenusLeftContent = styled.div`
   min-width: 200px;
+  max-height: 752px;
+  overflow: hidden;
+
   @media (max-width: 768px) {
     position: fixed;
     bottom: 0px;
@@ -29,18 +32,19 @@ export const MenusLeftContent = styled.div`
 
 export const MenusRightContent = styled.div`
   flex: 1 0 0;
+  overflow: auto;
   padding-left: 100px;
-
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
   @media (max-width: 768px) {
     padding: 0px;
   }
 `;
 
 export const MenusComponentWrapper = styled.div`
-  position: sticky;
   left: 0;
   overflow: auto;
-  top: 130px;
   ::-webkit-scrollbar {
     width: 0px;
   }

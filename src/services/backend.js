@@ -367,7 +367,40 @@ export const getPromotionByBrandProvince = ({ brandId = 7, provinceId = 5 }) => 
     },
   });
 };
+export const getListDynamicBlock = async () => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+  return Axios.get(`${host}/dynamic-blocks`);
+};
 
+export const getSites = async () => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+
+  return Axios.post(`${host}/graphql`, {
+    query: `query {
+      sites{
+      id
+      site_code
+    }
+  }`,
+  });
+};
+
+export const pushDynamicBlock = async (data) => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+  if (data.id) {
+    return Axios.put(`${host}/dynamic-blocks/${data.id}`, {
+      title: data.title,
+      contentVN: data.contentVN,
+      contentEN: data.contentEN,
+    });
+  } else {
+    return Axios.post(`${host}/dynamic-blocks`, {
+      title: data.title,
+      contentVN: data.contentVN,
+      contentEN: data.contentEN,
+    });
+  }
+};
 // read file cache
 export const getData = () => {
   let data = {};
@@ -401,6 +434,11 @@ export const createOrUpdateBrandStory = async (brandStory, token) => {
       },
     });
   }
+};
+
+export const deleteBlock = async (idBock) => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+  return Axios.delete(`${host}/dynamic-blocks/${idBock}`);
 };
 
 export const deleteStory = (id, token) => {

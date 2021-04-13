@@ -15,7 +15,7 @@ const SingleProducts = ({ config, isMobile, footer, onBack, setMenuDetail }) => 
   let products = config.products ?? config.options?.map((p) => p.product);
   const isSimple = config.products?.length != undefined;
   return (
-    <ProductSingleWraper className="wadawd">
+    <ProductSingleWraper className="wadawd sigunflf">
       {isMobile && (
         <ProductSingleMobileInfoWrapper>
           <Button

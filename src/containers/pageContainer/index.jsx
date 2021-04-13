@@ -18,13 +18,14 @@ const PageContainer = ({ modifiedConfig, pageName, shouldHideFooter, pageNameQue
       setShow(false)
     }
   }, [acceptCookie])
+  console.log()
   return (
     <MainContainer>
       <RenderHeader pageName={pageName} config={header} menus={modifiedConfig?.menus} />
       <MainWrapper className="main-content">
-        <RenderSections {...rest} sections={sections} footer={footer} />
+        <RenderSections {...rest} sections={sections} />
       </MainWrapper>
-      {!shouldHideFooter && <DynamicFooter config={footer} />}
+      {pageName !== "login" && (<DynamicFooter config={footer} />)}
       {show && <AcceptCookie />}
       <NotificationProvider />
     </MainContainer>

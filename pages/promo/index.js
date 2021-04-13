@@ -1,4 +1,3 @@
-import { List } from "immutable";
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { GET_PROMO_OF_USER, SET_GOOGLE_MAP_API, SET_ICON_VIEW_MAP } from "../../src/constants";
@@ -25,7 +24,7 @@ export async function getServerSideProps(ctx) {
     ]);
 
     let promoListResult = filterListPromoApi(promoListApi.result.content);
-
+    console.log("googleMapApi:", googleMapApi);
     return {
       props: {
         config: site?.config ?? null,
@@ -36,7 +35,6 @@ export async function getServerSideProps(ctx) {
       },
     };
   } catch (e) {
-    console.log(e);
     return {
       props: {
         config: null,

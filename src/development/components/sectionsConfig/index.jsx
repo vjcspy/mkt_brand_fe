@@ -1,8 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ADD_DYNAMIC_BLOCK, ADD_SECTION, REMOVE_DYNAMIC_BLOCK, UPDATE_CONFIG } from "../../../constants";
-import AddSectionDialog from "../../containers/developmentDialog/addSectionDialog";
+import { useDispatch, } from "react-redux";
+import { ADD_SECTION, REMOVE_DYNAMIC_BLOCK, UPDATE_CONFIG } from "../../../constants";
 import SectionThumbnail from "./sectionThumbnail";
 import { SectionItem, SectionsBlock, SectionsWrapper, SectionThumbnailWrapper, SectionTitleWrapper } from "./styled";
 import { generate } from "shortid-36";
@@ -14,30 +13,40 @@ import MenusConfig from "../menusConfig";
 import useFromJS from "../../../hooks/useFromJS";
 import LanguageConfig from "../languageConfig";
 import useSiteRouter from "../../../hooks/useSiteRouter";
-import useApi from "../../../hooks/useApi";
-import DynamicBlock from "../developmentComponentType/dynamicBlock";
 import { Sections } from "../../../sections";
+import { getListDynamicBlock } from "../../../services/backend";
+import DynamicContentLayer from "../dynamicContentLayer";
+
+let indexSelect;
 import { List, fromJS } from "immutable";
 import BrandStory from "../brandStory";
 const defaultBlock = {
   title: "Dynamic Block",
-  id: "",
-  name: "dynamicBlock",
+  contentEN: "",
+  contentVN: "",
+  siteCode: []
 };
-let indexSelect;
 const SectionsConfig = ({ putStage }) => {
-  const defaultDynamicHTML = Sections.dynamicContentHTML.defaultConfig;
+  /// dispatch
+  const dispatch = useDispatch();
+  const dynamicContentHTML = Sections.dynamicContentHTML.defaultConfig;
+  // console.log(dynamicContentHTML)
   const router = useSiteRouter();
   const pageQueryRouter = router.query.page ?? "home";
   const header = useFromJS(["modifiedConfig", "header"]);
   const footer = useFromJS(["modifiedConfig", "footer"]);
   const sections = useFromJS(["modifiedConfig", "pages", pageQueryRouter, "sections"]);
-  const listDynamicBlock = useFromJS(["modifiedConfig", "dynamicBlocks"]);
-  /// dispatch
-  const dispatch = useDispatch();
   const addSection = (value) => dispatch({ type: ADD_SECTION, value });
-  /// State
-  const [addSectionDialog, setAddSection] = useState({});
+  const [dynamicBlocks, setDynamicBlocks] = useState([])
+  const [dynamicBlockSelected, setDynamicBlockSelected] = useState()
+  const [showPopupDynamicBlock, setShowPopupDynamicBlock] = useState(false);
+  useEffect(async () => {
+    try {
+      const { data } = await getListDynamicBlock()
+      setDynamicBlocks(data)
+    } catch (e) {
+    }
+  }, [])
 
   useEffect(() => {
     switch (pageQueryRouter) {
@@ -46,6 +55,24 @@ const SectionsConfig = ({ putStage }) => {
       }
     }
   }, [pageQueryRouter]);
+
+  const onUpdateDynamicBlock = (value, isDelete = false) => {
+    if (value.id) {
+      const index = dynamicBlocks.findIndex(item => item.id === value.id)
+      if (index >= 0) {
+        if (isDelete) {
+          dynamicBlocks.splice(index, 1)
+        } else {
+          dynamicBlocks[index] = value
+        }
+      } else {
+        dynamicBlocks.push(value)
+      }
+      setDynamicBlocks([...dynamicBlocks])
+    }
+    setShowPopupDynamicBlock(false)
+  }
+
   const onDragStart = (e, index) => {
     indexSelect = index;
   };
@@ -53,7 +80,7 @@ const SectionsConfig = ({ putStage }) => {
     let tamp = sections[indexChange];
     sections[indexChange] = sections[indexByChange];
     sections[indexByChange] = tamp;
-    return List(sections.map((item) => fromJS(item)));
+    return [...sections];
   };
 
   const handleDrop = (e) => {
@@ -66,7 +93,6 @@ const SectionsConfig = ({ putStage }) => {
       });
     }
   };
-
   return (
     <SectionsWrapper>
       {/* Header Config*/}
@@ -93,26 +119,29 @@ const SectionsConfig = ({ putStage }) => {
         onDrop={(e) => handleDrop(e)}
       >
         {map(sections, (section, index) => (
-          <SectionItem
-            draggable="true"
-            onDragStart={(e) => onDragStart(e, index)}
-            key={section.code}
-            onClick={(e) => {
-              e.stopPropagation();
-              putStage({
-                props: { path: ["modifiedConfig", "pages", pageQueryRouter, "sections", index] },
-                Component: SectionConfig,
-              });
-            }}
-          >
-            <SectionThumbnail components={section.components} />
-            <SectionTitleWrapper data-index={index}>
-              {section.name === "dynamicContentHTML" ? section.components.title.value["vi"] : section.title}
-            </SectionTitleWrapper>
-          </SectionItem>
-        ))}
+          section.name === "dynamicBlock" ? (
+            null
+          ) : (
+            <SectionItem
+              draggable="true"
+              onDragStart={(e) => onDragStart(e, index)}
+              key={section.code}
+              onClick={(e) => {
+                e.stopPropagation();
+                putStage({
+                  props: { path: ["modifiedConfig", "pages", pageQueryRouter, "sections", index] },
+                  Component: SectionConfig,
+                });
+              }}
+            >
+              <SectionThumbnail components={section.components} />
+              <SectionTitleWrapper data-index={index}>
+                {section.name === "dynamicContentHTML" ? section.components.title.value : section.title}
+              </SectionTitleWrapper>
+            </SectionItem>
+          )))}
 
-        <SectionItem add onClick={() => addSection({ ...defaultDynamicHTML, code: generate() })}>
+        <SectionItem add onClick={() => addSection({ ...dynamicContentHTML, code: generate() })}>
           <SectionThumbnailWrapper>
             <FontAwesomeIcon icon={["far", "plus-square"]} />
           </SectionThumbnailWrapper>
@@ -183,6 +212,7 @@ const SectionsConfig = ({ putStage }) => {
         </SettingItem>
       </SettingItemWrapper>
 
+      {/* Dynamic Block */}
       <>
         {/* Cookie Config*/}
         {/* <SettingItemWrapper>
@@ -228,38 +258,17 @@ const SectionsConfig = ({ putStage }) => {
 
       {/* Add dynamicBlock */}
       <SectionsBlock>
-        {listDynamicBlock?.map((item, key) => (
-          <SectionsBlock key={key}>
-            <SectionItem
-              onClick={() =>
-                putStage({
-                  props: { path: ["modifiedConfig", "dynamicBlocks", key], block: item },
-                  Component: DynamicBlock,
-                })
-              }
-            >
-              <SectionThumbnail components={footer?.components} />
-              {item.title}
-              <FontAwesomeIcon
-                onClick={(e) => {
-                  e.stopPropagation();
-                  dispatch({ type: REMOVE_DYNAMIC_BLOCK, path: ["modifiedConfig", "dynamicBlocks", key] });
-                }}
-                className="icon-delete"
-                icon="trash-alt"
-              />
-            </SectionItem>
-          </SectionsBlock>
+        {dynamicBlocks?.map((item, key) => (
+          <SectionItem
+            key={key}
+            onClick={() => { setDynamicBlockSelected(item); setShowPopupDynamicBlock(true) }}
+          >
+            <SectionThumbnail components={footer?.components} />
+            {item.title}
+          </SectionItem>
         ))}
         <SectionItem
-          add
-          onClick={() =>
-            dispatch({
-              type: ADD_DYNAMIC_BLOCK,
-              path: ["modifiedConfig", "dynamicBlocks"],
-              value: { ...defaultBlock, id: generate() },
-            })
-          }
+          onClick={() => { setShowPopupDynamicBlock(true); setDynamicBlockSelected(defaultBlock) }}
         >
           <SectionThumbnailWrapper>
             <FontAwesomeIcon icon={["far", "plus-square"]} />
@@ -267,7 +276,10 @@ const SectionsConfig = ({ putStage }) => {
           Add Dynamic Block
         </SectionItem>
       </SectionsBlock>
-    </SectionsWrapper>
+      {showPopupDynamicBlock && <DynamicContentLayer dynamicBlockSelected={dynamicBlockSelected} onUpdateDynamicBlock={onUpdateDynamicBlock} />}
+
+
+    </SectionsWrapper >
   );
 };
 
