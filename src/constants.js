@@ -103,3 +103,5 @@ export const PROMO_FLASH_SALE = "limited-gift-promotion";
 export const PROMO_NORMAL = "gift-promotion";
 
 export const SET_SITE_CODE = "SET_SITE_CODE";
+
+export const SET_DATA_INITIAL = "SET_DATA_INITIAL";

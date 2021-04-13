@@ -56,6 +56,7 @@ import {
   SET_LIST_PROMO_EDIT_PAGE,
   SET_LAT_LNG,
   SET_SITE_CODE,
+  SET_DATA_INITIAL,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -213,6 +214,8 @@ export default function rootReducer(state = initialState, action) {
       return state.set("latLng", action.value);
     case SET_SITE_CODE:
       return state.set("siteCode", action.value);
+    case SET_DATA_INITIAL:
+      return state.set("dataInitial", action.value);
     default:
       return state;
   }
