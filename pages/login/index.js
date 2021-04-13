@@ -9,8 +9,8 @@ import PageContainer from "../../src/containers/pageContainer";
 
 export async function getServerSideProps(ctx) {
   const { siteCode } = await getInitialData(ctx);
-
   const { data: site } = await getSiteServer(siteCode);
+
   return {
     props: {
       config: site?.config ?? null,

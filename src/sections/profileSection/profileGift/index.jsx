@@ -34,14 +34,6 @@ const ProfileGift = ({ imageRegister }) => {
             </h6>
           </li>
         </ul>
-        <StoresWrapper>
-          <a>
-            <img width="190" height="60" src="/images/appstore.jpg" />
-          </a>
-          <a>
-            <img width="190" height="60" src="/images/googleplay.jpg" />
-          </a>
-        </StoresWrapper>
       </RightWrapper>
     </ProfileGiftWrapper>
   );
