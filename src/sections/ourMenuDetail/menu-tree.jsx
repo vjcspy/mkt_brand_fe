@@ -55,7 +55,7 @@ const MenuTree = ({
   }
 
   return (
-    <MenusComponentWrapper style={{ height: `${appHeight - headerHeight - 40}px` }} className="sticky">
+    <MenusComponentWrapper style={{ height: `${appHeight - headerHeight - 40}px`, top: headerHeight }} className="sticky">
       <div style={{ height: "fit-content" }}>
         {map(menus, (item, index) => (
           <MenuItemWrapper key={index}>
@@ -137,6 +137,7 @@ const MenuTree = ({
                               key={optionIndex}
                               isOpen={indexGrandChild === optionIndex}
                               onClick={() => {
+                                scrollTop()
                                 setIndexGrandChild(optionIndex);
                                 setPath([index, "products", subIndex, "items", optionIndex]);
                               }}
@@ -161,6 +162,7 @@ const MenuTree = ({
                     <MenuSubItemButton
                       isOpen={indexChild === subIndex}
                       onClick={() => {
+                        scrollTop()
                         if (subIndex == indexChild) {
                           setIndexGrandChild(undefined);
                           setIndexChild(undefined);
@@ -193,6 +195,7 @@ const MenuTree = ({
                             key={sub2Index}
                             isOpen={indexGrandChild === sub2Index}
                             onClick={() => {
+                              scrollTop()
                               setIndexGrandChild(sub2Index);
                               setPath([index, "children", subIndex, "children", sub2Index]);
                             }}

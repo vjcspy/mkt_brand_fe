@@ -16,8 +16,6 @@ export const OurMenusContent = styled.div`
 
 export const MenusLeftContent = styled.div`
   min-width: 200px;
-  max-height: 752px;
-  overflow: hidden;
 
   @media (max-width: 768px) {
     position: fixed;
@@ -44,6 +42,8 @@ export const MenusRightContent = styled.div`
 
 export const MenusComponentWrapper = styled.div`
   left: 0;
+  position: sticky;
+  top: 0;
   overflow: auto;
   ::-webkit-scrollbar {
     width: 0px;

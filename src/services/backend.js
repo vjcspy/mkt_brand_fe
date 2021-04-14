@@ -10,13 +10,13 @@ export const getInitialData = async (ctx) => {
 
   const webData = chain(webSites)
     .get(["data", "rows"])
-    .find((e) => e.code === webSiteConfig.website_code)
+    .find((e) => e.code === webSiteConfig?.website_code)
     .value();
-  const { brand_id } = webData;
+  const { brand_id } = webData ?? {};
   const group = webData?.groups?.find((g, index) =>
     webData?.default_group_id ? g.id === webData?.default_group_id : index == 0
   );
-  const { root_category_id } = group;
+  const { root_category_id } = group ?? {};
 
   const store = group?.stores?.find((s, index) =>
     group?.default_store_id ? s.id === group.default_store_id : index === 0
@@ -385,20 +385,36 @@ export const getSites = async () => {
   });
 };
 
-export const pushDynamicBlock = async (data) => {
+export const pushDynamicBlock = async (data, token) => {
   const host = process.env.NEXT_PUBLIC_API_HOST;
   if (data.id) {
-    return Axios.put(`${host}/dynamic-blocks/${data.id}`, {
-      title: data.title,
-      contentVN: data.contentVN,
-      contentEN: data.contentEN,
-    });
+    return Axios.put(
+      `${host}/dynamic-blocks/${data.id}`,
+      {
+        title: data.title,
+        contentVN: data.contentVN,
+        contentEN: data.contentEN,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   } else {
-    return Axios.post(`${host}/dynamic-blocks`, {
-      title: data.title,
-      contentVN: data.contentVN,
-      contentEN: data.contentEN,
-    });
+    return Axios.post(
+      `${host}/dynamic-blocks`,
+      {
+        title: data.title,
+        contentVN: data.contentVN,
+        contentEN: data.contentEN,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 };
 // read file cache
@@ -436,9 +452,13 @@ export const createOrUpdateBrandStory = async (brandStory, token) => {
   }
 };
 
-export const deleteBlock = async (idBock) => {
+export const deleteBlock = async (idBock, token) => {
   const host = process.env.NEXT_PUBLIC_API_HOST;
-  return Axios.delete(`${host}/dynamic-blocks/${idBock}`);
+  return Axios.delete(`${host}/dynamic-blocks/${idBock}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const deleteStory = (id, token) => {

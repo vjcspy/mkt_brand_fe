@@ -9,7 +9,7 @@ import { getSites, getSiteServer, pushDynamicBlock, deleteBlock } from "../../..
 import DropDownComponent from "../developmentComponentType/drop-down-component";
 import GroupCheckBoxComponent from "../developmentComponentType/group-check-box-component";
 import TextIgnoreLocaleComponent from "../developmentComponentType/textIgnoreLocaleComponent";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   WrapperLayer,
   GroupButton,
@@ -44,6 +44,7 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
   const dispatch = useDispatch();
   const listPageDefault = useFromJS(["modifiedConfig", "pages"]);
   const siteCodeCurrent = useFromJS(["siteCode"]);
+  const token = useSelector((s) => s.get("token"));
   const listPageCustom = useMemo(() => {
     let listPageData = coverValueObjectToArray(listPageDefault);
     return formatListPage(listPageData);
@@ -53,7 +54,6 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
   const [listPage, setListPage] = useState(listPageCustom);
   const [listPosition, setListPosition] = useState(positionDefaultPage); // for drag order
   const [positionDefault, setPositionSelectedDefault] = useState({ id: 0, title: "After Header" }); // for select all page
-
   const [siteSelected, setSiteSelected] = useState({ id: 0, title: "All", checked: true });
   const [pageSelected, setPageSelected] = useState({ id: 0, title: "All", checked: true });
 
@@ -68,7 +68,7 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
       const {
         data: { data },
       } = await getSites();
-
+      console.log(data);
       data.sites.map((item) => {
         item.checked === false;
         item.title = item.site_code;
@@ -170,7 +170,7 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
   const onAddBlock = async () => {
     try {
       setLoading(loadAdd);
-      const { data } = await pushDynamicBlock(block);
+      const { data } = await pushDynamicBlock(block, token);
       const listSite = await getRawConfigOfSites();
       updatePageInRawConfigOfSite(listSite);
       setLoading(stopLoad);
@@ -247,14 +247,14 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
 
   const onCreatOrUpdateBlock = async () => {
     setLoading(loadSaveAndUpdate);
-    const { data } = await pushDynamicBlock(block);
+    const { data } = await pushDynamicBlock(block, token);
     updateStateSuccess(data);
     setLoading(stopLoad);
     return data;
   };
   const onDeleteBlock = async () => {
     setLoading(loadDelete);
-    const { data } = await deleteBlock(block.id);
+    const { data } = await deleteBlock(block.id, token);
     if (data.siteCode) {
       const listSite = await getListSiteNeedRemoveBlock(data);
       updateSectionOfPage(listSite, block.id);
@@ -305,7 +305,7 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
   return (
     <WrapperLayer>
       <ContentLayer>
-        {/* {loading && (
+        {loading === loadSite && (
           <div
             style={{
               background: "rgba(0, 0, 0, 0.6)",
@@ -319,7 +319,7 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
           >
             <PulseLoader color="#DA841E" loading fill />
           </div>
-        )} */}
+        )}
         <WrapperEditContent>
           <TextIgnoreLocaleComponent
             config={{ title: "Title", value: block?.title }}
