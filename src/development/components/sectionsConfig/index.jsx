@@ -120,7 +120,15 @@ const SectionsConfig = ({ putStage }) => {
       >
         {map(sections, (section, index) => (
           section.name === "dynamicBlock" ? (
-            null
+            <SectionItem
+              draggable="true"
+              onDragStart={(e) => onDragStart(e, index)}
+              key={section.id}>
+              <SectionThumbnail components={section.components} />
+              <SectionTitleWrapper data-index={index}>
+                {section.title}
+              </SectionTitleWrapper>
+            </SectionItem>
           ) : (
             <SectionItem
               draggable="true"

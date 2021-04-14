@@ -11,7 +11,7 @@ const defaultConfig = {
   },
 };
 
-const DynamicBlock = async ({ config = defaultConfig }) => {
+const DynamicBlock = ({ config = defaultConfig }) => {
   const locale = useSelector((s) => s.get("locale"));
 
   return <div>kokok</div>;

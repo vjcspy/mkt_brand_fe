@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import OnePageScroll from "../../components/one-page-scroll/one-page-scroll";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import useRefCallback from "../../hooks/useRefCallback";
+import NotificationProvider from "../../components/notification";
+import AcceptCookie from "../../components/accept-cookie";
 const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRouter, ...rest }) => {
   pageName = pageNameQueryRouter ?? pageName;
   const header = get(modifiedConfig, ["header"]);
@@ -77,6 +79,8 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
           {renderSection}
         </OnePageScroll>
       </MainWrapper>
+      {show && <AcceptCookie />}
+      <NotificationProvider />
     </MainContainer>
   );
 };
