@@ -169,7 +169,7 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop }) => {
       );
     }
     firstLoad = true
-  }, [config]);
+  }, []);
 
 
 
