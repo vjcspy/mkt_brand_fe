@@ -17,7 +17,7 @@ import DynamicContentHTML from "./dynamicContentHTML";
 import PolicyCookie from "./policyCookie";
 import TabBanner from "./tab-banner";
 import DynamicFooter from "./dynamic-footer";
-
+import DynamicBlock from "./dynamicBlock";
 export const RenderHeader = ({ config, menus, pageName }) => {
   const H = Headers[config?.name];
   return H ? <H config={config} menus={menus} pageName={pageName} /> : null;
@@ -182,4 +182,5 @@ export const Sections = {
   [DynamicContentHTML.defaultConfig.name]: DynamicContentHTML,
   [PolicyCookie.defaultConfig.name]: PolicyCookie,
   [TabBanner.defaultConfig.name]: TabBanner,
+  [DynamicBlock.defaultConfig.name]: DynamicBlock,
 };

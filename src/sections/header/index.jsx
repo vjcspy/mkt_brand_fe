@@ -12,7 +12,7 @@ import {
   HeaderLine,
   ContentHeaderLink,
 } from "./header.styled";
-import { DEVELOPMENT_MODE, SET_HEADER_HEIGHT, SET_LAT_LNG, SET_PROVINCE_SELECTED, SHOW_LANGUAGE_LOCATION } from "../../constants";
+import { DEVELOPMENT_MODE, SET_HEADER_HEIGHT, SET_LAT_LNG, SET_LIST_PROVINCE, SET_NUM_PROMO, SET_PROVINCE_SELECTED, SHOW_LANGUAGE_LOCATION, UPDATE_API_STATUS } from "../../constants";
 import { Container } from "../../styles";
 import IconMenu from "../../components/icons/iconMenu";
 import IconUserNoBorder from "../../components/icons/iconUserNoBorder";
@@ -20,14 +20,12 @@ import useWindowResize from "../../hooks/useWindowResize";
 import HeaderTop from "./headerTop";
 import LinkRouter from "../../components/link-router";
 import useSiteRouter from "../../hooks/useSiteRouter";
-import useMenu from "../../hooks/useMenu";
 import { Marker } from "./profileDropdown/styled";
 import ProfileDropdown from "./profileDropdown";
 import ImageMedia from "../../development/components/imageMedia";
 import Link from "next/link";
-import { stringifyUrl } from "query-string";
 import PopupLanguageLocation from "./popup-language-location";
-import { getProvinceIdByLocation } from "../../services/backend";
+import { fetchMenuCategories, fetchParentMenu, filterListPromoApi, getPromotionByBrandProvince, getProvinceIdByLocation, getProvinces } from "../../services/backend";
 import { showNotification } from "../../components/notification";
 
 const MenuRight = loadable(() => import("../../components/menu"));
@@ -209,6 +207,7 @@ function requestLocation() {
 
 const Header = ({ config = defaultConfig, menus, pageName }) => {
   const showMenuHeader = useSelector((state) => state.getIn(["showMenuHeader"]));
+  const { siteCode, storeCode, root_category_id, brand_id } = useSelector((state) => state.get("dataInitial")) ?? {};
   const mode = useSelector((state) => state.get("mode"));
   const router = useSiteRouter();
   const dispatch = useDispatch();
@@ -266,6 +265,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
     );
   }, [])
 
+
   const isHomePage = useMemo(() => {
     if (mode === DEVELOPMENT_MODE) {
       let pageNameQuery = router.query.page ?? "home";
@@ -281,8 +281,8 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   useEffect(() => {
     const listener = (e) => {
       if (linkRef.current) {
-        let width = linkRef.current.children[e.index].offsetWidth;
-        let left = linkRef.current.children[e.index].offsetLeft;
+        let width = linkRef.current?.children?.[e.index]?.offsetWidth;
+        let left = linkRef.current?.children[e.index]?.offsetLeft;
         let w = width + 60; // px
         let p = e.percentage / 100; // %
         let p2 = linkRef.current.offsetWidth / 100; // %
@@ -296,6 +296,25 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
     window.addEventListener("tabbanner", listener);
     return () => window.removeEventListener("tabbanner", listener);
   }, []);
+
+  // get list provinces & number promo in hamburger menu
+  useEffect(async () => {
+    try {
+      if (siteCode, storeCode, root_category_id, brand_id) {
+        const [listProvince, { data: listPromo }] = await Promise.all([
+          getProvinces(),
+          getPromotionByBrandProvince({ brand_id }),
+        ]);
+        const provinces = listProvince ?? [{ id: 5, name: "Hà Nội" }];
+        let numPromo = filterListPromoApi(listPromo.result.content).length;
+        dispatch({ type: SET_NUM_PROMO, value: numPromo });
+        dispatch({ type: SET_LIST_PROVINCE, value: provinces });
+      }
+    } catch (e) {
+      console.log(e)
+    }
+
+  }, [siteCode, storeCode, root_category_id, brand_id])
 
   return (
     <>

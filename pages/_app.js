@@ -8,17 +8,8 @@ import { Provider, useDispatch } from "react-redux";
 import useFromJS from "../src/hooks/useFromJS";
 import defaultTranslation from "../src/translations";
 import { useEffect } from "react";
-import { SET_HOST, SET_LIST_PROVINCE, SET_NUM_PROMO, UPDATE_API_STATUS } from "../src/constants";
-import {
-  filterListPromoApi,
-  getWebsitesConfig,
-  getProvinces,
-  getSiteCode,
-  getPromotionByBrandProvince,
-  getWebsitesData,
-  fetchMenuCategories,
-} from "../src/services/backend";
-import { chain } from "lodash";
+import { SET_DATA_INITIAL, SET_HOST, UPDATE_API_STATUS } from "../src/constants";
+import { fetchMenuCategories, fetchParentMenu, getInitialData } from "../src/services/backend";
 
 const ThemeWrapper = ({ children }) => {
   const theme = useFromJS(["modifiedConfig", "theme"]);
@@ -29,22 +20,21 @@ const LanguageWrapper = ({ children }) => {
   return <LanguageProvider messages={translation ?? defaultTranslation}>{children}</LanguageProvider>;
 };
 
-const HostWrapper = ({ children, host, graphqlHost, provinces, numPromo, menuApi }) => {
+const HostWrapper = ({ children, host, graphqlHost, dataInitial, menuApi }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch({ type: SET_HOST, host, graphqlHost });
-    dispatch({ type: SET_LIST_PROVINCE, value: provinces });
-    dispatch({ type: SET_NUM_PROMO, value: numPromo });
+    dispatch({ type: SET_DATA_INITIAL, value: dataInitial });
     dispatch({ type: UPDATE_API_STATUS, path: ["menu"], value: menuApi });
   }, [host, graphqlHost]);
   return children;
 };
 
-function App({ Component, pageProps, host, graphqlHost, provinces, numPromo, menuApi }) {
+function App({ Component, pageProps, host, graphqlHost, dataInitial, menuApi }) {
   return (
     <Provider store={store}>
-      <HostWrapper menuApi={menuApi} numPromo={numPromo} provinces={provinces} host={host} graphqlHost={graphqlHost}>
+      <HostWrapper menuApi={menuApi} dataInitial={dataInitial} host={host} graphqlHost={graphqlHost}>
         <LanguageWrapper>
           <ThemeWrapper>
             <GlobalStyle />
@@ -60,43 +50,17 @@ App.getInitialProps = async ({ Component, ctx }) => {
   // const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
   // console.log("getInitialProps App");
   try {
-    const pathname = ctx.req.headers.host;
-    const webSiteConfig = await getWebsitesConfig(pathname);
-    const webSites = await getWebsitesData();
-    const webData = chain(webSites)
-      .get(["data", "rows"])
-      .find((e) => e.code === webSiteConfig.website_code)
-      .value();
-    const group = webData?.groups?.find((g, index) =>
-      webData?.default_group_id ? g.id === webData?.default_group_id : index == 0
-    );
-    const { root_category_id } = group;
-    const { brand_id } = webData;
-    const store = group?.stores?.find((s, index) =>
-      group?.default_store_id ? s.id === group.default_store_id : index === 0
-    );
-    const siteCode = webData?.code ?? process.env.SITE_CODE;
-    const storeCode = store?.code ?? process.env.STORE_CODE;
-
-    const [listProvince, { data: listPromo }, menus] = await Promise.all([
-      getProvinces(),
-      getPromotionByBrandProvince({ brand_id }),
-      fetchMenuCategories({ urlKey: siteCode, storeCode: storeCode, rootCategory: root_category_id }),
-    ]);
-
-    const menuApi = menus.map((item) => ({
+    const dataInitial = await getInitialData(ctx);
+    const { storeCode, root_category_id } = dataInitial;
+    const menu = await fetchParentMenu({ storeCode, rootCategory: root_category_id });
+    const menuApi = menu?.children.map((item) => ({
       label: item.name,
       url: item.url_key,
     }));
-
-    let provinces = listProvince ?? [{ id: 5, name: "Hà Nội" }];
-    let numPromo = filterListPromoApi(listPromo.result.content).length;
-
     return {
       host: process.env.API_HOST,
       graphqlHost: process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
-      provinces: provinces,
-      numPromo,
+      dataInitial,
       menuApi,
     };
   } catch (e) {
@@ -104,8 +68,7 @@ App.getInitialProps = async ({ Component, ctx }) => {
     return {
       host: process.env.API_HOST,
       graphqlHost: process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
-      provinces: null,
-      numPromo: 0,
+      dataInitial: null,
       menuApi: null,
     };
   }

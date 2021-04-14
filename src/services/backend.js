@@ -4,15 +4,45 @@ import { each, get, sortBy, chain } from "lodash";
 import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../constants";
 import fs from "fs";
 
+export const getInitialData = async (ctx) => {
+  const pathname = ctx.req.headers.host;
+  const [webSiteConfig, webSites] = await Promise.all([getWebsitesConfig(pathname), getWebsitesData()]);
+
+  const webData = chain(webSites)
+    .get(["data", "rows"])
+    .find((e) => e.code === webSiteConfig?.website_code)
+    .value();
+  const { brand_id } = webData ?? {};
+  const group = webData?.groups?.find((g, index) =>
+    webData?.default_group_id ? g.id === webData?.default_group_id : index == 0
+  );
+  const { root_category_id } = group ?? {};
+
+  const store = group?.stores?.find((s, index) =>
+    group?.default_store_id ? s.id === group.default_store_id : index === 0
+  );
+  const siteCode = webData?.code ?? process.env.SITE_CODE;
+  const storeCode = store?.code ?? process.env.STORE_CODE;
+  return {
+    siteCode,
+    storeCode,
+    root_category_id,
+    brand_id,
+  };
+};
+
 export const getWebsitesConfig = async (domain) => {
   try {
-    const { getWebsitesConfig } = getData();
-    if (getWebsitesConfig) {
-      return getWebsitesConfig;
+    let { getWebsitesConfig } = getData();
+    getWebsitesConfig = getWebsitesConfig ? getWebsitesConfig : [];
+    const checkDomain = getWebsitesConfig?.find((item) => item.domain === domain);
+    if (checkDomain) {
+      return checkDomain;
     } else {
       const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
       const fileData = getData();
-      fileData["getWebsitesConfig"] = data;
+      getWebsitesConfig.push(data);
+      fileData["getWebsitesConfig"] = getWebsitesConfig;
       saveData(fileData);
       return data;
     }
@@ -150,32 +180,17 @@ export const getListBlog = async () => {
 export const fetchMenuCategories = async ({
   pageSize = 20,
   currentPage = 1,
-  urlKey = "gogi",
   storeCode = "gogi_royal",
   rootCategory,
 } = {}) => {
-  const productFragment = `fragment product on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url}only_x_left_in_stock options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html}sku stock_status thumbnail{url}url_key}`;
-  const bundleProductFragment = `fragment bundle on BundleProduct{items{__typename position required title option_id options{product{...product}}}}`;
-  const categoryTreeChild = `fragment categoryTreeChild on CategoryTree{id level name path position url_key}`;
-  const categoryTree = `fragment categoryTree on CategoryTree{id level name path position children{...categoryTreeChild}url_key}`;
-  const categoryResult = `fragment category on CategoryResult{items{id name position description url_key children_count canonical_url level path children{...categoryTree}}}`;
-  const query = `query{categories(filters:{ids:{in:["${rootCategory}"]}}pageSize:${pageSize} currentPage:${currentPage}){...category page_info{total_pages}total_count}}`;
-
-  const { data } = await Axios.post(
-    process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
-    { query: `${categoryTreeChild} ${categoryTree} ${categoryResult} ${query}` },
-    { headers: { Store: storeCode } }
-  );
-  function sort(m) {
-    if (get(m, ["children", "length"]) > 0) {
-      m.children = sortBy(m.children, "position");
-      each(m.children, (m1) => sort(m1.children));
-    }
-    return m;
-  }
-  const menu = sort(get(data, ["data", "categories", "items", 0]));
+  const menu = await fetchParentMenu({
+    pageSize,
+    currentPage,
+    storeCode,
+    rootCategory,
+  });
   const categoriesIds = [];
-  menu.children.forEach(({ id, children }) => {
+  menu?.children.forEach(({ id, children }) => {
     categoriesIds.push(id);
     children?.forEach(({ id }) => {
       categoriesIds.push(id);
@@ -187,9 +202,9 @@ export const fetchMenuCategories = async ({
   );
   const categories = categoriesIds.map((id, i) => ({ id, products: productList[i] }));
 
-  const menus = menu.children.map((category, i) => {
-    if (category.children?.length) {
-      category.children.map((category) =>
+  const menus = menu?.children.map((category, i) => {
+    if (category?.children?.length) {
+      category?.children.map((category) =>
         Object.assign(category, { products: categories.find((c) => c.id === category.id).products })
       );
     }
@@ -208,6 +223,28 @@ export const fetchMenuCategories = async ({
   //     })
   //   )
   // );
+};
+
+export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCode = "gogi_royal", rootCategory }) => {
+  const categoryTreeChild = `fragment categoryTreeChild on CategoryTree{id level name path position url_key}`;
+  const categoryTree = `fragment categoryTree on CategoryTree{id level name path position children{...categoryTreeChild}url_key}`;
+  const categoryResult = `fragment category on CategoryResult{items{id name position description url_key children_count canonical_url level path children{...categoryTree}}}`;
+  const query = `query{categories(filters:{ids:{in:["${rootCategory}"]}}pageSize:${pageSize} currentPage:${currentPage}){...category page_info{total_pages}total_count}}`;
+
+  const { data } = await Axios.post(
+    process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
+    { query: `${categoryTreeChild} ${categoryTree} ${categoryResult} ${query}` },
+    { headers: { Store: storeCode } }
+  );
+  function sort(m) {
+    if (get(m, ["children", "length"]) > 0) {
+      m.children = sortBy(m.children, "position");
+      each(m.children, (m1) => sort(m1.children));
+    }
+    return m;
+  }
+  const menu = sort(get(data, ["data", "categories", "items", 0]));
+  return menu;
 };
 
 export const fetchMenuCategoriesListingData = async ({ categoryId, storeCode = "gogi_royal" }) => {
@@ -337,16 +374,63 @@ export const getPromotionByBrandProvince = ({ brandId = 7, provinceId = 5 }) => 
     },
   });
 };
+export const getListDynamicBlock = async () => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+  return Axios.get(`${host}/dynamic-blocks`);
+};
 
+export const getSites = async () => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+
+  return Axios.post(`${host}/graphql`, {
+    query: `query {
+      sites{
+      id
+      site_code
+    }
+  }`,
+  });
+};
+
+export const pushDynamicBlock = async (data, token) => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+  if (data.id) {
+    return Axios.put(
+      `${host}/dynamic-blocks/${data.id}`,
+      {
+        title: data.title,
+        contentVN: data.contentVN,
+        contentEN: data.contentEN,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } else {
+    return Axios.post(
+      `${host}/dynamic-blocks`,
+      {
+        title: data.title,
+        contentVN: data.contentVN,
+        contentEN: data.contentEN,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+};
 // read file cache
 export const getData = () => {
   let data = {};
   try {
     const dataFilePath = path.join(process.cwd(), "data.json");
     data = JSON.parse(fs.readFileSync(dataFilePath, "utf-8"));
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
   return data;
 };
 // write file cache
@@ -354,9 +438,7 @@ export const saveData = (data) => {
   try {
     const dataFilePath = path.join(process.cwd(), "data.json");
     fs.writeFileSync(dataFilePath, JSON.stringify(data));
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
 };
 
 export const createOrUpdateBrandStory = async (brandStory, token) => {
@@ -377,9 +459,22 @@ export const createOrUpdateBrandStory = async (brandStory, token) => {
   }
 };
 
-export const deleteStory = (id) => {
+export const deleteBlock = async (idBock, token) => {
   const host = process.env.NEXT_PUBLIC_API_HOST;
-  return Axios.delete(`${host}/brand-stories/${id}`);
+  return Axios.delete(`${host}/dynamic-blocks/${idBock}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteStory = (id, token) => {
+  const host = process.env.NEXT_PUBLIC_API_HOST;
+  return Axios.delete(`${host}/brand-stories/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const getListBrandStory = () => {

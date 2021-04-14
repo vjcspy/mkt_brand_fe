@@ -17,7 +17,6 @@ import { showNotification } from "../../../components/notification";
 import moment from "moment";
 import Portal from "../../../development/containers/developmentDialog/portal";
 const ProfileHistory = ({ setTransaction }) => {
-  console.log(setTransaction)
   const [showDetail, setShowDetail] = useState(false);
   const [size] = useIframeResize();
   const dispatch = useDispatch();

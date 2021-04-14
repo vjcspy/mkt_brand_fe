@@ -13,6 +13,7 @@ import {
   SET_OUR_MENUS,
   SET_SITE_CODE,
 } from "../../src/constants";
+import HomePageContainer from "../../src/containers/homePageContainer";
 import PageContainer from "../../src/containers/pageContainer";
 import DevelopmentLayout from "../../src/development/containers/developmentLayout";
 import useFromJS from "../../src/hooks/useFromJS";
@@ -21,21 +22,13 @@ import { Pages } from "../../src/sections";
 import {
   fetchMenuCategories,
   filterListPromoApi,
+  getInitialData,
   getListBlog,
   getListPromo,
-  getWebsitesConfig,
-  getWebsitesData,
 } from "../../src/services/backend";
 
 export async function getServerSideProps(ctx) {
-  const pathname = ctx.req.headers.host;
-  const webSiteConfig = await getWebsitesConfig(pathname);
-  const webSites = await getWebsitesData();
-  const webData = chain(webSites)
-    .get(["data", "rows"])
-    .find((e) => e.code === webSiteConfig.website_code)
-    .value();
-  const siteCode = webData?.code ?? process.env.SITE_CODE;
+  const { siteCode } = await getInitialData(ctx);
   var menus = [];
   try {
     menus = await fetchMenuCategories();
@@ -45,7 +38,7 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       site_code: siteCode ?? null,
-      menus: menus,
+      menus: menus ?? null,
     },
   };
 }
@@ -60,6 +53,7 @@ const Home = ({ site_code, menus }) => {
 
   useEffect(() => {
     dispatch({ type: SET_MODE, value: DEVELOPMENT_MODE });
+    dispatch({ type: SET_SITE_CODE, value: site_code });
   }, []);
   useEffect(() => {
     if (!token) {
@@ -96,7 +90,6 @@ const Home = ({ site_code, menus }) => {
   }, [router.query.page]);
 
   const Page = useMemo(() => Pages[router.query.page ?? "home"], [router.query.page]);
-
   return (
     <DevelopmentLayout>
       <Head>
@@ -105,11 +98,15 @@ const Home = ({ site_code, menus }) => {
           referrerpolicy="origin"
         ></script>
       </Head>
-      <PageContainer
-        modifiedConfig={modifiedConfig}
-        pageNameQueryRouter={Page.name}
-        shouldHideFooter={Page.shouldHideFooter}
-      />
+      {Page.name === "home" ? (
+        <HomePageContainer modifiedConfig={modifiedConfig} pageName={Page.name} pageNameQueryRouter={Page.name} />
+      ) : (
+        <PageContainer
+          modifiedConfig={modifiedConfig}
+          pageNameQueryRouter={Page.name}
+          shouldHideFooter={Page.shouldHideFooter}
+        />
+      )}
     </DevelopmentLayout>
   );
 };

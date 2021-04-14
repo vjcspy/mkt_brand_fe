@@ -15,7 +15,7 @@ const LinkRouter = forwardRef(({ href, children, passHref, ...props }, ref) => {
     let edit = mode == DEVELOPMENT_MODE ? "edit" : null;
     let newHref = href;
     let query = process.browser ? parse(location.search) : cloneDeep(router.query);
-    let [, page, search] = href.match(/\/([a-z_][\w-]*|)(\?.*|)/);
+    let [, page, search] = href.match(/\/([a-z_][\w\/-]*|)(\?.*|)/);
     query = Object.assign(query, parse(search));
     if (edit) {
       if (page && page != "edit") {
@@ -25,6 +25,7 @@ const LinkRouter = forwardRef(({ href, children, passHref, ...props }, ref) => {
     } else {
       newHref = stringifyUrl({ url: `/${page ?? ""}`, query: query });
     }
+
     return <NextLink {...props} passHref={passHref} children={children} href={newHref} ref={ref} />;
   }
   let child = React.Children.only(children);

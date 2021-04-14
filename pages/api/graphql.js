@@ -25,7 +25,6 @@ async function handler(req, res) {
   try {
     await runMiddleware(req, res, cors);
   } catch (e) {
-    console.log(e);
     return;
   }
   const response = await Axios.post(process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql", req.body, {

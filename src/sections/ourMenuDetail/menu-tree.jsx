@@ -55,7 +55,7 @@ const MenuTree = ({
   }
 
   return (
-    <MenusComponentWrapper style={{ height: `${appHeight - headerHeight - 40}px` }} className="sticky">
+    <MenusComponentWrapper style={{ height: `${appHeight - headerHeight - 40}px`, top: headerHeight }} className="sticky">
       <div style={{ height: "fit-content" }}>
         {map(menus, (item, index) => (
           <MenuItemWrapper key={index}>
@@ -137,6 +137,7 @@ const MenuTree = ({
                               key={optionIndex}
                               isOpen={indexGrandChild === optionIndex}
                               onClick={() => {
+                                scrollTop()
                                 setIndexGrandChild(optionIndex);
                                 setPath([index, "products", subIndex, "items", optionIndex]);
                               }}
@@ -156,11 +157,12 @@ const MenuTree = ({
 
             {indexParent == index && get(item, ["children", "length"]) > 0 && (
               <MenuSubItemWrapper isOpen={true}>
-                {map(item.children, (subItem, subIndex) => (
+                {map(item?.children, (subItem, subIndex) => (
                   <Fragment key={subIndex}>
                     <MenuSubItemButton
                       isOpen={indexChild === subIndex}
                       onClick={() => {
+                        scrollTop()
                         if (subIndex == indexChild) {
                           setIndexGrandChild(undefined);
                           setIndexChild(undefined);
@@ -188,11 +190,12 @@ const MenuTree = ({
 
                     {indexChild == subIndex && get(subItem, ["children", "length"]) > 0 && (
                       <MenuSub2ItemWrapper>
-                        {subItem.children.map((sub2Item, sub2Index) => (
+                        {subItem?.children.map((sub2Item, sub2Index) => (
                           <MenuSubItemButton
                             key={sub2Index}
                             isOpen={indexGrandChild === sub2Index}
                             onClick={() => {
+                              scrollTop()
                               setIndexGrandChild(sub2Index);
                               setPath([index, "children", subIndex, "children", sub2Index]);
                             }}

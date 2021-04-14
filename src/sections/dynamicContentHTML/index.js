@@ -7,18 +7,18 @@ const defaultConfig = {
   type: "section",
   code: "dynamicContentHTML",
   name: "dynamicContentHTML",
-  title: "Dynamic HTML",
+  title: "Dynamic Content HTML",
   components: {
     title: {
-      type: "text",
+      type: "textIgnoreLocale",
       title: "Block Title",
-      value: { vi: "Dynamic Content HTML", en: "Dynamic Content HTML" },
-      name: "titleDynamicContent",
+      value: "Block HTML",
+      name: "blockHTML",
     },
     contentHTML: {
-      type: "textIgnoreLocale",
+      type: "text",
       title: "Content HTML",
-      value: "",
+      value: { vi: "", en: "" },
       name: "contentHTML",
     },
   },
@@ -27,7 +27,7 @@ const defaultConfig = {
 const DynamicContentHTML = ({ config = defaultConfig }) => {
   const locale = useSelector((state) => state.get("locale"));
   const contentHTML = get(config, ["components", "contentHTML", "value"]);
-  return <div style={{ width: "100%" }} dangerouslySetInnerHTML={{ __html: contentHTML }} />;
+  return <div style={{ width: "100%" }} dangerouslySetInnerHTML={{ __html: contentHTML[locale] }} />;
 };
 
 DynamicContentHTML.defaultConfig = defaultConfig;

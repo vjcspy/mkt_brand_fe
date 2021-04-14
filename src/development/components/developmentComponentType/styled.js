@@ -336,9 +336,9 @@ export const ListOption = styled.div`
   border: 1px solid #231f20;
   box-sizing: border-box;
   border-radius: 4px;
-  top: calc(100% - 18px);
   width: 100%;
   padding-top: 2px;
+  max-height: 160px;
   div {
     display: flex;
     align-items: center;
@@ -382,13 +382,13 @@ export const WrapperListOption = styled.div`
   border-radius: 4px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
 `;
 
 export const ItemSelected = styled.div`
   display: flex;
   margin-right: 15px;
   cursor: pointer;
-  width: 44%;
   margin-bottom: 10px;
   p {
     margin: 0;
@@ -426,7 +426,7 @@ export const Checkbox = styled.button`
     border: ${({ checked, theme }) => (checked ? "none" : "1px solid " + theme.devColor.border)};
     border-radius: 4px;
     position: absolute;
-    top: 0px;
+    top: 3px;
     left: 0px;
   }
   &:after {

@@ -23,7 +23,7 @@ const PopupLanguageLocation = () => {
   const provinceSelected = useSelector((state) => state.get("provinceSelected"))?.toJS();
   const showLanguageLocation = useSelector((state) => state.getIn(["showLanguageLocation"]));
   const listProvince = useSelector((state) => state.get("listProvince")) ?? [];
-  const provinceFilter = filterProvinceById(listProvince, provinceSelected.id);
+  const provinceFilter = filterProvinceById(listProvince, provinceSelected?.id);
   const [location, setLocation] = useState(provinceFilter);
   const [language, setCheck] = useState(locale);
   const dispatch = useDispatch();

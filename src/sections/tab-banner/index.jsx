@@ -1,5 +1,4 @@
 import { get } from "lodash";
-import { useRouter } from "next/dist/client/router";
 import { stringifyUrl } from "query-string";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import useSiteRouter from "../../hooks/useSiteRouter";
@@ -97,23 +96,24 @@ const defaultConfig = {
   },
 };
 
-const TabBanner = ({ config = defaultConfig, footer }) => {
+let firstLoad = false
+
+const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop }) => {
   const router = useSiteRouter();
+
   const { tabBanner, bannerItem } = router.query;
   const length = config.components.tabBanner.value.length;
   const miniDelta = 20;
   const [{ width }, ref] = useIframeResize();
   const containerRef = useRef();
   const [transition, setTransition] = useState(true);
-  const [translateX, setTranslateX] = useState();
+  const [translateX, setTranslateX] = useState(0);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [movePos, setMovePos] = useState({ x: 0, y: 0 });
-  const [disableTouchInFooter, setDisableTouchFooter] = useState(false)
   const [delta, setDelta] = useState({
     current: { x: 0, y: 0 },
     positive: false,
   });
-
 
   const [indexBannerCurrentTab, setIndexBannerCurrentTab] = useState({
     [tabBanner]: (bannerItem?.replace(tabBanner + '-') ?? 1) - 1
@@ -131,10 +131,14 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
     const currentTab = config.components.tabBanner.value.find(item => item.tabCode?.value === tabBanner)
     if (currentTab) {
       const sizeofTab = currentTab.tab.value.length
-      if (sizeofTab === indexBannerCurrentTab[tabBanner] - 1) {
-        setDisableTouchFooter(true)
+      if (sizeofTab === indexBannerCurrentTab[tabBanner]) {
+        setTimeout(() => {
+          onDisableTop(true)
+        }, [200])
       } else {
-        setDisableTouchFooter(false)
+        setTimeout(() => {
+          onDisableTop(false)
+        }, [200])
       }
     }
   }, [indexBannerCurrentTab, tabBanner])
@@ -145,48 +149,28 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
       if (index > -1) {
         setTranslateX(-index);
       }
-    } else {
-      let active = config.components.tabBanner.value[0];
-      router.pushQuery(
-        stringifyUrl({
-          url: router.pathname,
-          query: { tabBanner: active?.tabCode.value },
-        }),
-        undefined,
-        { shallow: true }
-      );
     }
-  }, [config, tabBanner]);
+  }, [tabBanner]);
+
 
   useEffect(() => {
-    let tab = get(config, ["components", "tabBanner", "value", Math.abs(translateX)]);
-    if (tab) {
+    let active = config.components.tabBanner.value.find((t) => t.firstLoad?.value.active === "Yes") ?? config.components.tabBanner.value?.[0];
+    if (active) {
       router.pushQuery(
         stringifyUrl({
           url: router.pathname,
           query: {
-            tabBanner: tab?.tabCode.value,
-            bannerItem: tab?.tabCode.value + '-' + (indexBannerCurrentTab[tab?.tabCode.value] ?? 1)
+            tabBanner: active.tabCode.value,
+            bannerItem: active.tabCode.value + '-' + (indexBannerCurrentTab[active.tabCode.value] ?? 1)
           },
         }),
         undefined,
-        { shallow: true }
+        { shallow: false }
       );
-    } else {
-      let active = config.components.tabBanner.value.find((t) => t.firstLoad?.value.active === "Yes");
-      if (sessionStorage.getItem("redirect") != "true" && window.innerWidth <= 768 && active) {
-        router.pushQuery(
-          stringifyUrl({
-            url: router.pathname,
-            query: { tabBanner: active?.tabCode.value },
-          }),
-          undefined,
-          { shallow: true }
-        );
-      }
-      sessionStorage.setItem("redirect", "true");
     }
-  }, [config, translateX]);
+    firstLoad = true
+  }, [config]);
+
 
 
   useEffect(() => {
@@ -216,7 +200,6 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
 
   const onTouchMove = useCallback(
     (event) => {
-      if (disableTouchInFooter) return;
       const X = event.touches[0].pageX;
       const Y = event.touches[0].pageY;
       if (Math.abs(startPos.y - Y) > Math.abs(startPos.x - X)) {
@@ -241,10 +224,13 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
     if (typeof delta.positive !== "undefined") {
       if (delta.positive && delta.next) {
         setTranslateX((pre = 0) => {
+          updateTab(Math.max(pre - 1, -(length - 1)))
           return Math.max(pre - 1, -(length - 1));
         });
       } else if (!delta.positive && !delta.next) {
+
         setTranslateX((pre = 0) => {
+          updateTab(Math.min(pre + 1, 0))
           return Math.min(pre + 1, 0);
         });
       }
@@ -252,6 +238,22 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
     setMovePos({ x: 0, y: 0 });
     setStartPos({ x: 0, y: 0 });
   }, [delta]);
+
+  const updateTab = (value) => {
+    const tab = config.components.tabBanner.value[Math.abs(value)]
+    router.pushQuery(
+      stringifyUrl({
+        url: router.pathname,
+        query: {
+          tabBanner: tab.tabCode.value,
+          bannerItem: tab.tabCode.value + '-' + (indexBannerCurrentTab[tab.tabCode.value] ?? 1)
+        },
+      }),
+      undefined,
+      { shallow: true }
+    );
+  }
+
   return (
     <TabScrollWrapper onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchStart={onTouchStart} ref={ref}>
       <TabContainerWrapper
@@ -259,11 +261,11 @@ const TabBanner = ({ config = defaultConfig, footer }) => {
         style={{
           width: `${length * 100}%`,
           transition: transition ? "transform 0.3s ease-out" : "none",
-          transform: `translateX(${((translateX + (movePos.x - startPos.x) / width) * 100) / length}%)`,
+          transform: `translateX(${(((translateX) + (movePos.x - startPos.x) / width) * 100) / length}%)`,
         }}
       >
         {config.components.tabBanner.value.map((config, index) => (
-          <BannerItem key={index} tabCode={config.tabCode.value} config={config.tab} footer={footer} onChangeBanner={handleChangeCurrentTab} />
+          <BannerItem key={index} tabCode={config.tabCode.value} config={config.tab} onChangeBanner={handleChangeCurrentTab} isDisableTop={isDisableTop} />
         ))}
       </TabContainerWrapper>
     </TabScrollWrapper>

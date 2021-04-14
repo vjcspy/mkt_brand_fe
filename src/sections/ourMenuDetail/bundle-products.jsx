@@ -6,7 +6,7 @@ import { MenuChildImageWrapper, MenuChildItem, MenuChildItemWraper, MenuChildWra
 
 const BundleProducts = ({ config }) => {
   return (
-    <MenuChildWraper>
+    <MenuChildWraper className="bundel">
       {config.products?.map((product) => (
         <MenuChildItemWraper key={product.id}>
           <MenuChildItem isFirst>

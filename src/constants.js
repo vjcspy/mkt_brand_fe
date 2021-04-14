@@ -76,6 +76,7 @@ export const UPLOAD_FILES = "UPLOAD_FILES";
 export const DOWNLOAD_FILE = "DOWNLOAD_FILE";
 export const LOGIN = "LOGIN";
 export const GET_SITE = "GET_SITE";
+export const SET_SITE_CODE = "SET_SITE_CODE";
 export const FETCH_MENU = "FETCH_MENU";
 
 export const SUBMIT_OPT = "SUBMIT_OTP";
@@ -102,4 +103,6 @@ export const SET_NUM_PROMO = "SET_NUM_PROMO";
 export const PROMO_FLASH_SALE = "limited-gift-promotion";
 export const PROMO_NORMAL = "gift-promotion";
 
-export const SET_SITE_CODE = "SET_SITE_CODE";
+export const SET_DISABLE_SCROLL_TAB_BANNER = "SET_DISABLE_SCROLL_TAB_BANNER";
+
+export const SET_DATA_INITIAL = "SET_DATA_INITIAL";

@@ -88,20 +88,21 @@ const PromoDesktop = ({ promoListApi, onGetCode, resultGetCode, setResultGetCode
             {PromoList}
           </OnePageScroll>
         </ContentScroller>
-
-        <WrapperEndpoint>
-          <IconTriangleLineTop className="top" />
-          <PointNavigation
-            className="point-pagination-promo"
-            sizeAfter={7}
-            display="block"
-            size={size}
-            currentIndex={currentPage}
-            borderColor="#7B7979"
-            backgroundActive="#7B7979"
-          />
-          <IconTriangleLineDown className="bottom " />
-        </WrapperEndpoint>
+        {size > 0 && (
+          <WrapperEndpoint>
+            <IconTriangleLineTop className="top" />
+            <PointNavigation
+              className="point-pagination-promo"
+              sizeAfter={7}
+              display="block"
+              size={size}
+              currentIndex={currentPage}
+              borderColor="#7B7979"
+              backgroundActive="#7B7979"
+            />
+            <IconTriangleLineDown className="bottom " />
+          </WrapperEndpoint>
+        )}
       </WrapperContentPromo>
 
       <Popup show={resultGetCode} onClose={() => setResultGetCode(false)}>

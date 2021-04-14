@@ -1,50 +1,44 @@
 import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ACCEPT_COOKIE, SET_TOKEN_USER, SET_USER_INFO } from "../../src/constants";
+import { useDispatch } from "react-redux";
+import { SET_TOKEN_USER, SET_USER_INFO } from "../../src/constants";
 import Layout from "../../src/containers/layout";
-import { Pages } from "../../src/sections";
+import { Pages, RenderHeader, RenderSections } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSiteServer, getWebsitesConfig, getWebsitesData } from "../../src/services/backend";
-import PageContainer from "../../src/containers/pageContainer";
-import { useRouter } from "next/dist/client/router";
-import { chain } from "lodash";
+import { getInitialData, getSiteServer } from "../../src/services/backend";
+import { MainContainer, MainWrapper } from "../../src/styles";
+import { get } from "lodash";
+import NotificationProvider from "../../src/components/notification";
 
 export async function getServerSideProps(ctx) {
-  const pathname = ctx.req.headers.host;
-  const webSiteConfig = await getWebsitesConfig(pathname);
-  const webSites = await getWebsitesData();
-  const webData = chain(webSites)
-    .get(["data", "rows"])
-    .find((e) => e.code === webSiteConfig.website_code)
-    .value();
-  const siteCode = webData?.code ?? process.env.SITE_CODE;
+  const { siteCode } = await getInitialData(ctx);
   const { data: site } = await getSiteServer(siteCode);
+
   return {
     props: {
       config: site?.config ?? null,
-      site_code: siteCode ?? null,
     },
   };
 }
 
-const Login = ({ config, site_code }) => {
+const Login = ({ config }) => {
   const dispatch = useDispatch();
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
-
+  const header = get(modifiedConfig, ["header"]);
+  const sections = get(modifiedConfig, ["pages", Pages.login.name, "sections"]);
   useEffect(() => {
-    dispatch({ type: ACCEPT_COOKIE, value: true });
     dispatch({ type: SET_TOKEN_USER, value: null });
     dispatch({ type: SET_USER_INFO, value: null });
   }, [config]);
 
   return (
     <Layout>
-      <PageContainer
-        pageName={Pages.login.name}
-        siteCode={site_code}
-        modifiedConfig={modifiedConfig}
-        shouldHideFooter={true}
-      />
+      <MainContainer>
+        <RenderHeader pageName={Pages.login.name} config={header} menus={modifiedConfig?.menus} />
+        <MainWrapper className="main-content">
+          <RenderSections sections={sections} />
+        </MainWrapper>
+        <NotificationProvider />
+      </MainContainer>
     </Layout>
   );
 };

@@ -9,12 +9,9 @@ import TextIgnoreLocaleComponent from "../developmentComponentType/textIgnoreLoc
 import { GroupButton } from "../../../sections/header/popup-language-location/style";
 import Button from "../../../components/button";
 import SectionThumbnail from "../sectionsConfig/sectionThumbnail";
-import { ButtonIcon } from "./style";
-import SectionTitle from "../sectionsConfig/sectionTitle";
 import { createOrUpdateBrandStory, deleteStory, getListBrandStory } from "../../../services/backend";
 import { useSelector } from "react-redux";
 import PulseLoader from "../../../components/loading";
-import { set } from "immutable";
 const defaultStory = {
   title: "Title story",
   brandId: "",
@@ -52,7 +49,6 @@ const BrandStory = ({ path, popStage, putStage }) => {
       story.brandId = siteCode;
       const { data } = await createOrUpdateBrandStory(story, token);
       const index = findIndexItem(listStory, data);
-      console.log(index);
       if (index >= 0) {
         listStory[index] = data;
       } else {
@@ -68,7 +64,6 @@ const BrandStory = ({ path, popStage, putStage }) => {
   };
 
   const onChangTextField = (value, name) => {
-    console.log(value, name);
     setStorySelected((pre) => ({
       ...pre,
       [name]: value,
@@ -79,7 +74,7 @@ const BrandStory = ({ path, popStage, putStage }) => {
   const onDeleteStory = async (id, index) => {
     try {
       setLoading("delete");
-      const { data } = await deleteStory(id);
+      const { data } = await deleteStory(id, token);
       listStory.splice(index, 1);
       setListStory([...listStory]);
       setLoading();

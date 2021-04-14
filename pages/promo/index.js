@@ -1,4 +1,3 @@
-import { List } from "immutable";
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { GET_PROMO_OF_USER, SET_GOOGLE_MAP_API, SET_ICON_VIEW_MAP } from "../../src/constants";
@@ -8,28 +7,16 @@ import { formatConfig } from "../../src/services/frontend";
 import {
   filterListPromoApi,
   getApiKeyGoogleMap,
-  getListPromo,
-  getSiteCode,
   getSiteServer,
-  getWebsitesConfig,
   getPromotionByBrandProvince,
-  getWebsitesData,
+  getInitialData,
 } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 import { chain, get } from "lodash";
 
 export async function getServerSideProps(ctx) {
   try {
-    const pathname = ctx.req.headers.host;
-    const webSiteConfig = await getWebsitesConfig(pathname);
-    const webSites = await getWebsitesData();
-    const webData = chain(webSites)
-      .get(["data", "rows"])
-      .find((e) => e.code === webSiteConfig.website_code)
-      .value();
-    const siteCode = webData?.code ?? process.env.SITE_CODE;
-    const { brand_id } = webData;
-
+    const { siteCode, brand_id } = await getInitialData(ctx);
     const [googleMapApi, { data: promoListApi }, { data: site }] = await Promise.all([
       getApiKeyGoogleMap(),
       getPromotionByBrandProvince({ brand_id }),
@@ -37,18 +24,17 @@ export async function getServerSideProps(ctx) {
     ]);
 
     let promoListResult = filterListPromoApi(promoListApi.result.content);
-
+    console.log("googleMapApi:", googleMapApi);
     return {
       props: {
         config: site?.config ?? null,
         site_code: site?.site_code ?? null,
         promoListApi: promoListResult ?? [],
-        googleMapApi: googleMapApi[0],
+        googleMapApi: googleMapApi[0] ?? null,
         brandId: brand_id ?? null,
       },
     };
   } catch (e) {
-    console.log("error: ", e);
     return {
       props: {
         config: null,

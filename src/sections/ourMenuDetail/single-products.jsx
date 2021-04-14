@@ -8,7 +8,6 @@ import {
 } from "./styled";
 import Image from "../../components/image";
 import Button from "../../components/button";
-import DynamicFooter from "../dynamic-footer";
 import { get, isNil, map } from "lodash";
 import { toMoney } from "../../services/frontend";
 
@@ -16,7 +15,7 @@ const SingleProducts = ({ config, isMobile, footer, onBack, setMenuDetail }) => 
   let products = config.products ?? config.options?.map((p) => p.product);
   const isSimple = config.products?.length != undefined;
   return (
-    <ProductSingleWraper className="wadawd">
+    <ProductSingleWraper className="wadawd sigunflf">
       {isMobile && (
         <ProductSingleMobileInfoWrapper>
           <Button
@@ -41,8 +40,8 @@ const SingleProducts = ({ config, isMobile, footer, onBack, setMenuDetail }) => 
         </ProductSingleMobileInfoWrapper>
       )}
       <ProductSingleContainer>
-        {map(products, (product) => (
-          <ProductSingleItem key={product.id}>
+        {map(products, (product, index) => (
+          <ProductSingleItem key={index} data-name={product.name}>
             <Image width="300" height="300" src={product.image.url} alt="product" title="product" />
             <h4>{product.name}</h4>
             {isSimple && (

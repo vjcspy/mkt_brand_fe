@@ -4,28 +4,13 @@ import { SET_GOOGLE_MAP_API } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import {
-  getApiKeyGoogleMap,
-  getListRestaurant,
-  getSiteServer,
-  getWebsitesConfig,
-  getWebsitesData,
-} from "../../src/services/backend";
+import { getApiKeyGoogleMap, getInitialData, getListRestaurant, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
-import { chain } from "lodash";
 
 export async function getServerSideProps(ctx) {
   try {
+    const { siteCode, brand_id } = await getInitialData(ctx);
     const { idRestaurant } = ctx.query;
-    const pathname = ctx.req.headers.host;
-    const webSiteConfig = await getWebsitesConfig(pathname);
-    const webSites = await getWebsitesData();
-    const webData = chain(webSites)
-      .get(["data", "rows"])
-      .find((e) => e.code === webSiteConfig.website_code)
-      .value();
-    const siteCode = webData?.code ?? process.env.SITE_CODE;
-    const { brand_id } = webData;
     const [googleMapApi, { data: site }, { data: dataForMap }] = await Promise.all([
       getApiKeyGoogleMap(),
       getSiteServer(siteCode),
@@ -37,7 +22,7 @@ export async function getServerSideProps(ctx) {
         brandId: brand_id ?? null,
         config: site?.config ?? null,
         site_code: site?.site_code ?? null,
-        googleMapApi: googleMapApi[0],
+        googleMapApi: googleMapApi[0] ?? null,
         restaurantViewMap,
         listRestaurant: dataForMap.result,
       },

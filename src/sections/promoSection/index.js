@@ -39,6 +39,12 @@ const PromoSection = ({ promoListApi, brandId }) => {
   const [loading, setLoading] = useState(false);
   const provinceSelected = useSelector((state) => state.getIn(["provinceSelected"])).toJS();
 
+  useEffect(() => {
+    if (promosShow?.length === 0) {
+      showNotification(dispatch, { content: "Không có ưu đãi", status: "error" });
+    }
+  }, [promosShow]);
+
   // get list promo when user change location on Header
   useEffect(async () => {
     if (!provinceSelected.default) {

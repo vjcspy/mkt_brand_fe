@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import LinkRouter from "../../components/link-router";
 import { WrapperOnePageScroller, GroupButton, WrapperListPoint, WrapperSection } from "./style";
 import loadable from "@loadable/component";
@@ -8,7 +8,6 @@ import ImageMedia from "../../development/components/imageMedia";
 import PointNavigation from "../../components/point-navigation";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import OnePageScroll from "../../components/one-page-scroll/one-page-scroll";
-import DynamicFooter from "../dynamic-footer";
 import useSiteRouter from "../../hooks/useSiteRouter";
 import { stringifyUrl } from "query-string";
 import useRefCallback from "../../hooks/useRefCallback";
@@ -33,14 +32,15 @@ const Link = ({ url, item, ...props }) => {
   return <LinkRouter {...props} href={href} />
 }
 
-const BannerItem = ({ config, footer, tabCode, onChangeBanner, indexBannerCurrentTab }) => {
+const BannerItem = ({ config, tabCode, onChangeBanner, isDisableTop }) => {
   const locale = useSelector((s) => s.get("locale"));
   const tabShouldShow = config.value.filter((item) => item.statusTab.value.active === "Show");
-  let size = tabShouldShow?.length ?? 0
-  const headerHeight = useSelector((s) => s.get("headerHeight"));
+  const size = tabShouldShow?.length ?? 0
+  const headerHeight = useSelector((s) => s.get("headerHeight"))
   const [{ width, height }, ref] = useIframeResize();
   const router = useSiteRouter();
   const bannerItem = router.query.bannerItem;
+
   const initPage = (() => {
     if (bannerItem?.includes(tabCode)) {
       return (bannerItem?.replace(tabCode + '-', '') ?? 1) - 1
@@ -73,40 +73,34 @@ const BannerItem = ({ config, footer, tabCode, onChangeBanner, indexBannerCurren
   }, []);
 
   const Images = useMemo(() => {
-    var items = tabShouldShow.concat(null);
-    size = items.length
-    return items.map((item, index) =>
-      item === null ? (
-        <WrapperSection key={index}>
-          <DynamicFooter config={footer} />
-        </WrapperSection>
-      ) : (
-        <WrapperSection key={index}>
-          <ImageMedia
-            preload={true}
-            width="100%"
-            height="100%"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            media={width > 768 ? item.imageDesktop.value : item.imageMobile.value}
-          />
+    return tabShouldShow.map((item, index) =>
+      <WrapperSection key={index}>
+        <ImageMedia
+          preload={true}
+          width="100%"
+          height="100%"
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          media={width > 768 ? item.imageDesktop.value : item.imageMobile.value}
+        />
 
-          <GroupButton>
-            {item.showHead.value.active === "Show" && <h1>{item.headText.value[locale]}</h1>}
-            {item.showContent.value.active === "Show" && <h3>{item.contentText.value[locale]}</h3>}
-            <Link url={item.link?.value.url} item={item} passHref >
-              <a className="link-banner">{item.link?.value?.label[locale] ?? "Xem ưu đãi"}</a>
-            </Link>
-          </GroupButton>
-        </WrapperSection>
-      )
+        <GroupButton>
+          {item.showHead.value.active === "Show" && <h1>{item.headText.value[locale]}</h1>}
+          {item.showContent.value.active === "Show" && <h3>{item.contentText.value[locale]}</h3>}
+          <Link url={item.link?.value.url} item={item} passHref >
+            <a className="link-banner">{item.link?.value?.label[locale] ?? "Xem ưu đãi"}</a>
+          </Link>
+        </GroupButton>
+      </WrapperSection>
     );
   }, [tabShouldShow, width]);
   return (
     <WrapperOnePageScroller ref={ref}>
       <OnePageScroll
+        from="item"
         customPageNumber={currentPage}
         containerHeight={height - headerHeight}
         pageOnChange={handlePageChange}
+        isDisableTop={isDisableTop}
       >
         {Images}
       </OnePageScroll>

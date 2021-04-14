@@ -3,7 +3,6 @@ import { LeftWrapper, ProfileGiftWrapper, RightWrapper, StoresWrapper } from "./
 import { FormattedMessage } from "react-intl";
 
 const ProfileGift = ({ imageRegister }) => {
-  console.log("tab re:", imageRegister)
   return (
     <ProfileGiftWrapper>
       <LeftWrapper>
@@ -35,14 +34,6 @@ const ProfileGift = ({ imageRegister }) => {
             </h6>
           </li>
         </ul>
-        <StoresWrapper>
-          <a>
-            <img width="190" height="60" src="/images/appstore.jpg" />
-          </a>
-          <a>
-            <img width="190" height="60" src="/images/googleplay.jpg" />
-          </a>
-        </StoresWrapper>
       </RightWrapper>
     </ProfileGiftWrapper>
   );

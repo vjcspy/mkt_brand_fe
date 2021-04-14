@@ -1,3 +1,4 @@
+import { map } from "lodash";
 import React, { useState } from "react";
 import IconTicker from "../../../components/icons/iconTicker";
 import IconTriangleDown from "../../../components/icons/iconTriangleDown";
@@ -6,17 +7,18 @@ const DropDownComponent = ({ tittle, listOption, onSelect, optionSelected }) => 
   const [showList, setShowList] = useState(false);
 
   return (
+    listOption &&
     <WrapperDropDown>
       <div>{tittle}</div>
-      <TitleDropDown onClick={() => setShowList(true)}>
-        <p>{optionSelected.title}</p>
+      <TitleDropDown className="custom-default" onClick={() => setShowList(true)}>
+        <p>{optionSelected?.title}</p>
         <IconTriangleDown color="#737373" className="icon-down" />
       </TitleDropDown>
       {showList && (
         <>
           <Marker onClick={() => setShowList(false)} />
           <ListOption>
-            {listOption?.map((item, index) => (
+            {map(listOption, (item, index) => (
               <div
                 key={index}
                 onClick={() => {
@@ -24,8 +26,8 @@ const DropDownComponent = ({ tittle, listOption, onSelect, optionSelected }) => 
                   setShowList(false);
                 }}
               >
-                <p>{item.title}</p>
-                {item.id === optionSelected.id && <IconTicker />}
+                <p>{item?.title}</p>
+                {item?.id === optionSelected?.id && <IconTicker />}
               </div>
             ))}
           </ListOption>

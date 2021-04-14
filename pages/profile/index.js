@@ -4,21 +4,15 @@ import { SET_GOOGLE_MAP_API, SET_SHOW_MENU_HEADER } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getApiKeyGoogleMap, getSiteServer, getWebsitesConfig, getWebsitesData } from "../../src/services/backend";
+import { getApiKeyGoogleMap, getInitialData, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 import { useRouter } from "next/dist/client/router";
 import { chain } from "lodash";
 
 export async function getServerSideProps(ctx) {
   try {
-    const pathname = ctx.req.headers.host;
-    const webSiteConfig = await getWebsitesConfig(pathname);
-    const webSites = await getWebsitesData();
-    const webData = chain(webSites)
-      .get(["data", "rows"])
-      .find((e) => e.code === webSiteConfig.website_code)
-      .value();
-    const siteCode = webData?.code ?? process.env.SITE_CODE;
+    const { siteCode } = await getInitialData(ctx);
+
     const [googleMapApi, { data: site }] = await Promise.all([getApiKeyGoogleMap(), getSiteServer(siteCode)]);
     return {
       props: {

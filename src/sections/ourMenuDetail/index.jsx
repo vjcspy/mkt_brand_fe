@@ -7,6 +7,8 @@ import MenuMobile from "./menu-mobile";
 import MenuMain from "./menu-main";
 import MenuTree from "./menu-tree";
 import { MenusLeftContent, MenusRightContent, OurMenusContent, OurMenusWrapper } from "./styled";
+import useAppHeight from "../../hooks/useAppHeight";
+import { useSelector } from "react-redux";
 
 const defaultConfig = {
   id: "our-menu-detail",
@@ -35,7 +37,6 @@ const OurMenus = ({ menus, footer }) => {
     menus,
     setPath,
   };
-
   return (
     <OurMenusWrapper ref={ref}>
       {size.width > 768 ? (
