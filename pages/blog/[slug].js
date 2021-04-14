@@ -53,15 +53,21 @@ export const getServerSideProps = async (ctx) => {
     props: {
       site_code: site?.site_code ?? null,
       config: site?.config ?? null,
-      blog: data.data.blogs[0],
+      blog: data.data?.blogs?.[0] ?? null,
     },
   };
 };
-
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  fonWeight: 400,
+};
 const Site = ({ site_code, config, blog }) => {
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
 
-  return (
+  return blog ? (
     <Layout>
       <PageContainer
         pageName={Pages["blog-detail"].name}
@@ -70,6 +76,8 @@ const Site = ({ site_code, config, blog }) => {
         blog={blog}
       />
     </Layout>
+  ) : (
+    <div style={style}>404-Page not found</div>
   );
 };
 
