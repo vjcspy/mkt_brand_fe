@@ -9,7 +9,7 @@ import useFromJS from "../src/hooks/useFromJS";
 import defaultTranslation from "../src/translations";
 import { useEffect } from "react";
 import { SET_DATA_INITIAL, SET_HOST, UPDATE_API_STATUS } from "../src/constants";
-import { fetchMenuCategories, getInitialData } from "../src/services/backend";
+import { fetchMenuCategories, fetchParentMenu, getInitialData } from "../src/services/backend";
 
 const ThemeWrapper = ({ children }) => {
   const theme = useFromJS(["modifiedConfig", "theme"]);
@@ -51,9 +51,9 @@ App.getInitialProps = async ({ Component, ctx }) => {
   // console.log("getInitialProps App");
   try {
     const dataInitial = await getInitialData(ctx);
-    const { siteCode, storeCode, root_category_id } = dataInitial;
-    const menus = await fetchMenuCategories({ urlKey: siteCode, storeCode: storeCode, rootCategory: root_category_id });
-    const menuApi = menus.map((item) => ({
+    const { storeCode, root_category_id } = dataInitial;
+    const menu = await fetchParentMenu({ storeCode, rootCategory: root_category_id });
+    const menuApi = menu?.children.map((item) => ({
       label: item.name,
       url: item.url_key,
     }));

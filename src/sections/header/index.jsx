@@ -25,7 +25,7 @@ import ProfileDropdown from "./profileDropdown";
 import ImageMedia from "../../development/components/imageMedia";
 import Link from "next/link";
 import PopupLanguageLocation from "./popup-language-location";
-import { filterListPromoApi, getPromotionByBrandProvince, getProvinceIdByLocation, getProvinces } from "../../services/backend";
+import { fetchMenuCategories, fetchParentMenu, filterListPromoApi, getPromotionByBrandProvince, getProvinceIdByLocation, getProvinces } from "../../services/backend";
 import { showNotification } from "../../components/notification";
 
 const MenuRight = loadable(() => import("../../components/menu"));
@@ -265,6 +265,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
     );
   }, [])
 
+
   const isHomePage = useMemo(() => {
     if (mode === DEVELOPMENT_MODE) {
       let pageNameQuery = router.query.page ?? "home";
@@ -304,7 +305,6 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
           getProvinces(),
           getPromotionByBrandProvince({ brand_id }),
         ]);
-
         const provinces = listProvince ?? [{ id: 5, name: "Hà Nội" }];
         let numPromo = filterListPromoApi(listPromo.result.content).length;
         dispatch({ type: SET_NUM_PROMO, value: numPromo });
