@@ -28,7 +28,6 @@ const defaultConfig = {
 };
 
 const Article = ({ blog }) => {
-  let count = 0;
   const refIframe = useRef();
   const [height, setHeight] = useState();
   // const blogRelative = useMemo(() => {
@@ -40,9 +39,14 @@ const Article = ({ blog }) => {
   //   }, []);
   // }, []);
   useEffect(() => {
-    const height = refIframe.current.scrollHeight;
-    setHeight(height);
-  }, []);
+    setTimeout(() => {
+      if (refIframe.current) {
+        const height = refIframe.current?.scrollHeight;
+        setHeight(height);
+        console.log(height);
+      }
+    }, 100);
+  }, [blog]);
   return (
     <WrapperBlog>
       {blog && (
