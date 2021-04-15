@@ -10,7 +10,6 @@
       "env": {
         "NODE_ENV": "production",
         "NEXT_PUBLIC_API_HOST": "https://brand-cms-prod.ggg.systems",
-        "NEXT_PUBLIC_API_GRAPHQL_HOST_": "https://brand-cms-prod.ggg.systems/graphql",
         "NEXT_PUBLIC_KEY_TINY_EDITOR": "jytc12a33valp2bwfz6dk90xrlh4qru0l2rqk4497o0m5wxv",
         "API_HOST": "https://brand-cms-prod.ggg.systems",
         "NEXTJS_USERNAME": "nextjsusername",
