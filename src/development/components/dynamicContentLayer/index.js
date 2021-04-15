@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Button from "../../../components/button";
 import DropDown from "../../../components/input/drop-down";
 import PulseLoader from "../../../components/loading";
-import { UPDATE_CONFIG } from "../../../constants";
+import { SET_MODIFIED_CONFIG, UPDATE_CONFIG } from "../../../constants";
 import useFromJS from "../../../hooks/useFromJS";
 import { getSites, getSiteServer, pushDynamicBlock, deleteBlock } from "../../../services/backend";
 import DropDownComponent from "../developmentComponentType/drop-down-component";
@@ -19,11 +19,17 @@ import {
   WrapperListSection,
   ListItemSection,
 } from "./style";
-import { set } from "immutable";
+import { fromJS, set } from "immutable";
 
 const positionDefaultPage = [
   { id: 0, title: "After Header" },
   { id: 1, title: "Before Footer" },
+];
+
+const site = [
+  { id: 0, title: "All", checked: true },
+  { id: "5fd9dff49774d32b4d233c96", site_code: "gogi", title: "gogi" },
+  { id: "5fd9dff49774d32b4d233c96", site_code: "gogi", title: "gogi" },
 ];
 
 const coverValueObjectToArray = (object) => (object ? Object.values(object) : null);
@@ -50,7 +56,8 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
     return formatListPage(listPageData);
   }, []);
   const [block, setBlock] = useState(dynamicBlockSelected);
-  const [listSite, setListSite] = useState([{ id: 0, title: "All", checked: true }]);
+  // const [listSite, setListSite] = useState([{ id: 0, title: "All", checked: true }]);
+  const [listSite, setListSite] = useState(site);
   const [listPage, setListPage] = useState(listPageCustom);
   const [listPosition, setListPosition] = useState(positionDefaultPage); // for drag order
   const [positionDefault, setPositionSelectedDefault] = useState({ id: 0, title: "After Header" }); // for select all page
@@ -68,7 +75,6 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
       const {
         data: { data },
       } = await getSites();
-      console.log(data);
       data.sites.map((item) => {
         item.checked === false;
         item.title = item.site_code;
@@ -77,6 +83,7 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
       });
       block.siteCode = defaultSiteCodeOfBlock;
       setBlock({ ...block });
+      // console.log(newSites);
       setListSite(newSites);
       setLoading(stopLoad);
     } catch (e) {
@@ -173,6 +180,7 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
       const { data } = await pushDynamicBlock(block, token);
       const listSite = await getRawConfigOfSites();
       updatePageInRawConfigOfSite(listSite);
+      onUpdateDynamicBlock(block, false);
       setLoading(stopLoad);
     } catch (e) {
       setLoading(stopLoad);
@@ -201,9 +209,9 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
 
   const updatePageInRawConfigOfSite = (lisSite) => {
     lisSite.forEach((item) => {
-      addSectionInPage(item.raw_config.pages);
+      addSectionInPage(item.config.pages);
       if (item.site_code === siteCodeCurrent) {
-        dispatch({ type: UPDATE_CONFIG, path: ["modifiedConfig"], value: item.raw_config });
+        dispatch({ type: UPDATE_CONFIG, path: ["modifiedConfig"], value: item.config });
       }
     });
   };
@@ -253,14 +261,20 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
     return data;
   };
   const onDeleteBlock = async () => {
-    setLoading(loadDelete);
-    const { data } = await deleteBlock(block.id, token);
-    if (data.siteCode) {
-      const listSite = await getListSiteNeedRemoveBlock(data);
-      updateSectionOfPage(listSite, block.id);
+    try {
+      setLoading(loadDelete);
+      const { data } = await deleteBlock(block.id, token);
+      console.log(data);
+
+      if (data.siteCode) {
+        const listSite = await getListSiteNeedRemoveBlock(data);
+        updateSectionOfPage(listSite, block.id);
+        onUpdateDynamicBlock(block, true);
+      }
+      setLoading(stopLoad);
+    } catch (e) {
+      console.log(e);
     }
-    setLoading(stopLoad);
-    onUpdateDynamicBlock(block, true);
   };
 
   const updateStateSuccess = (newData) => {
@@ -284,16 +298,15 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
   };
 
   const updateSectionOfPage = (listSite, idBlock) => {
-    listSite.forEach((item) => {
-      map(item.raw_config.pages, (item) => {
+    listSite.forEach((itemSite) => {
+      map(itemSite.config.pages, (item) => {
         removeBlockInSection(item.sections, idBlock);
       });
-      if (item.site_code === siteCodeCurrent) {
-        dispatch({ type: UPDATE_CONFIG, path: ["modifiedConfig"], value: item.raw_config });
+
+      if (itemSite.site_code === siteCodeCurrent) {
+        dispatch({ type: UPDATE_CONFIG, path: ["modifiedConfig"], value: itemSite.raw_config });
       }
     });
-
-    console.log(listSite);
   };
 
   const removeBlockInSection = (sections, idBlock) => {
@@ -305,7 +318,7 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
   return (
     <WrapperLayer>
       <ContentLayer>
-        {loading === loadSite && (
+        {/* {loading === loadSite && (
           <div
             style={{
               background: "rgba(0, 0, 0, 0.6)",
@@ -319,7 +332,7 @@ const DynamicContentLayer = ({ dynamicBlockSelected, onUpdateDynamicBlock }) => 
           >
             <PulseLoader color="#DA841E" loading fill />
           </div>
-        )}
+        )} */}
         <WrapperEditContent>
           <TextIgnoreLocaleComponent
             config={{ title: "Title", value: block?.title }}

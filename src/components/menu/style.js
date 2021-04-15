@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const WrapperMenu = styled.div`
   position: fixed;
   width: 100%;
-  
+
   height: 100vh;
   z-index: 1003;
   opacity: 0;
@@ -105,9 +105,11 @@ export const MainMenu = styled.div`
   padding: 40px 0;
   margin-bottom: 20px;
   transition: 0.3s;
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 100%;
-
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
   &.hide {
     transform: translateX(-100%);
   }
@@ -329,13 +331,13 @@ export const FooterMenu = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
-  display:flex;
+  display: flex;
   button,
   a {
     border-radius: 0px !important;
     width: 50%;
     padding: 0;
-    a{
+    a {
       width: 100%;
     }
   }

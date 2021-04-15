@@ -6,6 +6,7 @@ import fs from "fs";
 
 export const getInitialData = async (ctx) => {
   const pathname = ctx.req.headers.host;
+
   const [webSiteConfig, webSites] = await Promise.all([getWebsitesConfig(pathname), getWebsitesData()]);
 
   const webData = chain(webSites)
@@ -33,17 +34,18 @@ export const getInitialData = async (ctx) => {
 
 export const getWebsitesConfig = async (domain) => {
   try {
-    let { getWebsitesConfig } = getData();
-    getWebsitesConfig = getWebsitesConfig ? getWebsitesConfig : [];
-    const checkDomain = getWebsitesConfig?.find((item) => item.domain === domain);
+    let { getWebsitesConfig = [] } = getData();
+    const checkDomain = getWebsitesConfig?.find((item) => item?.domain === domain);
     if (checkDomain) {
       return checkDomain;
     } else {
       const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
-      const fileData = getData();
-      getWebsitesConfig.push(data);
-      fileData["getWebsitesConfig"] = getWebsitesConfig;
-      saveData(fileData);
+      if (data) {
+        const fileData = getData();
+        getWebsitesConfig.push(data);
+        fileData["getWebsitesConfig"] = getWebsitesConfig;
+        saveData(fileData);
+      }
       return data;
     }
   } catch (e) {
@@ -401,6 +403,7 @@ export const pushDynamicBlock = async (data, token) => {
         title: data.title,
         contentVN: data.contentVN,
         contentEN: data.contentEN,
+        siteCode: data.siteCode,
       },
       {
         headers: {
