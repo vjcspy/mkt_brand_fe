@@ -1,18 +1,13 @@
-import Link from "next/link";
-import React, { useMemo } from "react";
-import { useSelector } from "react-redux";
-import Blog from "../../components/blog";
+import React, { useEffect, useRef, useState } from "react";
 import IconFacebookCircle from "../../components/icons/iconFacebookCircle";
 import IconInstagramCircle from "../../components/icons/iconInstagramCircle";
 import IconLike from "../../components/icons/iconLike";
 import IconShare from "../../components/icons/iconShare";
 import IconView from "../../components/icons/iconView";
-import RatioImage from "../../components/ratioImage";
-import RenderListFlex from "../../components/render-list-flex";
-import { blogs } from "../../dummyData/blogs";
+import StyledFrame from "react-styled-frame";
+
 import {
   WrapperBlog,
-  Banner,
   Title,
   Content,
   HeaderBlog,
@@ -22,7 +17,6 @@ import {
   DatePost,
   ContentBlog,
   LeftInfo,
-  RelativeBlog,
 } from "./style";
 
 const defaultConfig = {
@@ -35,13 +29,19 @@ const defaultConfig = {
 
 const Article = ({ blog }) => {
   let count = 0;
-  const blogRelative = useMemo(() => {
-    return blogs.filter((item) => {
-      if (item.id !== 1 && count < 2) {
-        count++;
-        return item;
-      }
-    }, []);
+  const refIframe = useRef();
+  const [height, setHeight] = useState();
+  // const blogRelative = useMemo(() => {
+  //   return blogs.filter((item) => {
+  //     if (item.id !== 1 && count < 2) {
+  //       count++;
+  //       return item;
+  //     }
+  //   }, []);
+  // }, []);
+  useEffect(() => {
+    const height = refIframe.current.scrollHeight;
+    setHeight(height);
   }, []);
   return (
     <WrapperBlog>
@@ -68,7 +68,9 @@ const Article = ({ blog }) => {
             </Info>
           </HeaderBlog>
           <ContentBlog>
-            <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+            <StyledFrame style={{ width: "100%", height: height }}>
+              <div ref={refIframe} dangerouslySetInnerHTML={{ __html: blog.content }} />
+            </StyledFrame>
           </ContentBlog>
           <FooterBlog>
             <a>Share</a>
@@ -80,19 +82,11 @@ const Article = ({ blog }) => {
             </a>
           </FooterBlog>
           {/* <Artical limited={2} /> */}
-          <RelativeBlog>
+          {/* <RelativeBlog>
             <RenderListFlex>
-              {blogRelative.map((item, index) => (
-                <React.Fragment key={index}>
-                  {item.id !== 1 && (
-                    <Link href={`/news/${item.id}`}>
-                      <a>{/* <Blog blog={item} /> */}</a>
-                    </Link>
-                  )}
-                </React.Fragment>
-              ))}
+              
             </RenderListFlex>
-          </RelativeBlog>
+          </RelativeBlog> */}
         </Content>
       )}
     </WrapperBlog>

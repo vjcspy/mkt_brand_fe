@@ -10,7 +10,13 @@ const PromoDesktop = loadable(() => import("./desktop"));
 import PromoMobile from "./mobile";
 
 import useSiteRouter from "../../hooks/useSiteRouter";
-import { filterListPromoApi, getListPromo, getPromotionByBrandProvince, pickUpVoucher } from "../../services/backend";
+import {
+  filterListPromoApi,
+  getListPromo,
+  getPromotionByBrandProvince,
+  pickUpVoucher,
+  savePickUpVoucher,
+} from "../../services/backend";
 import { showNotification } from "../../components/notification";
 import { GET_PROMO_OF_USER, SET_NUM_PROMO } from "../../constants";
 
@@ -27,8 +33,8 @@ const PromoSection = ({ promoListApi, brandId }) => {
   const dispatch = useDispatch();
   const routerSite = useSiteRouter();
   const { promoCode } = routerSite.query;
-
   const { token } = useSelector((s) => s.get("tokenUser"))?.toJS() ?? {};
+  const userInfo = useSelector((s) => s.get("userInfo"))?.toJS() ?? {};
   const listPromoEditPage = useSelector((s) => s.get("listPromoEditPage"));
 
   promoListApi = listPromoEditPage ? listPromoEditPage : promoListApi;
@@ -37,8 +43,9 @@ const PromoSection = ({ promoListApi, brandId }) => {
   const [resultGetCode, setResultGetCode] = useState();
   const [promosShow, setPromosShow] = useState(promoListApi);
   const [loading, setLoading] = useState(false);
-  const provinceSelected = useSelector((state) => state.getIn(["provinceSelected"])).toJS();
-
+  const provinceSelected = useSelector((state) => state.getIn(["provinceSelected"]))?.toJS();
+  const listProvince = useSelector((state) => state.get("listProvince"));
+  const currentLocation = listProvince?.find((item) => item.id === provinceSelected.id);
   useEffect(() => {
     if (promosShow?.length === 0) {
       showNotification(dispatch, { content: "Không có ưu đãi", status: "error" });
@@ -86,7 +93,20 @@ const PromoSection = ({ promoListApi, brandId }) => {
         code,
         token,
       });
-
+      const { utm_campaign, utm_content, utm_medium, utm_source, utm_term } = routerSite.query;
+      const timeline = new Date();
+      savePickUpVoucher({
+        timeline,
+        fullName: userInfo.fullName,
+        phoneNumber: userInfo.cellphone,
+        eVoucherCode: code,
+        platform: utm_source,
+        placement: utm_medium,
+        memo: utm_campaign,
+        content: utm_content,
+        location: currentLocation.name,
+        brand: utm_term,
+      });
       if (data.result) {
         setResultGetCode(data.result[0]);
         dispatch({ type: GET_PROMO_OF_USER, value: { type: "all" } });
@@ -98,6 +118,7 @@ const PromoSection = ({ promoListApi, brandId }) => {
       // handel success
       setLoading(false);
     } catch (e) {
+      console.log(e);
       showNotification(dispatch, { content: "Loi mang", status: "error" });
       setLoading(false);
     }

@@ -24,10 +24,6 @@ const OnePageScroll = ({
   const [translateY, setTranslateY] = useState(customPageNumber ? -customPageNumber : 0);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [movePos, setMovePos] = useState({ x: 0, y: 0 });
-  const [delta, setDelta] = useState({
-    current: { x: 0, y: 0 },
-    positive: false,
-  });
   const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
@@ -37,57 +33,71 @@ const OnePageScroll = ({
   }, [customPageNumber]);
 
   const onTouchStart = useCallback((event) => {
+    const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
+
     const Y = event.touches[0].pageY;
     const X = event.touches[0].pageX;
-    setStartPos({ x: X, y: Y });
-    setMovePos({ x: X, y: Y });
-    setTransition(false);
-    setDelta({
+    var startPos = {
+      x: X, y: Y
+    }
+    var movePos = {
+      x: X, y: Y
+    }
+    var delta = {
       start: { x: X, y: Y },
       current: { x: X, y: Y },
       positive: undefined,
-    });
-  }, []);
-
-  const onTouchMove = useCallback(
-    (event) => {
-      const Y = event.touches[0].pageY;
-      const X = event.touches[0].pageX;
-      if (Math.abs(startPos.x - X) > Math.abs(startPos.y - Y)) {
-        setMovePos(startPos);
-        setTransition(true);
-      } else {
-        setTransition(false);
-        setMovePos({ x: X, y: Y });
-      }
-      setDelta(({ current, start }) => {
-        return {
-          start: start,
-          current: { x: X, y: Y },
-          next: Y < start.y,
-          positive: Math.abs(start.y - Y) <= minDeltaTouch ? undefined : current.y > Y,
-        };
-      });
-    },
-    [startPos]
-  );
-
-  const onTouchEnd = useCallback(() => {
-    setTransition(true);
-    if (typeof delta.positive !== "undefined") {
-      if (delta.positive && delta.next) {
-        setTranslateY((pre) => {
-          return Math.max(pre - 1, -(length - 1));
-        });
-      } else if (!delta.positive && !delta.next) {
-        setTranslateY((pre) => {
-          return Math.min(pre + 1, 0);
-        });
-      }
     }
-    setMovePos({ x: 0, y: 0 });
-    setStartPos({ x: 0, y: 0 });
-  }, [delta]);
+
+    setStartPos({ x: X, y: Y });
+    setMovePos({ x: X, y: Y });
+    setTransition(false);
+
+    const onTouchMove =
+      (event) => {
+        const Y = event.touches[0].pageY;
+        const X = event.touches[0].pageX;
+        if (Math.abs(startPos.x - X) > Math.abs(startPos.y - Y)) {
+          movePos = startPos;
+          setMovePos(movePos)
+          setTransition(true);
+        } else {
+          setTransition(false);
+          movePos = ({ x: X, y: Y });
+          setMovePos(movePos)
+        }
+        delta = {
+          start: delta.start,
+          current: { x: X, y: Y },
+          next: Y < delta.start.y,
+          positive: Math.abs(delta.start.y - Y) <= minDeltaTouch ? undefined : delta.current.y > Y,
+        };
+      }
+
+    const onTouchEnd = () => {
+      setTransition(true);
+      if (typeof delta.positive !== "undefined") {
+        if (delta.positive && delta.next) {
+          setTranslateY((pre) => {
+            return Math.max(pre - 1, -(length - 1));
+          });
+        } else if (!delta.positive && !delta.next) {
+          setTranslateY((pre) => {
+            return Math.min(pre + 1, 0);
+          });
+        }
+      }
+      setMovePos({ x: 0, y: 0 });
+      setStartPos({ x: 0, y: 0 });
+
+      win.document.removeEventListener("touchend", onTouchEnd);
+      win.document.removeEventListener("touchmove", onTouchMove);
+
+    }
+
+    win.document.addEventListener("touchend", onTouchEnd);
+    win.document.addEventListener("touchmove", onTouchMove);
+  }, []);
 
   const onWheel = useCallback(
     (e) => {
@@ -110,21 +120,21 @@ const OnePageScroll = ({
     [length, isScrolling, isDisableTop]
   );
 
-  const keyPress = useCallback(
-    (event) => {
-      if (event.keyCode === KEY_DOWN) {
-        setTranslateY((pre) => {
-          return Math.max(pre - 1, -(length - 1));
-        });
-      }
-      if (event.keyCode === KEY_UP) {
-        setTranslateY((pre) => {
-          return Math.min(pre + 1, 0);
-        });
-      }
-    },
-    [length]
-  );
+  // const keyPress = useCallback(
+  //   (event) => {
+  //     if (event.keyCode === KEY_DOWN) {
+  //       setTranslateY((pre) => {
+  //         return Math.max(pre - 1, -(length - 1));
+  //       });
+  //     }
+  //     if (event.keyCode === KEY_UP) {
+  //       setTranslateY((pre) => {
+  //         return Math.min(pre + 1, 0);
+  //       });
+  //     }
+  //   },
+  //   [length]
+  // );
 
   useEffect(() => {
     pageOnChange?.(Math.abs(translateY));
@@ -165,6 +175,7 @@ const OnePageScroll = ({
   }, []);
 
   const top = useMemo(() => {
+    return -Math.abs(translateY) * containerHeight;
     if (children?.[Math.abs(translateY)] && containerRef.current) {
       return -containerRef.current?.children[Math.abs(translateY)]?.offsetTop;
     }
@@ -176,9 +187,6 @@ const OnePageScroll = ({
       ref={scrollRef}
       onWheel={onWheel}
       onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-      onTouchMove={onTouchMove}
-      onKeyDown={keyPress}
       style={{
         height: containerHeight || 0,
         width: containerWidth,

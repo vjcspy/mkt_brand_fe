@@ -1,6 +1,6 @@
 import { get } from "lodash";
 import { stringifyUrl } from "query-string";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import useSiteRouter from "../../hooks/useSiteRouter";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import BannerItem from "./banner-item";
@@ -96,10 +96,15 @@ const defaultConfig = {
   },
 };
 
-let firstLoad = false
 
-const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop }) => {
+const findIndexItemActive = (arr) => {
+  const index = arr.findIndex((t) => t.firstLoad?.value.active === "Yes")
+  return index > 0 ? index : 0
+}
+
+const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop, footer }) => {
   const router = useSiteRouter();
+  const initialIndex = useMemo(() => findIndexItemActive(config.components.tabBanner.value), []);
 
   const { tabBanner, bannerItem } = router.query;
   const length = config.components.tabBanner.value.length;
@@ -107,9 +112,10 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop }) => {
   const [{ width }, ref] = useIframeResize();
   const containerRef = useRef();
   const [transition, setTransition] = useState(true);
-  const [translateX, setTranslateX] = useState(0);
+  const [translateX, setTranslateX] = useState(-initialIndex);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [movePos, setMovePos] = useState({ x: 0, y: 0 });
+
   const [delta, setDelta] = useState({
     current: { x: 0, y: 0 },
     positive: false,
@@ -133,12 +139,12 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop }) => {
       const sizeofTab = currentTab.tab.value.length
       if (sizeofTab === indexBannerCurrentTab[tabBanner]) {
         setTimeout(() => {
-          onDisableTop(true)
-        }, [200])
+          onDisableTop(false)
+        }, 200)
       } else {
         setTimeout(() => {
-          onDisableTop(false)
-        }, [200])
+          onDisableTop(true)
+        }, 200)
       }
     }
   }, [indexBannerCurrentTab, tabBanner])
@@ -154,21 +160,20 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop }) => {
 
 
   useEffect(() => {
-    let active = config.components.tabBanner.value.find((t) => t.firstLoad?.value.active === "Yes") ?? config.components.tabBanner.value?.[0];
+    let active = config.components.tabBanner.value[initialIndex]
     if (active) {
       router.pushQuery(
         stringifyUrl({
           url: router.pathname,
           query: {
             tabBanner: active.tabCode.value,
-            bannerItem: active.tabCode.value + '-' + (indexBannerCurrentTab[active.tabCode.value] ?? 1)
+            bannerItem: active.tabCode.value + '-' + (indexBannerCurrentTab[active.tabCode.value] ? indexBannerCurrentTab[active.tabCode.value] : 1)
           },
         }),
         undefined,
         { shallow: false }
       );
     }
-    firstLoad = true
   }, []);
 
 
@@ -265,7 +270,7 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop }) => {
         }}
       >
         {config.components.tabBanner.value.map((config, index) => (
-          <BannerItem key={index} tabCode={config.tabCode.value} config={config.tab} onChangeBanner={handleChangeCurrentTab} isDisableTop={isDisableTop} />
+          <BannerItem footer={footer} key={index} tabCode={config.tabCode.value} config={config.tab} onChangeBanner={handleChangeCurrentTab} isDisableTop={isDisableTop} />
         ))}
       </TabContainerWrapper>
     </TabScrollWrapper>

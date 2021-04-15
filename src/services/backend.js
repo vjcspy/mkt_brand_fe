@@ -22,14 +22,19 @@ export const getInitialData = async (ctx) => {
   const store = group?.stores?.find((s, index) =>
     group?.default_store_id ? s.id === group.default_store_id : index === 0
   );
-  const siteCode = webData?.code ?? process.env.SITE_CODE;
-  const storeCode = store?.code ?? process.env.STORE_CODE;
-  return {
-    siteCode,
-    storeCode,
-    root_category_id,
-    brand_id,
-  };
+
+  const siteCode = webData?.code;
+  const storeCode = store?.code;
+  if (siteCode && storeCode && root_category_id && brand_id) {
+    return {
+      siteCode,
+      storeCode,
+      root_category_id,
+      brand_id,
+    };
+  } else {
+    throw new Error("siteCode or storeCode or root_category_id or brand_id null");
+  }
 };
 
 export const getWebsitesConfig = async (domain) => {
@@ -493,5 +498,33 @@ export const getBrandStoryBySlug = async (slug, brandId) => {
           content
         }
       }`,
+  });
+};
+
+export const savePickUpVoucher = async ({
+  timeline,
+  fullName,
+  phoneNumber,
+  eVoucherCode,
+  platform,
+  placement,
+  memo,
+  content,
+  location,
+  brand,
+}) => {
+  const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
+  return Axios.post(`${host}/save-pick-up-voucher-data`, {
+    timeline,
+    fullName,
+    phoneNumber,
+    eVoucherCode,
+    newUser: false,
+    platform,
+    placement,
+    memo,
+    content,
+    location,
+    brand,
   });
 };

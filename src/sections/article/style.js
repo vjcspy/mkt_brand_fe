@@ -39,6 +39,13 @@ export const ContentBlog = styled.div`
   img {
     border-radius: 10px;
   }
+  iframe {
+    body {
+      ::-webkit-scrollbar {
+        width: 0px;
+      }
+    }
+  }
 `;
 
 export const DetailInfo = styled.div`

@@ -9,7 +9,8 @@ import useFromJS from "../src/hooks/useFromJS";
 import defaultTranslation from "../src/translations";
 import { useEffect } from "react";
 import { SET_DATA_INITIAL, SET_HOST, UPDATE_API_STATUS } from "../src/constants";
-import { fetchMenuCategories, fetchParentMenu, getInitialData } from "../src/services/backend";
+import { fetchParentMenu, getInitialData } from "../src/services/backend";
+import useSiteRouter from "../src/hooks/useSiteRouter";
 
 const ThemeWrapper = ({ children }) => {
   const theme = useFromJS(["modifiedConfig", "theme"]);
@@ -64,7 +65,6 @@ App.getInitialProps = async ({ Component, ctx }) => {
       menuApi,
     };
   } catch (e) {
-    console.log(e);
     return {
       host: process.env.API_HOST,
       graphqlHost: process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",

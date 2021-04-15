@@ -30,15 +30,11 @@ const EditerComponent = ({ config, path }) => {
           <ContentEditer>
             <h3>{title}</h3>
             <Editor
-              initialValue={`<p>${value[showEditerLanguage]}</p>`}
+              initialValue={value[showEditerLanguage]}
               init={{
                 height: 500,
                 menubar: false,
-                plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table paste code help wordcount",
-                ],
+                plugins: 'link image code fullpage',
                 toolbar:
                   "undo redo | formatselect |sizes  elect|forecolor|  bold italic underline backcolor |fontselect |fontsizeselect| link image|\
                   alignleft aligncenter alignright alignjustify  | code",

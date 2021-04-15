@@ -24,7 +24,6 @@ export async function getServerSideProps(ctx) {
     ]);
 
     let promoListResult = filterListPromoApi(promoListApi.result.content);
-    console.log("googleMapApi:", googleMapApi);
     return {
       props: {
         config: site?.config ?? null,
