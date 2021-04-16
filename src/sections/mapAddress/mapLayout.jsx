@@ -66,7 +66,7 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
                   onClick={() => setSItem(restaurant)}
                   lat={restaurant?.latitude ?? null}
                   lng={restaurant?.longitude ?? null}
-                  image={iconMarker?.url}
+                  image={iconMarker?.url ?? "https://ggg-api.s3.ap-southeast-1.amazonaws.com//assets/Group_6577_c07b4df2c3.svg"}
                   zoom={zoom}
                 />
               ))}
@@ -75,7 +75,7 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
                 lat={item?.latitude ?? null}
                 lng={item?.longitude ?? null}
                 title={item?.name}
-                image={iconMarker?.url}
+                image={iconMarker?.url ?? "https://ggg-api.s3.ap-southeast-1.amazonaws.com//assets/Group_6577_c07b4df2c3.svg"}
               />
             )}
             {restaurantViewMap && (
@@ -84,7 +84,7 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
                 lat={restaurantViewMap?.latitude ?? null}
                 lng={restaurantViewMap?.longitude ?? null}
                 title={restaurantViewMap?.name}
-                image={iconMarker?.url}
+                image={iconMarker?.url ?? "https://ggg-api.s3.ap-southeast-1.amazonaws.com//assets/Group_6577_c07b4df2c3.svg"}
               />
             )}
           </GoogleMapReact>
