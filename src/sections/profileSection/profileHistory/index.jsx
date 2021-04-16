@@ -80,7 +80,7 @@ const ProfileHistory = ({ setTransaction }) => {
                 <FormattedMessage id="profile.history_total" />: {toMoney(item.totalBillValue)}đ
               </h5>
               <h5>
-                {toMoney(item?.amount)}
+                {item?.totalEWalletGain}
                 <Icon icon="coin" />
               </h5>
             </Pricewrapper>
