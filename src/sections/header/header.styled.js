@@ -93,7 +93,7 @@ export const HeaderLinks = styled.div`
     top: ${({ positionTopMobile }) => positionTopMobile}px;
     left: 0;
     transform: translateY(-100%);
-
+    -webkit-overflow-scrolling: touch;
     width: 100%;
     background: #242424cc;
     a {
