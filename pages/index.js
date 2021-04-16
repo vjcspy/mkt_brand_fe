@@ -10,25 +10,22 @@ import HomePageContainer from "../src/containers/homePageContainer";
 export async function getServerSideProps(ctx) {
   try {
     const { siteCode } = await getInitialData(ctx);
-
     const { data: site } = await getSiteServer(siteCode);
     return {
       props: {
         config: site?.config ?? null,
-        site_code: siteCode ?? null,
       },
     };
   } catch (e) {
     return {
       props: {
         config: null,
-        site_code: null,
       },
     };
   }
 }
 
-const Site = ({ config, site_code }) => {
+const Site = ({ config }) => {
   const dispatch = useDispatch();
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
   useEffect(() => {
@@ -40,12 +37,7 @@ const Site = ({ config, site_code }) => {
 
   return (
     <Layout>
-      <HomePageContainer
-        siteCode={site_code}
-        pageName={Pages.home.name}
-        modifiedConfig={modifiedConfig}
-        shouldHideFooter={true}
-      />
+      <HomePageContainer pageName={Pages.home.name} modifiedConfig={modifiedConfig} shouldHideFooter={true} />
     </Layout>
   );
 };

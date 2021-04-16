@@ -108,10 +108,18 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant,
   }, [restaurantViewMap]);
 
   useEffect(() => {
+
     if (sItem) {
       const index = listRestaurantShow.findIndex((item) => item.code === sItem.code);
       let position = index > 0 ? refList.current.children[index]?.offsetTop : 0;
       ref.current.scrollTo({ top: position - 20, left: 0 });
+    }
+    if (size.width <= 768 && sItem) {
+      document.body.style.overflowY = "hidden";
+      document.body.style.height = "calc(100vh - 69px)";
+    } else {
+      document.body.style.overflowY = "hidden";
+      document.body.style.height = "100%";
     }
   }, [sItem])
 

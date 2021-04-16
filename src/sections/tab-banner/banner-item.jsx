@@ -7,10 +7,11 @@ import loadable from "@loadable/component";
 import ImageMedia from "../../development/components/imageMedia";
 import PointNavigation from "../../components/point-navigation";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
-import OnePageScroll from "../../components/one-page-scroll/one-page-scroll";
+import OnePageScrollHome from "../../components/one-page-scroll/one-page-scroll-home";
 import useSiteRouter from "../../hooks/useSiteRouter";
 import { stringifyUrl } from "query-string";
 import useRefCallback from "../../hooks/useRefCallback";
+import DynamicFooter from "../dynamic-footer";
 
 const IconTriangleLineTop = loadable(() => import("../../components/icons/iconTriangleLineTop"));
 const IconTriangleLineDown = loadable(() => import("../../components/icons/iconTriangleLineDown"));
@@ -32,7 +33,7 @@ const Link = ({ url, item, ...props }) => {
   return <LinkRouter {...props} href={href} />
 }
 
-const BannerItem = ({ config, tabCode, onChangeBanner, isDisableTop }) => {
+const BannerItem = ({ config, tabCode, onChangeBanner, isDisableTop, footer }) => {
   const locale = useSelector((s) => s.get("locale"));
   const tabShouldShow = config.value.filter((item) => item.statusTab.value.active === "Show");
   const size = tabShouldShow?.length ?? 0
@@ -73,7 +74,7 @@ const BannerItem = ({ config, tabCode, onChangeBanner, isDisableTop }) => {
   }, []);
 
   const Images = useMemo(() => {
-    return tabShouldShow.map((item, index) =>
+    let resutl = tabShouldShow.map((item, index) =>
       <WrapperSection key={index}>
         <ImageMedia
           preload={true}
@@ -92,18 +93,19 @@ const BannerItem = ({ config, tabCode, onChangeBanner, isDisableTop }) => {
         </GroupButton>
       </WrapperSection>
     );
+    return resutl
   }, [tabShouldShow, width]);
   return (
     <WrapperOnePageScroller ref={ref}>
-      <OnePageScroll
-        from="item"
+      <OnePageScrollHome
         customPageNumber={currentPage}
         containerHeight={height - headerHeight}
         pageOnChange={handlePageChange}
         isDisableTop={isDisableTop}
+        child={true}
       >
         {Images}
-      </OnePageScroll>
+      </OnePageScrollHome>
       <WrapperListPoint>
         <IconTriangleLineTop className="top" color="#ffffff" />
         <PointNavigation display="block" currentIndex={currentPage} size={size} />

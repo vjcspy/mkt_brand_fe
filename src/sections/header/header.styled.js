@@ -32,7 +32,6 @@ export const ContentHeaderLink = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-
   @media (max-width: 768px) {
     justify-content: space-between;
     width: 100%;
@@ -50,11 +49,6 @@ export const HeaderLinks = styled.div`
 
     &.active {
       color: ${({ theme }) => theme.color.status.primary};
-      // &: after {
-      //   content: "";
-      //   background: ${({ theme }) => theme.color.status.primary};
-      //   width: 100%;
-      // }
     }
 
     &:first-child {
@@ -95,16 +89,11 @@ export const HeaderLinks = styled.div`
 
   @media (max-width: 768px) {
     display: ${({ showMobile }) => (showMobile ? "block" : "none")};
-
     position: fixed;
-    top: 100%;
+    top: ${({ positionTopMobile }) => positionTopMobile}px;
     left: 0;
-
-    -webkit-transform: translate(0, -100%) translateZ(0);
-    -moz-transform: translate(0, -100%) translateZ(0);
-    -o-transform: translate(0, -100%) translateZ(0);
-    transform: translate(0, -100%) translateZ(0);
-
+    transform: translateY(-100%);
+    -webkit-overflow-scrolling: touch;
     width: 100%;
     background: #242424cc;
     a {

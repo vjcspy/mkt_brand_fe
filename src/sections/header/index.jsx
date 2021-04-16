@@ -27,6 +27,7 @@ import Link from "next/link";
 import PopupLanguageLocation from "./popup-language-location";
 import { fetchMenuCategories, fetchParentMenu, filterListPromoApi, getPromotionByBrandProvince, getProvinceIdByLocation, getProvinces } from "../../services/backend";
 import { showNotification } from "../../components/notification";
+import useAppHeight from "../../hooks/useAppHeight";
 
 const MenuRight = loadable(() => import("../../components/menu"));
 
@@ -228,6 +229,9 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   const [transition, setTransition] = useState(true);
   const [width, setWidth] = useState(0);
   const [index, setIndex] = useState(0);
+  const appHeight = useAppHeight();
+
+  const [positionTopMobile, setPositionTopMobile] = useState({ height: appHeight })
   useEffect(() => {
     if (!process.browser) {
       return;
@@ -340,7 +344,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
                 </LogoWrapper>
               </LinkRouter>
             </FlexGrow>
-            <HeaderLinks showMobile={showMenuHeader}>
+            <HeaderLinks positionTopMobile={positionTopMobile.height} showMobile={showMenuHeader}>
               <ContentHeaderLink ref={linkRef}>
                 {navMenu?.children.map((e, i) => (
                   <LinkRouter key={i} passHref={true} href={e.url} shallow>

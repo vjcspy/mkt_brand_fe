@@ -12,6 +12,7 @@ const CommentMobile = ({ comments }) => {
   return (
     <>
       <Swiper
+        direction="horizontal"
         slidesPerView={1}
         onSlideChange={(index) => setCurrentSlideMobile(index?.activeIndex)}
         // onSwiper={(swiper) => console.log("oko")}

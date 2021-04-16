@@ -75,11 +75,7 @@ const BlogComponent = ({ path, blog, ...rest }) => {
   }, []);
 
   const onChangeData = (value, name) => {
-    if (name === "slug") {
-      setBlogApi((preState) => ({ ...preState, [name]: slug(value) }));
-    } else {
-      setBlogApi((preState) => ({ ...preState, [name]: value }));
-    }
+    setBlogApi((preState) => ({ ...preState, [name]: value }));
   }
 
   return (
@@ -144,19 +140,24 @@ const BlogComponent = ({ path, blog, ...rest }) => {
         <PopupWrapperEditer>
           <ContentEditer>
             <Editor
-              initialValue={`<p>${blogApi.content}</p>`}
+              initialValue={blogApi.content}
               tagName='div'
               init={{
+                codesampleLanguages: [
+                  { text: 'HTML/XML', value: 'markup' },
+                  { text: 'JavaScript', value: 'javascript' },
+                  { text: 'CSS', value: 'css' },
+                ],
                 outputFormat: 'html',
                 height: 500,
                 menubar: false,
                 content_style: "body {font-size: 14pt;}",
                 fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
                 image_uploadtab: true,
-                plugins: 'link image code',
+                plugins: 'link image   pageembed code preview',
                 toolbar:
                   "undo redo | formatselect |sizes  elect|forecolor|  bold italic underline backcolor |fontselect |fontsizeselect| link image|\
-                  alignleft aligncenter alignright alignjustify | code",
+                  alignleft aligncenter alignright alignjustify | pageembed code preview",
               }}
               onEditorChange={value => onChangeData(value, "content")}
             />
