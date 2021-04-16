@@ -32,8 +32,8 @@ export const ListLocation = styled.div`
   top: 100%;
   padding-top: 2px;
   max-height: 150px;
-  overflow-y:auto;
-  z-index:10;
+  overflow-y: auto;
+  z-index: 10;
   div {
     display: flex;
     align-items: center;
@@ -56,6 +56,9 @@ export const ListLocation = styled.div`
 
   @media (max-width: 768px) {
     width: 100%;
+    top: unset;
+    bottom: 100%;
+
     div {
       padding: 10px 16px;
       p {
