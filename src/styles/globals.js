@@ -194,11 +194,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .rps-scroll--disabled {
-    position: fixed;
-    height: unset !important;
-    max-height: unset !important;
-    top: 0px;
-    left: 0px;
     width: 100%;
     overflow: hidden;
     transition: .3s top ease-in-out;

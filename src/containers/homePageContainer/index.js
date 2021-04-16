@@ -63,7 +63,7 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
   }, [modifiedConfig, sections, isDisableTop]);
 
   return (
-    <MainContainer>
+    <>
       <RenderHeader pageName={pageName} config={header} menus={modifiedConfig?.menus} />
       <MainWrapper style={{ height: appHeight - headerHeight }} className="main-content">
         <OnePageScrollHome
@@ -93,7 +93,7 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
       </MainWrapper>
       {show && <AcceptCookie />}
       <NotificationProvider />
-    </MainContainer>
+    </>
   );
 };
 

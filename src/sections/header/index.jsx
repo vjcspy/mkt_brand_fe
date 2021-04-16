@@ -401,6 +401,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
           </HeaderContent>
         </Container>
       </HeaderWrapper>
+      <div style={{ height: ref.current?.offsetHeight }}></div>
     </>
   );
 };

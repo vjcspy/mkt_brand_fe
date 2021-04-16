@@ -7,11 +7,11 @@ import fs from "fs";
 export const getInitialData = async (ctx) => {
   let pathname = ctx.req.headers.host;
   const [webSiteConfig, webSites] = await Promise.all([getWebsitesConfig(pathname), getWebsitesData()]);
-
   const webData = chain(webSites)
     .get(["data", "rows"])
     .find((e) => e.code === webSiteConfig?.website_code)
     .value();
+
   const { brand_id } = webData ?? {};
   const group = webData?.groups?.find((g, index) =>
     webData?.default_group_id ? g.id === webData?.default_group_id : index == 0
@@ -24,6 +24,7 @@ export const getInitialData = async (ctx) => {
 
   const siteCode = webData?.code;
   const storeCode = store?.code;
+
   if (siteCode && storeCode && root_category_id && brand_id) {
     return {
       siteCode,
@@ -236,7 +237,6 @@ export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCod
   const categoryTree = `fragment categoryTree on CategoryTree{id level name path position children{...categoryTreeChild}url_key}`;
   const categoryResult = `fragment category on CategoryResult{items{id name position description url_key children_count canonical_url level path children{...categoryTree}}}`;
   const query = `query{categories(filters:{ids:{in:["${rootCategory}"]}}pageSize:${pageSize} currentPage:${currentPage}){...category page_info{total_pages}total_count}}`;
-
   const { data } = await Axios.post(
     process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
     { query: `${categoryTreeChild} ${categoryTree} ${categoryResult} ${query}` },
@@ -254,8 +254,8 @@ export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCod
 };
 
 export const fetchMenuCategoriesListingData = async ({ categoryId, storeCode = "gogi_royal" }) => {
-  const productFragment = `fragment product on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url}only_x_left_in_stock options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html}sku stock_status thumbnail{url}url_key}`;
-  const bundleProductFragment = `fragment bundle on BundleProduct{items{__typename type position required title option_id options{product{... on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url}only_x_left_in_stock options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html}sku stock_status thumbnail{url}url_key}}}}}`;
+  const productFragment = `fragment product on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url} options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html} thumbnail{url}url_key}`;
+  const bundleProductFragment = `fragment bundle on BundleProduct{items{__typename type position required title option_id options{product{... on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url} options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html}sku thumbnail{url}url_key}}}}}`;
   const query = `query{catalogCategoryListingData(search:"" filters:{code:"category_id",data:{eq:"${categoryId}"}}pageSize:100 currentPage:1){items{...product ...bundle}page_info{total_pages}total_count}}`;
 
   const { data } = await Axios.post(
@@ -263,7 +263,6 @@ export const fetchMenuCategoriesListingData = async ({ categoryId, storeCode = "
     { query: `${productFragment} ${bundleProductFragment} ${query}` },
     { headers: { Store: storeCode } }
   );
-
   return get(data, ["data", "catalogCategoryListingData", "items"], []);
 };
 

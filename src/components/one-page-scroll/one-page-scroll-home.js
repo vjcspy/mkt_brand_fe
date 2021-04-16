@@ -38,23 +38,27 @@ const OnePageScrollHome = ({
       const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
 
       let startY = event.touches[0].pageY;
-      let endY;
+      let startX = event.touches[0].pageX;
+      let endY, endX;
 
       const onTouchMove = (event) => {
         endY = event.touches[0].pageY;
+        endX = event.touches[0].pageX;
       };
 
       const onTouchEnd = () => {
-        setTransition(true);
-        if (startY > endY) {
-          // cong
-          changeTranslate(true);
-        } else {
-          //tru
-          changeTranslate(false);
+        if (Math.abs(startY - endY) > Math.abs(startX - endX)) {
+          setTransition(true);
+          if (startY > endY) {
+            // cong
+            changeTranslate(true);
+          } else {
+            //tru
+            changeTranslate(false);
+          }
+          win.document.removeEventListener("touchend", onTouchEnd);
+          win.document.removeEventListener("touchmove", onTouchMove);
         }
-        win.document.removeEventListener("touchend", onTouchEnd);
-        win.document.removeEventListener("touchmove", onTouchMove);
       };
 
       win.document.addEventListener("touchend", onTouchEnd);
@@ -88,11 +92,9 @@ const OnePageScrollHome = ({
         behavior: "smooth",
       });
       win.document.body.classList.add(DISABLED_CLASS_NAME);
-      win.document.documentElement.classList.add(DISABLED_CLASS_NAME);
     } else {
       const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
       win.document.body.classList.remove(DISABLED_CLASS_NAME);
-      win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
     }
   }, [pageOnChange, translateY]);
 
