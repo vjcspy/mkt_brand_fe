@@ -154,10 +154,10 @@ const BlogComponent = ({ path, blog, ...rest }) => {
                 content_style: "body {font-size: 14pt;}",
                 fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
                 image_uploadtab: true,
-                plugins: 'link image code fullpage',
+                plugins: 'link image   pageembed code preview',
                 toolbar:
                   "undo redo | formatselect |sizes  elect|forecolor|  bold italic underline backcolor |fontselect |fontsizeselect| link image|\
-                  alignleft aligncenter alignright alignjustify | code",
+                  alignleft aligncenter alignright alignjustify | pageembed code preview",
               }}
               onEditorChange={value => onChangeData(value, "content")}
             />

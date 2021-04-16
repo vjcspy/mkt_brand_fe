@@ -269,6 +269,12 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
     );
   }, [])
 
+  useEffect(() => {
+    let timer = setInterval(() => {
+      setPositionTopMobile({ height: appHeight })
+    }, 100)
+    return () => clearInterval(timer)
+  }, [])
 
   const isHomePage = useMemo(() => {
     if (mode === DEVELOPMENT_MODE) {
