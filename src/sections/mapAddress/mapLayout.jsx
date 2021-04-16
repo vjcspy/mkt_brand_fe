@@ -66,25 +66,25 @@ const MapLayout = ({ listRestaurant, restaurantViewMap, onBack, item, iconMarker
                   onClick={() => setSItem(restaurant)}
                   lat={restaurant?.latitude ?? null}
                   lng={restaurant?.longitude ?? null}
-                  image={iconMarker.url}
+                  image={iconMarker?.url}
                   zoom={zoom}
                 />
               ))}
             {item && width <= 768 && (
               <Marker
-                lat={item.latitude ?? null}
-                lng={item.longitude ?? null}
-                title={item.name}
-                image={iconMarker.url}
+                lat={item?.latitude ?? null}
+                lng={item?.longitude ?? null}
+                title={item?.name}
+                image={iconMarker?.url}
               />
             )}
             {restaurantViewMap && (
               <Marker
 
-                lat={restaurantViewMap.latitude ?? null}
-                lng={restaurantViewMap.longitude ?? null}
-                title={restaurantViewMap.name}
-                image={iconMarker.url}
+                lat={restaurantViewMap?.latitude ?? null}
+                lng={restaurantViewMap?.longitude ?? null}
+                title={restaurantViewMap?.name}
+                image={iconMarker?.url}
               />
             )}
           </GoogleMapReact>
