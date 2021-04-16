@@ -5,8 +5,7 @@ import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../constants";
 import fs from "fs";
 
 export const getInitialData = async (ctx) => {
-  const pathname = ctx.req.headers.host;
-
+  let pathname = ctx.req.headers.host;
   const [webSiteConfig, webSites] = await Promise.all([getWebsitesConfig(pathname), getWebsitesData()]);
 
   const webData = chain(webSites)
@@ -132,7 +131,7 @@ export const getApiKeyGoogleMap = async () => {
     const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
     const { data } = await Axios.get(`${host}/get-configs`);
     const fileData = getData();
-    fileData["getApiKeyGoogleMap"] = data;
+    fileData["getApiKeyGoogleMap"] = data?.[0];
     saveData(fileData);
     return data;
   }

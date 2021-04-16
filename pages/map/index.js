@@ -22,7 +22,7 @@ export async function getServerSideProps(ctx) {
         brandId: brand_id ?? null,
         config: site?.config ?? null,
         site_code: site?.site_code ?? null,
-        googleMapApi: googleMapApi[0] ?? null,
+        googleMapApi: googleMapApi ?? null,
         restaurantViewMap,
         listRestaurant: dataForMap.result,
       },
