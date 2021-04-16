@@ -161,6 +161,7 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop, footer 
 
   useEffect(() => {
     let active = config.components.tabBanner.value[initialIndex]
+    console.log(active)
     if (active) {
       router.pushQuery(
         stringifyUrl({

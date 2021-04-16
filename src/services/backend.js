@@ -6,6 +6,7 @@ import fs from "fs";
 
 export const getInitialData = async (ctx) => {
   let pathname = ctx.req.headers.host;
+  pathname = pathname === "172.31.21.19:3041" ? "localhost:3041" : pathname;
   const [webSiteConfig, webSites] = await Promise.all([getWebsitesConfig(pathname), getWebsitesData()]);
 
   const webData = chain(webSites)

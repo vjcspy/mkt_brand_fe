@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { SET_DATA_INITIAL, SET_HOST, UPDATE_API_STATUS } from "../src/constants";
 import { fetchParentMenu, getInitialData } from "../src/services/backend";
 import useSiteRouter from "../src/hooks/useSiteRouter";
+import useAppHeight from "../src/hooks/useAppHeight";
 
 const ThemeWrapper = ({ children }) => {
   const theme = useFromJS(["modifiedConfig", "theme"]);
@@ -23,7 +24,6 @@ const LanguageWrapper = ({ children }) => {
 
 const HostWrapper = ({ children, host, graphqlHost, dataInitial, menuApi }) => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch({ type: SET_HOST, host, graphqlHost });
     dispatch({ type: SET_DATA_INITIAL, value: dataInitial });

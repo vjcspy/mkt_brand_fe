@@ -32,13 +32,9 @@ const Login = ({ config }) => {
 
   return (
     <Layout>
-      <MainContainer>
-        <RenderHeader pageName={Pages.login.name} config={header} menus={modifiedConfig?.menus} />
-        <MainWrapper className="main-content">
-          <RenderSections sections={sections} />
-        </MainWrapper>
-        <NotificationProvider />
-      </MainContainer>
+      <RenderHeader pageName={Pages.login.name} config={header} menus={modifiedConfig?.menus} />
+      <RenderSections sections={sections} />
+      <NotificationProvider />
     </Layout>
   );
 };
