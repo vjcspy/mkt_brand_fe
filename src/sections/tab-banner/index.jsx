@@ -160,21 +160,22 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop, footer 
 
 
   useEffect(() => {
-    let active = config.components.tabBanner.value[initialIndex]
-    console.log(active)
-    if (active) {
-      router.pushQuery(
-        stringifyUrl({
-          url: router.pathname,
-          query: {
-            tabBanner: active.tabCode.value,
-            bannerItem: active.tabCode.value + '-' + (indexBannerCurrentTab[active.tabCode.value] ? indexBannerCurrentTab[active.tabCode.value] : 1)
-          },
-        }),
-        undefined,
-        { shallow: false }
-      );
-    }
+    setTimeout(() => {
+      let active = config.components.tabBanner.value[initialIndex]
+      if (active) {
+        router.pushQuery(
+          stringifyUrl({
+            url: router.pathname,
+            query: {
+              tabBanner: active.tabCode.value,
+              bannerItem: active.tabCode.value + '-' + (indexBannerCurrentTab[active.tabCode.value] ? indexBannerCurrentTab[active.tabCode.value] : 1)
+            },
+          }),
+          undefined,
+          { shallow: false }
+        );
+      }
+    }, 1)
   }, []);
 
 

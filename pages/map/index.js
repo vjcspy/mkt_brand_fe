@@ -14,7 +14,7 @@ export async function getServerSideProps(ctx) {
     const [googleMapApi, { data: site }, { data: dataForMap }] = await Promise.all([
       getApiKeyGoogleMap(),
       getSiteServer(siteCode),
-      getListRestaurant({ brand_id }),
+      getListRestaurant({ brandId: brand_id }),
     ]);
     let restaurantViewMap = idRestaurant ? dataForMap.result?.find((item) => item.code == idRestaurant) ?? null : null;
     return {
