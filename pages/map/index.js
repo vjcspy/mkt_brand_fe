@@ -24,7 +24,7 @@ export async function getServerSideProps(ctx) {
         site_code: site?.site_code ?? null,
         googleMapApi: googleMapApi ?? null,
         restaurantViewMap,
-        listRestaurant: dataForMap.result,
+        listRestaurant: dataForMap.result ?? null,
       },
     };
   } catch (e) {
