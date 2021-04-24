@@ -5,7 +5,7 @@ export const DialogBackground = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 100vh;
+  height: var(--app-height);
   overflow: auto;
   position: absolute;
   top: 0px;

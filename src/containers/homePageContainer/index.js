@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { RenderHeader, Sections } from "../../sections";
 import { MainContainer, MainWrapper } from "../../styles";
 import { get } from "lodash";
 import DynamicFooter from "../../sections/dynamic-footer";
-import { useSelector } from "react-redux";
-import OnePageScrollHome from "../../components/one-page-scroll/one-page-scroll-home";
+import { useDispatch, useSelector } from "react-redux";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
-import useRefCallback from "../../hooks/useRefCallback";
 import NotificationProvider from "../../components/notification";
 import AcceptCookie from "../../components/accept-cookie";
-import useAppHeight from "../../hooks/useAppHeight";
+import { SET_SHOW_MENU_HEADER } from "../../constants";
+
 const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRouter, ...rest }) => {
   pageName = pageNameQueryRouter ?? pageName;
   const header = get(modifiedConfig, ["header"]);
@@ -17,14 +16,21 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
   const sections = get(modifiedConfig, ["pages", pageName, "sections"]);
   const [show, setShow] = useState(true);
   const acceptCookie = useSelector((state) => state.get("acceptCookie"));
-  const headerHeight = useSelector((s) => s.get("headerHeight"));
+  const headerHeight = useSelector((s) => s.get("headerHeight")) ?? 0;
   const [{ width, height }, ref] = useIframeResize();
-  const [currentPage, setCurrentPage] = useState(0);
+  const footerRef = useRef();
+  const [showFooter, setShowFooter] = useState(false);
 
-  const [isDisableTop, setIsDisableTop] = useState({
-    parent: false,
-  });
-  const appHeight = useAppHeight();
+  const dispatch = useDispatch();
+
+  const setShowMenuHeader = useCallback((value) => {
+    setShowFooter(!value);
+    dispatch({ type: SET_SHOW_MENU_HEADER, value });
+  }, []);
+
+  const handleScrollToFooter = useCallback(() => {
+    setShowMenuHeader(false);
+  }, []);
 
   useEffect(() => {
     if (acceptCookie) {
@@ -32,68 +38,65 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
     }
   }, [acceptCookie]);
 
-  const handlePageChange = useRefCallback((index) => {
-    setCurrentPage(index);
-    if (index > 0) {
-      setIsDisableTop(false);
-    } else {
-      setIsDisableTop(true);
+  const mainHeight = useMemo(() => {
+    if (showFooter && footerRef.current) {
+      return Math.max(footerRef.current.offsetHeight, height - headerHeight);
     }
-  }, []);
+    return height - headerHeight;
+  }, [showFooter, height, headerHeight]);
 
-  const renderSection = useMemo(() => {
-    let result =
-      sections?.map((config, index) => {
-        const Section = Sections[config?.name];
-        if (Section) {
-          return (
-            <Section
-              key={index}
-              isDisableTop={isDisableTop} // for scroll banner (#parent)
-              onDisableTop={(value) => setIsDisableTop(value)}
-              {...rest}
-              config={config}
-              footer={footer}
-            />
-          );
-        }
-      }) ?? [];
-    result.push(<DynamicFooter config={footer} />);
-    return result;
-  }, [modifiedConfig, sections, isDisableTop]);
+  useEffect(() => {
+    const win = get(ref, ["current", "ownerDocument", "defaultView", "window"], window);
+    const onScroll = () => {
+      if (win.document.documentElement.scrollTop <= -20) {
+        setShowMenuHeader(true);
+      }
+    };
+    const onWheel = (e) => {
+      if (e.wheelDelta > 0 && win.document.documentElement.scrollTop <= 0) {
+        setShowMenuHeader(true);
+      }
+    };
+    if (showFooter) {
+      win.addEventListener("wheel", onWheel);
+      win.addEventListener("scroll", onScroll);
+    }
+    return () => {
+      win.removeEventListener("scroll", onScroll);
+      win.removeEventListener("wheel", onWheel);
+    };
+  }, [showFooter]);
 
   return (
-    <>
+    <MainContainer ref={ref}>
       <RenderHeader pageName={pageName} config={header} menus={modifiedConfig?.menus} />
-      <MainWrapper style={{ height: appHeight - headerHeight }} className="main-content">
-        <OnePageScrollHome
-          isDisableTop={!isDisableTop}
-          pageOnChange={handlePageChange}
-          customPageNumber={currentPage}
-          containerHeight={height - headerHeight}
-          widthParent={width}
-          from="home"
+      <MainWrapper
+        style={{
+          height: mainHeight,
+          maxHeight: mainHeight,
+          overflow: "hidden",
+        }}
+        className="main-content"
+      >
+        <div
+          style={{
+            transition: "all 0.3s ease-in-out",
+            transform: `translate3d(0px, ${showFooter ? -(height - headerHeight) : 0}px, 0px)`,
+            width: "100%",
+          }}
         >
           {sections?.map((config, index) => {
             const Section = Sections[config?.name];
             if (Section) {
-              return (
-                <Section
-                  key={index}
-                  isDisableTop={isDisableTop} // for scroll banner (#parent)
-                  onDisableTop={(value) => setIsDisableTop(value)}
-                  {...rest}
-                  config={config}
-                />
-              );
+              return <Section key={index} scrollToFooter={handleScrollToFooter} {...rest} config={config} />;
             }
           })}
-          <DynamicFooter config={footer} />
-        </OnePageScrollHome>
+          <DynamicFooter config={footer} ref={footerRef} mainHeight={mainHeight} />
+        </div>
       </MainWrapper>
       {show && <AcceptCookie />}
       <NotificationProvider />
-    </>
+    </MainContainer>
   );
 };
 

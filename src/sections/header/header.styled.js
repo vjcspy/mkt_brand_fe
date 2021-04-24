@@ -41,6 +41,8 @@ export const ContentHeaderLink = styled.div`
 
 export const HeaderLinks = styled.div`
   position: relative;
+  overflow: hidden;
+  width: 100%;
 
   a {
     margin: 0 30px;
@@ -89,11 +91,11 @@ export const HeaderLinks = styled.div`
 
   @media (max-width: 768px) {
     display: ${({ showMobile }) => (showMobile ? "block" : "none")};
-    position: fixed;
+    position: absolute;
     top: ${({ positionTopMobile }) => positionTopMobile}px;
     left: 0;
-    transform: translateY(-100%);
-
+    transform: translate3d(0, 0, 0);
+    perspective: 1000;
     width: 100%;
     background: #242424cc;
     a {

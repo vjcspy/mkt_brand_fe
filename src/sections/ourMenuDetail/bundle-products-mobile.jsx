@@ -13,8 +13,7 @@ import {
   MenuChildMobileInfo,
 } from "./styled";
 import OnePageScroll from "../../components/one-page-scroll/one-page-scroll";
-import useAppHeight from "../../hooks/useAppHeight";
-import DynamicFooter from "../dynamic-footer";
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 
 const BundleProductMobile = ({ config, footer, setMenuDetail }) => {
   const [current, setCurrent] = useState(0);
@@ -23,15 +22,14 @@ const BundleProductMobile = ({ config, footer, setMenuDetail }) => {
   const [itemHeight, setItemHeight] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
   const headerHeight = useSelector((s) => s.get("headerHeight") ?? 0);
-  const appHeight = useAppHeight();
-  const ref = useRef();
+  const [{ height }, ref] = useIframeResize();
   const infoOffsetHeight = ref.current?.offsetHeight ?? 0;
 
   useEffect(() => {
-    const height = appHeight - (headerHeight + infoOffsetHeight - 20);
+    const height = height - (headerHeight + infoOffsetHeight - 20);
     setItemHeight(height);
-    setContainerHeight(appHeight - headerHeight);
-  }, [appHeight, headerHeight, infoOffsetHeight]);
+    setContainerHeight(height - headerHeight);
+  }, [height, headerHeight, infoOffsetHeight]);
 
   useEffect(() => {
     const product = get(config, ["products", current]);
@@ -41,19 +39,17 @@ const BundleProductMobile = ({ config, footer, setMenuDetail }) => {
     setShouldHide(!product);
   }, [current, config.products]);
 
-  const items = useMemo(() => (config.products ?? []), [config]);
+  const items = useMemo(() => config.products ?? [], [config]);
 
   return (
     <MenuChildMobileWrapper style={{ height: containerHeight }}>
       <MenuChildMobileScroller>
         <OnePageScroll containerHeight={containerHeight} pageOnChange={setCurrent}>
-          {items.map((product, index) =>
-          (
+          {items.map((product, index) => (
             <MenuChildItemMobile key={index} style={{ height: itemHeight }}>
               <Image width="300" height="300" src={product.image.url} alt={product.name} title={product.name} />
             </MenuChildItemMobile>
-          )
-          )}
+          ))}
         </OnePageScroll>
         <DotsWrapper style={{ top: `calc(50% - ${infoOffsetHeight}px)` }}>
           <PointNavigation size={config.products?.length ?? 0} currentIndex={current} display="block" />

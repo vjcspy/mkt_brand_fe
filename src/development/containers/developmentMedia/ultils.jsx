@@ -14,7 +14,7 @@ export const getType = (mime) => {
   return "file";
 };
 export const formatBytes = (receivedBytes, decimals = 0) => {
-  const { value, unit } = byteSize(receivedBytes * 1000, { precision: decimals });
+  const { value, unit } = byteSize(receivedBytes, { precision: decimals });
 
   if (!unit) {
     return "0B";

@@ -28,28 +28,27 @@ const Link = ({ url, item, ...props }) => {
     if (item.menuCode.value) {
       query.menuCode = item.menuCode.value;
     }
-    return stringifyUrl({ url, query })
-  }, [url, item])
-  return <LinkRouter {...props} href={href} />
-}
+    return stringifyUrl({ url, query });
+  }, [url, item]);
+  return <LinkRouter {...props} href={href} />;
+};
 
-const BannerItem = ({ config, tabCode, onChangeBanner, isDisableTop, footer }) => {
+const BannerItem = ({ config, tabCode, onChangeBanner, scrollToFooter }) => {
   const locale = useSelector((s) => s.get("locale"));
   const tabShouldShow = config.value.filter((item) => item.statusTab.value.active === "Show");
-  const size = tabShouldShow?.length ?? 0
-  const headerHeight = useSelector((s) => s.get("headerHeight"))
+  const size = tabShouldShow?.length ?? 0;
+  const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width, height }, ref] = useIframeResize();
   const router = useSiteRouter();
   const bannerItem = router.query.bannerItem;
 
   const initPage = (() => {
     if (bannerItem?.includes(tabCode)) {
-      return (bannerItem?.replace(tabCode + '-', '') ?? 1) - 1
+      return (bannerItem?.replace(tabCode + "-", "") ?? 1) - 1;
     }
     return 0;
-  })()
+  })();
   const [currentPage, setCurrentPage] = useState(initPage);
-
 
   useEffect(() => {
     if (bannerItem?.includes(tabCode)) {
@@ -61,7 +60,7 @@ const BannerItem = ({ config, tabCode, onChangeBanner, isDisableTop, footer }) =
   }, [bannerItem]);
 
   const handlePageChange = useRefCallback((index) => {
-    onChangeBanner(tabCode, index)
+    onChangeBanner(tabCode, index);
     if (index != currentPage) {
       router.pushQuery(
         stringifyUrl({ url: router.pathname, query: { bannerItem: `${tabCode}-${index + 1}` } }),
@@ -74,7 +73,7 @@ const BannerItem = ({ config, tabCode, onChangeBanner, isDisableTop, footer }) =
   }, []);
 
   const Images = useMemo(() => {
-    let resutl = tabShouldShow.map((item, index) =>
+    let resutl = tabShouldShow.map((item, index) => (
       <WrapperSection key={index}>
         <ImageMedia
           preload={true}
@@ -87,13 +86,13 @@ const BannerItem = ({ config, tabCode, onChangeBanner, isDisableTop, footer }) =
         <GroupButton>
           {item.showHead.value.active === "Show" && <h1>{item.headText.value[locale]}</h1>}
           {item.showContent.value.active === "Show" && <h3>{item.contentText.value[locale]}</h3>}
-          <Link url={item.link?.value.url} item={item} passHref >
+          <Link url={item.link?.value.url} item={item} passHref>
             <a className="link-banner">{item.link?.value?.label[locale] ?? "Xem ưu đãi"}</a>
           </Link>
         </GroupButton>
       </WrapperSection>
-    );
-    return resutl
+    ));
+    return resutl;
   }, [tabShouldShow, width]);
   return (
     <WrapperOnePageScroller ref={ref}>
@@ -101,7 +100,7 @@ const BannerItem = ({ config, tabCode, onChangeBanner, isDisableTop, footer }) =
         customPageNumber={currentPage}
         containerHeight={height - headerHeight}
         pageOnChange={handlePageChange}
-        isDisableTop={isDisableTop}
+        scrollToFooter={scrollToFooter}
         child={true}
       >
         {Images}

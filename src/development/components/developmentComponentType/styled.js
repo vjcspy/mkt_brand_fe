@@ -46,7 +46,7 @@ export const ItemRadio = styled.div`
 export const PopupWrapperEditer = styled.div`
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  height: var(--app-height);
   top: 50%;
   left: 50%;
   /* -webkit-transform: translate(-50%,-50%); */
@@ -296,7 +296,7 @@ export const WrapperDropDown = styled.div`
 export const Marker = styled.div`
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  height: var(--app-height);
   left: 0;
   top: 0;
   z-index: 1;
@@ -447,5 +447,5 @@ export const WrapperUploadImageBlog = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: var(--app-height);
 `;

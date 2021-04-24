@@ -177,7 +177,7 @@ const OnePageScrollHorizontal = ({
       onTouchMove={onTouchMove}
       onKeyDown={keyPress}
       style={{
-        height: heightChildren ? "fit-content" : containerHeight || height || "100vh",
+        height: heightChildren ? "fit-content" : containerHeight || height || "var(--app-height)",
         width: "100%",
         overflow: "hidden",
         outline: "none",

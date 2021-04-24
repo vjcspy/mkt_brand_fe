@@ -24,7 +24,7 @@ const MenuMainMobile = ({ menus, pageOnChange, onBack, pageIndex, footer, setMen
         pageOnChange={pageOnChange}
       >
         {menus?.map((config, i) => {
-          return <Product key={i + "100vh"} config={config} footer={footer} onBack={onBack} setMenuDetail={setMenuDetail} />;
+          return <Product key={i} config={config} footer={footer} onBack={onBack} setMenuDetail={setMenuDetail} />;
         })}
       </OnePageScrollHorizontal>
     </MenuMainMobileWrapper>

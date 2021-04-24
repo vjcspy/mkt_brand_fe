@@ -9,13 +9,12 @@ const TIMESCROLL = 300; //ms
 const OnePageScroll = ({
   children,
   pageOnChange,
-  containerHeight = "100vh",
+  containerHeight = "var(--app-height)",
   containerWidth = "100vw",
   minDeltaWheel = 5,
   minDeltaTouch = 50,
   customPageNumber,
-  isDisableTop,
-  from
+  from,
 }) => {
   const scrollRef = useRef();
   const containerRef = useRef();
@@ -38,41 +37,42 @@ const OnePageScroll = ({
     const Y = event.touches[0].pageY;
     const X = event.touches[0].pageX;
     var startPos = {
-      x: X, y: Y
-    }
+      x: X,
+      y: Y,
+    };
     var movePos = {
-      x: X, y: Y
-    }
+      x: X,
+      y: Y,
+    };
     var delta = {
       start: { x: X, y: Y },
       current: { x: X, y: Y },
       positive: undefined,
-    }
+    };
 
     setStartPos({ x: X, y: Y });
     setMovePos({ x: X, y: Y });
     setTransition(false);
 
-    const onTouchMove =
-      (event) => {
-        const Y = event.touches[0].pageY;
-        const X = event.touches[0].pageX;
-        if (Math.abs(startPos.x - X) > Math.abs(startPos.y - Y)) {
-          movePos = startPos;
-          setMovePos(movePos)
-          setTransition(true);
-        } else {
-          setTransition(false);
-          movePos = ({ x: X, y: Y });
-          setMovePos(movePos)
-        }
-        delta = {
-          start: delta.start,
-          current: { x: X, y: Y },
-          next: Y < delta.start.y,
-          positive: Math.abs(delta.start.y - Y) <= minDeltaTouch ? undefined : delta.current.y > Y,
-        };
+    const onTouchMove = (event) => {
+      const Y = event.touches[0].pageY;
+      const X = event.touches[0].pageX;
+      if (Math.abs(startPos.x - X) > Math.abs(startPos.y - Y)) {
+        movePos = startPos;
+        setMovePos(movePos);
+        setTransition(true);
+      } else {
+        setTransition(false);
+        movePos = { x: X, y: Y };
+        setMovePos(movePos);
       }
+      delta = {
+        start: delta.start,
+        current: { x: X, y: Y },
+        next: Y < delta.start.y,
+        positive: Math.abs(delta.start.y - Y) <= minDeltaTouch ? undefined : delta.current.y > Y,
+      };
+    };
 
     const onTouchEnd = () => {
       setTransition(true);
@@ -92,8 +92,7 @@ const OnePageScroll = ({
 
       win.document.removeEventListener("touchend", onTouchEnd);
       win.document.removeEventListener("touchmove", onTouchMove);
-
-    }
+    };
 
     win.document.addEventListener("touchend", onTouchEnd);
     win.document.addEventListener("touchmove", onTouchMove);
@@ -103,12 +102,10 @@ const OnePageScroll = ({
     (e) => {
       if (Math.abs(e.deltaY) > minDeltaWheel && !isScrolling) {
         if (e.deltaY > 0) {
-          if (!isDisableTop) {
-            setIsScrolling(true);
-            setTranslateY((pre) => {
-              return Math.max(pre - 1, -(length - 1));
-            });
-          }
+          setIsScrolling(true);
+          setTranslateY((pre) => {
+            return Math.max(pre - 1, -(length - 1));
+          });
         } else {
           setIsScrolling(true);
           setTranslateY((pre) => {
@@ -117,7 +114,7 @@ const OnePageScroll = ({
         }
       }
     },
-    [length, isScrolling, isDisableTop]
+    [length, isScrolling]
   );
 
   // const keyPress = useCallback(
@@ -145,12 +142,12 @@ const OnePageScroll = ({
         top: 0,
         behavior: "smooth",
       });
-      win.document.body.classList.add(DISABLED_CLASS_NAME);
-      win.document.documentElement.classList.add(DISABLED_CLASS_NAME);
+      // win.document.body.classList.add(DISABLED_CLASS_NAME);
+      // win.document.documentElement.classList.add(DISABLED_CLASS_NAME);
     } else {
-      const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
-      win.document.body.classList.remove(DISABLED_CLASS_NAME);
-      win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
+      // const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
+      // win.document.body.classList.remove(DISABLED_CLASS_NAME);
+      // win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
     }
   }, [pageOnChange, translateY]);
 

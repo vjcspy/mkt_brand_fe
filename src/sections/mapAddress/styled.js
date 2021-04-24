@@ -6,7 +6,7 @@ export const MapAddressWrapper = styled.div`
   width: 100%;
   max-height: calc(100vh - ${({ headerHeight }) => headerHeight ?? 0}px);
   padding-bottom: 40px;
-  height: 100vh;
+  height: var(--app-height);
 
   @media (max-width: 768px) {
     max-height: none;

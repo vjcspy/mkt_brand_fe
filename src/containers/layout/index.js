@@ -1,7 +1,25 @@
 import Head from "next/head";
 import { MainContainer } from "../../styles";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faImage } from "@fortawesome/free-regular-svg-icons";
+import { useEffect } from "react";
+
+library.add(faImage);
 
 export default function Layout({ children, seo }) {
+  useEffect(() => {
+    const appHeight = () => {
+      const doc = document.documentElement;
+      doc.style.setProperty("--app-height", `${window.innerHeight}px`);
+    };
+    appHeight();
+    window.addEventListener("resize", appHeight);
+
+    return () => {
+      window.removeEventListener("resize", appHeight);
+    };
+  }, []);
+
   return (
     <MainContainer>
       <Head>

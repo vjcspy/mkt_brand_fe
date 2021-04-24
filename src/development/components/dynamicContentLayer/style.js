@@ -5,7 +5,7 @@ export const WrapperLayer = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: var(--app-height);
   background: #00000063;
   z-index: 2000;
   display: flex;

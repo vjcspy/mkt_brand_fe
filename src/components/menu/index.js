@@ -24,11 +24,10 @@ import { FormattedMessage } from "react-intl";
 import LinkRouter from "../link-router";
 import SelectLocation from "../drop-down/SelectLocation";
 import SelectLanguage from "../drop-down/SelectLanguage";
-import useGraphql from "../../hooks/useApi/useGraphql";
 import useSiteRouter from "../../hooks/useSiteRouter";
-import useAppHeight from "../../hooks/useAppHeight";
 import { filterProvinceById } from "../../services/backend";
 import useFromJS from "../../hooks/useFromJS";
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 const mapDispatchToProp = (dispatch) => ({
   setShowLanguageLocation: (value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }),
 });
@@ -45,7 +44,7 @@ const Menu = ({ show, listMenu, setShowMenu, buttonRight, buttonLeft }) => {
     listMenu,
     menu,
   ]);
-  const appHeight = useAppHeight();
+  const [{ height }, ref] = useIframeResize();
   const router = useSiteRouter();
   const onCloseMenu = () => {
     // setClassNameMenu(null);
@@ -60,7 +59,7 @@ const Menu = ({ show, listMenu, setShowMenu, buttonRight, buttonLeft }) => {
   };
 
   return (
-    <WrapperMenu style={{ height: appHeight }} className={`${show ? "show" : "close"}`}>
+    <WrapperMenu ref={ref} style={{ height: height }} className={`${show ? "show" : "close"}`}>
       <ContentPosition>
         <MarkerLayout show={show} onClick={onCloseMenu} />
         <WrapperContentMenu show={show}>

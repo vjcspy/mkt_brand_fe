@@ -1,22 +1,21 @@
 import { get, isNil } from "lodash";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import useRefCallback from "../../hooks/useRefCallback";
 
 const KEY_UP = 38;
 const KEY_DOWN = 40;
 const DISABLED_CLASS_NAME = "rps-scroll--disabled";
 const TIMESCROLL = 200; //ms
 
-let startY;
-let endEY;
 const OnePageScrollHome = ({
   children,
   pageOnChange,
-  containerHeight = "100vh",
+  containerHeight = "var(--app-height)",
   containerWidth = "100vw",
   minDeltaWheel = 5,
   minDeltaTouch = 50,
   customPageNumber,
-  isDisableTop,
+  scrollToFooter,
   widthParent,
   from = "wwew",
   child,
@@ -51,10 +50,16 @@ const OnePageScrollHome = ({
           setTransition(true);
           if (startY > endY) {
             // cong
-            changeTranslate(true);
+            setTranslateY((pre) => {
+              if (pre === length - 1) {
+                scrollToFooter();
+                return pre;
+              }
+              return pre + 1;
+            });
           } else {
             //tru
-            changeTranslate(false);
+            setTranslateY((pre) => Math.max(pre - 1, 0));
           }
           win.document.removeEventListener("touchend", onTouchEnd);
           win.document.removeEventListener("touchmove", onTouchMove);
@@ -67,20 +72,25 @@ const OnePageScrollHome = ({
     [children]
   );
 
-  const onWheel = useCallback(
-    (e) => {
-      if (Math.abs(e.deltaY) > minDeltaWheel && !isScrolling) {
-        if (e.deltaY > 0) {
-          setIsScrolling(true);
-          changeTranslate(true);
-        } else {
-          setIsScrolling(true);
-          changeTranslate(false);
+  const onWheel = useRefCallback((e) => {
+    if (Math.abs(e.deltaY) > minDeltaWheel && !isScrolling) {
+      if (e.deltaY > 0) {
+        setIsScrolling(true);
+        if (translateY === length - 1) {
+          scrollToFooter();
         }
+        setTranslateY((pre) => {
+          if (pre === length - 1) {
+            return pre;
+          }
+          return pre + 1;
+        });
+      } else {
+        setIsScrolling(true);
+        setTranslateY((pre) => Math.max(pre - 1, 0));
       }
-    },
-    [length, isScrolling, isDisableTop]
-  );
+    }
+  }, []);
 
   useEffect(() => {
     pageOnChange?.(Math.abs(translateY));
@@ -91,10 +101,12 @@ const OnePageScrollHome = ({
         top: 0,
         behavior: "smooth",
       });
-      win.document.body.classList.add(DISABLED_CLASS_NAME);
+      // win.document.body.classList.add(DISABLED_CLASS_NAME);
+      // win.document.documentElement.classList.add(DISABLED_CLASS_NAME);
     } else {
-      const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
-      win.document.body.classList.remove(DISABLED_CLASS_NAME);
+      // const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
+      // win.document.body.classList.remove(DISABLED_CLASS_NAME);
+      // win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
     }
   }, [pageOnChange, translateY]);
 
@@ -117,24 +129,6 @@ const OnePageScrollHome = ({
       win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
     };
   }, []);
-
-  const changeTranslate = (down) => {
-    let move;
-    if (down) {
-      move = translateY >= length - 1 ? length - 1 : translateY + 1;
-    } else {
-      move = translateY >= 1 ? translateY - 1 : 0;
-    }
-    if (child && move < translateY) {
-      setTranslateY(move);
-    } else {
-      if (isDisableTop) {
-        setTranslateY(move);
-      }
-    }
-    startY = 0;
-    endEY = 0;
-  };
 
   return (
     <div

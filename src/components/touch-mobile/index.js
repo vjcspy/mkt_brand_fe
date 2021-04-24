@@ -1,16 +1,15 @@
 import React, { useRef, useState, useEffect } from "react";
 
 import IconRectangle from "../icons/iconRectangle";
-import IconClose from "../icons/iconsClose";
-import useAppHeight from "../../hooks/useAppHeight";
-import { WrapperDrag, ContentDrag, IconDrag, IconCloseDrag, Content } from "./style";
+import { WrapperDrag, ContentDrag, IconDrag, Content } from "./style";
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
+
 let postionStart;
 const DragMobile = ({ isShowDefault, children }) => {
-  const refDrag = useRef();
+  const [{ height: appHeight }, refDrag] = useIframeResize();
   const refContent = useRef();
   const [statusTop, setStatusTop] = useState(false);
   const [height, setHeight] = useState(230);
-  const appHeight = useAppHeight();
 
   const onMouseDown = (e) => {
     postionStart = e.clientY;

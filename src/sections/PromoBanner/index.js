@@ -57,8 +57,7 @@ const PromoBanner = ({ config = defaultConfig, listPromoActive }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const promoShouldShow = listPromoActive ?? valuePromo.filter((item) => item.statusPromo.value.active === "Show");
   const headerHeight = useSelector((s) => s.get("headerHeight"));
-  const [{ width }, ref] = useIframeResize();
-  const appHeight = useAppHeight();
+  const [{ width, height }, ref] = useIframeResize();
   const Images = useMemo(() => {
     return promoShouldShow?.map((item, index) => (
       <WrapperSection key={index}>
@@ -86,7 +85,7 @@ const PromoBanner = ({ config = defaultConfig, listPromoActive }) => {
     <WrapperOnePageScroller ref={ref}>
       <OnePageScroll
         customPageNumber={currentPage}
-        containerHeight={appHeight - headerHeight}
+        containerHeight={height - headerHeight}
         pageOnChange={setCurrentPage}
         totalElement={promoShouldShow.length}
       >
