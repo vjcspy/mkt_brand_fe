@@ -381,10 +381,11 @@ export const MenuChildMobileInfo = styled.div`
 `;
 
 export const MenuTreeMobileWrapper = styled.div`
-  position: fixed;
-  bottom: 0px;
+  position: absolute;
   left: 0px;
   right: 0px;
+  height: 60px;
+  top: ${({ top }) => top ?? 0}px;
   width: auto;
   background: rgba(0, 0, 0, 0.8);
   z-index: 1000;

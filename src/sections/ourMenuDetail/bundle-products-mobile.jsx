@@ -1,5 +1,5 @@
 import { get } from "lodash";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import Button from "../../components/button";
 import Image from "../../components/image";
@@ -12,10 +12,10 @@ import {
   DotsWrapper,
   MenuChildMobileInfo,
 } from "./styled";
-import OnePageScroll from "../../components/one-page-scroll/one-page-scroll";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
+import OnePageScrollMenu from "../../components/one-page-scroll/one-page-scroll-menu";
 
-const BundleProductMobile = ({ config, footer, setMenuDetail }) => {
+const BundleProductMobile = ({ config, setMenuDetail, scrollToFooter }) => {
   const [current, setCurrent] = useState(0);
   const [product, setProduct] = useState();
   const [shouldHide, setShouldHide] = useState(false);
@@ -26,8 +26,8 @@ const BundleProductMobile = ({ config, footer, setMenuDetail }) => {
   const infoOffsetHeight = ref.current?.offsetHeight ?? 0;
 
   useEffect(() => {
-    const height = height - (headerHeight + infoOffsetHeight - 20);
-    setItemHeight(height);
+    const h = height - (headerHeight + infoOffsetHeight - 20);
+    setItemHeight(h);
     setContainerHeight(height - headerHeight);
   }, [height, headerHeight, infoOffsetHeight]);
 
@@ -44,18 +44,23 @@ const BundleProductMobile = ({ config, footer, setMenuDetail }) => {
   return (
     <MenuChildMobileWrapper style={{ height: containerHeight }}>
       <MenuChildMobileScroller>
-        <OnePageScroll containerHeight={containerHeight} pageOnChange={setCurrent}>
+        <OnePageScrollMenu
+          containerHeight={containerHeight}
+          itemHeight={itemHeight}
+          pageOnChange={setCurrent}
+          scrollToFooter={scrollToFooter}
+        >
           {items.map((product, index) => (
             <MenuChildItemMobile key={index} style={{ height: itemHeight }}>
               <Image width="300" height="300" src={product.image.url} alt={product.name} title={product.name} />
             </MenuChildItemMobile>
           ))}
-        </OnePageScroll>
+        </OnePageScrollMenu>
         <DotsWrapper style={{ top: `calc(50% - ${infoOffsetHeight}px)` }}>
           <PointNavigation size={config.products?.length ?? 0} currentIndex={current} display="block" />
         </DotsWrapper>
       </MenuChildMobileScroller>
-      <MenuChildMobileInfo ref={ref} className={shouldHide ? "hide okokok" : "okok"}>
+      <MenuChildMobileInfo ref={ref} className={shouldHide ? "hide" : ""}>
         <h3>{product?.name}</h3>
         <h5>{toMoney(get(product, ["price_range", "minimum_price", "final_price", "value"]))} VNĐ/người</h5>
         <Button

@@ -3,14 +3,12 @@ import { RenderHeader, Sections } from "../../sections";
 import { MainContainer, MainWrapper } from "../../styles";
 import { get } from "lodash";
 import DynamicFooter from "../../sections/dynamic-footer";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import NotificationProvider from "../../components/notification";
 import AcceptCookie from "../../components/accept-cookie";
-import { SET_SHOW_MENU_HEADER } from "../../constants";
 
-const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRouter, ...rest }) => {
-  pageName = pageNameQueryRouter ?? pageName;
+const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
   const header = get(modifiedConfig, ["header"]);
   const footer = get(modifiedConfig, ["footer"]);
   const sections = get(modifiedConfig, ["pages", pageName, "sections"]);
@@ -21,11 +19,8 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
   const footerRef = useRef();
   const [showFooter, setShowFooter] = useState(false);
 
-  const dispatch = useDispatch();
-
   const setShowMenuHeader = useCallback((value) => {
     setShowFooter(!value);
-    dispatch({ type: SET_SHOW_MENU_HEADER, value });
   }, []);
 
   const handleScrollToFooter = useCallback(() => {
@@ -86,7 +81,7 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
       const onTouchEnd = () => {
         if (Math.abs(startY - endY) > Math.abs(startX - endX)) {
           if (startY < endY && win.document.documentElement.scrollTop <= 0) {
-            setShowMenuHeader(true);
+            setShowFooter(false);
           }
           win.document.removeEventListener("touchend", onTouchEnd);
           win.document.removeEventListener("touchmove", onTouchMove);
@@ -104,8 +99,8 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
       <RenderHeader pageName={pageName} config={header} menus={modifiedConfig?.menus} />
       <MainWrapper
         style={{
-          height: mainHeight,
-          maxHeight: mainHeight,
+          height: width < 768 ? mainHeight : null,
+          maxHeight: width < 768 ? mainHeight : null,
           overflow: "hidden",
         }}
         className="main-content"
@@ -132,4 +127,4 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
   );
 };
 
-export default HomePageContainer;
+export default OurMenuContainer;

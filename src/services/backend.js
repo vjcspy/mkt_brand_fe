@@ -186,6 +186,11 @@ export const fetchMenuCategories = async ({
   storeCode = "gogi_royal",
   rootCategory,
 } = {}) => {
+  if (process.env.DEV) {
+    try {
+      return JSON.parse(fs.readFileSync(path.join(process.cwd(), "menus.json"), "utf-8"));
+    } catch (e) {}
+  }
   const menu = await fetchParentMenu({
     pageSize,
     currentPage,

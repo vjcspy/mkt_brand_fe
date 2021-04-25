@@ -4,12 +4,8 @@ import { SET_SHOW_MENU_HEADER } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import {
-  getSiteServer,
-  fetchMenuCategories,
-  getInitialData,
-} from "../../src/services/backend";
-import PageContainer from "../../src/containers/pageContainer";
+import { getSiteServer, fetchMenuCategories, getInitialData } from "../../src/services/backend";
+import OurMenuContainer from "../../src/containers/our-menu-container";
 
 // export async function getStaticPaths() {
 //   const site = await getSite(process.env.SITE_CODE);
@@ -37,7 +33,7 @@ import PageContainer from "../../src/containers/pageContainer";
 // }
 
 export async function getServerSideProps(ctx) {
-  const { siteCode, storeCode, root_category_id } = await getInitialData(ctx)
+  const { siteCode, storeCode, root_category_id } = await getInitialData(ctx);
   const [{ data: site }, menus] = await Promise.all([
     getSiteServer(siteCode),
     fetchMenuCategories({ urlKey: siteCode, storeCode: storeCode, rootCategory: root_category_id }),
@@ -62,7 +58,7 @@ const Site = ({ site_code, config, menus }) => {
 
   return (
     <Layout>
-      <PageContainer
+      <OurMenuContainer
         menus={menus}
         pageName={Pages["our-menu"].name}
         siteCode={site_code}

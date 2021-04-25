@@ -309,21 +309,24 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   }, []);
 
   // get list provinces & number promo in hamburger menu
-  useEffect(async () => {
-    try {
-      if ((siteCode, storeCode, root_category_id, brand_id)) {
-        const [listProvince, { data: listPromo }] = await Promise.all([
-          getProvinces(),
-          getPromotionByBrandProvince({ brand_id }),
-        ]);
-        const provinces = listProvince ?? [{ id: 5, name: "Hà Nội" }];
-        let numPromo = filterListPromoApi(listPromo.result.content).length;
-        dispatch({ type: SET_NUM_PROMO, value: numPromo });
-        dispatch({ type: SET_LIST_PROVINCE, value: provinces });
+  useEffect(() => {
+    const fetchApi = async () => {
+      try {
+        if ((siteCode, storeCode, root_category_id, brand_id)) {
+          const [listProvince, { data: listPromo }] = await Promise.all([
+            getProvinces(),
+            getPromotionByBrandProvince({ brand_id }),
+          ]);
+          const provinces = listProvince ?? [{ id: 5, name: "Hà Nội" }];
+          let numPromo = filterListPromoApi(listPromo.result.content).length;
+          dispatch({ type: SET_NUM_PROMO, value: numPromo });
+          dispatch({ type: SET_LIST_PROVINCE, value: provinces });
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
-    }
+    };
+    fetchApi();
   }, [siteCode, storeCode, root_category_id, brand_id]);
 
   return (

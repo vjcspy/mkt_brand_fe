@@ -18,7 +18,7 @@ const OnePageScrollHorizontal = ({
   minDeltaWheel = 5,
   minDeltaTouch = 50,
   pageIndex = 0,
-  heightChildren
+  heightChildren,
 }) => {
   const scrollRef = useRef();
   const containerRef = useRef();
@@ -147,7 +147,7 @@ const OnePageScrollHorizontal = ({
         setHeight(height);
       }
     }
-  }, [pageOnChange, translateX]);
+  }, [pageOnChange, translateX, containerHeight]);
 
   useEffect(() => {
     var timeout;

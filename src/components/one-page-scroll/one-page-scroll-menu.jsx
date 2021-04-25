@@ -7,11 +7,12 @@ const KEY_DOWN = 40;
 const DISABLED_CLASS_NAME = "rps-scroll--disabled";
 const TIMESCROLL = 200; //ms
 
-const OnePageScrollHome = ({
+const OnePageScrollMenu = ({
   children,
   pageOnChange,
   containerHeight = "var(--app-height)",
   containerWidth = "100vw",
+  itemHeight,
   minDeltaWheel = 5,
   minDeltaTouch = 50,
   customPageNumber,
@@ -31,7 +32,6 @@ const OnePageScrollHome = ({
       setTranslateY(customPageNumber);
     }
   }, [customPageNumber]);
-
   const onTouchStart = useRefCallback((event) => {
     const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
 
@@ -145,7 +145,7 @@ const OnePageScrollHome = ({
       <div
         ref={containerRef}
         style={{
-          height: "100%",
+          height: itemHeight,
           transform: `translate3d(0px, -${translateY * 100}%, 0px)`,
           transition: transition ? `transform ${TIMESCROLL}ms ease-out` : "none",
         }}
@@ -156,4 +156,4 @@ const OnePageScrollHome = ({
   );
 };
 
-export default OnePageScrollHome;
+export default OnePageScrollMenu;

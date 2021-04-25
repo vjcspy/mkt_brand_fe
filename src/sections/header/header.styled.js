@@ -24,7 +24,6 @@ export const LogoWrapper = styled.a`
     max-height: 68px;
     width: auto;
     max-width: 140px;
-    width: 100%;
   }
 `;
 
@@ -41,8 +40,6 @@ export const ContentHeaderLink = styled.div`
 
 export const HeaderLinks = styled.div`
   position: relative;
-  overflow: hidden;
-  width: 100%;
 
   a {
     margin: 0 30px;
@@ -90,6 +87,8 @@ export const HeaderLinks = styled.div`
   }
 
   @media (max-width: 768px) {
+    overflow: hidden;
+    width: 100%;
     display: ${({ showMobile }) => (showMobile ? "block" : "none")};
     position: absolute;
     top: ${({ positionTopMobile }) => positionTopMobile}px;
