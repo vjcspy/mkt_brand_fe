@@ -58,6 +58,7 @@ import {
   SET_DISABLE_SCROLL_TAB_BANNER,
   SET_SITE_CODE,
   SET_DATA_INITIAL,
+  SET_SHOW_FOOTER,
 } from "../constants";
 import { Pages } from "../sections";
 import { formatConfig, setStorage } from "../services/frontend";
@@ -156,6 +157,8 @@ export default function rootReducer(state = initialState, action) {
       return state.set("headerHeight", action.value);
     case SET_SHOW_MENU_HEADER:
       return state.update("showMenuHeader", () => action.value);
+    case SET_SHOW_FOOTER:
+      return state.update("showFooter", () => action.value);
     case UPDATE_VALUE_TRANSITION:
       return state.updateIn(["modifiedConfig", "translation", ...action.path], () => action.value);
     case SET_HOST:

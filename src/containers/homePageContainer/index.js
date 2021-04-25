@@ -117,12 +117,16 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
             width: "100%",
           }}
         >
-          {sections?.map((config, index) => {
-            const Section = Sections[config?.name];
-            if (Section) {
-              return <Section key={index} scrollToFooter={handleScrollToFooter} {...rest} config={config} />;
-            }
-          })}
+          {useMemo(
+            () =>
+              sections?.map((config, index) => {
+                const Section = Sections[config?.name];
+                if (Section) {
+                  return <Section key={index} scrollToFooter={handleScrollToFooter} {...rest} config={config} />;
+                }
+              }),
+            []
+          )}
           <DynamicFooter config={footer} ref={footerRef} mainHeight={mainHeight} />
         </div>
       </MainWrapper>

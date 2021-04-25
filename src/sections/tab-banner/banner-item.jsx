@@ -11,7 +11,6 @@ import OnePageScrollHome from "../../components/one-page-scroll/one-page-scroll-
 import useSiteRouter from "../../hooks/useSiteRouter";
 import { stringifyUrl } from "query-string";
 import useRefCallback from "../../hooks/useRefCallback";
-import DynamicFooter from "../dynamic-footer";
 
 const IconTriangleLineTop = loadable(() => import("../../components/icons/iconTriangleLineTop"));
 const IconTriangleLineDown = loadable(() => import("../../components/icons/iconTriangleLineDown"));

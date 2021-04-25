@@ -16,8 +16,8 @@ const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
   const [pageIndex, setPageIndex] = useState(0);
   const [menuDetail, setMenuDetail] = useState();
   const router = useSiteRouter();
-  const [showTree, setShowTree] = useState(true);
   const headerHeight = useSelector((s) => s.get("headerHeight") ?? 0);
+  const showFooter = useSelector((s) => s.get("showFooter"));
   const [{ height }, cRef] = useIframeResize();
 
   const { menus, tree } = useMemo(() => {
@@ -92,14 +92,8 @@ const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
     [pageOnChange]
   );
 
-  const handleShowTree = useCallback((show) => {
-    scrollToFooter(show);
-    setShowTree(!show);
-  }, []);
-
   const updateParam = useRefCallback((index) => {
     const menuSelect = menus[index];
-    console.log(menuSelect.url_key);
     router.pushQuery(
       stringifyUrl({
         url: `/our-menu`,
@@ -121,9 +115,9 @@ const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
         pageOnChange={pageOnChange}
         onBack={handleClick}
         setMenuDetail={setMenuDetail}
-        scrollToFooter={handleShowTree}
+        scrollToFooter={scrollToFooter}
       />
-      {showTree && (
+      {!showFooter && (
         <MenuTreeMobile
           top={height - headerHeight - 60}
           tree={tree}

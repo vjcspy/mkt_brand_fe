@@ -3,10 +3,11 @@ import { RenderHeader, Sections } from "../../sections";
 import { MainContainer, MainWrapper } from "../../styles";
 import { get } from "lodash";
 import DynamicFooter from "../../sections/dynamic-footer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import NotificationProvider from "../../components/notification";
 import AcceptCookie from "../../components/accept-cookie";
+import { SET_SHOW_FOOTER } from "../../constants";
 
 const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
   const header = get(modifiedConfig, ["header"]);
@@ -17,14 +18,16 @@ const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
   const headerHeight = useSelector((s) => s.get("headerHeight")) ?? 0;
   const [{ width, height }, ref] = useIframeResize();
   const footerRef = useRef();
-  const [showFooter, setShowFooter] = useState(false);
+  const showFooter = useSelector((s) => s.get("showFooter"));
 
-  const setShowMenuHeader = useCallback((value) => {
-    setShowFooter(!value);
+  const dispatch = useDispatch();
+
+  const setShowMenuFooter = useCallback((value) => {
+    dispatch({ type: SET_SHOW_FOOTER, value });
   }, []);
 
   const handleScrollToFooter = useCallback(() => {
-    setShowMenuHeader(false);
+    setShowMenuFooter(true);
   }, []);
 
   useEffect(() => {
@@ -44,12 +47,12 @@ const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
     const win = get(ref, ["current", "ownerDocument", "defaultView", "window"], window);
     const onScroll = () => {
       if (win.document.documentElement.scrollTop <= -20) {
-        setShowMenuHeader(true);
+        setShowMenuFooter(false);
       }
     };
     const onWheel = (e) => {
       if (e.wheelDelta > 0 && win.document.documentElement.scrollTop <= 0) {
-        setShowMenuHeader(true);
+        setShowMenuFooter(false);
       }
     };
     if (showFooter) {
@@ -112,12 +115,16 @@ const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
             width: "100%",
           }}
         >
-          {sections?.map((config, index) => {
-            const Section = Sections[config?.name];
-            if (Section) {
-              return <Section key={index} scrollToFooter={handleScrollToFooter} {...rest} config={config} />;
-            }
-          })}
+          {useMemo(
+            () =>
+              sections?.map((config, index) => {
+                const Section = Sections[config?.name];
+                if (Section) {
+                  return <Section key={index} scrollToFooter={handleScrollToFooter} {...rest} config={config} />;
+                }
+              }),
+            [sections]
+          )}
           <DynamicFooter config={footer} ref={footerRef} mainHeight={mainHeight} />
         </div>
       </MainWrapper>

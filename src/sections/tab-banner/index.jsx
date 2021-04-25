@@ -258,6 +258,19 @@ const TabBanner = ({ config = defaultConfig, scrollToFooter, footer }) => {
     );
   };
 
+  const items = useMemo(() => {
+    return config.components.tabBanner.value.map((config, index) => (
+      <BannerItem
+        footer={footer}
+        key={index}
+        tabCode={config.tabCode.value}
+        config={config.tab}
+        onChangeBanner={handleChangeCurrentTab}
+        scrollToFooter={scrollToFooter}
+      />
+    ));
+  }, [config.components.tabBanner.value]);
+
   return (
     <TabScrollWrapper onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchStart={onTouchStart} ref={ref}>
       <TabContainerWrapper
@@ -268,16 +281,7 @@ const TabBanner = ({ config = defaultConfig, scrollToFooter, footer }) => {
           transform: `translateX(${((translateX + (movePos.x - startPos.x) / width) * 100) / length}%)`,
         }}
       >
-        {config.components.tabBanner.value.map((config, index) => (
-          <BannerItem
-            footer={footer}
-            key={index}
-            tabCode={config.tabCode.value}
-            config={config.tab}
-            onChangeBanner={handleChangeCurrentTab}
-            scrollToFooter={scrollToFooter}
-          />
-        ))}
+        {items}
       </TabContainerWrapper>
     </TabScrollWrapper>
   );
