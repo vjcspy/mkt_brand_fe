@@ -84,7 +84,7 @@ const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
       const onTouchEnd = () => {
         if (Math.abs(startY - endY) > Math.abs(startX - endX)) {
           if (startY < endY && win.document.documentElement.scrollTop <= 0) {
-            setShowFooter(false);
+            setShowMenuFooter(false);
           }
           win.document.removeEventListener("touchend", onTouchEnd);
           win.document.removeEventListener("touchmove", onTouchMove);
