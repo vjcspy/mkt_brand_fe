@@ -12,20 +12,15 @@ export const GlobalStyle = createGlobalStyle`
 
   html {
     height: var(--app-height);
-    overflow-y: hidden;
-    max-height: 100vh;
-    overscroll-behavior-x: none;
-    overscroll-behavior-y: none;
-    overscroll-behavior-y: contain;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
   
   body{
-    height: 100%;
-    max-height: 100vh;
+    height: var(--app-height);
     overflow-y: auto;
-    overscroll-behavior-x: none;
-    overscroll-behavior-y: none;
-    overscroll-behavior-y: contain;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     ::-webkit-scrollbar {
      width: 0px;
     }

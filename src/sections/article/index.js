@@ -72,9 +72,7 @@ const Article = ({ blog }) => {
             </Info>
           </HeaderBlog>
           <ContentBlog>
-            <StyledFrame style={{ width: "100%", height: height }}>
-              <div ref={refIframe} dangerouslySetInnerHTML={{ __html: blog.content }} />
-            </StyledFrame>
+            <div ref={refIframe} dangerouslySetInnerHTML={{ __html: blog.content }} />
           </ContentBlog>
           <FooterBlog>
             <a>Share</a>

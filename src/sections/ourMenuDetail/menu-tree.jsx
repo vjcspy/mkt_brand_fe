@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import IconTriangleDown from "../../components/icons/iconTriangleDown";
 import useAppHeight from "../../hooks/useAppHeight";
 import useSiteRouter from "../../hooks/useSiteRouter";
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import {
   CaretDownIcon,
   MenuItemButton,
@@ -30,7 +31,8 @@ const MenuTree = ({
   const router = useSiteRouter();
   const menu = router.query.category;
   const headerHeight = useSelector((s) => s.get("headerHeight"));
-  const appHeight = useAppHeight();
+  const [{ height }, ref] = useIframeResize();
+  
   useEffect(() => {
     if (menu && menus) {
       let index = menus.findIndex((m) => m.url_key === menu);
@@ -51,17 +53,21 @@ const MenuTree = ({
   }, [menu, menus]);
 
   const scrollTop = () => {
-    document.body.scrollTop = 0
-  }
+    document.body.scrollTop = 0;
+  };
 
   return (
-    <MenusComponentWrapper style={{ height: `${appHeight - headerHeight - 40}px`, top: headerHeight }} className="sticky">
+    <MenusComponentWrapper
+      ref={ref}
+      style={{ height: `${height - headerHeight - 40}px`, top: headerHeight }}
+      className="sticky"
+    >
       <div style={{ height: "fit-content" }}>
         {map(menus, (item, index) => (
           <MenuItemWrapper key={index}>
             <MenuItemButton
               onClick={() => {
-                scrollTop()
+                scrollTop();
                 if (index == indexParent) {
                   setIndexChild(undefined);
                   // setIndexParent(undefined);
@@ -106,14 +112,14 @@ const MenuTree = ({
                 {map(item.products, (bundleProduct, subIndex) => {
                   const hasChild = get(bundleProduct, ["items", "length"]) > 0;
                   const type = get(bundleProduct, ["items", 0, "type"]);
-                  const length = get(bundleProduct, ['items', 'length']);
-                  const shouldShowChild = !(type == 'checkbox' && length === 1)
+                  const length = get(bundleProduct, ["items", "length"]);
+                  const shouldShowChild = !(type == "checkbox" && length === 1);
                   return (
                     <Fragment key={subIndex}>
                       <MenuSubItemButton
                         isOpen={indexChild === subIndex}
                         onClick={() => {
-                          scrollTop()
+                          scrollTop();
                           if (subIndex == indexChild) {
                             setIndexGrandChild(undefined);
                             setIndexChild(undefined);
@@ -137,7 +143,7 @@ const MenuTree = ({
                               key={optionIndex}
                               isOpen={indexGrandChild === optionIndex}
                               onClick={() => {
-                                scrollTop()
+                                scrollTop();
                                 setIndexGrandChild(optionIndex);
                                 setPath([index, "products", subIndex, "items", optionIndex]);
                               }}
@@ -153,8 +159,6 @@ const MenuTree = ({
               </MenuSubItemWrapper>
             )}
 
-
-
             {indexParent == index && get(item, ["children", "length"]) > 0 && (
               <MenuSubItemWrapper isOpen={true}>
                 {map(item?.children, (subItem, subIndex) => (
@@ -162,7 +166,7 @@ const MenuTree = ({
                     <MenuSubItemButton
                       isOpen={indexChild === subIndex}
                       onClick={() => {
-                        scrollTop()
+                        scrollTop();
                         if (subIndex == indexChild) {
                           setIndexGrandChild(undefined);
                           setIndexChild(undefined);
@@ -180,8 +184,9 @@ const MenuTree = ({
                       }}
                     >
                       <h5
-                        className={`${get(subItem, ["children", "length"]) > 0 ? "sup-item-1 have-sup-menu " : " sup-item-1"
-                          }`}
+                        className={`${
+                          get(subItem, ["children", "length"]) > 0 ? "sup-item-1 have-sup-menu " : " sup-item-1"
+                        }`}
                       >
                         {subItem.name}
                       </h5>
@@ -195,7 +200,7 @@ const MenuTree = ({
                             key={sub2Index}
                             isOpen={indexGrandChild === sub2Index}
                             onClick={() => {
-                              scrollTop()
+                              scrollTop();
                               setIndexGrandChild(sub2Index);
                               setPath([index, "children", subIndex, "children", sub2Index]);
                             }}
@@ -205,16 +210,13 @@ const MenuTree = ({
                         ))}
                       </MenuSub2ItemWrapper>
                     )}
-
                   </Fragment>
                 ))}
               </MenuSubItemWrapper>
             )}
-
           </MenuItemWrapper>
         ))}
       </div>
-
     </MenusComponentWrapper>
   );
 };

@@ -1,6 +1,7 @@
 import { get } from "lodash";
-import React from "react";
+import React, { forwardRef } from "react";
 import { useSelector } from "react-redux";
+import { DynamicContent, DynamicWrapper } from "./styled";
 const defaultConfig = {
   type: "text",
   name: "dynamicHTMLFooter",
@@ -9,11 +10,15 @@ const defaultConfig = {
     contentHTML: { type: "text", title: "Content HTML", value: { vi: "", en: "" }, name: "text" },
   },
 };
-const DynamicFooter = ({ config = defaultConfig }) => {
+const DynamicFooter = forwardRef(({ config = defaultConfig, mainHeight }, ref) => {
   const locale = useSelector((s) => s.get("locale"));
   const content = get(config, ["components", "contentHTML", "value", locale]);
-  return <div style={{ width: "100%", height: "100%" }} dangerouslySetInnerHTML={{ __html: content }} />;
-};
+  return (
+    <DynamicWrapper style={{ minHeight: mainHeight }}>
+      <DynamicContent ref={ref} dangerouslySetInnerHTML={{ __html: content }} />
+    </DynamicWrapper>
+  );
+});
 
 DynamicFooter.defaultConfig = defaultConfig;
 

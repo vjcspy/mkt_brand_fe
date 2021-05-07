@@ -7,10 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import NotificationProvider from "../../components/notification";
 import AcceptCookie from "../../components/accept-cookie";
-import { SET_SHOW_MENU_HEADER } from "../../constants";
+import { SET_SHOW_FOOTER } from "../../constants";
 
-const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRouter, ...rest }) => {
-  pageName = pageNameQueryRouter ?? pageName;
+const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
   const header = get(modifiedConfig, ["header"]);
   const footer = get(modifiedConfig, ["footer"]);
   const sections = get(modifiedConfig, ["pages", pageName, "sections"]);
@@ -19,17 +18,16 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
   const headerHeight = useSelector((s) => s.get("headerHeight")) ?? 0;
   const [{ width, height }, ref] = useIframeResize();
   const footerRef = useRef();
-  const [showFooter, setShowFooter] = useState(false);
+  const showFooter = useSelector((s) => s.get("showFooter"));
 
   const dispatch = useDispatch();
 
-  const setShowMenuHeader = useCallback((value) => {
-    setShowFooter(!value);
-    dispatch({ type: SET_SHOW_MENU_HEADER, value });
+  const setShowMenuFooter = useCallback((value) => {
+    dispatch({ type: SET_SHOW_FOOTER, value });
   }, []);
 
   const handleScrollToFooter = useCallback(() => {
-    setShowMenuHeader(false);
+    setShowMenuFooter(true);
   }, []);
 
   useEffect(() => {
@@ -49,12 +47,12 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
     const win = get(ref, ["current", "ownerDocument", "defaultView", "window"], window);
     const onScroll = () => {
       if (win.document.documentElement.scrollTop <= -20) {
-        setShowMenuHeader(true);
+        setShowMenuFooter(false);
       }
     };
     const onWheel = (e) => {
       if (e.wheelDelta > 0 && win.document.documentElement.scrollTop <= 0) {
-        setShowMenuHeader(true);
+        setShowMenuFooter(false);
       }
     };
     if (showFooter) {
@@ -86,7 +84,7 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
       const onTouchEnd = () => {
         if (Math.abs(startY - endY) > Math.abs(startX - endX)) {
           if (startY < endY && win.document.documentElement.scrollTop <= 0) {
-            setShowMenuHeader(true);
+            setShowMenuFooter(false);
           }
           win.document.removeEventListener("touchend", onTouchEnd);
           win.document.removeEventListener("touchmove", onTouchMove);
@@ -104,8 +102,8 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
       <RenderHeader pageName={pageName} config={header} menus={modifiedConfig?.menus} />
       <MainWrapper
         style={{
-          height: mainHeight,
-          maxHeight: mainHeight,
+          height: width < 768 ? mainHeight : null,
+          maxHeight: width < 768 ? mainHeight : null,
           overflow: "hidden",
         }}
         className="main-content"
@@ -125,7 +123,7 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
                   return <Section key={index} scrollToFooter={handleScrollToFooter} {...rest} config={config} />;
                 }
               }),
-            []
+            [sections]
           )}
           <DynamicFooter config={footer} ref={footerRef} mainHeight={mainHeight} />
         </div>
@@ -136,4 +134,4 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
   );
 };
 
-export default HomePageContainer;
+export default OurMenuContainer;

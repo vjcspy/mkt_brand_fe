@@ -147,7 +147,7 @@ const PromoSection = ({ promoListApi, brandId }) => {
           <div
             style={{
               background: "rgba(0, 0, 0, 0)",
-              height: "100vh",
+              height: height,
               width: "100vw",
               zIndex: "3000",
               position: "fixed",

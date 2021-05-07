@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
-import ReactPageScroller from "../../../plugins/react-page-scroller";
 import loadable from "@loadable/component";
 
 import { WrapperContentPromo, WrapperEndpoint, WrapperDragMobile, WrapperScroller } from "./style";
@@ -8,11 +7,10 @@ import { WrapperContentPopup } from "../../components/popup-wrapper-mobile/style
 
 import PromoInfo from "./PromoInfo";
 import Head from "next/head";
-import useAppHeight from "../../hooks/useAppHeight";
 import OnePageScroll from "../../components/one-page-scroll/one-page-scroll";
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 const ListRestaurant = loadable(() => import("../../components/list-restaurant"));
 const ListRestaurantBooking = loadable(() => import("../../components/list-restaurant/list-restaurant-booking"));
-const CSSTransition = loadable(() => import("../../components/css-transition"));
 const PointNavigation = loadable(() => import("../../components/point-navigation"));
 const RatioImage = loadable(() => import("../../components/ratioImage"));
 const DragMobile = loadable(() => import("../../components/touch-mobile"));
@@ -28,7 +26,7 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
   const [showConditionOrRestaurant, setShowConditionOrRestaurant] = useState(); // true: restaurant, false:condition
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [stepFlowPopupMobile, setStepFlowPopupMobile] = useState(0);
-  const appHeight = useAppHeight();
+  const [{ height }, ref] = useIframeResize();
 
   const { data: promoUser } = useSelector((state) => state.get("promoOfUser")) ?? {};
   const [restaurantViewMap, setRestaurantViewMap] = useState();
@@ -70,7 +68,7 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
       <OnePageScroll
         className="scroller"
         customPageNumber={indexPromoParam ?? currentPage}
-        containerHeight={appHeight - headerHeight - 230 + 30}
+        containerHeight={height - headerHeight - 230 + 30}
         pageOnChange={setCurrentPage}
       >
         {promoListApi?.map((item, index) => (
@@ -85,10 +83,10 @@ const PromoMobile = ({ promoListApi, setResultGetCode, onGetCode, resultGetCode,
         ))}
       </OnePageScroll>
     );
-  }, [promoListApi, headerHeight, appHeight, indexPromoParam]);
+  }, [promoListApi, headerHeight, height, indexPromoParam]);
   return (
     <>
-      <WrapperContentPromo className="promo-mobile" style={{ height: appHeight - headerHeight }}>
+      <WrapperContentPromo className="promo-mobile" style={{ height: height - headerHeight }} ref={ref}>
         <WrapperScroller className="wrapper-scroller">
           {promoMobile}
           <WrapperEndpoint>

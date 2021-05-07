@@ -9,7 +9,7 @@ import ReactPageScroller from "../../../plugins/react-page-scroller";
 import ImageMedia from "../../development/components/imageMedia";
 import PointNavigation from "../../components/point-navigation";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
-import useAppHeight from "../../hooks/useAppHeight";
+
 const IconTriangleLineTop = loadable(() => import("../../components/icons/iconTriangleLineTop"));
 const IconTriangleLineDown = loadable(() => import("../../components/icons/iconTriangleLineDown"));
 const defaultConfig = {
@@ -79,8 +79,7 @@ const BookingBanner = ({ config = defaultConfig }) => {
   const valueBooking = config.components.bookingBanner.value ?? [];
   const [currentPage, setCurrentPage] = useState(0);
   const headerHeight = useSelector((s) => s.get("headerHeight"));
-  const [{ width }, ref] = useIframeResize();
-  const appHeight = useAppHeight();
+  const [{ width, height }, ref] = useIframeResize();
 
   const Images = useMemo(() => {
     return valueBooking?.map((item, index) => {
@@ -113,12 +112,12 @@ const BookingBanner = ({ config = defaultConfig }) => {
   }, [valueBooking, width]);
 
   return (
-    <WrapperOnePageScroller>
+    <WrapperOnePageScroller ref={ref}>
       {valueBooking.length > 1 ? (
         <>
           <ReactPageScroller
             customPageNumber={currentPage}
-            containerHeight={appHeight - headerHeight}
+            containerHeight={height - headerHeight}
             pageOnChange={setCurrentPage}
             totalElement={valueBooking.length}
           >

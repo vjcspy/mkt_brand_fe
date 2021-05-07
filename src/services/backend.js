@@ -5,13 +5,13 @@ import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../constants";
 import fs from "fs";
 
 export const getInitialData = async (ctx) => {
-  let pathname = ctx.req.headers.host;
+  const pathname = process.env.DEV ? "localhost:3041" : ctx.req.headers.host;
+
   const [webSiteConfig, webSites] = await Promise.all([getWebsitesConfig(pathname), getWebsitesData()]);
   const webData = chain(webSites)
     .get(["data", "rows"])
     .find((e) => e.code === webSiteConfig?.website_code)
     .value();
-
   const { brand_id } = webData ?? {};
   const group = webData?.groups?.find((g, index) =>
     webData?.default_group_id ? g.id === webData?.default_group_id : index == 0
@@ -24,7 +24,6 @@ export const getInitialData = async (ctx) => {
 
   const siteCode = webData?.code;
   const storeCode = store?.code;
-
   if (siteCode && storeCode && root_category_id && brand_id) {
     return {
       siteCode,
@@ -76,14 +75,6 @@ export const getWebsitesData = async () => {
   }
 };
 
-export const getSiteCode = async (name) => {
-  const webSite = await getWebsitesData();
-  return chain(webSite)
-    .get(["data", "rows"])
-    .find((e) => e.code === name)
-    .value();
-};
-
 export const getGlobalToken = async () => {
   global.jwtToken;
   if (!global.jwtToken) {
@@ -120,6 +111,11 @@ export const getSite = async (site_code) => {
 };
 
 export const getSiteServer = async (site_code) => {
+  if (process.env.DEV) {
+    try {
+      return { data: JSON.parse(fs.readFileSync(path.join(process.cwd(), "config.json"), "utf-8")) };
+    } catch (e) {}
+  }
   const host = process.env.NEXT_PUBLIC_API_HOST;
   return Axios.get(`${host}/sites/config/${site_code}`);
 };
@@ -190,6 +186,11 @@ export const fetchMenuCategories = async ({
   storeCode = "gogi_royal",
   rootCategory,
 } = {}) => {
+  if (process.env.DEV) {
+    try {
+      return JSON.parse(fs.readFileSync(path.join(process.cwd(), "menus.json"), "utf-8"));
+    } catch (e) {}
+  }
   const menu = await fetchParentMenu({
     pageSize,
     currentPage,
@@ -233,6 +234,11 @@ export const fetchMenuCategories = async ({
 };
 
 export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCode = "gogi_royal", rootCategory }) => {
+  if (process.env.DEV) {
+    try {
+      return JSON.parse(fs.readFileSync(path.join(process.cwd(), "parent-menu.json"), "utf-8"));
+    } catch (e) {}
+  }
   const categoryTreeChild = `fragment categoryTreeChild on CategoryTree{id level name path position url_key}`;
   const categoryTree = `fragment categoryTree on CategoryTree{id level name path position children{...categoryTreeChild}url_key}`;
   const categoryResult = `fragment category on CategoryResult{items{id name position description url_key children_count canonical_url level path children{...categoryTree}}}`;

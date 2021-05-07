@@ -96,13 +96,12 @@ const defaultConfig = {
   },
 };
 
-
 const findIndexItemActive = (arr) => {
-  const index = arr.findIndex((t) => t.firstLoad?.value.active === "Yes")
-  return index > 0 ? index : 0
-}
+  const index = arr.findIndex((t) => t.firstLoad?.value.active === "Yes");
+  return index > 0 ? index : 0;
+};
 
-const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop, footer }) => {
+const TabBanner = ({ config = defaultConfig, scrollToFooter, footer }) => {
   const router = useSiteRouter();
   const initialIndex = useMemo(() => findIndexItemActive(config.components.tabBanner.value), []);
 
@@ -122,32 +121,31 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop, footer 
   });
 
   const [indexBannerCurrentTab, setIndexBannerCurrentTab] = useState({
-    [tabBanner]: (bannerItem?.replace(tabBanner + '-') ?? 1) - 1
+    [tabBanner]: (bannerItem?.replace(tabBanner + "-") ?? 1) - 1,
   });
 
   const handleChangeCurrentTab = useCallback((tab, index) => {
-    setIndexBannerCurrentTab(pre => ({
+    setIndexBannerCurrentTab((pre) => ({
       ...pre,
-      [tab]: index + 1
-    }))
-  }, [])
+      [tab]: index + 1,
+    }));
+  }, []);
 
-
-  useEffect(() => {
-    const currentTab = config.components.tabBanner.value.find(item => item.tabCode?.value === tabBanner)
-    if (currentTab) {
-      const sizeofTab = currentTab.tab.value.length
-      if (sizeofTab === indexBannerCurrentTab[tabBanner]) {
-        setTimeout(() => {
-          onDisableTop(false)
-        }, 200)
-      } else {
-        setTimeout(() => {
-          onDisableTop(true)
-        }, 200)
-      }
-    }
-  }, [indexBannerCurrentTab, tabBanner])
+  // useEffect(() => {
+  //   const currentTab = config.components.tabBanner.value.find((item) => item.tabCode?.value === tabBanner);
+  //   if (currentTab) {
+  //     const sizeofTab = currentTab.tab.value.length;
+  //     if (sizeofTab === indexBannerCurrentTab[tabBanner]) {
+  //       setTimeout(() => {
+  //         onDisableTop(false);
+  //       }, 200);
+  //     } else {
+  //       setTimeout(() => {
+  //         onDisableTop(true);
+  //       }, 200);
+  //     }
+  //   }
+  // }, [indexBannerCurrentTab, tabBanner]);
 
   useEffect(() => {
     if (tabBanner) {
@@ -158,27 +156,27 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop, footer 
     }
   }, [tabBanner]);
 
-
   useEffect(() => {
     setTimeout(() => {
-      let active = config.components.tabBanner.value[initialIndex]
+      let active = config.components.tabBanner.value[initialIndex];
       if (active) {
         router.pushQuery(
           stringifyUrl({
             url: router.pathname,
             query: {
               tabBanner: active.tabCode.value,
-              bannerItem: active.tabCode.value + '-' + (indexBannerCurrentTab[active.tabCode.value] ? indexBannerCurrentTab[active.tabCode.value] : 1)
+              bannerItem:
+                active.tabCode.value +
+                "-" +
+                (indexBannerCurrentTab[active.tabCode.value] ? indexBannerCurrentTab[active.tabCode.value] : 1),
             },
           }),
           undefined,
           { shallow: false }
         );
       }
-    }, 1)
+    }, 1);
   }, []);
-
-
 
   useEffect(() => {
     const e = new Event("tabbanner");
@@ -231,13 +229,12 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop, footer 
     if (typeof delta.positive !== "undefined") {
       if (delta.positive && delta.next) {
         setTranslateX((pre = 0) => {
-          updateTab(Math.max(pre - 1, -(length - 1)))
+          updateTab(Math.max(pre - 1, -(length - 1)));
           return Math.max(pre - 1, -(length - 1));
         });
       } else if (!delta.positive && !delta.next) {
-
         setTranslateX((pre = 0) => {
-          updateTab(Math.min(pre + 1, 0))
+          updateTab(Math.min(pre + 1, 0));
           return Math.min(pre + 1, 0);
         });
       }
@@ -247,19 +244,32 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop, footer 
   }, [delta]);
 
   const updateTab = (value) => {
-    const tab = config.components.tabBanner.value[Math.abs(value)]
+    const tab = config.components.tabBanner.value[Math.abs(value)];
     router.pushQuery(
       stringifyUrl({
         url: router.pathname,
         query: {
           tabBanner: tab.tabCode.value,
-          bannerItem: tab.tabCode.value + '-' + (indexBannerCurrentTab[tab.tabCode.value] ?? 1)
+          bannerItem: tab.tabCode.value + "-" + (indexBannerCurrentTab[tab.tabCode.value] ?? 1),
         },
       }),
       undefined,
       { shallow: true }
     );
-  }
+  };
+
+  const items = useMemo(() => {
+    return config.components.tabBanner.value.map((config, index) => (
+      <BannerItem
+        footer={footer}
+        key={index}
+        tabCode={config.tabCode.value}
+        config={config.tab}
+        onChangeBanner={handleChangeCurrentTab}
+        scrollToFooter={scrollToFooter}
+      />
+    ));
+  }, [config.components.tabBanner.value]);
 
   return (
     <TabScrollWrapper onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchStart={onTouchStart} ref={ref}>
@@ -268,12 +278,10 @@ const TabBanner = ({ config = defaultConfig, onDisableTop, isDisableTop, footer 
         style={{
           width: `${length * 100}%`,
           transition: transition ? "transform 0.3s ease-out" : "none",
-          transform: `translateX(${(((translateX) + (movePos.x - startPos.x) / width) * 100) / length}%)`,
+          transform: `translateX(${((translateX + (movePos.x - startPos.x) / width) * 100) / length}%)`,
         }}
       >
-        {config.components.tabBanner.value.map((config, index) => (
-          <BannerItem footer={footer} key={index} tabCode={config.tabCode.value} config={config.tab} onChangeBanner={handleChangeCurrentTab} isDisableTop={isDisableTop} />
-        ))}
+        {items}
       </TabContainerWrapper>
     </TabScrollWrapper>
   );

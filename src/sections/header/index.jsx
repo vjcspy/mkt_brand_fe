@@ -12,11 +12,18 @@ import {
   HeaderLine,
   ContentHeaderLink,
 } from "./header.styled";
-import { DEVELOPMENT_MODE, SET_HEADER_HEIGHT, SET_LAT_LNG, SET_LIST_PROVINCE, SET_NUM_PROMO, SET_PROVINCE_SELECTED, SHOW_LANGUAGE_LOCATION, UPDATE_API_STATUS } from "../../constants";
+import {
+  DEVELOPMENT_MODE,
+  SET_HEADER_HEIGHT,
+  SET_LAT_LNG,
+  SET_LIST_PROVINCE,
+  SET_NUM_PROMO,
+  SET_PROVINCE_SELECTED,
+  SHOW_LANGUAGE_LOCATION,
+} from "../../constants";
 import { Container } from "../../styles";
 import IconMenu from "../../components/icons/iconMenu";
 import IconUserNoBorder from "../../components/icons/iconUserNoBorder";
-import useWindowResize from "../../hooks/useWindowResize";
 import HeaderTop from "./headerTop";
 import LinkRouter from "../../components/link-router";
 import useSiteRouter from "../../hooks/useSiteRouter";
@@ -25,9 +32,14 @@ import ProfileDropdown from "./profileDropdown";
 import ImageMedia from "../../development/components/imageMedia";
 import Link from "next/link";
 import PopupLanguageLocation from "./popup-language-location";
-import { fetchMenuCategories, fetchParentMenu, filterListPromoApi, getPromotionByBrandProvince, getProvinceIdByLocation, getProvinces } from "../../services/backend";
+import {
+  filterListPromoApi,
+  getPromotionByBrandProvince,
+  getProvinceIdByLocation,
+  getProvinces,
+} from "../../services/backend";
 import { showNotification } from "../../components/notification";
-import useAppHeight from "../../hooks/useAppHeight";
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 
 const MenuRight = loadable(() => import("../../components/menu"));
 
@@ -182,7 +194,7 @@ function requestLocation() {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       // call api
-      latLng = { lat: position.coords.latitude, lng: position.coords.longitude }
+      latLng = { lat: position.coords.latitude, lng: position.coords.longitude };
       // alert(`latitude: ${position.coords.latitude}\nlongitude: ${position.coords.longitude}`);
     },
     (error) => {
@@ -203,7 +215,7 @@ function requestLocation() {
       timeout: 27000,
     }
   );
-  return latLng
+  return latLng;
 }
 
 const Header = ({ config = defaultConfig, menus, pageName }) => {
@@ -215,9 +227,8 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   const setPopupLanguageLocation = useCallback((value) => dispatch({ type: SHOW_LANGUAGE_LOCATION, value }), []);
   const components = config.components;
   const [isShowMenu, setShowMenu] = useState(false);
-  const ref = useRef();
   const linkRef = useRef();
-  const size = useWindowResize();
+  const [size, ref] = useIframeResize();
   const locale = useSelector((s) => s.get("locale"));
   const navMenu = menus?.find((m) => m.name == components.navMenu?.value);
   const hambergerMenu = menus?.find((m) => m.name == components.hambergerMenu?.value);
@@ -225,27 +236,24 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   const buttonRightFooterMenu = components.buttonRightFooterMenu;
   const [showProfileDropdownMobile, setShowProfileDropdownMobile] = useState(false);
   const { fullName, avatar } = useSelector((state) => state.get("userInfo"))?.toJS() ?? "";
-  const [percentage, setPercentage] = useState(0);
+  const [percentage, setPercentage] = useState(33.03834808259587);
   const [transition, setTransition] = useState(true);
   const [width, setWidth] = useState(0);
   const [index, setIndex] = useState(0);
-  const appHeight = useAppHeight();
 
-  const [positionTopMobile, setPositionTopMobile] = useState({ height: appHeight })
   useEffect(() => {
     if (!process.browser) {
       return;
     }
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        const { latitude, longitude } = position.coords
+        const { latitude, longitude } = position.coords;
         if (latitude && longitude) {
           try {
-            const { data } = await getProvinceIdByLocation({ lat: latitude, lng: longitude })
-            dispatch({ type: SET_PROVINCE_SELECTED, value: { id: data.provinceId, default: false } })
-          } catch (e) {
-          }
-          dispatch({ type: SET_LAT_LNG, value: { lat: latitude, lng: longitude } })
+            const { data } = await getProvinceIdByLocation({ lat: latitude, lng: longitude });
+            dispatch({ type: SET_PROVINCE_SELECTED, value: { id: data.provinceId, default: false } });
+          } catch (e) {}
+          dispatch({ type: SET_LAT_LNG, value: { lat: latitude, lng: longitude } });
         }
       },
       (error) => {
@@ -255,7 +263,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
           case error.POSITION_UNAVAILABLE:
             break;
           case error.TIMEOUT:
-            showNotification(dispatch, { content: "Không thể truy cập location", status: "warning" })
+            showNotification(dispatch, { content: "Không thể truy cập location", status: "warning" });
             break;
           default:
             break;
@@ -267,8 +275,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
         timeout: 27000,
       }
     );
-  }, [])
-
+  }, []);
 
   const isHomePage = useMemo(() => {
     if (mode === DEVELOPMENT_MODE) {
@@ -302,27 +309,35 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   }, []);
 
   // get list provinces & number promo in hamburger menu
-  useEffect(async () => {
-    try {
-      if (siteCode, storeCode, root_category_id, brand_id) {
-        const [listProvince, { data: listPromo }] = await Promise.all([
-          getProvinces(),
-          getPromotionByBrandProvince({ brand_id }),
-        ]);
-        const provinces = listProvince ?? [{ id: 5, name: "Hà Nội" }];
-        let numPromo = filterListPromoApi(listPromo.result.content).length;
-        dispatch({ type: SET_NUM_PROMO, value: numPromo });
-        dispatch({ type: SET_LIST_PROVINCE, value: provinces });
+  useEffect(() => {
+    const fetchApi = async () => {
+      try {
+        if ((siteCode, storeCode, root_category_id, brand_id)) {
+          const [listProvince, { data: listPromo }] = await Promise.all([
+            getProvinces(),
+            getPromotionByBrandProvince({ brand_id }),
+          ]);
+          const provinces = listProvince ?? [{ id: 5, name: "Hà Nội" }];
+          let numPromo = filterListPromoApi(listPromo.result.content).length;
+          dispatch({ type: SET_NUM_PROMO, value: numPromo });
+          dispatch({ type: SET_LIST_PROVINCE, value: provinces });
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e)
-    }
-
-  }, [siteCode, storeCode, root_category_id, brand_id])
+    };
+    fetchApi();
+  }, [siteCode, storeCode, root_category_id, brand_id]);
 
   return (
     <>
-      <MenuRight show={isShowMenu} buttonRight={buttonRightFooterMenu} buttonLeft={buttonLeftFooterMenu} listMenu={hambergerMenu?.children} setShowMenu={setShowMenu} />
+      <MenuRight
+        show={isShowMenu}
+        buttonRight={buttonRightFooterMenu}
+        buttonLeft={buttonLeftFooterMenu}
+        listMenu={hambergerMenu?.children}
+        setShowMenu={setShowMenu}
+      />
       <PopupLanguageLocation />
 
       <HeaderWrapper ref={ref}>
@@ -344,7 +359,10 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
                 </LogoWrapper>
               </LinkRouter>
             </FlexGrow>
-            <HeaderLinks positionTopMobile={positionTopMobile.height} showMobile={showMenuHeader}>
+            <HeaderLinks
+              positionTopMobile={size.height - (linkRef.current?.offsetHeight || 60)}
+              showMobile={showMenuHeader}
+            >
               <ContentHeaderLink ref={linkRef}>
                 {navMenu?.children.map((e, i) => (
                   <LinkRouter key={i} passHref={true} href={e.url} shallow>

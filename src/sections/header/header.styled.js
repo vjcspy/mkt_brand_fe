@@ -24,7 +24,6 @@ export const LogoWrapper = styled.a`
     max-height: 68px;
     width: auto;
     max-width: 140px;
-    width: 100%;
   }
 `;
 
@@ -88,12 +87,14 @@ export const HeaderLinks = styled.div`
   }
 
   @media (max-width: 768px) {
+    overflow: hidden;
+    width: 100%;
     display: ${({ showMobile }) => (showMobile ? "block" : "none")};
-    position: fixed;
+    position: absolute;
     top: ${({ positionTopMobile }) => positionTopMobile}px;
     left: 0;
-    transform: translateY(-100%);
-
+    transform: translate3d(0, 0, 0);
+    perspective: 1000;
     width: 100%;
     background: #242424cc;
     a {

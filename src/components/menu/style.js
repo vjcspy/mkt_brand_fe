@@ -4,7 +4,7 @@ export const WrapperMenu = styled.div`
   position: fixed;
   width: 100%;
 
-  height: 100vh;
+  height: var(--app-height);
   z-index: 1003;
   opacity: 0;
   visibility: hidden;
@@ -37,7 +37,7 @@ export const MarkerLayout = styled.div`
 export const WrapperContentMenu = styled.div`
   width: 40%;
   height: 100%;
-  max-height: 100vh;
+  max-height: var(--app-height);
   min-width: 358px;
   display: flex;
   flex-direction: column;

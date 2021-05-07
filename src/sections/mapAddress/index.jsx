@@ -116,7 +116,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant,
     }
     if (size.width <= 768 && sItem) {
       document.body.style.overflowY = "hidden";
-      document.body.style.height = "calc(100vh - 69px)";
+      document.body.style.height = `${size.height - 69}px`;
     } else {
       document.body.style.overflowY = "hidden";
       document.body.style.height = "100%";
@@ -129,7 +129,7 @@ const MapAddress = ({ config = defaultConfig, restaurantViewMap, listRestaurant,
         <div
           style={{
             background: "rgba(0, 0, 0, 0.6)",
-            height: "100vh",
+            height: size.height,
             width: "100vw",
             zIndex: "3000",
             position: "fixed",

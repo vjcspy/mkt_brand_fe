@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import useFromJS from "../../hooks/useFromJS";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import { Container } from "../../styles";
-import DynamicFooter from "../dynamic-footer";
 import MenuMobile from "./menu-mobile";
 import MenuMain from "./menu-main";
 import MenuTree from "./menu-tree";
 import { MenusLeftContent, MenusRightContent, OurMenusContent, OurMenusWrapper } from "./styled";
-import useAppHeight from "../../hooks/useAppHeight";
-import { useSelector } from "react-redux";
 
 const defaultConfig = {
   id: "our-menu-detail",
@@ -18,7 +15,7 @@ const defaultConfig = {
   components: [],
 };
 
-const OurMenus = ({ menus, footer }) => {
+const OurMenus = ({ menus, footer, scrollToFooter }) => {
   const [path, setPath] = useState([]);
   menus = useFromJS(["ourMenus"]) ?? menus;
   const [size, ref] = useIframeResize();
@@ -42,7 +39,7 @@ const OurMenus = ({ menus, footer }) => {
       {size.width > 768 ? (
         <Container>
           <OurMenusContent>
-            <MenusLeftContent >
+            <MenusLeftContent>
               <MenuTree {...props} />
             </MenusLeftContent>
             <MenusRightContent className="right">
@@ -51,9 +48,8 @@ const OurMenus = ({ menus, footer }) => {
           </OurMenusContent>
         </Container>
       ) : (
-        <MenuMobile menus={menus} footer={footer} />
+        <MenuMobile menus={menus} footer={footer} scrollToFooter={scrollToFooter} />
       )}
-      <DynamicFooter config={footer} />
     </OurMenusWrapper>
   );
 };

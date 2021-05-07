@@ -1,18 +1,24 @@
 import { get } from "lodash";
 import { stringifyUrl } from "query-string";
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import useRefCallback from "../../hooks/useRefCallback";
 import useSiteRouter from "../../hooks/useSiteRouter";
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 import { toMoney } from "../../services/frontend";
 import MenuMainMobile from "./menu-main-mobile";
 import MenuTreeMobile from "./menu-tree-mobile";
 import { MenuMobileWrapper } from "./styled";
 
-const MenuMobile = ({ footer, menus: propsMenus }) => {
+const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [childrenIndex, setChildrenIndex] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [menuDetail, setMenuDetail] = useState();
   const router = useSiteRouter();
+  const headerHeight = useSelector((s) => s.get("headerHeight") ?? 0);
+  const showFooter = useSelector((s) => s.get("showFooter"));
+  const [{ height }, cRef] = useIframeResize();
 
   const { menus, tree } = useMemo(() => {
     let menus = [];
@@ -58,7 +64,6 @@ const MenuMobile = ({ footer, menus: propsMenus }) => {
 
   const ref = useRef();
   ref.current = (index) => {
-
     if (isNaN(index)) {
       return;
     }
@@ -72,26 +77,23 @@ const MenuMobile = ({ footer, menus: propsMenus }) => {
       setCurrentIndex(menus[index].index);
       setChildrenIndex(menus[index].childIndex);
     }
-  }
+  };
 
-  const pageOnChange = useCallback(
-    (index) => {
-      ref.current(index);
-    },
-    []
-  );
+  const pageOnChange = useCallback((index) => {
+    ref.current(index);
+  }, []);
 
   const handleClick = useCallback(
     (index) => {
-      updateParam(index)
+      updateParam(index);
       setPageIndex(index);
       pageOnChange(index);
     },
     [pageOnChange]
   );
 
-  const updateParam = (index) => {
-    const menuSelect = menus[index]
+  const updateParam = useRefCallback((index) => {
+    const menuSelect = menus[index];
     router.pushQuery(
       stringifyUrl({
         url: `/our-menu`,
@@ -102,18 +104,28 @@ const MenuMobile = ({ footer, menus: propsMenus }) => {
         shallow: true,
       }
     );
-  }
+  });
 
   return (
-    <MenuMobileWrapper>
+    <MenuMobileWrapper ref={cRef}>
       <MenuMainMobile
+        isDetail={!!menuDetail}
         menus={menus}
         pageIndex={pageIndex}
         pageOnChange={pageOnChange}
         onBack={handleClick}
         setMenuDetail={setMenuDetail}
+        scrollToFooter={scrollToFooter}
       />
-      <MenuTreeMobile tree={tree} currentIndex={currentIndex} childrenIndex={childrenIndex} onClick={handleClick} />
+      {!showFooter && (
+        <MenuTreeMobile
+          top={height - headerHeight - 60}
+          tree={tree}
+          currentIndex={currentIndex}
+          childrenIndex={childrenIndex}
+          onClick={handleClick}
+        />
+      )}
     </MenuMobileWrapper>
   );
 };

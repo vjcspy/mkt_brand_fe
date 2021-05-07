@@ -1,9 +1,10 @@
-import { get, has, map } from "lodash";
-import React, { useEffect, useState } from "react";
+import _, { get, has, map } from "lodash";
+import React, { useEffect, useRef, useState } from "react";
 import { MenuItemButton, MenuTreeMobileWrapper } from "./styled";
 
-const MenuTree = ({ tree, currentIndex, isHidden, onClick }) => {
+const MenuTree = ({ tree, currentIndex, isHidden, onClick, top }) => {
   const [list, setList] = useState(tree);
+  const ref = useRef();
 
   useEffect(() => {
     if (tree) {
@@ -11,8 +12,31 @@ const MenuTree = ({ tree, currentIndex, isHidden, onClick }) => {
     }
   }, [tree]);
 
+  useEffect(() => {
+    let child = ref.current?.children[currentIndex];
+    if (child) {
+      const offsetLeft = child.offsetLeft;
+      const offsetWidth = child.offsetWidth;
+      const scrollLeft = ref.current.scrollLeft;
+      if (scrollLeft + ref.current.offsetWidth < offsetLeft + offsetWidth) {
+        // if (offsetLeft + offsetWidth > ref.current.offsetWidth) {
+        ref.current.scrollTo({
+          top: 0,
+          left: offsetLeft + offsetWidth - ref.current.offsetWidth,
+          behavior: "smooth",
+        });
+      } else if (scrollLeft > offsetLeft) {
+        ref.current.scrollTo({
+          top: 0,
+          left: offsetLeft,
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [currentIndex]);
+
   return (
-    <MenuTreeMobileWrapper className={isHidden ? "hide" : ""}>
+    <MenuTreeMobileWrapper className={isHidden ? "hide" : ""} top={top} ref={ref}>
       {map(list, (item, index) => (
         <MenuItemButton
           key={index}
@@ -28,7 +52,7 @@ const MenuTree = ({ tree, currentIndex, isHidden, onClick }) => {
   );
 };
 
-const MenuTreeMobile = ({ tree, onClick, currentIndex, childrenIndex }) => {
+const MenuTreeMobile = ({ tree, onClick, currentIndex, childrenIndex, top }) => {
   return (
     <>
       <MenuTree
@@ -37,6 +61,7 @@ const MenuTreeMobile = ({ tree, onClick, currentIndex, childrenIndex }) => {
         isHidden={has(tree, [currentIndex, "children"])}
         currentIndex={currentIndex}
         onClick={onClick}
+        top={top}
       />
       <MenuTree
         key={"children"}
@@ -44,6 +69,7 @@ const MenuTreeMobile = ({ tree, onClick, currentIndex, childrenIndex }) => {
         isHidden={!has(tree, [currentIndex, "children"])}
         currentIndex={childrenIndex}
         onClick={onClick}
+        top={top}
       />
     </>
   );
