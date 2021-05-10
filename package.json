@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next dev -p 3041",
+    "dev": "NODE_OPTIONS='--inspect' next -p 3041",
     "build": "next build",
     "start": "next start -p 3041",
     "deploy": "node deploy.js",
@@ -53,6 +53,12 @@
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
-    "@fortawesome/react-fontawesome": "^0.1.14"
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
+    "prettier": "^2.3.0"
   }
 }

@@ -3,9 +3,16 @@ import Axios from "axios";
 import { each, get, sortBy, chain } from "lodash";
 import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../constants";
 import fs from "fs";
+import { CacheFile } from "./cache";
 
 export const getInitialData = async (ctx) => {
   const pathname = process.env.DEV ? "localhost:3041" : ctx.req.headers.host;
+
+  const CACHE_KEY = "INIT_DATA_FOR_DOMAIN_" + pathname;
+  const cachedData = await CacheFile.get(CACHE_KEY);
+  if (cachedData) {
+    return cachedData;
+  }
 
   const [webSiteConfig, webSites] = await Promise.all([getWebsitesConfig(pathname), getWebsitesData()]);
   const webData = chain(webSites)
@@ -25,54 +32,66 @@ export const getInitialData = async (ctx) => {
   const siteCode = webData?.code;
   const storeCode = store?.code;
   if (siteCode && storeCode && root_category_id && brand_id) {
-    return {
+
+    const data = {
       siteCode,
       storeCode,
       root_category_id,
-      brand_id,
+      brand_id
     };
+    await CacheFile.save(CACHE_KEY, data);
+    return data;
   } else {
     throw new Error("siteCode or storeCode or root_category_id or brand_id null");
   }
 };
 
 export const getWebsitesConfig = async (domain) => {
+  const CACHE_KEY = "WEBSITE_DATA_BY_DOMAIN_" + domain;
+  const cachedData = await CacheFile.get(CACHE_KEY);
+  if (cachedData) {
+    return cachedData;
+  }
+
   try {
-    let { getWebsitesConfig = [] } = getData();
-    const checkDomain = getWebsitesConfig?.find((item) => item?.domain === domain);
-    if (checkDomain) {
-      return checkDomain;
-    } else {
-      const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
-      if (data) {
-        const fileData = getData();
-        getWebsitesConfig.push(data);
-        fileData["getWebsitesConfig"] = getWebsitesConfig;
-        saveData(fileData);
-      }
+    const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
+    if (data) {
+      await CacheFile.save(CACHE_KEY, data);
       return data;
+    } else {
+      throw new Error("Could not get website data from api");
     }
   } catch (e) {
-    console.log("e:", e);
+    console.log("Could not get WebsiteConfig data", e);
   }
+  return undefined;
 };
 
 export const getWebsitesData = async () => {
-  const { getWebsitesData } = getData();
-  if (getWebsitesData) {
-    return getWebsitesData;
-  } else {
+  const CACHE_KEY = "WEB_SITE_DATA_FROM_PCMS";
+  const cachedData = await CacheFile.get(CACHE_KEY);
+  if (cachedData) {
+    return cachedData;
+  }
+
+  try {
     const { data } = await Axios.post(process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/rest/V1/izretail/dispatch", {
       action: {
         type: "get-websites",
-        payload: {},
-      },
+        payload: {}
+      }
     });
-    const fileData = getData();
-    fileData["getWebsitesData"] = data;
-    saveData(fileData);
-    return data;
+    if (data) {
+      await CacheFile.save(CACHE_KEY, data);
+      return data;
+    } else {
+      throw new Error("Could not get website data from PCMS");
+    }
+  } catch (e) {
+    console.log("Could not get Website data from PCMS", e);
   }
+
+  return undefined;
 };
 
 export const getGlobalToken = async () => {
@@ -80,10 +99,10 @@ export const getGlobalToken = async () => {
   if (!global.jwtToken) {
     const host = process.env.API_HOST;
     let {
-      data: { jwt },
+      data: { jwt }
     } = await Axios.post(`${host}/auth/local`, {
       identifier: process.env.NEXTJS_USERNAME,
-      password: process.env.NEXTJS_PASSWORD,
+      password: process.env.NEXTJS_PASSWORD
     });
     global.jwtToken = jwt;
   }
@@ -100,8 +119,8 @@ export const getSitePaths = async () => {
   const sites = await getGlobalSites();
   return sites.map((s) => ({
     params: {
-      site: s.site_code,
-    },
+      site: s.site_code
+    }
   }));
 };
 
@@ -114,7 +133,8 @@ export const getSiteServer = async (site_code) => {
   if (process.env.DEV) {
     try {
       return { data: JSON.parse(fs.readFileSync(path.join(process.cwd(), "config.json"), "utf-8")) };
-    } catch (e) {}
+    } catch (e) {
+    }
   }
   const host = process.env.NEXT_PUBLIC_API_HOST;
   return Axios.get(`${host}/sites/config/${site_code}`);
@@ -155,7 +175,7 @@ export const getSlug = async (slug) => {
           comment
         }
         
-      }`,
+      }`
   });
 };
 
@@ -176,26 +196,27 @@ export const getListBlog = async () => {
             url
           }
         }
-      }`,
+      }`
   });
 };
 
 export const fetchMenuCategories = async ({
-  pageSize = 20,
-  currentPage = 1,
-  storeCode = "gogi_royal",
-  rootCategory,
-} = {}) => {
+                                            pageSize = 20,
+                                            currentPage = 1,
+                                            storeCode = "gogi_royal",
+                                            rootCategory
+                                          } = {}) => {
   if (process.env.DEV) {
     try {
       return JSON.parse(fs.readFileSync(path.join(process.cwd(), "menus.json"), "utf-8"));
-    } catch (e) {}
+    } catch (e) {
+    }
   }
   const menu = await fetchParentMenu({
     pageSize,
     currentPage,
     storeCode,
-    rootCategory,
+    rootCategory
   });
   const categoriesIds = [];
   menu?.children.forEach(({ id, children }) => {
@@ -237,7 +258,8 @@ export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCod
   if (process.env.DEV) {
     try {
       return JSON.parse(fs.readFileSync(path.join(process.cwd(), "parent-menu.json"), "utf-8"));
-    } catch (e) {}
+    } catch (e) {
+    }
   }
   const categoryTreeChild = `fragment categoryTreeChild on CategoryTree{id level name path position url_key}`;
   const categoryTree = `fragment categoryTree on CategoryTree{id level name path position children{...categoryTreeChild}url_key}`;
@@ -248,6 +270,7 @@ export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCod
     { query: `${categoryTreeChild} ${categoryTree} ${categoryResult} ${query}` },
     { headers: { Store: storeCode } }
   );
+
   function sort(m) {
     if (get(m, ["children", "length"]) > 0) {
       m.children = sortBy(m.children, "position");
@@ -255,6 +278,7 @@ export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCod
     }
     return m;
   }
+
   const menu = sort(get(data, ["data", "categories", "items", 0]));
   return menu;
 };
@@ -278,11 +302,11 @@ export const getListPromo = (provinceId = 5) => {
   const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
   return Axios.get(`${host}/get-posts`, {
     params: {
-      provinceId,
+      provinceId
     },
     headers: {
-      "tgs-version": "2.6.10",
-    },
+      "tgs-version": "2.6.10"
+    }
   });
 };
 
@@ -293,13 +317,13 @@ export const pickUpVoucher = ({ code, token }) => {
   return Axios.post(
     `${host}/pick-up-voucher`,
     {
-      promotionId: code,
+      promotionId: code
     },
     {
       headers: {
         "tgs-version": "2.6.10",
-        Authorization: `Bearer ${token}`,
-      },
+        Authorization: `Bearer ${token}`
+      }
     }
   );
 };
@@ -312,11 +336,11 @@ export const getListRestaurant = ({ brandId = 7, provinceId = 5, longitude, lati
       brandId,
       provinceId,
       longitude,
-      latitude,
+      latitude
     },
     headers: {
-      "tgs-version": "2.6.10",
-    },
+      "tgs-version": "2.6.10"
+    }
   });
 };
 export const getProvinces = async () => {
@@ -327,8 +351,8 @@ export const getProvinces = async () => {
     const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
     const { data: listProvince } = await Axios.get(`${host}/province`, {
       headers: {
-        "tgs-version": "2.6.10",
-      },
+        "tgs-version": "2.6.10"
+      }
     });
     const provinces = listProvince.result?.map((item) => ({ id: item?.id, name: item?.name }));
     const fileData = getData();
@@ -361,11 +385,11 @@ export const getProvinceIdByLocation = ({ lat, lng }) => {
   return Axios.get(`${host}/get-province-id-by-location`, {
     params: {
       longitude: lng,
-      latitude: lat,
+      latitude: lat
     },
     headers: {
-      "tgs-version": "2.6.10",
-    },
+      "tgs-version": "2.6.10"
+    }
   });
 };
 
@@ -378,11 +402,11 @@ export const getPromotionByBrandProvince = ({ brandId = 7, provinceId = 5 }) => 
   return Axios.get(`${host}/get-promotion-by-brand-province`, {
     params: {
       brandId,
-      provinceId,
+      provinceId
     },
     headers: {
-      "tgs-version": "2.6.10",
-    },
+      "tgs-version": "2.6.10"
+    }
   });
 };
 export const getListDynamicBlock = async () => {
@@ -399,7 +423,7 @@ export const getSites = async () => {
       id
       site_code
     }
-  }`,
+  }`
   });
 };
 
@@ -412,12 +436,12 @@ export const pushDynamicBlock = async (data, token) => {
         title: data.title,
         contentVN: data.contentVN,
         contentEN: data.contentEN,
-        siteCode: data.siteCode,
+        siteCode: data.siteCode
       },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-        },
+          Authorization: `Bearer ${token}`
+        }
       }
     );
   } else {
@@ -426,12 +450,12 @@ export const pushDynamicBlock = async (data, token) => {
       {
         title: data.title,
         contentVN: data.contentVN,
-        contentEN: data.contentEN,
+        contentEN: data.contentEN
       },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-        },
+          Authorization: `Bearer ${token}`
+        }
       }
     );
   }
@@ -442,7 +466,8 @@ export const getData = () => {
   try {
     const dataFilePath = path.join(process.cwd(), "data.json");
     data = JSON.parse(fs.readFileSync(dataFilePath, "utf-8"));
-  } catch (e) {}
+  } catch (e) {
+  }
   return data;
 };
 // write file cache
@@ -450,7 +475,8 @@ export const saveData = (data) => {
   try {
     const dataFilePath = path.join(process.cwd(), "data.json");
     fs.writeFileSync(dataFilePath, JSON.stringify(data));
-  } catch (e) {}
+  } catch (e) {
+  }
 };
 
 export const createOrUpdateBrandStory = async (brandStory, token) => {
@@ -459,14 +485,14 @@ export const createOrUpdateBrandStory = async (brandStory, token) => {
   if (brandStory.id) {
     return Axios.put(`${host}/brand-stories/${brandStory.id}`, brandStory, {
       headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        Authorization: `Bearer ${token}`
+      }
     });
   } else {
     return Axios.post(`${host}/brand-stories`, brandStory, {
       headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        Authorization: `Bearer ${token}`
+      }
     });
   }
 };
@@ -475,8 +501,8 @@ export const deleteBlock = async (idBock, token) => {
   const host = process.env.NEXT_PUBLIC_API_HOST;
   return Axios.delete(`${host}/dynamic-blocks/${idBock}`, {
     headers: {
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   });
 };
 
@@ -484,8 +510,8 @@ export const deleteStory = (id, token) => {
   const host = process.env.NEXT_PUBLIC_API_HOST;
   return Axios.delete(`${host}/brand-stories/${id}`, {
     headers: {
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   });
 };
 
@@ -501,22 +527,22 @@ export const getBrandStoryBySlug = async (slug, brandId) => {
       brandStories (where: {slug:"${slug}", brandId:"${brandId}"}){
           content
         }
-      }`,
+      }`
   });
 };
 
 export const savePickUpVoucher = async ({
-  timeline,
-  fullName,
-  phoneNumber,
-  eVoucherCode,
-  platform,
-  placement,
-  memo,
-  content,
-  location,
-  brand,
-}) => {
+                                          timeline,
+                                          fullName,
+                                          phoneNumber,
+                                          eVoucherCode,
+                                          platform,
+                                          placement,
+                                          memo,
+                                          content,
+                                          location,
+                                          brand
+                                        }) => {
   const host = process.env.NEXT_PUBLIC_GGG_INTERNAL;
   return Axios.post(`${host}/save-pick-up-voucher-data`, {
     timeline,
@@ -529,6 +555,6 @@ export const savePickUpVoucher = async ({
     memo,
     content,
     location,
-    brand,
+    brand
   });
 };
