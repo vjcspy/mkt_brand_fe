@@ -55,11 +55,11 @@ export const getWebsitesConfig = async (domain) => {
 
   try {
     const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
+    console.log(data);
     if (data) {
       await CacheFile.save(CACHE_KEY, data);
       return data;
     } else {
-      console.error(e);
       throw new Error("Could not get website data from api");
     }
   } catch (e) {
