@@ -6,7 +6,7 @@ import fs from "fs";
 import { CacheFile } from "./cache";
 
 export const getInitialData = async (ctx) => {
-  const pathname = process.env.DEV ? "localhost:3041" : ctx.req.headers.host;
+  const pathname = ctx.req.headers.host;
 
   const CACHE_KEY = "INIT_DATA_FOR_DOMAIN_" + pathname;
   const cachedData = await CacheFile.get(CACHE_KEY);
@@ -55,12 +55,11 @@ export const getWebsitesConfig = async (domain) => {
 
   try {
     const { data } = await Axios.get(process.env.NEXT_PUBLIC_GGG_INTERNAL + "/get-website", { params: { domain } });
-    console.log(data);
     if (data) {
       await CacheFile.save(CACHE_KEY, data);
       return data;
     } else {
-      throw new Error("Could not get website data from api");
+      throw new Error("Could not get website data from api for domain" + domain);
     }
   } catch (e) {
     console.log("Could not get WebsiteConfig data", e);
@@ -251,12 +250,12 @@ export const fetchMenuCategories = async ({
     return Object.assign(category, { products });
   });
 
-  await CacheFile.save(CACHE_KEY,menus);
+  await CacheFile.save(CACHE_KEY, menus);
 
   return menus;
 };
 
-export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCode , rootCategory }) => {
+export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCode, rootCategory }) => {
   const categoryTreeChild = `fragment categoryTreeChild on CategoryTree{id level name path position url_key}`;
   const categoryTree = `fragment categoryTree on CategoryTree{id level name path position children{...categoryTreeChild}url_key}`;
   const categoryResult = `fragment category on CategoryResult{items{id name position description url_key children_count canonical_url level path children{...categoryTree}}}`;
