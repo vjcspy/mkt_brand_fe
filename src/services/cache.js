@@ -6,6 +6,10 @@ const _ = require("lodash");
 export class CacheFile {
   static _CACHE_DATA = {};
 
+  static register(key,value){
+
+  }
+
   static async save(key, value, store = "default") {
     if (!_.isString(key)) {
       throw new Error("key must be string");

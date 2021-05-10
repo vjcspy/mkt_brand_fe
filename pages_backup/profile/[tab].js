@@ -5,7 +5,7 @@ import { SET_GOOGLE_MAP_API, SET_ICON_VIEW_MAP, UPDATE_CONFIG } from "../../src/
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getApiKeyGoogleMap, getSite, getSiteServer } from "../../src/services/backend";
+import { getApiKeyGoogleMap, getSiteServer } from "../../src/services/backend";
 import PageContainer from "../../src/containers/pageContainer";
 
 // export async function getStaticPaths() {

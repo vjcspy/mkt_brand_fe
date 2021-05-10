@@ -3,10 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { DEVELOPMENT_MODE, GET_SITE, SET_MODE, SET_OUR_MENUS, SET_PAGE_NAME } from "../../../src/constants";
 import PageContainer from "../../../src/containers/pageContainer";
 import DevelopmentLayout from "../../../src/development/containers/developmentLayout";
-import { Pages } from "../../../src/sections";
-import { get, map } from "lodash";
+import { get } from "lodash";
 import useSiteRouter from "../../../src/hooks/useSiteRouter";
-import { getSite, getSiteServer } from "../../../src/services/backend";
+import {  getSiteServer } from "../../../src/services/backend";
 
 // export async function getStaticPaths() {
 //   const pagePaths = map(Pages, (page) => ({

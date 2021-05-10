@@ -3,16 +3,13 @@ import { each, get, isArray, map, sortBy } from "lodash";
 import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import {
-  SET_MODIFIED_CONFIG,
-  SET_OUR_MENUS,
-  SET_PAGE_NAME,
   SET_SHOW_MENU_HEADER,
   UPDATE_CONFIG,
 } from "../../src/constants";
 import Layout from "../../src/containers/layout";
 import { Pages } from "../../src/sections";
 import { formatConfig } from "../../src/services/frontend";
-import { getSite, getSiteServer, fetchMenuCategories } from "../../src/services/backend";
+import {  getSiteServer, fetchMenuCategories } from "../../src/services/backend";
 import useSiteRouter from "../../src/hooks/useSiteRouter";
 import PageContainer from "../../src/containers/pageContainer";
 

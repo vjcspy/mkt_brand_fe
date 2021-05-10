@@ -110,6 +110,7 @@ export const getGlobalToken = async () => {
 };
 
 export const getGlobalSites = async () => {
+  console.log("herer____");
   const postsDirectory = path.join(process.cwd(), "data.json");
   const data = JSON.parse(fs.readFileSync(postsDirectory, "utf-8"));
   return data;
@@ -130,14 +131,19 @@ export const getSite = async (site_code) => {
 };
 
 export const getSiteServer = async (site_code) => {
-  if (process.env.DEV) {
-    try {
-      return { data: JSON.parse(fs.readFileSync(path.join(process.cwd(), "config.json"), "utf-8")) };
-    } catch (e) {
-    }
+  const CACHE_KEY = "STRAPI_SITE_DATA_" + site_code;
+  const cachedData = await CacheFile.get(CACHE_KEY);
+  if (cachedData) {
+    return cachedData;
   }
   const host = process.env.NEXT_PUBLIC_API_HOST;
-  return Axios.get(`${host}/sites/config/${site_code}`);
+  try {
+    const { data } = await Axios.get(`${host}/sites/config/${site_code}`);
+    await CacheFile.save(CACHE_KEY, { data });
+    return { data };
+  } catch (e) {
+    console.error("Could not get data from STRAPI ", e);
+  }
 };
 
 export const getApiKeyGoogleMap = async () => {
@@ -203,15 +209,15 @@ export const getListBlog = async () => {
 export const fetchMenuCategories = async ({
                                             pageSize = 20,
                                             currentPage = 1,
-                                            storeCode = "gogi_royal",
+                                            storeCode,
                                             rootCategory
                                           } = {}) => {
-  if (process.env.DEV) {
-    try {
-      return JSON.parse(fs.readFileSync(path.join(process.cwd(), "menus.json"), "utf-8"));
-    } catch (e) {
-    }
+  const CACHE_KEY = "MENU_DATA_FOR_STORE" + storeCode;
+  const cachedData = await CacheFile.get(CACHE_KEY);
+  if (cachedData) {
+    return cachedData;
   }
+
   const menu = await fetchParentMenu({
     pageSize,
     currentPage,
@@ -244,23 +250,12 @@ export const fetchMenuCategories = async ({
     return Object.assign(category, { products });
   });
 
+  await CacheFile.save(CACHE_KEY,menus);
+
   return menus;
-  // return reduceRight(groupBy(get(data, ["data", "categories", "items"]), "level"), (arr, current) =>
-  //   map(current, (item) =>
-  //     assign(item, {
-  //       items: filter(arr, (child) => includes(map(item.children, "id"), child.id)),
-  //     })
-  //   )
-  // );
 };
 
-export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCode = "gogi_royal", rootCategory }) => {
-  if (process.env.DEV) {
-    try {
-      return JSON.parse(fs.readFileSync(path.join(process.cwd(), "parent-menu.json"), "utf-8"));
-    } catch (e) {
-    }
-  }
+export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCode , rootCategory }) => {
   const categoryTreeChild = `fragment categoryTreeChild on CategoryTree{id level name path position url_key}`;
   const categoryTree = `fragment categoryTree on CategoryTree{id level name path position children{...categoryTreeChild}url_key}`;
   const categoryResult = `fragment category on CategoryResult{items{id name position description url_key children_count canonical_url level path children{...categoryTree}}}`;
