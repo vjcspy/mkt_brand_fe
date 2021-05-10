@@ -59,6 +59,7 @@ export const getWebsitesConfig = async (domain) => {
       await CacheFile.save(CACHE_KEY, data);
       return data;
     } else {
+      console.error(e);
       throw new Error("Could not get website data from api");
     }
   } catch (e) {
