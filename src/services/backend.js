@@ -19,7 +19,15 @@ export const getInitialData = async (ctx) => {
     .get(["data", "rows"])
     .find((e) => e.code === webSiteConfig?.website_code)
     .value();
+  if (webData) {
+    throw new Error("Không tìm thấy dữ liệu website ở pcms cho domain hiện tại. Kiểm tra api config domain và pcms cho: " + pathname);
+  }
+
   const { brand_id } = webData ?? {};
+  if (!brand_id) {
+    throw new Error("Không có dữ liệu brand trong website trên pcms");
+  }
+
   const group = webData?.groups?.find((g, index) =>
     webData?.default_group_id ? g.id === webData?.default_group_id : index == 0
   );
@@ -47,7 +55,7 @@ export const getInitialData = async (ctx) => {
 };
 
 export const getWebsitesConfig = async (domain) => {
-  const CACHE_KEY = "WEBSITE_DATA_BY_DOMAIN_" + domain;
+  const CACHE_KEY = "WEBSITE_DATA_BY_DOMAIN_FROM_API_" + domain;
   const cachedData = await CacheFile.get(CACHE_KEY);
   if (cachedData) {
     return cachedData;
