@@ -100,6 +100,11 @@ function* fetchMedias({ _limit, _start, _q }) {
     const { data: medias } = yield Axios.get(
       `${host}/upload/files?_limit=${_limit}&_start=${_start}${_q ? `&_q=${_q}` : ""}`
     );
+    medias.sort((a, b) => {
+      var dateA = new Date(a.updatedAt);
+      var dateB = new Date(b.updatedAt);
+      return dateB - dateA;
+    });
     yield put({ type: SET_MEDIAS, value: medias });
     yield put({ type: UPDATE_API_STATUS, value: { success: true }, path: ["medias"] });
   } catch (e) {}

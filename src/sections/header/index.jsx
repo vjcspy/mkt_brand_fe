@@ -308,6 +308,14 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
     return () => window.removeEventListener("tabbanner", listener);
   }, []);
 
+  const prepareUrl = (value) => {
+    let tabCode = value.url.replace('/?bannerItem=', "");
+    if (tabCode) {
+      return value.url + '-1&tabBanner=' + tabCode;
+    }
+    return value.url;
+  }
+
   // get list provinces & number promo in hamburger menu
   useEffect(() => {
     const fetchApi = async () => {
@@ -365,7 +373,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
             >
               <ContentHeaderLink ref={linkRef}>
                 {navMenu?.children.map((e, i) => (
-                  <LinkRouter key={i} passHref={true} href={e.url} shallow>
+                  <LinkRouter key={i} passHref={true} href={prepareUrl(e)} shallow>
                     <a href={e.url} className={`${index === i && isHomePage ? "active" : ""}`}>
                       <h4>{e.label?.[locale]}</h4>
                     </a>
@@ -376,6 +384,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
                     style={{
                       left: percentage + "%",
                       transition: transition ? "left 0.3s ease-out, width 0.3s ease-out" : "none",
+                      // transition: "left 0.3s ease-out, width 0.3s ease-out" ,
                       width: width,
                     }}
                   />

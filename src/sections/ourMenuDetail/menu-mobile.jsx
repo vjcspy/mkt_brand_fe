@@ -1,4 +1,4 @@
-import { get } from "lodash";
+import { get, findIndex } from "lodash";
 import { stringifyUrl } from "query-string";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import MenuTreeMobile from "./menu-tree-mobile";
 import { MenuMobileWrapper } from "./styled";
 
 const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
+  debugger;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [childrenIndex, setChildrenIndex] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
@@ -47,7 +48,7 @@ const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
       } else {
         let items = get(config, ["children"], []);
         items.forEach((config, childIndex) => {
-          menus.push({ ...config, backIndex: Math.max(index - 1, 0), index, childIndex });
+          menus.push({ ...config, backIndex: Math.max(index - 1, 0), index, childIndex: childIndex + index });
         });
         tree.push({
           name: config.name,
@@ -85,11 +86,21 @@ const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
 
   const handleClick = useCallback(
     (index) => {
-      updateParam(index);
-      setPageIndex(index);
-      pageOnChange(index);
+      let findIndexMenu = findIndex(menus, {childIndex: index});
+      updateParam(findIndexMenu);
+      setPageIndex(findIndexMenu);
+      pageOnChange(findIndexMenu);
     },
     [pageOnChange]
+  );
+
+  const handleClickBack = useCallback(
+      (index) => {
+        updateParam(index);
+        setPageIndex(index);
+        pageOnChange(index);
+      },
+      [pageOnChange]
   );
 
   const updateParam = useRefCallback((index) => {
@@ -113,7 +124,7 @@ const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
         menus={menus}
         pageIndex={pageIndex}
         pageOnChange={pageOnChange}
-        onBack={handleClick}
+        onBack={handleClickBack}
         setMenuDetail={setMenuDetail}
         scrollToFooter={scrollToFooter}
       />

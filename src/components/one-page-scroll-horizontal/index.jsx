@@ -171,11 +171,11 @@ const OnePageScrollHorizontal = ({
   return (
     <div
       ref={scrollRef}
-      onWheel={onWheel}
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-      onTouchMove={onTouchMove}
-      onKeyDown={keyPress}
+      // onWheel={onWheel}
+      // onTouchStart={onTouchStart}
+      // onTouchEnd={onTouchEnd}
+      // onTouchMove={onTouchMove}
+      // onKeyDown={keyPress}
       style={{
         height: heightChildren ? "fit-content" : containerHeight || height || "var(--app-height)",
         width: "100%",
