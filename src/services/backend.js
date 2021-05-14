@@ -19,7 +19,8 @@ export const getInitialData = async (ctx) => {
     .get(["data", "rows"])
     .find((e) => e.code === webSiteConfig?.website_code)
     .value();
-  if (webData) {
+
+  if (!webData) {
     throw new Error("Không tìm thấy dữ liệu website ở pcms cho domain hiện tại. Kiểm tra api config domain và pcms cho: " + pathname);
   }
 
@@ -268,6 +269,11 @@ export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCod
   const categoryTree = `fragment categoryTree on CategoryTree{id level name path position children{...categoryTreeChild}url_key}`;
   const categoryResult = `fragment category on CategoryResult{items{id name position description url_key children_count canonical_url level path children{...categoryTree}}}`;
   const query = `query{categories(filters:{ids:{in:["${rootCategory}"]}}pageSize:${pageSize} currentPage:${currentPage}){...category page_info{total_pages}total_count}}`;
+
+  if (_.isString(storeCode)) {
+    throw new Error("Missing data storeCode");
+  }
+
   const { data } = await Axios.post(
     process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
     { query: `${categoryTreeChild} ${categoryTree} ${categoryResult} ${query}` },
@@ -286,10 +292,14 @@ export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCod
   return menu;
 };
 
-export const fetchMenuCategoriesListingData = async ({ categoryId, storeCode = "gogi_royal" }) => {
+export const fetchMenuCategoriesListingData = async ({ categoryId, storeCode }) => {
   const productFragment = `fragment product on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url} options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html} thumbnail{url}url_key}`;
   const bundleProductFragment = `fragment bundle on BundleProduct{items{__typename type position required title option_id options{product{... on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url} options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html}sku thumbnail{url}url_key}}}}}`;
   const query = `query{catalogCategoryListingData(search:"" filters:{code:"category_id",data:{eq:"${categoryId}"}}pageSize:100 currentPage:1){items{...product ...bundle}page_info{total_pages}total_count}}`;
+
+  if (_.isString(storeCode)) {
+    throw new Error("Missing data storeCode");
+  }
 
   const { data } = await Axios.post(
     process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
