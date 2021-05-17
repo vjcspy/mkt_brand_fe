@@ -11,12 +11,10 @@ const defaultConfig = {
   },
 };
 const DynamicFooter = forwardRef(({ config = defaultConfig, mainHeight }, ref) => {
-
-  const height = '100%';
   const locale = useSelector((s) => s.get("locale"));
   const content = get(config, ["components", "contentHTML", "value", locale]);
   return (
-    <DynamicWrapper style={{ minHeight: mainHeight, height: height }}>
+    <DynamicWrapper style={{ minHeight: mainHeight }}>
       <DynamicContent ref={ref} dangerouslySetInnerHTML={{ __html: content }} />
     </DynamicWrapper>
   );
