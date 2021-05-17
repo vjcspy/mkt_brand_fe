@@ -299,7 +299,7 @@ export const fetchMenuCategoriesListingData = async ({ categoryId, storeCode }) 
   const bundleProductFragment = `fragment bundle on BundleProduct{items{__typename type position required title option_id options{product{... on ProductInterface{__typename id name attribute_set_id description{html}gift_message_available image{url} options_container price_range{maximum_price{discount{amount_off percent_off}final_price{currency value}}minimum_price{discount{amount_off percent_off}final_price{currency value}}}short_description{html}sku thumbnail{url}url_key}}}}}`;
   const query = `query{catalogCategoryListingData(search:"" filters:{code:"category_id",data:{eq:"${categoryId}"}}pageSize:100 currentPage:1){items{...product ...bundle}page_info{total_pages}total_count}}`;
 
-  if (_.isString(storeCode)) {
+  if (!_.isString(storeCode)) {
     throw new Error("Missing data storeCode");
   }
 
