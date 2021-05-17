@@ -272,7 +272,7 @@ export const fetchParentMenu = async ({ pageSize = 20, currentPage = 1, storeCod
   const categoryResult = `fragment category on CategoryResult{items{id name position description url_key children_count canonical_url level path children{...categoryTree}}}`;
   const query = `query{categories(filters:{ids:{in:["${rootCategory}"]}}pageSize:${pageSize} currentPage:${currentPage}){...category page_info{total_pages}total_count}}`;
 
-  if (_.isString(storeCode)) {
+  if (!_.isString(storeCode)) {
     throw new Error("Missing data storeCode");
   }
 
