@@ -113,7 +113,8 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
         <div
           style={{
             transition: "all 0.3s ease-in-out",
-            transform: `translate3d(0px, ${showFooter ? -(height - headerHeight) : 0}px, 0px)`,
+            // transform: `translate3d(0px, ${showFooter ? -(height - headerHeight) : 0}px, 0px)`,
+              transform: `translate3d(0px, 0px, 0px)`,
             width: "100%",
           }}
         >
@@ -122,12 +123,13 @@ const HomePageContainer = ({ siteCode, pageName, modifiedConfig, pageNameQueryRo
               sections?.map((config, index) => {
                 const Section = Sections[config?.name];
                 if (Section) {
-                  return <Section key={index} scrollToFooter={handleScrollToFooter} {...rest} config={config} />;
+                  return <Section key={index} scrollToFooter={handleScrollToFooter} {...rest} config={config}
+                                  footer={footer} footerRef={footerRef} mainHeight={mainHeight}/>;
                 }
               }),
             []
           )}
-          <DynamicFooter config={footer} ref={footerRef} mainHeight={mainHeight} />
+          {/*<DynamicFooter config={footer} ref={footerRef} mainHeight={mainHeight} />*/}
         </div>
       </MainWrapper>
       {show && <AcceptCookie />}

@@ -11,6 +11,7 @@ import OnePageScrollHome from "../../components/one-page-scroll/one-page-scroll-
 import useSiteRouter from "../../hooks/useSiteRouter";
 import { stringifyUrl } from "query-string";
 import useRefCallback from "../../hooks/useRefCallback";
+import DynamicFooter from "../dynamic-footer";
 
 const IconTriangleLineTop = loadable(() => import("../../components/icons/iconTriangleLineTop"));
 const IconTriangleLineDown = loadable(() => import("../../components/icons/iconTriangleLineDown"));
@@ -32,10 +33,10 @@ const Link = ({ url, item, ...props }) => {
   return <LinkRouter {...props} href={href} />;
 };
 
-const BannerItem = ({ config, tabCode, onChangeBanner, scrollToFooter }) => {
+const BannerItem = ({ config, tabCode, onChangeBanner, scrollToFooter, footer, footerRef, mainHeight }) => {
   const locale = useSelector((s) => s.get("locale"));
   const tabShouldShow = config.value.filter((item) => item.statusTab.value.active === "Show");
-  const size = tabShouldShow?.length ?? 0;
+  const size = tabShouldShow?.length + 1 ?? 1;
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ width, height }, ref] = useIframeResize();
   const router = useSiteRouter();
@@ -91,6 +92,7 @@ const BannerItem = ({ config, tabCode, onChangeBanner, scrollToFooter }) => {
         </GroupButton>
       </WrapperSection>
     ));
+    resutl.push(<DynamicFooter config={footer} ref={footerRef} mainHeight={mainHeight} />);
     return resutl;
   }, [tabShouldShow, width]);
   return (

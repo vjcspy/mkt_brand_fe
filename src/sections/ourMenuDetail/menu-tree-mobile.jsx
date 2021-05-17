@@ -40,7 +40,7 @@ const MenuTree = ({ tree, currentIndex, isHidden, onClick, top }) => {
       {map(list, (item, index) => (
         <MenuItemButton
           key={index}
-          isOpen={index === currentIndex}
+          isOpen={item.pageIndex === currentIndex}
           onClick={() => {
             onClick(item.pageIndex);
           }}

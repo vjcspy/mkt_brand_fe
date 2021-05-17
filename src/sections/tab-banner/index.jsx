@@ -101,7 +101,7 @@ const findIndexItemActive = (arr) => {
   return index > 0 ? index : 0;
 };
 
-const TabBanner = ({ config = defaultConfig, scrollToFooter, footer }) => {
+const TabBanner = ({ config = defaultConfig, scrollToFooter, footer, footerRef, mainHeight}) => {
   const router = useSiteRouter();
   const initialIndex = useMemo(() => findIndexItemActive(config.components.tabBanner.value), []);
 
@@ -262,6 +262,7 @@ const TabBanner = ({ config = defaultConfig, scrollToFooter, footer }) => {
     return config.components.tabBanner.value.map((config, index) => (
       <BannerItem
         footer={footer}
+        footerRef={footerRef} mainHeight={mainHeight}
         key={index}
         tabCode={config.tabCode.value}
         config={config.tab}
