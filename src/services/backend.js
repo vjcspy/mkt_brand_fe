@@ -5,6 +5,8 @@ import { PROMO_FLASH_SALE, PROMO_NORMAL } from "../constants";
 import fs from "fs";
 import { CacheFile } from "./cache";
 
+const _ = require("lodash");
+
 export const getInitialData = async (ctx) => {
   const pathname = ctx.req.headers.host;
 
