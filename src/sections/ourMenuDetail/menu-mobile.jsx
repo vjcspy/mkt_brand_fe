@@ -86,10 +86,9 @@ const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
 
   const handleClick = useCallback(
     (index) => {
-      let findIndexMenu = findIndex(menus, {childIndex: index});
-      updateParam(findIndexMenu);
-      setPageIndex(findIndexMenu);
-      pageOnChange(findIndexMenu);
+      updateParam(index);
+      setPageIndex(index);
+      pageOnChange(index);
     },
     [pageOnChange]
   );
