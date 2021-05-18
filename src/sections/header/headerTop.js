@@ -36,6 +36,7 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
     avatar: null,
   });
   const showFBChat = () => {
+    console.log("here");
     window.fbAsyncInit = function() {
       FB.init({
         xfbml            : true,
