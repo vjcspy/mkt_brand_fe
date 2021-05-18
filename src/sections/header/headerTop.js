@@ -14,11 +14,12 @@ import {
   SlideCode,
   TopMenuRight,
   WrapperContent,
-  WrapperMenuRight,
+  WrapperMenuRight
 } from "./header.styled";
 import { Marker } from "./profileDropdown/styled";
 import Link from "next/link";
 import { filterProvinceById } from "../../services/backend";
+
 const ProfileDropdown = loadable(() => import("./profileDropdown"));
 
 const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
@@ -33,17 +34,17 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
     locale: null,
     provinceSelected: null,
     fullName: null,
-    avatar: null,
+    avatar: null
   });
   const showFBChat = () => {
     console.log("here");
-    window.fbAsyncInit = function() {
+    window.fbAsyncInit = (() => {
       FB.init({
-        xfbml            : true,
-        version          : 'v10.0'
+        xfbml: true,
+        version: "v10.0"
       });
       FB.CustomerChat.showDialog();
-    }
+    })();
   };
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
       locale: locale,
       provinceSelected: provinceFilter,
       fullName: fullName,
-      avatar: avatar,
+      avatar: avatar
     });
   }, [locale, provinceFilter, userInfo]);
 
@@ -77,7 +78,7 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
               </ItemTopMenuRight>
               <ItemTopMenuRight>
                 <HoverWrapper>
-                  <p onClick= {() => showFBChat()}>
+                  <p onClick={() => showFBChat()}>
                     <FormattedMessage id="header.helper" />
                   </p>
                 </HoverWrapper>
