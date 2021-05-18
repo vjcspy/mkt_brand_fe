@@ -77,9 +77,8 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
               </ItemTopMenuRight>
               <ItemTopMenuRight>
                 <HoverWrapper>
-                  <p>
-                    <FormattedMessage onClick= {() => showFBChat()}
-                                          id="header.helper" />
+                  <p onClick= {() => showFBChat()}>
+                    <FormattedMessage id="header.helper" />
                   </p>
                 </HoverWrapper>
               </ItemTopMenuRight>
