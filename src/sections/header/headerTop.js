@@ -37,14 +37,7 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
     avatar: null
   });
   const showFBChat = () => {
-    console.log("here");
-    window.fbAsyncInit = (() => {
-      FB.init({
-        xfbml: true,
-        version: "v10.0"
-      });
-      FB.CustomerChat.showDialog();
-    })();
+    FB.CustomerChat.showDialog();
   };
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import { Pages } from "../src/sections";
 import { formatConfig } from "../src/services/frontend";
 import { getInitialData, getSiteServer } from "../src/services/backend";
 import HomePageContainer from "../src/containers/homePageContainer";
+import { Head } from "next/document";
 
 export async function getServerSideProps(ctx) {
   try {
@@ -13,14 +14,14 @@ export async function getServerSideProps(ctx) {
     const { data: site } = await getSiteServer(siteCode);
     return {
       props: {
-        config: site?.config ?? null,
-      },
+        config: site?.config ?? null
+      }
     };
   } catch (e) {
     return {
       props: {
-        config: null,
-      },
+        config: null
+      }
     };
   }
 }
@@ -36,32 +37,35 @@ const Site = ({ config }) => {
   }, [config]);
 
   useEffect(() => {
-    window.fbAsyncInit = function() {
-      FB.init({
-        xfbml            : true,
-        version          : 'v10.0'
-      });
-      FB.CustomerChat.hide();
-    };
+    FB.init({
+      xfbml: true,
+      version: "v10.0"
+    });
+    FB.CustomerChat.hide();
 
-    const fjs = document.getElementsByTagName("script")[0];
-    if (document.getElementById('facebook-jssdk')) return;
-    const script = document.createElement("script");
-    script.id = 'facebook-jssdk';
-    script.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
-    fjs.parentNode.insertBefore(script, fjs);
+    // const fjs = document.getElementsByTagName("script")[0];
+    // if (document.getElementById("facebook-jssdk")) return;
+    // const script = document.createElement("script");
+    // script.id = "facebook-jssdk";
+    // script.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+    // fjs.parentNode.insertBefore(script, fjs);
   }, []);
   return (
-    <Layout>
-      <HomePageContainer pageName={Pages.home.name} modifiedConfig={modifiedConfig} shouldHideFooter={true} />
-      <div id="fb-root"></div>
-      <div class="fb-customerchat"
-           attribution="biz_inbox"
-           page_id="103388957919806">
-      </div>
+    <>
+      <Head>
+        <script type="text/javascript" src="https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js" />
+      </Head>
+      <Layout>
+        <HomePageContainer pageName={Pages.home.name} modifiedConfig={modifiedConfig} shouldHideFooter={true} />
+        <div id="fb-root"></div>
+        <div class="fb-customerchat"
+             attribution="biz_inbox"
+             page_id="103388957919806">
+        </div>
 
 
-    </Layout>
+      </Layout>
+    </>
   );
 };
 
