@@ -36,14 +36,10 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
     avatar: null,
   });
   const showFBChat = () => {
-    console.log("here");
-    window.fbAsyncInit = function() {
-      FB.init({
-        xfbml            : true,
-        version          : 'v10.0'
-      });
-      FB.CustomerChat.showDialog();
-    }
+    console.log("open facebook");
+    // window.fbAsyncInit();
+    FB.CustomerChat.show(true);
+
   };
 
   useEffect(() => {
@@ -77,9 +73,8 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
               </ItemTopMenuRight>
               <ItemTopMenuRight>
                 <HoverWrapper>
-                  <p>
-                    <FormattedMessage onClick= {() => showFBChat()}
-                                          id="header.helper" />
+                  <p onClick={() => showFBChat()}>
+                    <FormattedMessage id="header.helper" />
                   </p>
                 </HoverWrapper>
               </ItemTopMenuRight>
