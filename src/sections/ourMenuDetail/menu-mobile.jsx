@@ -11,7 +11,6 @@ import MenuTreeMobile from "./menu-tree-mobile";
 import { MenuMobileWrapper } from "./styled";
 
 const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
-  debugger;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [childrenIndex, setChildrenIndex] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
