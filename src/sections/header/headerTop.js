@@ -14,12 +14,11 @@ import {
   SlideCode,
   TopMenuRight,
   WrapperContent,
-  WrapperMenuRight
+  WrapperMenuRight,
 } from "./header.styled";
 import { Marker } from "./profileDropdown/styled";
 import Link from "next/link";
 import { filterProvinceById } from "../../services/backend";
-
 const ProfileDropdown = loadable(() => import("./profileDropdown"));
 
 const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
@@ -34,10 +33,13 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
     locale: null,
     provinceSelected: null,
     fullName: null,
-    avatar: null
+    avatar: null,
   });
   const showFBChat = () => {
-    FB.CustomerChat.showDialog();
+    console.log("open facebook");
+    // window.fbAsyncInit();
+    FB.CustomerChat.show(true);
+
   };
 
   useEffect(() => {
@@ -46,7 +48,7 @@ const HeaderTop = ({ setPopupLanguageLocation, slides }) => {
       locale: locale,
       provinceSelected: provinceFilter,
       fullName: fullName,
-      avatar: avatar
+      avatar: avatar,
     });
   }, [locale, provinceFilter, userInfo]);
 

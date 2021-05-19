@@ -28,6 +28,24 @@ const HostWrapper = ({ children, host, graphqlHost, dataInitial, menuApi }) => {
     dispatch({ type: SET_DATA_INITIAL, value: dataInitial });
     dispatch({ type: UPDATE_API_STATUS, path: ["menu"], value: menuApi });
   }, [host, graphqlHost]);
+
+  useEffect(() => {
+    window.fbAsyncInit = function() {
+      FB.init({
+        xfbml            : true,
+        version          : 'v10.0'
+      });
+      FB.CustomerChat.hide();
+      FB.Event.subscribe('customerchat.dialogHide', FB.CustomerChat.hide);
+    };
+
+    const fjs = document.getElementsByTagName("script")[0];
+    if (document.getElementById('facebook-jssdk')) return;
+    const script = document.createElement("script");
+    script.id = 'facebook-jssdk';
+    script.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+    fjs.parentNode.insertBefore(script, fjs);
+  }, []);
   return children;
 };
 
