@@ -65,7 +65,7 @@ const BundleProductMobile = ({ config, setMenuDetail, scrollToFooter }) => {
         <h5>{toMoney(get(product, ["price_range", "minimum_price", "final_price", "value"]))} VNĐ/người</h5>
         <Button
           varian="primary"
-          style={{ display: "block", width: "100%" }}
+          style={{ display: product && product.items && product.items.length ? "block" : "none", width: "100%",  }}
           onClick={() => {
             setMenuDetail(product);
           }}
