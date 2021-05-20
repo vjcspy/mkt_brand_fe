@@ -10,6 +10,7 @@ const SelectLocation = ({ location, onChangeLocation, ...rest }) => {
   const [showList, setShowList] = useState(false);
   const onSelect = (item) => {
     setShowList(false);
+    // TODO: lưu vào storage cache location hiện tại để sau đó get lại menu cho nhanh
     onChangeLocation({ ...item, default: false });
   };
   return (

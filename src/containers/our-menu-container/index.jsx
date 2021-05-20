@@ -9,7 +9,7 @@ import NotificationProvider from "../../components/notification";
 import AcceptCookie from "../../components/accept-cookie";
 import { SET_SHOW_FOOTER } from "../../constants";
 
-const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
+const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, menus, ...rest }) => {
   const header = get(modifiedConfig, ["header"]);
   const footer = get(modifiedConfig, ["footer"]);
   const sections = get(modifiedConfig, ["pages", pageName, "sections"]);
@@ -104,7 +104,7 @@ const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
         style={{
           height: width < 768 ? mainHeight : null,
           maxHeight: width < 768 ? mainHeight : null,
-          overflow: "hidden",
+          overflow: "hidden"
         }}
         className="main-content"
       >
@@ -112,7 +112,7 @@ const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
           style={{
             transition: "all 0.3s ease-in-out",
             transform: `translate3d(0px, ${showFooter ? -(height - headerHeight) : 0}px, 0px)`,
-            width: "100%",
+            width: "100%"
           }}
         >
           {useMemo(
@@ -120,10 +120,11 @@ const OurMenuContainer = ({ siteCode, pageName, modifiedConfig, ...rest }) => {
               sections?.map((config, index) => {
                 const Section = Sections[config?.name];
                 if (Section) {
-                  return <Section key={index} scrollToFooter={handleScrollToFooter} {...rest} config={config} />;
+                  return <Section key={index} scrollToFooter={handleScrollToFooter} menus={menus} {...rest}
+                                  config={config} />;
                 }
               }),
-            [sections]
+            [sections, menus]
           )}
           <DynamicFooter config={footer} ref={footerRef} mainHeight={mainHeight} />
         </div>

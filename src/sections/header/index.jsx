@@ -10,7 +10,7 @@ import {
   LogoWrapper,
   MenuIconButton,
   HeaderLine,
-  ContentHeaderLink,
+  ContentHeaderLink
 } from "./header.styled";
 import {
   DEVELOPMENT_MODE,
@@ -19,7 +19,7 @@ import {
   SET_LIST_PROVINCE,
   SET_NUM_PROMO,
   SET_PROVINCE_SELECTED,
-  SHOW_LANGUAGE_LOCATION,
+  SHOW_LANGUAGE_LOCATION
 } from "../../constants";
 import { Container } from "../../styles";
 import IconMenu from "../../components/icons/iconMenu";
@@ -36,10 +36,12 @@ import {
   filterListPromoApi,
   getPromotionByBrandProvince,
   getProvinceIdByLocation,
-  getProvinces,
+  getProvinces
 } from "../../services/backend";
 import { showNotification } from "../../components/notification";
 import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
+import { WebStorage } from "../../services/web-storage";
+import _ from "lodash";
 
 const MenuRight = loadable(() => import("../../components/menu"));
 
@@ -53,19 +55,19 @@ const defaultConfig = {
       type: "image",
       name: "logo",
       title: "Header Logo",
-      value: null,
+      value: null
     },
     navMenu: {
       type: "menu",
       name: "navMenu",
       title: "Nav Menu",
-      value: "navMenu",
+      value: "navMenu"
     },
     hambergerMenu: {
       type: "menu",
       name: "hambergerMenu",
       title: "Hamberger Menu",
-      value: "hambergerMenu",
+      value: "hambergerMenu"
     },
     buttonLeftFooterMenu: {
       type: "link",
@@ -73,8 +75,8 @@ const defaultConfig = {
       title: "Button Left Menu",
       value: {
         label: { vi: "Tải app", en: "Tải app" },
-        url: "/",
-      },
+        url: "/"
+      }
     },
     buttonRightFooterMenu: {
       type: "link",
@@ -82,8 +84,8 @@ const defaultConfig = {
       title: "Button Right Menu",
       value: {
         label: { vi: "Đặt bàn", en: "Đặt bàn" },
-        url: "/",
-      },
+        url: "/"
+      }
     },
     slides: {
       type: "group",
@@ -94,7 +96,7 @@ const defaultConfig = {
           type: "text",
           title: "Text",
           value: { vi: "Ăn GoGi trúng 1 tỷ", en: "Ăn GoGi trúng 1 tỷ" },
-          name: "text",
+          name: "text"
         },
         link: {
           type: "link",
@@ -102,9 +104,9 @@ const defaultConfig = {
           title: "Link",
           value: {
             label: { vi: "Nhận mã ngay", en: "Nhận mã ngay" },
-            url: "/",
-          },
-        },
+            url: "/"
+          }
+        }
       },
       value: [
         {
@@ -112,7 +114,7 @@ const defaultConfig = {
             type: "text",
             title: "Text",
             value: { vi: "Ăn GoGi trúng 1 tỷ", en: "Ăn GoGi trúng 1 tỷ" },
-            name: "text",
+            name: "text"
           },
           link: {
             type: "link",
@@ -120,16 +122,16 @@ const defaultConfig = {
             title: "Link",
             value: {
               label: { vi: "Nhận mã ngay", en: "Nhận mã ngay" },
-              url: "/",
-            },
-          },
+              url: "/"
+            }
+          }
         },
         {
           text: {
             type: "text",
             title: "Text",
             value: { vi: "Ăn GoGi trúng 1 tỷ", en: "Ăn GoGi trúng 1 tỷ" },
-            name: "text",
+            name: "text"
           },
           link: {
             type: "link",
@@ -137,12 +139,12 @@ const defaultConfig = {
             title: "Link",
             value: {
               label: { vi: "Nhận mã ngay", en: "Nhận mã ngay" },
-              url: "/",
-            },
-          },
-        },
-      ],
-    },
+              url: "/"
+            }
+          }
+        }
+      ]
+    }
 
     // menu: {
     //   title: "menu",
@@ -172,7 +174,7 @@ const defaultConfig = {
     //     { label: "Liên lạc", url: "/" },
     //   ],
     // },
-  },
+  }
 };
 
 // const mapStateToProps = (state) => ({
@@ -212,7 +214,7 @@ function requestLocation() {
     {
       enableHighAccuracy: true,
       maximumAge: 30000,
-      timeout: 27000,
+      timeout: 27000
     }
   );
   return latLng;
@@ -240,6 +242,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   const [transition, setTransition] = useState(true);
   const [width, setWidth] = useState(0);
   const [index, setIndex] = useState(0);
+  const [listProvince, setListProvince] = useState([{ id: 5, name: "Hà Nội" }]);
 
   useEffect(() => {
     if (!process.browser) {
@@ -252,7 +255,8 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
           try {
             const { data } = await getProvinceIdByLocation({ lat: latitude, lng: longitude });
             dispatch({ type: SET_PROVINCE_SELECTED, value: { id: data.provinceId, default: false } });
-          } catch (e) {}
+          } catch (e) {
+          }
           dispatch({ type: SET_LAT_LNG, value: { lat: latitude, lng: longitude } });
         }
       },
@@ -272,7 +276,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
       {
         enableHighAccuracy: true,
         maximumAge: 30000,
-        timeout: 27000,
+        timeout: 27000
       }
     );
   }, []);
@@ -309,32 +313,56 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
   }, []);
 
   const prepareUrl = (value) => {
-    let tabCode = value.url.replace('/?bannerItem=', "");
+    let tabCode = value.url.replace("/?bannerItem=", "");
     if (tabCode) {
-      return value.url + '-1&tabBanner=' + tabCode;
+      return value.url + "-1&tabBanner=" + tabCode;
     }
     return value.url;
-  }
+  };
 
   // get list provinces & number promo in hamburger menu
   useEffect(() => {
     const fetchApi = async () => {
       try {
         if ((siteCode, storeCode, root_category_id, brand_id)) {
-          const [listProvince, { data: listPromo }] = await Promise.all([
-            getProvinces(),
-            getPromotionByBrandProvince({ brand_id }),
-          ]);
-          const provinces = listProvince ?? [{ id: 5, name: "Hà Nội" }];
+          const { data: listPromo } = await getPromotionByBrandProvince({ brand_id });
           let numPromo = filterListPromoApi(listPromo.result.content).length;
           dispatch({ type: SET_NUM_PROMO, value: numPromo });
-          dispatch({ type: SET_LIST_PROVINCE, value: provinces });
         }
       } catch (e) {
         console.log(e);
       }
     };
     fetchApi();
+  }, [siteCode, storeCode, root_category_id, brand_id]);
+
+
+  useEffect(() => {
+    dispatch({ type: SET_LIST_PROVINCE, value: listProvince });
+  }, [listProvince]);
+
+
+  // get provinces
+  useEffect(() => {
+    const resolveProvince = async () => {
+      const webStorage = new WebStorage();
+      const websiteData = webStorage.get("websiteData");
+      let provinceData = webStorage.get("provinceData");
+      if (!provinceData) {
+        provinceData = await getProvinces();
+        webStorage.save("provinceData", provinceData);
+      }
+      let provinces = _.map(websiteData["groups"], (group) => {
+        return _.find(provinceData, p => p["id"] == group["province_id"]);
+      });
+
+      provinces = provinces.filter((v) => !!v);
+
+      setListProvince(provinces);
+    };
+
+    resolveProvince();
+
   }, [siteCode, storeCode, root_category_id, brand_id]);
 
   return (
@@ -385,7 +413,7 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
                       left: percentage + "%",
                       transition: transition ? "left 0.3s ease-out, width 0.3s ease-out" : "none",
                       // transition: "left 0.3s ease-out, width 0.3s ease-out" ,
-                      width: width,
+                      width: width
                     }}
                   />
                 )}

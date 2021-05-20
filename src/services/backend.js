@@ -45,6 +45,7 @@ export const getInitialData = async (ctx) => {
   if (siteCode && storeCode && root_category_id && brand_id) {
 
     const data = {
+      webData,
       siteCode,
       storeCode,
       root_category_id,

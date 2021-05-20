@@ -6,11 +6,15 @@ const _ = require("lodash");
 export class CacheFile {
   static _CACHE_DATA = {};
 
-  static register(key,value){
+  static register(key, value) {
 
   }
 
   static async save(key, value, store = "default") {
+    if (typeof window !== "undefined") {
+      return;
+    }
+
     if (!_.isString(key)) {
       throw new Error("key must be string");
     }
@@ -29,6 +33,10 @@ export class CacheFile {
   }
 
   static async get(key, store = "default") {
+    if (typeof window !== "undefined") {
+      return undefined;
+    }
+
     if (!_.isString(key)) {
       throw new Error("key must be string");
     }

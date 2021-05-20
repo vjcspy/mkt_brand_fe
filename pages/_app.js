@@ -10,6 +10,7 @@ import defaultTranslation from "../src/translations";
 import { useEffect } from "react";
 import { SET_DATA_INITIAL, SET_HOST, UPDATE_API_STATUS } from "../src/constants";
 import { fetchParentMenu, getInitialData } from "../src/services/backend";
+import { WebStorage } from "../src/services/web-storage";
 
 const ThemeWrapper = ({ children }) => {
   const theme = useFromJS(["modifiedConfig", "theme"]);
@@ -32,17 +33,17 @@ const HostWrapper = ({ children, host, graphqlHost, dataInitial, menuApi }) => {
   useEffect(() => {
     window.fbAsyncInit = function() {
       FB.init({
-        xfbml            : true,
-        version          : 'v10.0'
+        xfbml: true,
+        version: "v10.0"
       });
       FB.CustomerChat.hide();
-      FB.Event.subscribe('customerchat.dialogHide', FB.CustomerChat.hide);
+      FB.Event.subscribe("customerchat.dialogHide", FB.CustomerChat.hide);
     };
 
     const fjs = document.getElementsByTagName("script")[0];
-    if (document.getElementById('facebook-jssdk')) return;
+    if (document.getElementById("facebook-jssdk")) return;
     const script = document.createElement("script");
-    script.id = 'facebook-jssdk';
+    script.id = "facebook-jssdk";
     script.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
     fjs.parentNode.insertBefore(script, fjs);
   }, []);
@@ -50,6 +51,11 @@ const HostWrapper = ({ children, host, graphqlHost, dataInitial, menuApi }) => {
 };
 
 function App({ Component, pageProps, host, graphqlHost, dataInitial, menuApi }) {
+  if (dataInitial.webData && dataInitial.webData.brand_id) {
+    const storage = new WebStorage();
+    storage.save("websiteData", dataInitial.webData);
+  }
+
   return (
     <Provider store={store}>
       <HostWrapper menuApi={menuApi} dataInitial={dataInitial} host={host} graphqlHost={graphqlHost}>
@@ -73,20 +79,20 @@ App.getInitialProps = async ({ Component, ctx }) => {
     const menu = await fetchParentMenu({ storeCode, rootCategory: root_category_id });
     const menuApi = menu?.children.map((item) => ({
       label: item.name,
-      url: item.url_key,
+      url: item.url_key
     }));
     return {
       host: process.env.API_HOST,
       graphqlHost: process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
       dataInitial,
-      menuApi,
+      menuApi
     };
   } catch (e) {
     return {
       host: process.env.API_HOST,
       graphqlHost: process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
       dataInitial: null,
-      menuApi: null,
+      menuApi: null
     };
   }
 };

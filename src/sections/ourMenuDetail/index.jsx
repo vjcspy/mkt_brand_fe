@@ -16,6 +16,7 @@ const defaultConfig = {
 };
 
 const OurMenus = ({ menus, footer, scrollToFooter }) => {
+  console.log('in our menu',menus);
   const [path, setPath] = useState([]);
   menus = useFromJS(["ourMenus"]) ?? menus;
   const [size, ref] = useIframeResize();
