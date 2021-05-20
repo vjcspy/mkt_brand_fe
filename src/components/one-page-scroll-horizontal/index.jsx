@@ -90,19 +90,19 @@ const OnePageScrollHorizontal = ({
 
   const onWheel = useCallback(
     (e) => {
-      // if (Math.abs(e.deltaY) > minDeltaWheel && !isScrolling) {
-      //   if (e.deltaY > 0) {
-      //     setIsScrolling(true);
-      //     setTranslateY((pre) => {
-      //       return Math.max(pre - 1, -(length - 1));
-      //     });
-      //   } else {
-      //     setIsScrolling(true);
-      //     setTranslateY((pre) => {
-      //       return Math.min(pre + 1, 0);
-      //     });
-      //   }
-      // }
+      if (Math.abs(e.deltaY) > minDeltaWheel && !isScrolling) {
+        if (e.deltaY > 0) {
+          setIsScrolling(true);
+          setTranslateY((pre) => {
+            return Math.max(pre - 1, -(length - 1));
+          });
+        } else {
+          setIsScrolling(true);
+          setTranslateY((pre) => {
+            return Math.min(pre + 1, 0);
+          });
+        }
+      }
     },
     [length, isScrolling]
   );
