@@ -62,7 +62,6 @@ const Site = ({ site_code, config, menus }) => {
 
       const websiteData = webStorage.get("websiteData");
       if (websiteData) {
-        debugger;
         const group = _.find(websiteData.groups, (g) => g["province_id"] == provinceSelected.get("id"));
 
         if (group) {
