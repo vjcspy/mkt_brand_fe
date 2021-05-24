@@ -6,29 +6,36 @@ import { Pages } from "../src/sections";
 import { formatConfig } from "../src/services/frontend";
 import { getInitialData, getSiteServer } from "../src/services/backend";
 import HomePageContainer from "../src/containers/homePageContainer";
+import {useRouter} from "next/dist/client/router";
 
 export async function getServerSideProps(ctx) {
   try {
-    const { siteCode } = await getInitialData(ctx);
+    const { siteCode, redirect_url } = await getInitialData(ctx);
     const { data: site } = await getSiteServer(siteCode);
     return {
       props: {
         config: site?.config ?? null,
+        redirectUrl: redirect_url ?? null
       },
     };
   } catch (e) {
     return {
       props: {
         config: null,
+        redirectUrl: null
       },
     };
   }
 }
 
-const Site = ({ config }) => {
+const Site = ({ config, redirectUrl }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
   useEffect(() => {
+    if (redirectUrl && router) {
+      router.push(redirectUrl);
+    }
     dispatch({ type: SET_SHOW_MENU_HEADER, value: true });
     return () => {
       dispatch({ type: SET_SHOW_MENU_HEADER, value: false });

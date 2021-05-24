@@ -42,6 +42,7 @@ export const getInitialData = async (ctx) => {
 
   const siteCode = webData?.code;
   const storeCode = store?.code;
+  const redirect_url = webData?.redirect_url;
   if (siteCode && storeCode && root_category_id && brand_id) {
 
     const data = {
@@ -49,7 +50,8 @@ export const getInitialData = async (ctx) => {
       siteCode,
       storeCode,
       root_category_id,
-      brand_id
+      brand_id,
+      redirect_url
     };
     await CacheFile.save(CACHE_KEY, data);
     return data;
