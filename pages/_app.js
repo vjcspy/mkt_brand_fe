@@ -11,6 +11,15 @@ import { useEffect } from "react";
 import { SET_DATA_INITIAL, SET_HOST, UPDATE_API_STATUS } from "../src/constants";
 import { fetchParentMenu, getInitialData } from "../src/services/backend";
 import { WebStorage } from "../src/services/web-storage";
+import Router from "next/router";
+import NProgress from "nprogress"; //nprogress module
+import "nprogress/nprogress.css"; //styles of nprogress
+
+//Binding events.
+Router.events.on("routeChangeStart", () => NProgress.start());
+Router.events.on("routeChangeComplete", () => NProgress.done());
+Router.events.on("routeChangeError", () => NProgress.done());
+
 
 const ThemeWrapper = ({ children }) => {
   const theme = useFromJS(["modifiedConfig", "theme"]);

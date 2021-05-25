@@ -348,6 +348,9 @@ const Header = ({ config = defaultConfig, menus, pageName }) => {
       const webStorage = new WebStorage();
       const websiteData = webStorage.get("websiteData");
       let provinceData = webStorage.get("provinceData");
+      if (!websiteData) {
+        console.error("Not found websiteData in cache");
+      }
       if (!provinceData) {
         provinceData = await getProvinces();
         webStorage.save("provinceData", provinceData);

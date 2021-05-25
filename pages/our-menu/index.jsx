@@ -70,17 +70,15 @@ const Site = ({ site_code, config, menus }) => {
             const cacheKey = "MENU_ON_STORECODE_" + store.code + "_ROOT_CATEGORY_ID_" + group.root_category_id;
             const menuIncache = webStorage.get(cacheKey);
             if (menuIncache) {
-              console.log("cached", menuIncache);
               setMenu(menuIncache);
             } else {
               const menus = await fetchMenuCategories({
                 storeCode: store.code,
                 rootCategory: group.root_category_id
               });
-              console.log("uncached", menus);
+              console.log(menus);
               if (menus) {
                 webStorage.save(cacheKey, menus);
-                console.log("set new menu", menus);
                 setMenu(menus);
               }
             }
