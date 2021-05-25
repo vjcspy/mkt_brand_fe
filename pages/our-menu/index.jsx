@@ -76,7 +76,6 @@ const Site = ({ site_code, config, menus }) => {
                 storeCode: store.code,
                 rootCategory: group.root_category_id
               });
-              console.log(menus);
               if (menus) {
                 webStorage.save(cacheKey, menus);
                 setMenu(menus);

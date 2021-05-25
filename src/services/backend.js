@@ -249,7 +249,10 @@ export const fetchMenuCategories = async ({
   const productList = await Promise.all(
     categoriesIds.map((id) => fetchMenuCategoriesListingData({ categoryId: id, storeCode }))
   );
-  const categories = categoriesIds.map((id, i) => ({ id, products: productList[i] }));
+  const categories = categoriesIds.map((id) => {
+    const products = (_.find(productList, pL => pL.categoryId == id))?.items;
+    return ({ id, products });
+  });
 
   const menus = menu?.children.map((category, i) => {
     if (category?.children?.length) {
@@ -305,13 +308,18 @@ export const fetchMenuCategoriesListingData = async ({ categoryId, storeCode }) 
   if (!_.isString(storeCode)) {
     throw new Error("Missing data storeCode");
   }
-
-  const { data } = await Axios.post(
-    process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
-    { query: `${productFragment} ${bundleProductFragment} ${query}` },
-    { headers: { Store: storeCode } }
-  );
-  return get(data, ["data", "catalogCategoryListingData", "items"], []);
+  let res;
+  try {
+    res = await Axios.post(
+      process.env.NEXT_PUBLIC_GGG_BRAND_PCMS + "/graphql",
+      { query: `${productFragment} ${bundleProductFragment} ${query}` },
+      { headers: { Store: storeCode } }
+    );
+  } catch (e) {
+    console.error(e);
+  }
+  // console.log(categoryId, res.data);
+  return { categoryId, items: get(res?.data, ["data", "catalogCategoryListingData", "items"], []) };
 };
 
 // get promo
