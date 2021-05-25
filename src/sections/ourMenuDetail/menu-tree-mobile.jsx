@@ -1,8 +1,8 @@
-import _, { get, has, map } from "lodash";
+import _, { findIndex, get, has, map } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { MenuItemButton, MenuTreeMobileWrapper } from "./styled";
 
-const MenuTree = ({ tree, currentIndex, isHidden, onClick, top }) => {
+const MenuTree = ({ tree, currentIndex, currentPosition, isHidden, onClick, top }) => {
   const [list, setList] = useState(tree);
   const ref = useRef();
 
@@ -13,7 +13,8 @@ const MenuTree = ({ tree, currentIndex, isHidden, onClick, top }) => {
   }, [tree]);
 
   useEffect(() => {
-    let child = ref.current?.children[currentIndex];
+    let indexPosition = findIndex(tree, {pageIndex: currentIndex});
+    let child = ref.current?.children[indexPosition];
     if (child) {
       const offsetLeft = child.offsetLeft;
       const offsetWidth = child.offsetWidth;
@@ -33,7 +34,7 @@ const MenuTree = ({ tree, currentIndex, isHidden, onClick, top }) => {
         });
       }
     }
-  }, [currentIndex]);
+  }, [currentIndex, tree]);
 
   return (
     <MenuTreeMobileWrapper className={isHidden ? "hide" : ""} top={top} ref={ref}>
@@ -52,7 +53,7 @@ const MenuTree = ({ tree, currentIndex, isHidden, onClick, top }) => {
   );
 };
 
-const MenuTreeMobile = ({ tree, onClick, currentIndex, childrenIndex, top }) => {
+const MenuTreeMobile = ({ tree, onClick, currentIndex, currentPosition, childrenIndex, top }) => {
   return (
     <>
       <MenuTree

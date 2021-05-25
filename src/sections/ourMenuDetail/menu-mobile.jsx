@@ -32,6 +32,7 @@ const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
           index: index,
           parentTitle: menuDetail.name,
           price: toMoney(get(menuDetail, ["price_range", "minimum_price", "final_price", "value"])),
+          pageIndex: index
         });
         tree.push({
           name: config.title,
@@ -42,12 +43,14 @@ const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
     }
     propsMenus.forEach((config, index) => {
       if (config.isBundle) {
-        menus.push({ ...config, index });
+        menus.push({ ...config, index, pageIndex: index });
         tree.push({ name: config.name, pageIndex: index });
       } else {
         let items = get(config, ["children"], []);
+        // menus.push({...config, index});
         items.forEach((config, childIndex) => {
-          menus.push({ ...config, backIndex: Math.max(index - 1, 0), index, childIndex: childIndex + index });
+          menus.push({ ...config, backIndex: Math.max(index - 1, 0), index,
+            childIndex: childIndex + index, pageIndex: childIndex + index });
         });
         tree.push({
           name: config.name,
@@ -85,18 +88,20 @@ const MenuMobile = ({ menus: propsMenus, scrollToFooter }) => {
 
   const handleClick = useCallback(
     (index) => {
-      updateParam(index);
-      setPageIndex(index);
-      pageOnChange(index);
+      let findIndexMenu = findIndex(menus, {pageIndex: index});
+      updateParam(findIndexMenu);
+      setPageIndex(findIndexMenu);
+      pageOnChange(findIndexMenu);
     },
     [pageOnChange]
   );
 
   const handleClickBack = useCallback(
       (index) => {
-        updateParam(index);
-        setPageIndex(index);
-        pageOnChange(index);
+        let findIndexMenu = findIndex(menus, {pageIndex: index});
+        updateParam(findIndexMenu);
+        setPageIndex(findIndexMenu);
+        pageOnChange(findIndexMenu);
       },
       [pageOnChange]
   );
