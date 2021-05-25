@@ -122,7 +122,7 @@ const CreateInfo = ({ getCheckGetCode }) => {
           className="input"
           listData={genders}
           title="login.gender"
-          value={info.gender}
+          value={info.gender ?? 1}
         />
       </GroupInput>
       <Info>

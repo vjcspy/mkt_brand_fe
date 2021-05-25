@@ -32,7 +32,6 @@ const MenuTree = ({
   const menu = router.query.category;
   const headerHeight = useSelector((s) => s.get("headerHeight"));
   const [{ height }, ref] = useIframeResize();
-  
   useEffect(() => {
     if (menu && menus) {
       let index = menus.findIndex((m) => m.url_key === menu);
@@ -67,7 +66,6 @@ const MenuTree = ({
           <MenuItemWrapper key={index}>
             <MenuItemButton
               onClick={() => {
-                scrollTop();
                 if (index == indexParent) {
                   setIndexChild(undefined);
                   // setIndexParent(undefined);
