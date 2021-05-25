@@ -291,7 +291,7 @@ export const ProductSingleContainer = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr 1fr;
-    padding: 0px 20px;
+    padding: 0px 20px 80px;
     gap: 20px;
   }
 `;
@@ -404,6 +404,7 @@ export const MenuTreeMobileWrapper = styled.div`
 `;
 
 export const DotsWrapper = styled.div`
+  display: none;
   position: absolute;
   right: 20px;
   transform: translateY(34%);

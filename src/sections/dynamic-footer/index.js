@@ -13,11 +13,9 @@ const defaultConfig = {
 const DynamicFooter = forwardRef(({ config = defaultConfig, mainHeight }, ref) => {
   const locale = useSelector((s) => s.get("locale"));
   const content = get(config, ["components", "contentHTML", "value", locale]);
-  const addContent = '@media (max-width: 768px) {\n' +
-      '  .kwDkti { display: none !important;}\n' +
+  const addContent = '  .kwDkti { display: none !important;}\n' +
       '  .hHbuvI {height: 100%;}\n' +
-      '  .main-footer {height: 100%;}\n' +
-      '  }';
+      '  .main-footer {height: 100%;}\n';
   const finalContent = [content.slice(0, 7), addContent, content.slice(7)].join('');
   return (
     <DynamicWrapper style={{ minHeight: mainHeight, height: '100%'}}>
