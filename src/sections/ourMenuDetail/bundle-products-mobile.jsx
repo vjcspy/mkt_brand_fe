@@ -56,8 +56,8 @@ const BundleProductMobile = ({ config, setMenuDetail, scrollToFooter }) => {
             </MenuChildItemMobile>
           ))}
         </OnePageScrollMenu>
-        <DotsWrapper style={{ top: `calc(50% - ${infoOffsetHeight}px)` }}>
-          <PointNavigation size={config.products?.length ?? 0} currentIndex={current} display="block" />
+        <DotsWrapper style={{ top: `calc(57%)`, right:`calc(45%)` }}>
+          <PointNavigation size={config.products?.length ?? 0} currentIndex={current} display="inline-block" />
         </DotsWrapper>
       </MenuChildMobileScroller>
       <MenuChildMobileInfo ref={ref} className={shouldHide ? "hide" : ""}>

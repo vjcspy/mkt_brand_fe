@@ -404,8 +404,8 @@ export const MenuTreeMobileWrapper = styled.div`
 `;
 
 export const DotsWrapper = styled.div`
-  display: none;
+  // display: none;
   position: absolute;
-  right: 20px;
+  // right: 20px;
   transform: translateY(34%);
 `;
