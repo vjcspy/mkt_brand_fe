@@ -35,7 +35,7 @@ const SingleProducts = ({ config, isMobile, onBack, setMenuDetail, isDetail, scr
           if (Math.abs(startY - endY) > Math.abs(startX - endX)) {
             if (startY > endY) {
               if (ref.current && ref.current.scrollHeight - ref.current.scrollTop - win.innerHeight <= 0) {
-                scrollToFooter();
+                // scrollToFooter();
               }
             }
             win.document.removeEventListener("touchend", onTouchEnd);
