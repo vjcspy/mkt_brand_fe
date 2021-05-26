@@ -43,7 +43,7 @@ export default function Layout({ children, seo }) {
         <meta
           name="viewport"
           content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"
-        ></meta>
+        />
         <link rel="preload" href="/fonts/subset-SFProDisplay-Medium.ttf" as="font" crossOrigin="" />
         <link ref="preload" href="/css/font.css" as="css" crossOrigin="" />
       </Head>

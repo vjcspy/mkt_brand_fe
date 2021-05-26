@@ -92,7 +92,7 @@ const BannerItem = ({ config, tabCode, onChangeBanner, scrollToFooter, footer, f
         </GroupButton>
       </WrapperSection>
     ));
-    resutl.push(<DynamicFooter config={footer} ref={footerRef} mainHeight={mainHeight} />);
+    resutl.push(<DynamicFooter key='dynamic_footer' config={footer} ref={footerRef} mainHeight={mainHeight} />);
     return resutl;
   }, [tabShouldShow, width]);
   return (
