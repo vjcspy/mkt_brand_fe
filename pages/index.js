@@ -33,9 +33,6 @@ const Site = ({ config, redirectUrl }) => {
   const router = useRouter();
   const modifiedConfig = useMemo(() => formatConfig(config), [config]);
   useEffect(() => {
-    if (redirectUrl && router) {
-      router.push(redirectUrl);
-    }
     dispatch({ type: SET_SHOW_MENU_HEADER, value: true });
     return () => {
       dispatch({ type: SET_SHOW_MENU_HEADER, value: false });

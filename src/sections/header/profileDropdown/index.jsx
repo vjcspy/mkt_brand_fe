@@ -8,6 +8,7 @@ import { AvatarWrapper, DropDownWrapper, ProfileNameWrapper, ProfileWrapper, Tab
 import { FormattedMessage } from "react-intl";
 import { useDispatch } from "react-redux";
 import { SET_PROMO_OF_USER, SET_TOKEN_USER, SET_USER_INFO } from "../../../constants";
+import Image from "../../../components/image";
 
 const ProfileDropdown = ({ userName, avatar, setShowProfile }) => {
   const router = useSiteRouter();
