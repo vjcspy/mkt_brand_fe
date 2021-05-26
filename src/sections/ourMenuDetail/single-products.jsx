@@ -10,6 +10,7 @@ import Image from "../../components/image";
 import Button from "../../components/button";
 import { get, isNil, map } from "lodash";
 import { toMoney } from "../../services/frontend";
+import {SET_SHOW_FOOTER} from "../../constants";
 
 const SingleProducts = ({ config, isMobile, onBack, setMenuDetail, isDetail, scrollToFooter }) => {
   let products = config.products ?? config.options?.map((p) => p.product);
@@ -54,14 +55,16 @@ const SingleProducts = ({ config, isMobile, onBack, setMenuDetail, isDetail, scr
       if (e.deltaY > 0) {
         const win = get(ref, ["current", "ownerDocument", "defaultView", "window"], window);
         if (ref.current && ref.current.scrollHeight - ref.current.scrollTop - win.innerHeight <= 0) {
-          scrollToFooter();
+          // setShowMenuFooter(false);
         }
       }
     }
   }, []);
 
   return (
-    <ProductSingleWraper className="wadawd sigunflf" ref={ref} onTouchStart={onTouchStart} onWheel={handleWheel}>
+    <ProductSingleWraper className="wadawd sigunflf" ref={ref}
+                         onTouchStart={onTouchStart}
+                         onWheel={handleWheel}>
       {isMobile && (
         <ProductSingleMobileInfoWrapper>
           <Button

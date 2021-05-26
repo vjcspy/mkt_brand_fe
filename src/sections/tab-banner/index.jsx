@@ -273,7 +273,11 @@ const TabBanner = ({ config = defaultConfig, scrollToFooter, footer, footerRef, 
   }, [config.components.tabBanner.value]);
 
   return (
-    <TabScrollWrapper onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchStart={onTouchStart} ref={ref}>
+    <TabScrollWrapper
+        // onTouchMove={onTouchMove}
+                      // onTouchEnd={onTouchEnd}
+                      // onTouchStart={onTouchStart}
+                      ref={ref}>
       <TabContainerWrapper
         ref={containerRef}
         style={{
