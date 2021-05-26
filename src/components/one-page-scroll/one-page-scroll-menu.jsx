@@ -1,6 +1,6 @@
 import { get, isNil } from "lodash";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import useRefCallback from "../../hooks/useRefCallback";
+import useIframeResize from "../../hooks/useWindowResize/useIframeResize";
 
 const KEY_UP = 38;
 const KEY_DOWN = 40;
@@ -27,7 +27,7 @@ const OnePageScrollMenu = ({
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [movePos, setMovePos] = useState({ x: 0, y: 0 });
 
-  const [width, setWidth] = useState(1);
+  const [{ width }, ref] = useIframeResize();
   const [height, setHeight] = useState(1);
 
   const [delta, setDelta] = useState({
@@ -183,16 +183,16 @@ const OnePageScrollMenu = ({
       [length]
   );
 
-  useEffect(() => {
-    const listener = () => {
-      setWidth(scrollRef.current?.offsetWidth);
-    };
-    listener();
-    window.addEventListener("resize", listener, { passive: true });
-    return () => {
-      window.removeEventListener("resize", listener);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const listener = () => {
+  //     setWidth(scrollRef.current?.offsetWidth);
+  //   };
+  //   listener();
+  //   window.addEventListener("resize", listener, { passive: true });
+  //   return () => {
+  //     window.removeEventListener("resize", listener);
+  //   };
+  // }, []);
 
   useEffect(() => {
     pageOnChange?.(Math.abs(translateX));
@@ -230,25 +230,16 @@ const OnePageScrollMenu = ({
     setTranslateX(-Math.abs(customPageNumber));
   }, [customPageNumber]);
 
-  // useEffect(() => {
-  //   var timeout;
-  //   if (isScrolling) {
-  //     timeout = setTimeout(() => {
-  //       setIsScrolling(false);
-  //     }, TIMESCROLL);
-  //   }
-  //   return () => {
-  //     clearTimeout(timeout);
-  //   };
-  // }, [isScrolling]);
-  //
-  // useEffect(() => {
-  //   return () => {
-  //     const win = get(scrollRef, ["current", "ownerDocument", "defaultView", "window"], window);
-  //     win.document.body.classList.remove(DISABLED_CLASS_NAME);
-  //     win.document.documentElement.classList.remove(DISABLED_CLASS_NAME);
-  //   };
-  // }, []);
+
+  useEffect(() => {
+    const e = new Event("tabbanner");
+    e.percentage = ((startPos.x - movePos.x) / width) * 100;
+    e.transition = transition;
+    var index = Math.abs(translateX ?? 0);
+    e.index = index;
+    window.dispatchEvent(e);
+  }, [transition, translateX, startPos, movePos, width, length]);
+
 
   return (
     <div
@@ -269,9 +260,14 @@ const OnePageScrollMenu = ({
       <div
         ref={containerRef}
         style={{
+          position: "relative",
+          display: "flex",
           height: itemHeight,
-          transition: transition ? `transform ${TIMESCROLL}ms ease-out` : "none",
-          transform: `translate3d( -${translateX * 100}%,0px, 0px)`,
+          width: `${length * 100}%`,
+          // transition:  transition ? `transform ${TIMESCROLL}ms ease-out` : "none",
+          // transform: `translateX( -${translateX * 100}%,0px, 0px)`,
+          transition: transition ? "transform 0.3s ease-in-out" : "none",
+          transform: `translateX(${((translateX + (movePos.x - startPos.x) / width) * 100) / length}%)`,
         }}
       >
         {children}
