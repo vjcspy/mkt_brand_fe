@@ -71,6 +71,7 @@ export const GET_MY_VOUCHER = "GET_MY_VOUCHER";
 export const FETCH_CONFIG = "FETCH_CONFIG";
 export const PUT_CONFIG = "PUT_CONFIG";
 export const PUT_PUBLIC_CONFIG = "PUT_PUBLIC_CONFIG";
+export const FLUSH_CACHE = "FLUSH_CACHE";
 export const FETCH_MEDIAS = "FETCH_MEDIAS";
 export const FETCH_MEDIA_COUNT = "FETCH_MEDIA_COUNT";
 export const UPLOAD_FILES = "UPLOAD_FILES";

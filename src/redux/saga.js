@@ -24,7 +24,7 @@ import {
   SET_PROMO_OF_USER,
   GET_PROMO_OF_USER,
   GET_TRANSACTION,
-  SET_TRANSACTION,
+  SET_TRANSACTION, FLUSH_CACHE
 } from "../constants";
 import { chain, get, head } from "lodash";
 
@@ -61,6 +61,24 @@ function* putConfig({ value: raw_config }) {
   }
 }
 
+function* flushCache() {
+  try {
+    const [token] = yield select((s) => [s.get("token")]);
+    yield Axios.post(
+      "/api/flush-cache",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    alert("Flush cache success");
+  } catch (e) {
+    alert(e);
+  }
+}
+
 function* putPublicConfig() {
   try {
     const host = process.env.NEXT_PUBLIC_API_HOST;
@@ -77,16 +95,15 @@ function* putPublicConfig() {
         },
       }
     );
-    // const response = yield Axios.post(
-    //   "/api/deploy",
-    //   {},
-    //   {
-    //     params: { site_code: site.site_code },
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   }
-    // );
+    yield Axios.post(
+      "/api/flush-cache",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     alert("Success");
   } catch (e) {
     alert(e);
@@ -391,6 +408,7 @@ function* saga() {
   yield takeEvery(FETCH_CONFIG, fetchConfig);
   yield takeEvery(PUT_CONFIG, putConfig);
   yield takeEvery(PUT_PUBLIC_CONFIG, putPublicConfig);
+  yield takeEvery(FLUSH_CACHE, flushCache);
   yield takeEvery(FETCH_MEDIAS, fetchMedias);
   yield takeEvery(FETCH_MEDIA_COUNT, fetchMediaCount);
   yield takeEvery(UPLOAD_FILES, uploadFiles);

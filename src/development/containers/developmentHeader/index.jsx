@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PUT_CONFIG, PUT_PUBLIC_CONFIG, SET_PREVIEW_MODE } from "../../../constants";
+import { FLUSH_CACHE, PUT_CONFIG, PUT_PUBLIC_CONFIG, SET_PREVIEW_MODE } from "../../../constants";
 import { DevPrimaryButton, DevSecondaryA } from "../../../styles/developmentStyle";
 import DropDown from "./dropdown";
 import ImageMedia from "../../components/imageMedia";
@@ -16,6 +16,7 @@ const DevelopmentHeader = ({ viewPreview }) => {
   const site = useFromJS(["site"]);
   const putConfig = useCallback((config) => dispatch({ type: PUT_CONFIG, value: config }), []);
   const putPublicConfig = useCallback(() => dispatch({ type: PUT_PUBLIC_CONFIG }), []);
+  const flushCache = useCallback(() => dispatch({ type: FLUSH_CACHE }), []);
   const onPreviewMode = (value) => dispatch({ type: SET_PREVIEW_MODE, value });
 
   return (
@@ -34,6 +35,9 @@ const DevelopmentHeader = ({ viewPreview }) => {
           <DropDown />
         </LeftWrapper>
         <RightWrapper>
+          <DevPrimaryButton onClick={flushCache} style={{ background: "red" }}>
+            Flush cache
+          </DevPrimaryButton>
           <DevPrimaryButton onClick={putPublicConfig} style={{ background: "#27d427" }}>
             Public
           </DevPrimaryButton>
